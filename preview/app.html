@@ -1185,8 +1185,8 @@ html[dir="rtl"] .vw-line{text-align:start}
     <a href="#/charges" class="nav-item" data-route="charges"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-history"/></svg>
       <span class="nav-label" data-i18n="nav.chargeHistory">Charge history</span></a>
 
-    <div class="nav-group-label" data-i18n="nav.groupOffers">Offers</div>
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-ticket"/></svg>
+    <div class="nav-group-label" data-i18n="nav.groupOffers" data-nav-offers>Offers</div>
+    <a href="#" class="nav-item" data-nav-offers><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-ticket"/></svg>
       <span class="nav-label" data-i18n="nav.offers">Offers</span></a>
 
     <div class="nav-group-label" data-i18n="nav.groupReports">Reports</div>
@@ -4692,6 +4692,10 @@ function elapsed(d){
    would be under review is shown in the state it is on its way to instead.
    Flip this back on and the state, its progress count and its filter all
    return together. */
+// Offers is not designed yet, so its nav entry is hidden rather than left
+// pointing at nothing. Flip to true to bring the section back.
+const OFFERS_ENABLED = false;
+
 const REVIEWING_ENABLED = false;
 const shownStatus = b =>
   (!REVIEWING_ENABLED && b.status === "processing") ? "ready" : b.status;
@@ -7718,6 +7722,9 @@ function renderRelease(){
     </div>`;
 }
 function relToggleAlt(){ REL_ALT = !REL_ALT; renderRelease(); }
+
+if (!OFFERS_ENABLED)
+  document.querySelectorAll("[data-nav-offers]").forEach(el => { el.hidden = true; });
 
 document.body.dataset.state = "normal";
 document.body.dataset.collapsed = "false";
