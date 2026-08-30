@@ -103,12 +103,21 @@
 
   /* == TYPE ============================================================== */
   /* [figma] Arabic is FF Shamel Unique, line-height 1.5, letter-spacing 0.
-     FF Shamel is licensed and cannot load in a web preview, so the stack
-     falls back to IBM Plex Sans Arabic — the closest freely available
-     humanist Arabic sans, and a designed superfamily with its Latin
-     counterpart, which keeps the two scripts structurally harmonious.   */
-  --font-ar: "FF Shamel Unique", "IBM Plex Sans Arabic", "Noto Sans Arabic", sans-serif;
-  --font-en: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+     FF Shamel is licensed and cannot load in a web preview, so Tajawal leads
+     the fallback: the Latin face is Poppins (geometric), and pairing a
+     geometric Latin with a humanist Arabic is the dissonance the research file
+     warns about — Tajawal is geometric and widely used in KSA, so the two
+     scripts stay structurally matched.
+
+     [client] Latin is Poppins. One consequence to plan around: Poppins has
+     PROPORTIONAL digits (1 is 320 units against 6 at 635) and ships no `tnum`
+     feature, so `font-variant-numeric: tabular-nums` is inert under it. Figures
+     on this screen are inline or right-aligned so nothing misaligns, but any
+     future COLUMN of amounts (transactions, users) needs right-alignment or a
+     numeral face that actually aligns. Measured: IBM Plex Sans has uniform
+     digit widths, Inter ships `tnum`, Poppins and Tajawal have neither.      */
+  --font-ar: "FF Shamel Unique", "Tajawal", "IBM Plex Sans Arabic", "Noto Sans Arabic", sans-serif;
+  --font-en: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --fs-xs: 12px; --fs-s: 14px; --fs-m: 16px;   /* [figma] confirmed          */
   --fs-l: 18px; --fs-xl: 20px; --fs-2xl: 24px; /* [derived]                  */
