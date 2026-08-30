@@ -708,10 +708,11 @@ html[dir="ltr"] .ltr{text-align:left}
 .row-acts{display:flex;align-items:center;gap:6px;justify-content:flex-end}
 html[dir="rtl"] .row-acts{justify-content:flex-start}
 .act{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:var(--r-100);
-  max-width:15ch;overflow:hidden;
+  max-width:16ch;
   border:1px solid var(--n-300);background:#fff;font:inherit;font-size:13px;font-weight:600;
   color:var(--n-800);cursor:pointer;white-space:nowrap;transition:background .12s,border-color .12s}
 .act:hover{background:var(--n-50);border-color:var(--n-400)}
+.act-l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* Approve is the filled primary and reject the plain outline. A green/red
    pair carries its whole meaning in hue, which is exactly what a colour-blind
    reader cannot use; weight and fill survive where hue does not. */
@@ -3553,8 +3554,7 @@ function renderTransfers(){
 function setTTab(k){
   if (TTAB === k) return;
   TTAB = k; TPAGE = 1; TFILT.status = "all";
-  go("transfers", k === "individual" ? "individual" : null);
-  renderTransfers();
+  go("transfers", k === "individual" ? "individual" : null);   // routes through render()
 }
 
 /* ---------- rows --------------------------------------------------------- */
