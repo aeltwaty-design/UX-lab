@@ -5048,7 +5048,10 @@ const TXNS = (function build(){
   const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
   const pick = a => a[Math.floor(r() * a.length)];
   const out = [];
-  const people = USERS.concat(FOLLOWERS);
+  /* Users only. A follower who never registered has no points ledger, and the
+     profile link on a row resolves against the users collection — pulling
+     people from both would produce rows whose "view profile" led nowhere. */
+  const people = USERS;
   let seq = 5192991;
 
   const push = o => out.push(Object.assign({ id: "TX-" + (out.length + 1) }, o));
