@@ -21,7 +21,10 @@ const { chromium } = require('playwright');
         // Match the SHAPE of an unresolved key rather than a list of prefixes.
         // Deriving prefixes from the dictionary cannot catch a new screen whose
         // keys are missing from it - which is exactly when they render raw.
-        const KEYISH = /\b[a-z][a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+){1,4}\b/g;
+        // Every segment of a real key begins lowercase or with a digit. Prose
+        // does not: textContent joins blocks with no space, so "…the app." and
+        // "Turn on…" arrive as "app.Turn", which a looser pattern reads as a key.
+        const KEYISH = /\b[a-z][a-zA-Z0-9]*(?:\.[a-z0-9][a-zA-Z0-9]*){1,4}\b/g;
         const NOT_A_KEY = /\.(csv|png|json|html|js|css|pdf|xlsx|com|net|org|sa)$/i;
         // an email is two key-shaped halves either side of an @, so remove them
         // from the text before looking rather than trying to exclude the halves

@@ -4,7 +4,7 @@ const { chromium } = require('playwright');
    Everything else that reads as English words is a leak. */
 // Reference codes, ids, filenames and the tenant's own name are Latin by
 // nature; everything else Latin in an Arabic page is a leak.
-const OK = /^(?:[\d\s.,:/·—–-]+|BCH-\d+|TRF-\d+|TX-\d+|USR-\d+|FLW-\d+|INV-\d+|COMTECHGOLD(?:\/[A-Z]+)?\/[0-9]+|CHG-\d+|PO-\d+-\d+|EXP-\d+|Admin Charge|[a-z.@]+|[0-9_]+_[a-z]+\.csv|B2B|CSV|CG|MA|\d+K|⌘K|[A-Za-z0-9._-]+\.csv|Comtech Gold|English|WLA-[A-Z]+-[0-9]+|[A-Z]{1,2})$/;
+const OK = /^(?:[\d\s.,:/·—–-]+|BCH-\d+|TRF-\d+|TX-\d+|USR-\d+|FLW-\d+|INV-\d+|COMTECHGOLD(?:\/[A-Z]+)?\/[0-9]+|CHG-\d+|PO-\d+-\d+|EXP-\d+|Admin Charge|[a-z.@]+|[0-9_]+_[a-z]+\.csv|B2B|CSV|CG|MA|\d+K|⌘K|[A-Za-z0-9._-]+\.csv|Comtech Gold|Apple Wallet|English|WLA-[A-Z]+-[0-9]+|[A-Z]{1,2})$/;
 const LATIN = /[A-Za-z]{2,}/;
 const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
 (async () => {
@@ -24,7 +24,7 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
       // One test for text and attributes alike. Attributes used to get only the
       // whole-string check, so an aria-label that legitimately names a file -
       // "تنزيل 2026_08_29_charges.csv" - was reported as a leak.
-      const ALLOW = /^(?:CSV|B2B|COMTECHGOLD|DIRECT|RET|(?:INV|BCH|TRF|TX|CHG|PO|EXP|WLA)(?:-[0-9A-Z-]+)?|Comtech|Gold|PNG|JPG|SVG|9665X+\.?|[a-z.]+@[a-z.]+|[A-Za-z0-9._-]+\.csv)$/;
+      const ALLOW = /^(?:CSV|B2B|COMTECHGOLD|DIRECT|RET|(?:INV|BCH|TRF|TX|CHG|PO|EXP|WLA)(?:-[0-9A-Z-]+)?|Comtech|Gold|Apple|Wallet|PNG|JPG|SVG|9665X+\.?|[a-z.]+@[a-z.]+|[A-Za-z0-9._-]+\.csv)$/;
       const isLeak = txt => {
         if (!txt || !LATIN.test(txt) || OK.test(txt)) return false;
         const words = txt.split(/[^A-Za-z0-9._@X-]+/)
@@ -42,6 +42,11 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
           const pnl = el.closest('#pnl');
           if (pnl && pnl.hidden) continue;          // a closed drawer is not on screen
           if (el.offsetParent === null && !pnl) continue;
+          // A block that sets its own dir against the page is the other
+          // language on purpose, not a leak.
+          const flipped = el.closest('[dir]');
+          if (flipped && flipped !== document.documentElement
+              && flipped.getAttribute('dir') !== document.documentElement.dir) continue;
           const txt = n.textContent.trim();
           if (!isLeak(txt)) continue;
           out.push({ txt: txt.slice(0, 64), where: (el.className && String(el.className).slice(0,26)) || el.tagName });
