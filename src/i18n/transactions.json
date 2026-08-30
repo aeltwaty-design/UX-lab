@@ -35,6 +35,9 @@
     "transactions.filters.dateFrom": "From",
     "transactions.filters.dateTo": "To",
 
+    "transactions.scope.fromFile": "Records from {file}",
+    "transactions.scope.clear": "Show all transactions",
+
     "transactions.empty.title": "No transactions yet",
     "transactions.empty.body": "Once a transaction happens in your programme, it'll show up here.",
     "transactions.empty.noMatchTitle": "No matches",
@@ -48,6 +51,12 @@
     "transactions.panel.fromFile": "From this uploaded file",
     "transactions.panel.noOriginId": "No origin ID",
     "transactions.panel.noComment": "No comment",
+
+    "transactions.sampleNote1": "Compensation for the late delivery. She called twice.",
+    "transactions.sampleNote2": "National Day promo bonus.",
+    "transactions.sampleNote3": "Fixing yesterday's mistake. Too many points went in.",
+    "transactions.sampleNote4": "Invoice 4471, Olaya branch.",
+    "transactions.sampleNote5": "1850 points, more than usual. He bought two pieces this time.",
 
     "transactions.export": "Export",
     "transactions.a11y.rowActions": "Actions for {reference}",
@@ -89,6 +98,9 @@
     "transactions.filters.dateFrom": "من",
     "transactions.filters.dateTo": "إلى",
 
+    "transactions.scope.fromFile": "سجلات من {file}",
+    "transactions.scope.clear": "عرض كل المعاملات",
+
     "transactions.empty.title": "لا توجد معاملات بعد",
     "transactions.empty.body": "بمجرد أن تحدث معاملة في برنامجك، ستظهر هنا.",
     "transactions.empty.noMatchTitle": "لا توجد نتائج مطابقة",
@@ -102,6 +114,12 @@
     "transactions.panel.fromFile": "من هذا الملف المرفوع",
     "transactions.panel.noOriginId": "لا يوجد معرّف مصدر",
     "transactions.panel.noComment": "لا توجد ملاحظة",
+
+    "transactions.sampleNote1": "تعويض عن تأخر التوصيل. اتصلت مرتين تشتكي.",
+    "transactions.sampleNote2": "بونص عرض اليوم الوطني.",
+    "transactions.sampleNote3": "تصحيح خطأ أمس. انضافت نقاط زيادة بالغلط.",
+    "transactions.sampleNote4": "فاتورة 4471، فرع العليا.",
+    "transactions.sampleNote5": "1850 نقطة، أكثر من المعتاد. اشترى قطعتين هالمرة.",
 
     "transactions.export": "تصدير",
     "transactions.a11y.rowActions": "إجراءات {reference}",

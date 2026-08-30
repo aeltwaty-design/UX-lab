@@ -107,6 +107,7 @@
     "transfers.rejected.reasonHeading": "Reason for rejection",
 
     "transfers.detail.decidedBy": "Decided by {name} on {date}",
+    "transfers.detail.viewTransactions": "View {n} transactions",
 
     "transfers.viewer.title": "{file}",
     "transfers.viewer.subtitle": "{n} records",
@@ -323,6 +324,7 @@
     "transfers.rejected.reasonHeading": "سبب الرفض",
 
     "transfers.detail.decidedBy": "قرار بواسطة {name} بتاريخ {date}",
+    "transfers.detail.viewTransactions": "عرض {n} معاملات",
 
     "transfers.viewer.title": "{file}",
     "transfers.viewer.subtitle": "{n} سجلات",
