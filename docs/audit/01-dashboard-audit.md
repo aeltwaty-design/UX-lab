@@ -247,19 +247,64 @@ numerals (0–9) with consistent grouping.
 
 ---
 
-## Open questions blocking design
+## Resolved — answers from the client
 
-1. **Primary persona.** Confirmed as *partner admin* from the capture — the merchant-side
-   operator running the points programme. Confirm, and state the one question the
-   dashboard must answer for them.
-2. **Is a negative balance legitimate?** If partners can be overdrawn, this is a designed
-   "owing" state needing its own treatment and a top-up path. If not, it is an error
-   state. These are completely different designs.
-3. **Users vs Followers** — what distinguishes them? They currently share an icon.
-4. **Total offers (4094)** — created by this partner, or available across the network?
-   Is it a catalogue size or an activity count?
-5. **White-label theming.** Comtech Gold has its own brand slot. Do tenants get their own
-   brand colour, or is the WalaOne palette fixed for all? This decides whether the token
-   layer needs a per-tenant brand tier.
-6. **Roles.** Is `Partner` one of several roles (platform admin, partner admin, staff)?
-   Role-aware surfacing is a 2026 baseline and changes what we build.
+These are settled. Design against them.
+
+### R1. The core question: **"What needs my attention right now?"**
+The dashboard is an **operational triage screen**, not an analytics report. It leads with
+exceptions and pending items — low balance, pending transfers, failed transactions,
+expiring offers — and only then shows supporting metrics. This is the decision that fixes
+B1, B6 and the client's "no soul" complaint at the same time: the screen stops being a
+list of facts and starts being a worklist.
+
+Consequence: the eight-card uniform grid is not reworked, it is **replaced**. Exceptions
+get top billing; steady-state numbers step back into a supporting tier.
+
+### R2. A negative balance is a **bug**, not a state
+Balance must never go below zero. So −1,096,860 is not a figure to present — it is
+**untrustworthy data**, and the design must say so rather than rendering it as fact.
+
+Design implication: an **anomaly / data-integrity state** for any impossible value —
+visually distinct from both a healthy value and a normal error, stating plainly that the
+figure can't be right, suppressing the bogus number from driving any other calculation on
+the screen, and offering a report-issue route. No overdraft treatment, no top-up path.
+
+This also raises A2 in priority: if impossible values are reachable, contradictory
+metrics (0 users + 4,094 offers) need the same integrity check, not just this one card.
+
+### R3. Theming: **fixed WalaOne palette for all tenants**
+Tenants supply a logo only; the palette does not change per tenant. Token layer stays
+simple — semantic tokens map to fixed brand values, no per-tenant brand tier.
+
+The brand slot still needs a real fallback though (see C1): tenant initials or a
+monogram, never a broken-image glyph.
+
+### R4. Users vs Followers are **two distinct models**
+- **Users** — hold accounts and point balances, and transact.
+- **Followers** — subscribed to the partner's brand for offers; an audience, not
+  necessarily registered.
+
+Design implications:
+- Two genuinely different icons — the shared glyph (C2) is a real defect, not a nitpick.
+- They are **sibling surfaces**, not a filter of one another.
+- This also explains `Total Users` / `Users Registered` / `Users Unregistered` on the old
+  screen: that is a **conversion funnel** (audience → registered → active), currently
+  rendered as three disconnected equal cards. It should read as one funnel — the
+  [Deel](https://mobbin.com/screens/fb197e1a-8fc1-4c06-8ef3-8d143084834b) stage pattern
+  applies directly.
+
+---
+
+## Still open
+
+1. **Roles.** Is `Partner` one of several roles (platform admin, partner admin, staff)?
+   Role-aware surfacing is a 2026 baseline and would change what each user sees.
+2. **Total offers (4,094)** — created by this partner, or available across the network?
+   Catalogue size or activity count? Determines whether it is a headline metric or
+   supporting context.
+3. **Which exceptions exist in the API?** R1 makes the triage list the spine of the
+   screen, so we need the real set of attention-worthy events (pending transfers, failed
+   transactions, expiring offers, low balance thresholds, unregistered-user backlog).
+   Until confirmed, I will design against a reasonable set and mark it clearly as an
+   assumption.
