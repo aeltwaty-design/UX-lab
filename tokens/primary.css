@@ -1,0 +1,39 @@
+/* ---------------------------------------------------------------------------
+   WalaOne — Primary brand ramp
+   Derived from the client-specified brand colour #755BD8, replacing the green
+   primary carried by Singular (V1.0.0).
+
+   Method: converted to OKLCH, then held hue constant (-71.3deg) while walking a
+   perceptually even lightness ladder. 500 is pinned to #755BD8 exactly; every
+   other step is derived. Pale steps are gamut-mapped — chroma is reduced until
+   the colour fits sRGB, rather than letting a channel clip, which would drag the
+   hue toward blue.
+
+   Contrast is verified, not assumed. Figures are against white unless noted.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --primary-50:  #F5F4FF;  /* ink text 17.06:1 — surface tint, selected-row bg  */
+  --primary-100: #EAE8FF;  /* ink text 15.48:1 — hover tint, badge bg           */
+  --primary-200: #D7D4FF;  /* ink text 13.06:1 — borders on tinted surfaces     */
+  --primary-300: #BFB7FF;  /* ink text 10.12:1 — disabled primary, dividers     */
+  --primary-400: #9C89FF;  /* ink text  6.58:1 — decorative only, NOT for text  */
+  --primary-500: #755BD8;  /* white text 4.95:1 — BRAND. Buttons, focus ring    */
+  --primary-600: #6246BE;  /* white text 6.69:1 — hover, links on white         */
+  --primary-700: #4E349D;  /* white text 9.12:1 — pressed, text on 50/100 tints */
+  --primary-800: #3A2678;  /* white text 12.15:1 — headings on tint             */
+  --primary-900: #271A54;  /* white text 15.42:1 — max emphasis                 */
+}
+
+/* Verified pairings — do not substitute steps without re-checking contrast.
+
+   primary button      bg 500  + white label        4.95:1   AA
+   button hover        bg 600  + white label        6.69:1   AA
+   button pressed      bg 700  + white label        9.12:1   AA
+   active nav item     text 700 on 50 tint          8.37:1   AA
+   link on white       text 600                     6.69:1   AA
+   focus ring          500 on white (UI needs 3.0)  4.95:1   AA
+
+   400 fails AA as text on white (2.82:1). It is a decorative step only —
+   illustration fills, chart bands, gradient stops. Never body text, never an
+   icon that carries meaning on its own.                                       */
