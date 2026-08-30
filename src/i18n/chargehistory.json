@@ -1,0 +1,104 @@
+{
+  "en": {
+    "charge.heading": "Charge history",
+    "charge.subtitle": "See what you've paid for your points, find an invoice or check when a charge runs out.",
+    "charge.count": "{n} records",
+
+    "charge.columns.reference": "Reference",
+    "charge.columns.amount": "Amount paid",
+    "charge.columns.points": "Points",
+    "charge.columns.addedBy": "Added by",
+    "charge.columns.notes": "Notes",
+    "charge.columns.purchaseOrder": "Purchase order",
+    "charge.columns.invoice": "Invoice",
+    "charge.columns.createdAt": "Created",
+    "charge.columns.endedAt": "Ends",
+    "charge.columns.percent": "Percent",
+    "charge.columns.status": "Status",
+
+    "charge.status.active": "Active",
+    "charge.status.activeDesc": "Still valid, so it counts toward your balance.",
+    "charge.status.expiring": "Expiring soon",
+    "charge.status.expiringDesc": "Ends within 30 days.",
+    "charge.status.expired": "Expired",
+    "charge.status.expiredDesc": "Past its end date, so it no longer counts toward your balance.",
+
+    "charge.search.placeholder": "Search by reference, invoice or the person who added it…",
+    "charge.filters.status": "Status",
+    "charge.filters.addedBy": "Added by",
+    "charge.filters.dateRange": "Date range",
+
+    "charge.empty.title": "No charges yet",
+    "charge.empty.body": "Once you charge points to your account, it'll show up here.",
+    "charge.empty.noMatchTitle": "No matches",
+    "charge.empty.noMatchBody": "No charges match your filters. Try different search terms, or clear your filters to see more.",
+
+    "charge.panel.title": "Charge {reference}",
+    "charge.panel.sectionCharge": "Charge",
+    "charge.panel.sectionPaperwork": "Paperwork",
+    "charge.panel.sectionAddedBy": "Added by",
+    "charge.panel.noNotes": "No notes",
+    "charge.panel.noPurchaseOrder": "No purchase order",
+    "charge.panel.noInvoice": "No invoice",
+    "charge.panel.validFor": "Valid from {from} to {to}",
+
+    "charge.chargeNote1": "From this quarter's marketing budget.",
+    "charge.chargeNote2": "Paid by bank transfer, approved by the finance manager.",
+    "charge.chargeNote3": "Double check the purchase order number before sending the invoice to accounting.",
+
+    "charge.export": "Export",
+    "charge.rate": "5 points = 1 ﷼",
+    "charge.a11y.panel": "Side panel"
+  },
+  "ar": {
+    "charge.heading": "سجل الشحن",
+    "charge.subtitle": "راجع ما دفعته مقابل نقاطك أو ابحث عن فاتورة أو تحقّق من موعد انتهاء أي شحنة.",
+    "charge.count": "{n} سجلات",
+
+    "charge.columns.reference": "المرجع",
+    "charge.columns.amount": "المبلغ المدفوع",
+    "charge.columns.points": "النقاط",
+    "charge.columns.addedBy": "بواسطة",
+    "charge.columns.notes": "الملاحظات",
+    "charge.columns.purchaseOrder": "أمر الشراء",
+    "charge.columns.invoice": "الفاتورة",
+    "charge.columns.createdAt": "الإنشاء",
+    "charge.columns.endedAt": "الانتهاء",
+    "charge.columns.percent": "النسبة",
+    "charge.columns.status": "الحالة",
+
+    "charge.status.active": "نشطة",
+    "charge.status.activeDesc": "لا تزال سارية، لذا تُحتسب ضمن رصيدك.",
+    "charge.status.expiring": "تنتهي قريبًا",
+    "charge.status.expiringDesc": "تنتهي خلال 30 يومًا.",
+    "charge.status.expired": "منتهية",
+    "charge.status.expiredDesc": "تجاوزت موعد انتهائها، ولم تعد تُحتسب ضمن رصيدك.",
+
+    "charge.search.placeholder": "ابحث بالمرجع أو الفاتورة أو اسم من أضافها…",
+    "charge.filters.status": "الحالة",
+    "charge.filters.addedBy": "بواسطة",
+    "charge.filters.dateRange": "الفترة الزمنية",
+
+    "charge.empty.title": "لا توجد شحنات بعد",
+    "charge.empty.body": "بمجرد أن تشحن نقاطًا إلى حسابك، ستظهر هنا.",
+    "charge.empty.noMatchTitle": "لا توجد نتائج مطابقة",
+    "charge.empty.noMatchBody": "لا توجد شحنات مطابقة لمعايير التصفية. جرّب كلمات بحث مختلفة أو امسح التصفية لعرض المزيد.",
+
+    "charge.panel.title": "شحنة {reference}",
+    "charge.panel.sectionCharge": "الشحنة",
+    "charge.panel.sectionPaperwork": "المستندات",
+    "charge.panel.sectionAddedBy": "بواسطة",
+    "charge.panel.noNotes": "لا توجد ملاحظات",
+    "charge.panel.noPurchaseOrder": "لا يوجد أمر شراء",
+    "charge.panel.noInvoice": "لا توجد فاتورة",
+    "charge.panel.validFor": "سارية من {from} إلى {to}",
+
+    "charge.chargeNote1": "من ميزانية الربع الثالث، بند التسويق.",
+    "charge.chargeNote2": "تحويل بنكي، وافق عليه المدير المالي.",
+    "charge.chargeNote3": "تأكد من رقم أمر الشراء قبل ما ترسل الفاتورة للمحاسبة.",
+
+    "charge.export": "تصدير",
+    "charge.rate": "5 نقاط = 1 ﷼",
+    "charge.a11y.panel": "لوحة جانبية"
+  }
+}

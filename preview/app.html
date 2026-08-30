@@ -797,9 +797,12 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
 @media (max-width:620px){
   .page-head .dd{width:100%}
   .page-head .dd > .btn{width:100%;justify-content:center}
-  .tabs-row .segs{display:flex;width:100%}
-  .tabs-row .seg{flex:1 1 0;min-width:0;justify-content:center}
-  .tabs-row .seg > span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* Every segmented control, not only the one on Transfer points. Scoped to
+     that screen, this left the Users control to overflow the page at 360. */
+  .segs{display:flex;width:100%}
+  .seg{flex:1 1 0;min-width:0;justify-content:center;padding-inline:8px}
+  .seg > span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .seg-n{padding:1px 5px}
   .bal{flex-basis:100%;border-inline-start:none;border-top:1px solid var(--n-200)}
   .bal:first-child{border-top:none}
   .queue{flex-wrap:wrap}
@@ -1362,6 +1365,7 @@ html[dir="rtl"] .vw-line{text-align:start}
           </table>
         </div>
         <!-- no rows matched the current filters -->
+        <div class="cards" id="uCards" hidden></div>
         <div id="noMatch" class="empty" hidden>
           <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-search"/></svg></div>
           <div class="empty-t" data-i18n-coll="empty.noMatches" data-i18n-part="head"></div>
@@ -3586,16 +3590,25 @@ function ck(suffix){
 /* Columns. Person, status, points, joined and the row menu are always on;
    the rest are the ones the client wanted kept without crowding the table. */
 const COLS = [
-  { k:"person",  always:true, on:true,  min:0    },
-  { k:"userId",  on:true,  min:1000 },
-  { k:"status",  on:true,  min:470  },
-  { k:"points",  on:true,  min:620  },
-  { k:"joined",  on:true,  min:840  },
-  { k:"email",   on:false, min:1200 },
-  { k:"gender",  on:false, min:1000 },
-  { k:"activity",on:false, min:1100 }
+  { k:"person",  always:true, on:true },
+  { k:"userId",  on:true },
+  { k:"status",  on:true },
+  { k:"points",  on:true },
+  { k:"joined",  on:true },
+  { k:"email",   on:false },
+  { k:"gender",  on:false },
+  { k:"activity",on:false }
 ];
-const shown = () => COLS.filter(c => c.on && window.innerWidth >= (c.min || 0));
+const UORDER = ["person","userId","status","points","joined","email","gender","activity"];
+/* Least valuable first, and measured rather than predicted — the width
+   thresholds this table used to carry were wrong at almost every size. */
+const UDROP_ORDER = ["activity","gender","email","userId","joined","points","status"];
+let UDROP = 0;
+const shown = () => {
+  const dropped = UDROP_ORDER.filter(k => !COLS.find(c => c.k === k)?.pinned).slice(0, UDROP);
+  return COLS.filter(c => c.on && !dropped.includes(c.k))
+             .sort((a, b) => UORDER.indexOf(a.k) - UORDER.indexOf(b.k));
+};
 let SEG = (new URLSearchParams(location.search).get("seg") === "unreg" ? "unreg"
          : new URLSearchParams(location.search).get("seg") === "reg" ? "reg" : "all"),
     PAGE = 1, PER = 10, SORT = { k:"joined", dir:"desc" };
@@ -3659,13 +3672,52 @@ function renderHead(){
 }
 
 function renderRows(){
+  if (!document.getElementById("tbody")) return;
+  const r = fitTable("#view-list", UDROP_ORDER.length,
+                     d => { UDROP = d; paintRows(); }, () => shown().length);
+  uUseCards(r.cards);
+}
+let UPAGE_ROWS = [];
+function uUseCards(on){
+  const host = document.getElementById("uCards"),
+        sc = document.querySelector("#view-list .tbl-scroll");
+  if (!host) return;
+  if (!on){ host.hidden = true; return; }
+  host.innerHTML = UPAGE_ROWS.map(uCard).join("");
+  host.hidden = UPAGE_ROWS.length === 0;
+  sc.hidden = true;
+}
+/* Below three columns the table is a name and a number, which a card says
+   better — the same rule the other four tables follow. */
+function uCard(u){
+  return `<div class="card-row" onclick="openUser(${u.id})" tabindex="0"
+      onkeydown="if(event.key==='Enter'){openUser(${u.id})}">
+    <div class="card-top">
+      <span class="avatar ${u.registered ? "avatar-txt" : ""}" aria-hidden="true">${u.registered
+        ? initials(u) : `<svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-user"/></svg>`}</span>
+      <span class="min-w-0 flex-1">
+        <span class="person-name${u.registered ? "" : " ltr num"}">${u.registered ? u.name[LANG] : u.phone}</span>
+        ${u.registered ? `<span class="person-sub ltr num">${u.phone}</span>` : ""}
+      </span>
+      <span class="pill ${u.registered ? "pill-success" : "pill-stage"}">
+        <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-${u.registered ? "check" : "clock"}"/></svg>
+        ${t(u.registered ? coll().statusOn : coll().statusOff)}</span>
+    </div>
+    <div class="card-meta">${pointsCell(u.points)}
+      <span class="cell-date" style="margin-inline-start:auto">${dfmt(u.joined)}</span></div>
+    <div class="file-sub"><span class="ltr num">${uid(u)}</span></div>
+  </div>`;
+}
+function paintRows(){
   const tb = document.getElementById("tbody"); if (!tb) return;
   const all = matching();
   const pages = Math.max(1, Math.ceil(all.length / PER));
   if (PAGE > pages) PAGE = pages;
   const rows = all.slice((PAGE-1)*PER, PAGE*PER);
   document.getElementById("noMatch").hidden = all.length > 0;
-  document.querySelector(".tbl-scroll").hidden = all.length === 0;
+  document.querySelector("#view-list .tbl-scroll").hidden = all.length === 0;
+  UPAGE_ROWS = rows;
+  const cardHost = document.getElementById("uCards"); if (cardHost) cardHost.hidden = true;
 
   tb.innerHTML = rows.map(u => {
     const sel = SEL.has(u.id);
