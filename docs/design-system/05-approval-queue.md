@@ -23,22 +23,37 @@ approval" row all read the same field.
 **Rule:** if an item leaves the queue by changing state rather than by being
 deleted, the queue is a saved view over the list, never a separate list.
 
-## 2. Rejected and failed are different things and must never look alike
+## 2. There is no failed state — rejection is the only way out
 
-| | Rejected | Failed |
-|---|---|---|
-| What it is | a person decided | the system broke |
-| Colour | neutral grey | danger red |
-| Shape | circle | triangle |
-| Who acts next | the uploader, on the reason given | someone on our side |
-| Retry offered | no — a new file is the fix | yes |
+**Revised after client review.** The product has no failure state for a
+transfer: a batch either goes through or an admin declines it. Five states,
+not six — uploaded, reviewing, ready, completed, rejected.
 
-Collapsing both into error-red is the common default and it is wrong twice
-over: it tells the uploader their judgement call was a system fault, and it
-spends red — the one colour that should mean *something is broken* — on an
-outcome that is entirely expected.
+The principle the removed state carried still governs the screen: **an
+expected human outcome never takes the danger colour.** Rejected is a
+decision, so it takes neutral grey and a circle. Red stays unspent here, which
+is the point — nothing on this screen is broken, so nothing on it is red.
 
-**Rule:** an expected human outcome never takes the danger colour.
+Should a failure state ever be introduced, it must not share a colour, an icon
+or a shape with rejection. Collapsing the two into error-red is the common
+default and it is wrong twice over: it tells an uploader their judgement call
+was a system fault, and it spends the one colour that should mean *something
+is broken*.
+
+### Five states, five colours
+
+No two states are told apart by their icon alone:
+
+| State | Treatment |
+|---|---|
+| Uploaded | warning tint, pulsing dot — the only one addressed to a person |
+| Reviewing | info teal, spinning eye — in progress, with a clock |
+| Ready | brand purple, clock — approved, queued to send |
+| Completed | success green, check |
+| Rejected | neutral grey, circle-cross |
+
+The first draft gave Reviewing and Ready the same teal, separated only by
+their icons. That is a distinction a glance does not make.
 
 ## 3. Reject is not delete
 
@@ -53,25 +68,38 @@ hue does not.
 **Rule:** red and trash iconography are reserved for irreversible destruction.
 A reversible or record-preserving action takes a neutral outline.
 
-## 4. Every count is a route to its rows
+## 4. Validate before accepting, not after
 
-A file's breakdown reads `1,223 valid · 12 invalid · 5 duplicate`. Each of
-those three is a control: it opens the file filtered to exactly the rows it
-counts. The segments of the bar above it do the same.
+**Revised after client review.** Records are checked while a file is being
+uploaded, not after it lands in the queue, and only usable records are
+uploaded. So a file in the list is clean by definition, and an admin reviewing
+it is judging the transfer — who it is for, how many points, what it costs —
+not proofreading a spreadsheet.
 
-The old viewer printed the counts on one screen and the rows on another with
-nothing joining them, and silently dropped lines it could not parse — so the
-count was a claim with the evidence removed.
+This is the stronger design. A queue that carries broken records asks every
+reviewer to re-discover the same problems, and lets the person best placed to
+fix them — whoever made the file — find out last.
+
+The breakdown moved with it. Choosing a file now produces a check before it is
+submitted: how many records were read, how many will be uploaded, how many
+will not and why, with a panel naming the problem on each one. **The count and
+its evidence stay in one place**, which is what the principle was always
+about:
 
 **Rule:** a number describing a subset must be a link to that subset. If it
 cannot be, it should not be shown.
 
-## 5. Processing must be distinguishable from stuck
+The old viewer printed counts on one screen and records on another with
+nothing joining them, and silently dropped lines it could not parse — a claim
+with the evidence removed. That is the failure this guards against, wherever
+the count lives.
+
+## 5. Reviewing must be distinguishable from stuck
 
 A status pill reading "Processing" looks identical whether a job is moving or
 hung. Two things separate them, and both are shown on the row:
 
-- a **determinate count** — `1,890 of 2,086 rows`
+- a **determinate count** — `1,890 of 2,086 records`
 - **how long it has been running** — from the moment processing started
 
 Past a threshold (60 minutes here) the row switches to the stuck treatment.
@@ -84,7 +112,8 @@ so this state is designed rather than assumed.
 
 Approving spends the balance. The approve panel states what will be sent, to
 how many people, what it costs in riyal, and what is left afterwards — and
-refuses rather than letting an approval overdraw.
+refuses rather than letting an approval overdraw. Nothing is skipped, because
+nothing unusable reached the queue.
 
 The available-balance figure also carries **what the queue has already
 committed**: points promised to files still awaiting a decision. Without it an
@@ -135,14 +164,22 @@ legacy glyph because it is what their material uses and it renders reliably.
 Moving to U+20C1 is a brand decision with a font-coverage cost attached, and
 should be taken deliberately rather than by drift.
 
-## 10. Derived values beat stored ones when they disagree
+## 10. Derive what can be derived
 
-Five points make one riyal, so a batch's value is arithmetic. It is computed
-from the points every time and never read from the stored field, because the
-stored field disagrees: one record here holds a value one hundredth of what
-its points are worth. Where the two differ the derived figure is shown and the
-row is flagged.
+Five points make one riyal, so a batch's value is arithmetic: points ÷ 5,
+computed every time it is shown. There is no stored value to read, so there is
+nothing to disagree with, no flag, and no message explaining a discrepancy the
+product cannot produce.
 
 **Rule:** where a value can be derived from data the product already trusts,
 derive it. A stored duplicate is a second source of truth, and second sources
 of truth are only ever discovered when they are already wrong.
+
+## 11. Records, not rows
+
+The product counts **records** (سجلات). A file has records; only the file
+viewer's line numbers refer to *lines* (سطر), because those are positions in a
+text file rather than things in the system.
+
+Small, but worth fixing once and holding: a screen that calls the same thing a
+row here and a record there makes a reader wonder whether they are two things.
