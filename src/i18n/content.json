@@ -45,6 +45,16 @@
       "last12Months": "Last 12 months",
       "comparedToPrevious": "vs. previous period"
     },
+    "dateFilter": {
+      "yesterday": "Yesterday",
+      "lastWeek": "Last week",
+      "lastMonth": "Last month",
+      "lastYear": "Last year",
+      "custom": "Custom",
+      "customHelp": "Select a specific date or range",
+      "label": "Date range filter",
+      "applied": "Showing {range}"
+    },
     "actions": {
       "transferPoints": "Transfer points",
       "chargePoints": "Charge points",
@@ -229,6 +239,16 @@
       "customRange": "فترة مخصصة",
       "last12Months": "آخر 12 شهرًا",
       "comparedToPrevious": "مقارنة بالفترة السابقة"
+    },
+    "dateFilter": {
+      "yesterday": "أمس",
+      "lastWeek": "الأسبوع الماضي",
+      "lastMonth": "الشهر الماضي",
+      "lastYear": "العام الماضي",
+      "custom": "مخصص",
+      "customHelp": "اختر تاريخًا محددًا أو فترة",
+      "label": "تصفية الفترة الزمنية",
+      "applied": "جارٍ عرض {range}"
     },
     "actions": {
       "transferPoints": "تحويل النقاط",
