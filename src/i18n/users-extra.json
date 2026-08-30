@@ -1,0 +1,36 @@
+{
+  "en": {
+    "users": {
+      "columns": {
+        "actions": "Actions"
+      },
+      "gender": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "reminder": {
+        "noneEligible": "None of the selected people are waiting to register."
+      },
+      "table": {
+        "sarAmount": "{value} SAR"
+      }
+    }
+  },
+  "ar": {
+    "users": {
+      "columns": {
+        "actions": "الإجراءات"
+      },
+      "gender": {
+        "male": "ذكر",
+        "female": "أنثى"
+      },
+      "reminder": {
+        "noneEligible": "لا أحد من المحددين بانتظار التسجيل."
+      },
+      "table": {
+        "sarAmount": "{value} ريال"
+      }
+    }
+  }
+}

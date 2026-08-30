@@ -1266,12 +1266,13 @@ const I18N = {
     "users.reminder.body": "This sends a text message to {count} people and can't be undone.",
     "users.reminder.cooldown": "{count} people were excluded because they were reminded recently.",
     "users.reminder.cap": "You can send up to {cap} reminders in one batch.",
-    "users.reminder.noneEligible": "Nobody in this selection is waiting to register.",
+    "users.reminder.noneEligible": "None of the selected people are waiting to register.",
     "users.reminder.confirm": "Send reminder",
     "users.reminder.cancel": "Cancel",
     "users.reminder.sent": "Reminder sent to {count} people.",
     "users.detail.pageHeading": "User profile",
-    "a11y.breadcrumb": "Breadcrumb"
+    "a11y.breadcrumb": "Breadcrumb",
+    "users.table.sarAmount": "{value} SAR"
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -1476,7 +1477,13 @@ const I18N = {
     "users.pagination.next": "التالي",
     "users.pagination.perPage": "الصفوف في الصفحة",
     "users.detail.pageHeading": "الملف الشخصي للمستخدم",
-    "a11y.breadcrumb": "مسار التنقل"
+    "a11y.breadcrumb": "مسار التنقل",
+    "users.columns.actions": "الإجراءات",
+    "users.gender.male": "ذكر",
+    "users.gender.female": "أنثى",
+    "users.reminder.noneEligible": "لا أحد من المحددين بانتظار التسجيل.",
+    "users.table.sarAmount": "{value} ريال",
+    "users.table.sar": "{value} ريال"
   }
 };
 
@@ -2178,7 +2185,7 @@ function renderHead(){
       data-i18n-aria="users.selection.selectPage"><svg viewBox="0 0 24 24" width="12" height="12" fill="none"
       stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="m5 12.5 4.5 4.5L19 7"/></svg></button></th>`
-    + cells + `<th style="width:56px"><span class="sr-only">${t("users.columns.actions")}</span></th>`;
+    + cells + `<th style="width:56px">${t("users.columns.actions")}</th>`;
 }
 
 function renderRows(){

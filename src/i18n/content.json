@@ -199,7 +199,8 @@
         "userId": "User ID",
         "email": "Email",
         "gender": "Gender",
-        "lastActivity": "Last activity"
+        "lastActivity": "Last activity",
+        "actions": "Actions"
       },
       "status": {
         "registered": "Registered",
@@ -225,7 +226,8 @@
         "cancel": "Cancel",
         "success": "Reminder sent to {count} people.",
         "cooldownNote": "{count} people were excluded because they were reminded recently.",
-        "capNote": "You can send up to {cap} reminders in one batch."
+        "capNote": "You can send up to {cap} reminders in one batch.",
+        "noneEligible": "None of the selected people are waiting to register."
       },
       "actions": {
         "viewProfile": "View profile",
@@ -263,7 +265,8 @@
         "directionOut": "Out",
         "emptyTransactions": "No transactions yet. Once this user makes a purchase, they'll show up here.",
         "emptyParked": "No parked points yet. If any of this user's points are parked, they'll appear here.",
-        "zeroPurchaseValue": "No purchase value"
+        "zeroPurchaseValue": "No purchase value",
+        "sarAmount": "{value} SAR"
       },
       "unregistered": {
         "notice": "This person hasn't completed registration yet, so their profile is just a phone number for now.",
@@ -274,6 +277,10 @@
         "previous": "Previous",
         "next": "Next",
         "rowsPerPage": "Rows per page"
+      },
+      "gender": {
+        "male": "Male",
+        "female": "Female"
       }
     },
     "states": {
@@ -495,7 +502,8 @@
         "userId": "معرف المستخدم",
         "email": "البريد",
         "gender": "الجنس",
-        "lastActivity": "آخر نشاط"
+        "lastActivity": "آخر نشاط",
+        "actions": "الإجراءات"
       },
       "status": {
         "registered": "مسجل",
@@ -521,7 +529,8 @@
         "cancel": "إلغاء",
         "success": "تم إرسال التذكير إلى {count} أشخاص.",
         "cooldownNote": "تم استبعاد {count} أشخاص تم تذكيرهم مؤخرًا.",
-        "capNote": "يمكنك إرسال ما يصل إلى {cap} تذكيرات دفعة واحدة."
+        "capNote": "يمكنك إرسال ما يصل إلى {cap} تذكيرات دفعة واحدة.",
+        "noneEligible": "لا أحد من المحددين بانتظار التسجيل."
       },
       "actions": {
         "viewProfile": "عرض الملف الشخصي",
@@ -559,7 +568,8 @@
         "directionOut": "صادر",
         "emptyTransactions": "لا توجد معاملات بعد. بمجرد أن يقوم هذا المستخدم بعملية شراء، ستظهر هنا.",
         "emptyParked": "لا توجد نقاط محجوزة بعد. إذا تم حجز أي من نقاط هذا المستخدم، ستظهر هنا.",
-        "zeroPurchaseValue": "لا توجد قيمة شراء"
+        "zeroPurchaseValue": "لا توجد قيمة شراء",
+        "sarAmount": "{value} ريال"
       },
       "unregistered": {
         "notice": "لم يكمل هذا الشخص تسجيله بعد، لذا يقتصر ملفه الشخصي على رقم الجوال حاليًا.",
@@ -570,6 +580,10 @@
         "previous": "السابق",
         "next": "التالي",
         "rowsPerPage": "الصفوف في الصفحة"
+      },
+      "gender": {
+        "male": "ذكر",
+        "female": "أنثى"
       }
     },
     "states": {
