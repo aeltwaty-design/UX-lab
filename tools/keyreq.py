@@ -14,7 +14,7 @@ s = raw[:_a] + raw[_b:]
 keys = set()
 
 # literal keys
-PREFIX = r'(?:transfers|transactions|charge|exports)'
+PREFIX = r'(?:transfers|transactions|charge|exports|login|otp)'
 for m in re.finditer(r'["\'](' + PREFIX + r'\.[A-Za-z0-9._]+)["\']', s):
     keys.add(m.group(1))
 for m in re.finditer(r'data-i18n[a-z-]*="(' + PREFIX + r'\.[A-Za-z0-9._]+)"', s):
@@ -100,7 +100,8 @@ keys.discard("exports.target.")
 req = sorted(keys)
 if len(sys.argv) > 1 and sys.argv[1] == "--check":
     d = {"en": {}, "ar": {}}
-    for f in ("transfers.json", "transactions.json", "chargehistory.json", "exports.json"):
+    for f in ("transfers.json", "transactions.json", "chargehistory.json", "exports.json",
+              "login.json"):
         try:
             x = json.load(io.open("src/i18n/" + f, encoding="utf-8"))
         except FileNotFoundError:

@@ -602,6 +602,116 @@ html[dir="ltr"] .ltr{text-align:left}
 }
 
 /* ===================================================================
+   SIGN IN
+   A split card: the form on one half, a showcase on the other. Full
+   bleed, no shell — the app's chrome has no business here.
+   =================================================================== */
+body[data-auth="1"] .shell{display:none}
+body[data-auth="1"]{background:var(--p-700)}
+#view-login{display:none}
+body[data-auth="1"] #view-login{display:block}
+
+.auth{position:fixed;inset:0;overflow-y:auto;padding:28px 20px;
+  background:
+    radial-gradient(120% 90% at 88% 8%, rgba(250,195,51,.22), transparent 55%),
+    radial-gradient(110% 80% at 8% 92%, rgba(155,120,255,.35), transparent 60%),
+    linear-gradient(150deg, var(--p-700), var(--p-600) 45%, var(--p-800));
+  display:grid;place-items:center}
+.auth-card{width:min(1080px,100%);background:#fff;border-radius:var(--r-300);
+  box-shadow:0 28px 70px rgba(17,19,23,.28);overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;min-height:600px}
+.auth-form{padding:44px 48px;display:flex;flex-direction:column}
+.auth-brand{display:flex;align-items:center;gap:11px;margin-bottom:38px}
+.auth-mark{inline-size:40px;block-size:40px;border-radius:11px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--p-500),var(--p-700));color:#fff;
+  font-size:15px;font-weight:700;flex:none}
+.auth-brand-n{font-size:16px;font-weight:700;color:var(--n-950);line-height:1.2}
+.auth-brand-s{font-size:12.5px;color:var(--n-700);margin-top:2px}
+.auth-h{font-size:26px;font-weight:700;color:var(--n-950);letter-spacing:-.015em}
+.auth-sub{font-size:14px;color:var(--n-700);margin-top:7px;line-height:1.55}
+.auth-body{margin-top:30px;flex:1}
+.auth-foot{margin-top:32px;padding-top:20px;border-top:1px solid var(--n-100);
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--n-600)}
+.auth-foot a{color:var(--n-700);text-decoration:none}
+.auth-foot a:hover{color:var(--p-700);text-decoration:underline}
+.auth-foot .sep{color:var(--n-300)}
+
+/* a field with something inside it: an icon at the start, a control at the end */
+.f-wrap{position:relative;display:flex;align-items:center}
+.f-wrap > svg{position:absolute;inset-inline-start:14px;color:var(--n-600);pointer-events:none}
+.f-wrap .finp{padding-inline-start:44px}
+.f-wrap .finp.has-end{padding-inline-end:48px}
+.f-eye{position:absolute;inset-inline-end:6px;inline-size:38px;block-size:38px;border:none;
+  background:none;border-radius:var(--r-100);color:var(--n-600);cursor:pointer;
+  display:grid;place-items:center}
+.f-eye:hover{background:var(--n-100);color:var(--n-900)}
+.auth .btn{width:100%;justify-content:center;font-size:15px}
+.auth-link{background:none;border:none;padding:0;font:inherit;font-size:13.5px;
+  color:var(--p-700);font-weight:600;cursor:pointer}
+.auth-link:hover{text-decoration:underline}
+
+/* --- the six-digit code ------------------------------------------
+   Six boxes rather than one field: the shape of the input tells you how
+   much is wanted, and a pasted code fills them all. */
+.otp{display:flex;gap:10px;direction:ltr}
+.otp input{inline-size:100%;block-size:62px;min-width:0;text-align:center;
+  font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;
+  border:1px solid var(--n-300);border-radius:var(--r-150);background:#fff;
+  color:var(--n-950);outline:none;transition:border-color .12s,box-shadow .12s}
+.otp input:focus{border-color:var(--p-500);box-shadow:var(--focus)}
+.otp input[aria-invalid="true"]{border-color:var(--danger-500)}
+.otp-note{display:flex;align-items:center;gap:8px;padding:11px 14px;border-radius:var(--r-100);
+  background:var(--success-50);border:1px solid var(--success-200);
+  font-size:13px;color:var(--n-900);margin-bottom:20px}
+.otp-note svg{flex:none;color:var(--success-700)}
+
+/* --- the showcase ------------------------------------------------- */
+.auth-show{position:relative;overflow:hidden;padding:44px;display:flex;
+  flex-direction:column;justify-content:flex-end;color:#fff;
+  background:linear-gradient(160deg,var(--p-600),var(--p-800) 60%,var(--p-900))}
+.auth-show::before,.auth-show::after{content:"";position:absolute;border-radius:50%;
+  pointer-events:none}
+.auth-show::before{inline-size:340px;block-size:340px;inset-block-start:-90px;inset-inline-end:-110px;
+  background:radial-gradient(circle,rgba(250,195,51,.30),transparent 70%)}
+.auth-show::after{inline-size:300px;block-size:300px;inset-block-end:-120px;inset-inline-start:-90px;
+  background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%)}
+.show-h{position:relative;font-size:29px;font-weight:700;line-height:1.3;letter-spacing:-.015em}
+.show-b{position:relative;font-size:14.5px;line-height:1.65;margin-top:12px;color:rgba(255,255,255,.82);
+  max-width:42ch}
+.show-cap{position:relative;font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:14px}
+
+/* The film. Two identical runs side by side, translated by exactly half the
+   track, so the loop has no seam and no jump. */
+.film{position:relative;margin-bottom:34px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+.film-track{display:flex;gap:14px;width:max-content;animation:film 34s linear infinite}
+.film:hover .film-track{animation-play-state:paused}
+@keyframes film{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){
+  .film-track{animation:none}
+  .film{overflow-x:auto;scrollbar-width:thin}
+}
+.film-tile{inline-size:112px;block-size:112px;border-radius:var(--r-200);flex:none;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);
+  display:grid;place-items:center;backdrop-filter:blur(2px)}
+.film-tile svg{opacity:.92}
+
+@media (max-width:900px){
+  .auth-card{grid-template-columns:1fr;min-height:0}
+  .auth-show{order:-1;padding:30px;min-height:300px}
+  .show-h{font-size:23px}
+  .auth-form{padding:32px 26px}
+}
+@media (max-width:560px){
+  .auth{padding:0}
+  .auth-card{border-radius:0;min-height:100vh}
+  .otp{gap:7px}
+  .otp input{block-size:54px;font-size:20px}
+}
+
+/* ===================================================================
    TRANSFER POINTS
    An approval queue, not a report. Everything below serves one job:
    let a reviewer see what is waiting, judge it, and act — without
@@ -961,7 +1071,7 @@ html[dir="rtl"] .vw-line{text-align:start}
       <span class="nav-label" data-i18n="nav.whatsNew">What's new</span></a>
     <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-settings"/></svg>
       <span class="nav-label" data-i18n="nav.settings">Settings</span></a>
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-logout"/></svg>
+    <a href="#/login" class="nav-item" onclick="signOut();return false"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-logout"/></svg>
       <span class="nav-label" data-i18n="nav.logout">Log out</span></a>
   </div>
 </aside>
@@ -1399,6 +1509,10 @@ html[dir="rtl"] .vw-line{text-align:start}
     </div>
   </div>
 </div>
+
+<!-- Sign in lives outside the shell: no sidebar, no topbar, nothing of the
+     application's chrome, because none of it is usable until you are in. -->
+<div id="view-login"></div>
 
 <!-- Side panel. Every action on Transfer points happens here rather than in a
      dialog, so the list being judged stays on screen while a decision is made. -->
@@ -2931,6 +3045,7 @@ function setLang(l){
   if (ROUTE === "transactions") renderTransactions();
   if (ROUTE === "charges") renderCharges();
   if (ROUTE === "exports") renderExports();
+  if (ROUTE === "login") renderLogin();
   if (PSTACK.length) paintPanel();
   navQueueBadge();
   [["btn-ar","btn-en"],["pv-ar","pv-en"]].forEach(([a,b])=>{
@@ -3229,6 +3344,13 @@ const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"det
 const COLL_OF = { users:"users", user:"users", followers:"followers", follower:"followers" };
 function render(route, id){
   ROUTE = route; CURRENT = id ?? null;
+  // Sign in replaces the application rather than sitting inside it.
+  if (route === "login"){
+    document.body.dataset.auth = "1";
+    renderLogin(); applyI18n(); window.scrollTo(0, 0);
+    return;
+  }
+  document.body.dataset.auth = "0";
   if (COLL_OF[route] && COLL_OF[route] !== COLL){ COLL = COLL_OF[route]; SEL.clear(); PAGE = 1; }
   const view = VIEW_OF[route] || "overview";
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "view-" + view));
@@ -3265,7 +3387,7 @@ function onHash(){
     SEG = seg; PAGE = 1;
     document.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-selected", b.dataset.seg === seg));
   }
-  render(VIEW_OF[route] ? route : "overview", id);
+  render(route === "login" || VIEW_OF[route] ? route : "overview", id);
 }
 window.addEventListener("hashchange", onHash);
 let _rw; window.addEventListener("resize", () => {
@@ -6592,6 +6714,240 @@ document.addEventListener("click", e => {
     }
   }
 });
+
+/* =====================================================================
+   SIGN IN
+   Two steps on one screen: credentials, then the code sent by SMS.
+   There is no sign-up — partner accounts are provisioned by WalaOne, so
+   nothing here offers to make one.
+   ===================================================================== */
+let AUTH_STEP = "creds", OTP_LEFT = 0, OTP_TIMER = null;
+const OTP_LEN = 6, OTP_WAIT = 55;
+
+/* PLACEHOLDER ARTWORK — the client asked for photographs of real Saudi
+   brands here. I have no rights-cleared assets for any real company, and
+   the published page cannot load an external image in any case, so these
+   are abstract marks standing in a logo wall.
+
+   To use the real thing: replace FILM_MARKS with inline <svg> or
+   <img src="data:image/…"> for each partner. The strip, its masking and
+   its seamless loop need no other change — only the contents of a tile. */
+const FILM_MARKS = [
+  `<svg viewBox="0 0 48 48" width="46" height="46" fill="none" stroke="#fff" stroke-width="2.2"
+     stroke-linecap="round" stroke-linejoin="round"><path d="M24 6 8 15v18l16 9 16-9V15Z"/><path d="M24 24 8 15M24 24l16-9M24 24v18"/></svg>`,
+  `<svg viewBox="0 0 48 48" width="46" height="46" fill="none" stroke="#fff" stroke-width="2.2"
+     stroke-linecap="round"><circle cx="24" cy="24" r="15"/><path d="M24 9v30M9 24h30"/></svg>`,
+  `<svg viewBox="0 0 48 48" width="46" height="46" fill="none" stroke="#fff" stroke-width="2.2"
+     stroke-linejoin="round"><path d="M10 32 24 10l14 22Z"/><path d="M17 32h14"/></svg>`,
+  `<svg viewBox="0 0 48 48" width="46" height="46" fill="none" stroke="#fff" stroke-width="2.2"
+     stroke-linecap="round"><path d="M12 36V16a6 6 0 0 1 12 0v20"/><path d="M24 36V16a6 6 0 0 1 12 0v20"/></svg>`,
+  `<svg viewBox="0 0 48 48" width="46" height="46" fill="none" stroke="#fff" stroke-width="2.2"
+     stroke-linejoin="round"><rect x="10" y="10" width="28" height="28" rx="9"/><path d="M19 24h10M24 19v10"/></svg>`,
+  `<svg viewBox="0 0 48 48" width="46" height="46" fill="none" stroke="#fff" stroke-width="2.2"
+     stroke-linecap="round" stroke-linejoin="round"><path d="M24 8c7 6 11 11 11 17a11 11 0 1 1-22 0c0-6 4-11 11-17Z"/></svg>`,
+  `<svg viewBox="0 0 48 48" width="46" height="46" fill="none" stroke="#fff" stroke-width="2.2"
+     stroke-linecap="round"><path d="M14 34V14l20 20V14"/></svg>`,
+  `<svg viewBox="0 0 48 48" width="46" height="46" fill="none" stroke="#fff" stroke-width="2.2"
+     stroke-linejoin="round"><path d="M24 9l4.6 9.8 10.4 1.6-7.6 7.6 1.8 10.9L24 33.7 14.8 38.9l1.8-10.9L9 20.4l10.4-1.6Z"/></svg>`
+];
+
+function renderLogin(){
+  const el = document.getElementById("view-login"); if (!el) return;
+  /* The strip is written twice and slid by exactly half its width, which is
+     what makes the loop seamless rather than snapping back at the end. */
+  const tiles = FILM_MARKS.map(m => `<span class="film-tile">${m}</span>`).join("");
+  el.innerHTML = `
+  <div class="auth">
+    <div class="auth-card">
+      <div class="auth-form">
+        <div class="auth-brand">
+          <span class="auth-mark" aria-hidden="true">CG</span>
+          <span class="min-w-0">
+            <span class="auth-brand-n" style="display:block">Comtech Gold</span>
+            <span class="auth-brand-s" style="display:block">${esc(t("login.brandLine"))}</span>
+          </span>
+          <span class="langtog" role="group" aria-label="${esc(t("login.langToggle"))}"
+                style="margin-inline-start:auto">
+            <button onclick="setLang('ar')" aria-pressed="${LANG === "ar"}">عربي</button>
+            <button onclick="setLang('en')" aria-pressed="${LANG === "en"}">English</button>
+          </span>
+        </div>
+        ${AUTH_STEP === "creds" ? credsStep() : otpStep()}
+        <div class="auth-foot">
+          <span>${esc(interp(t("login.rights"), { year: fmt(2026) }))}</span>
+          <a href="#" onclick="return false">${esc(t("login.terms"))}</a>
+          <span class="sep" aria-hidden="true">·</span>
+          <a href="#" onclick="return false">${esc(t("login.privacy"))}</a>
+        </div>
+      </div>
+
+      <div class="auth-show">
+        <div class="show-cap">${esc(t("login.showcase.brands"))}</div>
+        <div class="film" role="img" aria-label="${esc(t("login.showcase.brands"))}">
+          <div class="film-track" aria-hidden="true">${tiles}${tiles}</div>
+        </div>
+        <h2 class="show-h">${esc(t("login.showcase.heading"))}</h2>
+        <p class="show-b">${esc(t("login.showcase.body"))}</p>
+      </div>
+    </div>
+  </div>`;
+  if (AUTH_STEP === "otp") setTimeout(() => document.getElementById("otp0")?.focus(), 60);
+}
+
+function credsStep(){
+  return `
+    <h1 class="auth-h">${esc(t("login.heading"))}</h1>
+    <p class="auth-sub">${esc(t("login.subtitle"))}</p>
+    <div class="auth-body">
+      <div class="fgrp">
+        <label class="flab" for="lgEmail">${esc(t("login.emailLabel"))}</label>
+        <span class="f-wrap">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m3.8 7 8.2 6 8.2-6"/></svg>
+          <input class="finp ltr" id="lgEmail" type="email" autocomplete="username"
+                 placeholder="${esc(t("login.emailPlaceholder"))}" oninput="lgClear('lgEmailErr')">
+        </span>
+        <div class="ferr" id="lgEmailErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+          <span>${esc(t("login.errEmail"))}</span></div>
+      </div>
+      <div class="fgrp">
+        <label class="flab" for="lgPass">${esc(t("login.passwordLabel"))}</label>
+        <span class="f-wrap">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>
+          <input class="finp ltr has-end" id="lgPass" type="password" autocomplete="current-password"
+                 placeholder="${esc(t("login.passwordPlaceholder"))}" oninput="lgClear('lgPassErr')"
+                 onkeydown="if(event.key==='Enter')doLogin()">
+          <button class="f-eye" type="button" id="lgEye" onclick="lgEye()"
+                  aria-label="${esc(t("login.showPassword"))}" title="${esc(t("login.showPassword"))}">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-eye"/></svg></button>
+        </span>
+        <div class="ferr" id="lgPassErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+          <span id="lgPassErrTxt">${esc(t("login.errPassword"))}</span></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:6px" onclick="doLogin()">${esc(t("login.submit"))}</button>
+      <div style="text-align:center;margin-top:16px">
+        <button class="auth-link" onclick="toast(t('login.forgotHelp'))">${esc(t("login.forgot"))}</button>
+      </div>
+    </div>`;
+}
+
+function otpStep(){
+  const boxes = Array.from({ length: OTP_LEN }, (_, i) => `<input id="otp${i}" type="text"
+    inputmode="numeric" autocomplete="${i === 0 ? "one-time-code" : "off"}" maxlength="1"
+    aria-label="${esc(interp(t("otp.a11y.digit"), { n: fmt(i + 1) }))}"
+    oninput="otpIn(${i})" onkeydown="otpKey(event,${i})" onpaste="otpPaste(event)">`).join("");
+  return `
+    <h1 class="auth-h">${esc(t("otp.heading"))}</h1>
+    <p class="auth-sub">${esc(t("otp.subtitle"))}</p>
+    <div class="auth-body">
+      <div class="otp-note" id="otpNote" hidden>
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-check"/></svg>
+        <span>${esc(t("otp.resent"))}</span></div>
+      <div class="fgrp">
+        <span class="flab" id="otpLbl">${esc(t("otp.codeLabel"))}</span>
+        <div class="otp" role="group" aria-labelledby="otpLbl"
+             aria-label="${esc(t("otp.a11y.group"))}">${boxes}</div>
+        <div class="ferr" id="otpErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+          <span id="otpErrTxt"></span></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:6px" onclick="doOtp()">${esc(t("otp.submit"))}</button>
+      <div style="text-align:center;margin-top:16px">
+        <span id="otpResend"></span>
+      </div>
+      <div style="text-align:center;margin-top:14px">
+        <button class="auth-link" style="color:var(--n-700)" onclick="authBack()">${esc(t("otp.back"))}</button>
+      </div>
+    </div>`;
+}
+
+const lgClear = id => { const e = document.getElementById(id); if (e) e.hidden = true; };
+function lgEye(){
+  const i = document.getElementById("lgPass"), b = document.getElementById("lgEye");
+  const show = i.type === "password";
+  i.type = show ? "text" : "password";
+  const label = t(show ? "login.hidePassword" : "login.showPassword");
+  b.setAttribute("aria-label", label); b.setAttribute("title", label);
+}
+function doLogin(){
+  const em = document.getElementById("lgEmail"), pw = document.getElementById("lgPass");
+  let bad = false;
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value.trim())){
+    document.getElementById("lgEmailErr").hidden = false; bad = true;
+  }
+  if (!pw.value){
+    document.getElementById("lgPassErrTxt").textContent = t("login.errPassword");
+    document.getElementById("lgPassErr").hidden = false; bad = true;
+  }
+  if (bad) return;
+  AUTH_STEP = "otp"; renderLogin(); startResend();
+}
+function authBack(){ stopResend(); AUTH_STEP = "creds"; renderLogin(); }
+
+/* --- the code ------------------------------------------------------------ */
+const otpVal = () => Array.from({ length: OTP_LEN },
+  (_, i) => document.getElementById("otp" + i)?.value || "").join("");
+function otpIn(i){
+  const el = document.getElementById("otp" + i);
+  el.value = el.value.replace(/\D/g, "").slice(0, 1);
+  document.getElementById("otpErr").hidden = true;
+  if (el.value && i < OTP_LEN - 1) document.getElementById("otp" + (i + 1)).focus();
+}
+function otpKey(e, i){
+  if (e.key === "Backspace" && !e.target.value && i > 0){
+    e.preventDefault(); const p = document.getElementById("otp" + (i - 1)); p.value = ""; p.focus();
+  }
+  if (e.key === "ArrowLeft"  && i > 0)           document.getElementById("otp" + (i - 1)).focus();
+  if (e.key === "ArrowRight" && i < OTP_LEN - 1) document.getElementById("otp" + (i + 1)).focus();
+  if (e.key === "Enter") doOtp();
+}
+/* A code arrives as one string, so pasting anywhere fills the whole row
+   rather than dropping five digits on the floor. */
+function otpPaste(e){
+  const txt = (e.clipboardData || window.clipboardData).getData("text").replace(/\D/g, "");
+  if (!txt) return;
+  e.preventDefault();
+  for (let i = 0; i < OTP_LEN; i++) document.getElementById("otp" + i).value = txt[i] || "";
+  document.getElementById("otp" + Math.min(txt.length, OTP_LEN - 1)).focus();
+  document.getElementById("otpErr").hidden = true;
+}
+function doOtp(){
+  const v = otpVal(), err = document.getElementById("otpErr"), txt = document.getElementById("otpErrTxt");
+  if (v.length < OTP_LEN){
+    txt.textContent = t("otp.errIncomplete"); err.hidden = false;
+    for (let i = 0; i < OTP_LEN; i++)
+      document.getElementById("otp" + i).setAttribute("aria-invalid", String(!document.getElementById("otp" + i).value));
+    return;
+  }
+  stopResend();
+  document.body.dataset.auth = "0";
+  go("overview");
+}
+function startResend(){
+  OTP_LEFT = OTP_WAIT; paintResend();
+  stopResend();
+  OTP_TIMER = setInterval(() => { OTP_LEFT--; paintResend(); if (OTP_LEFT <= 0) stopResend(); }, 1000);
+}
+function stopResend(){ if (OTP_TIMER){ clearInterval(OTP_TIMER); OTP_TIMER = null; } }
+function paintResend(){
+  const el = document.getElementById("otpResend"); if (!el) return;
+  el.innerHTML = OTP_LEFT > 0
+    ? `<span style="font-size:13.5px;color:var(--n-600)">${
+        esc(interp(t("otp.resendIn"), { n: fmt(OTP_LEFT) }))}</span>`
+    : `<button class="auth-link" onclick="otpResend()">${esc(t("otp.resend"))}</button>`;
+}
+function otpResend(){
+  const n = document.getElementById("otpNote"); if (n) n.hidden = false;
+  startResend();
+}
+function signOut(){
+  stopResend(); AUTH_STEP = "creds";
+  document.body.dataset.auth = "1";
+  location.hash = "#/login";
+  renderLogin();
+}
 
 document.body.dataset.state = "normal";
 document.body.dataset.collapsed = "false";
