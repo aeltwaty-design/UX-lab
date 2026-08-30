@@ -4529,11 +4529,11 @@ function doSingle(){
    The old panel's rules contradicted each other on commas. These four say one
    thing each, and the template is offered before the rules rather than after,
    because a correct file beats a well-explained rejection.               */
-let UP = { file:null, total:0, invalid:0, dup:0 };
+let UP = { file:null, total:0, invalid:0, dup:0, src:"file" };
 const upUsable = () => Math.max(0, UP.total - UP.invalid - UP.dup);
 
 function openUpload(){
-  UP = { file:null, total:0, invalid:0, dup:0 };
+  UP = { file:null, total:0, invalid:0, dup:0, src:"file" };
   openPanel({
     title: t("transfers.upload.title"),
     body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:18px">${esc(t("transfers.upload.intro"))}</p>
@@ -4561,8 +4561,21 @@ function openUpload(){
           <span>${esc(t("transfers.upload.rule" + i))}</span></li>`).join("")}</ul>
       </div>`,
     foot: `<button class="btn btn-ghost" onclick="panelBack()">${esc(t("transfers.upload.cancel"))}</button>
-      <button class="btn btn-primary" onclick="doUpload()">${esc(t("transfers.upload.submit"))}</button>`
+      <button class="btn btn-primary" onclick="doUpload()">${esc(t("transfers.upload.submit"))}</button>`,
+    after: restoreUpload
   });
+}
+/* Repainting the panel rebuilds its markup from the stored body, so a file
+   already chosen has to be put back on screen — otherwise stepping back from
+   the review makes the person choose it a second time. */
+function restoreUpload(){
+  if (!UP.file) return;
+  const drop = document.getElementById("upDrop"); if (!drop) return;
+  drop.classList.add("has-file");
+  document.getElementById("upName").textContent = UP.file;
+  const src = document.getElementById("upSrc");
+  if (src && UP.src) src.value = UP.src;
+  renderUpCheck();
 }
 
 /* A prototype cannot read a real file, so the check is simulated — but the
@@ -4571,6 +4584,7 @@ function openUpload(){
 function upPick(){
   UP.file = "campaign-upload-" + (BATCHES.length + 1) + ".csv";
   UP.total = 214; UP.invalid = 3; UP.dup = 1;
+  UP.src = document.getElementById("upSrc")?.value || "file";
   document.getElementById("upDrop").classList.add("has-file");
   document.getElementById("upName").textContent = UP.file;
   document.getElementById("upHint").textContent = t("transfers.upload.checking");
