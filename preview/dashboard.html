@@ -78,6 +78,7 @@ html[lang="ar"] .num{font-family:var(--font-en)} /* Western numerals, KSA conven
    will need either right-alignment or a numeral face that aligns. */
 .num{font-variant-numeric:tabular-nums}
 :focus-visible{outline:none;box-shadow:var(--focus);border-radius:var(--r-100)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .skip{position:absolute;inset-inline-start:-9999px;top:8px;z-index:100;
       background:var(--p-700);color:#fff;padding:10px 16px;border-radius:var(--r-100)}
 .skip:focus{inset-inline-start:8px}
@@ -129,6 +130,25 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .langtog button{border:none;background:none;padding:5px 12px;border-radius:var(--r-50);
   font-size:13px;font-weight:600;color:var(--n-700);cursor:pointer}
 .langtog button[aria-pressed="true"]{background:#fff;color:var(--p-700);box-shadow:var(--shadow-xs)}
+
+/* ---- date range dropdown ---- */
+.dd{position:relative}
+.dd-menu{position:absolute;z-index:40;inset-block-start:calc(100% + 6px);inset-inline-end:0;
+  min-width:250px;background:#fff;border:1px solid var(--n-200);border-radius:var(--r-150);
+  box-shadow:var(--shadow-lg);padding:6px;animation:ddIn .12s ease}
+@keyframes ddIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.dd-menu{animation:none}}
+.dd-opt{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:none;
+  background:none;border-radius:var(--r-100);cursor:pointer;text-align:start;
+  font-size:14px;color:var(--n-900);font-family:inherit}
+.dd-opt:hover,.dd-opt:focus-visible{background:var(--n-100);outline:none}
+.dd-opt[aria-selected="true"]{color:var(--p-700);font-weight:600}
+.dd-check{inline-size:16px;block-size:16px;flex:none;color:var(--p-600);visibility:hidden}
+.dd-opt[aria-selected="true"] .dd-check{visibility:visible}
+.dd-sep{height:1px;background:var(--n-200);margin:6px 4px}
+.dd-sub{display:block;font-size:11.5px;color:var(--n-700);font-weight:400;margin-top:2px;line-height:1.35}
+.dd-opt.dd-custom{align-items:flex-start}
+.dd-opt.dd-custom .dd-check{margin-top:2px}
 
 /* ---- cards ---- */
 .card{background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
@@ -285,9 +305,16 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
   .att-row .btn{margin-inline-start:auto}
 }
 @media (max-width:640px){
-  /* three fixed-width buttons cannot fit a phone; let the row wrap and share it */
+  /* the row wraps and its controls share it */
   .hdr-actions{width:100%}
   .hdr-actions .btn:not([aria-label]){flex:1 1 auto;justify-content:center}
+  /* the range control is a wrapper now, so it needs the rule the button had —
+     without this it keeps its natural width, and in Arabic the menu anchored
+     mid-row and ran off the right edge of the viewport */
+  .hdr-actions .dd{flex:1 1 auto}
+  .hdr-actions .dd > .btn{width:100%;justify-content:center}
+  /* and the menu can never be wider than the screen it opens on */
+  .dd-menu{min-width:0;width:100%;max-width:calc(100vw - 32px)}
 }
 @media (max-width:560px){
   .langtog button{padding:5px 9px;font-size:12px}
@@ -361,6 +388,7 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
 <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.3 2.6 17.4A2 2 0 0 0 4.3 20.4h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4"/><circle cx="12" cy="16.8" r=".9" fill="currentColor" stroke="none"/></symbol>
 </defs></svg>
 
+<div id="ddLive" role="status" aria-live="polite" class="sr-only"></div>
 <a href="#main" class="skip" data-i18n="a11y.skip">Skip to main content</a>
 
 <div id="navScrim" onclick="closeNav()" aria-hidden="true"></div>
@@ -463,11 +491,15 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
         <p style="font-size:14px;color:var(--n-700);margin-top:3px" data-i18n="header.subtitle">Here's what needs you today.</p>
       </div>
       <div class="hdr-actions flex items-center gap-2 flex-wrap">
-        <button class="btn btn-ghost">
-          <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-calendar"/></svg>
-          <span data-i18n="header.range12m">Last 12 months</span>
-          <svg viewBox="0 0 24 24" width="15" height="15" style="color:var(--n-500)"><use href="#i-chevron"/></svg>
-        </button>
+        <div class="dd">
+          <button class="btn btn-ghost" id="ddBtn" aria-haspopup="listbox" aria-expanded="false"
+                  aria-controls="ddMenu" data-i18n-aria="dateFilter.label" onclick="ddToggle()">
+            <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-calendar"/></svg>
+            <span id="ddLabel">Last month</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" style="color:var(--n-500)" id="ddCaret"><use href="#i-chevron"/></svg>
+          </button>
+          <div class="dd-menu" id="ddMenu" role="listbox" data-i18n-aria="dateFilter.label" hidden></div>
+        </div>
       </div>
     </div>
     <div class="grid grid-cols-12 gap-5 mb-5">
@@ -1172,6 +1204,57 @@ function renderOffers(){
     </div>`).join("");
 }
 
+/* Date range control. Presets first, custom behind a hairline at the foot with
+   its own explanation. Selection is marked by a check, never by colour alone. */
+const RANGES = ["yesterday","lastWeek","lastMonth","lastYear"];
+let RANGE = "lastMonth";
+function renderDD(){
+  const m = document.getElementById("ddMenu"); if (!m) return;
+  const opt = (k, sub) => `<button class="dd-opt${sub?" dd-custom":""}" role="option" data-k="${k}"
+      aria-selected="${RANGE===k}" onclick="ddPick('${k}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+           stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${t("dateFilter."+k)}${sub?`<span class="dd-sub">${t("dateFilter.customHelp")}</span>`:""}</span>
+    </button>`;
+  m.innerHTML = RANGES.map(k=>opt(k)).join("") + '<div class="dd-sep"></div>' + opt("custom", true);
+  document.getElementById("ddLabel").textContent = t("dateFilter." + RANGE);
+}
+function ddOpen(){
+  const m=document.getElementById("ddMenu"), b=document.getElementById("ddBtn");
+  m.hidden=false; b.setAttribute("aria-expanded","true");
+  document.getElementById("ddCaret").style.transform="rotate(180deg)";
+  (m.querySelector('[aria-selected="true"]')||m.querySelector(".dd-opt")).focus();
+}
+function ddClose(focus){
+  const m=document.getElementById("ddMenu"), b=document.getElementById("ddBtn");
+  if (m.hidden) return;
+  m.hidden=true; b.setAttribute("aria-expanded","false");
+  document.getElementById("ddCaret").style.transform="";
+  if (focus) b.focus();
+}
+function ddToggle(){ document.getElementById("ddMenu").hidden ? ddOpen() : ddClose(true); }
+function ddPick(k){
+  RANGE = k;
+  // 'custom' would open a date picker in the real product; here it just selects.
+  renderDD(); ddClose(true);
+  const live = document.getElementById("ddLive");
+  if (live) live.textContent = interp(t("dateFilter.applied"), { range: t("dateFilter."+k) });
+}
+document.addEventListener("click", e => {
+  if (!e.target.closest(".dd")) ddClose(false);
+});
+document.addEventListener("keydown", e => {
+  const m = document.getElementById("ddMenu");
+  if (!m || m.hidden) return;
+  const opts = [...m.querySelectorAll(".dd-opt")];
+  const i = opts.indexOf(document.activeElement);
+  if (e.key === "Escape"){ e.preventDefault(); ddClose(true); }
+  else if (e.key === "ArrowDown"){ e.preventDefault(); opts[(i+1) % opts.length].focus(); }
+  else if (e.key === "ArrowUp"){ e.preventDefault(); opts[(i-1+opts.length) % opts.length].focus(); }
+  else if (e.key === "Home"){ e.preventDefault(); opts[0].focus(); }
+  else if (e.key === "End"){ e.preventDefault(); opts[opts.length-1].focus(); }
+});
+
 /* ===================== controls ===================== */
 function interp(s, vars){
   const all = Object.assign({ name: t("app.userName").split(" ")[0] }, vars || {});
@@ -1210,7 +1293,7 @@ function setLang(l){
   const html = document.documentElement;
   html.lang = l;
   html.dir = (l === "ar") ? "rtl" : "ltr";     // structural mirror, not just copy
-  applyI18n(); renderActivity(); renderOffers(); drawChart(); drawSparks();
+  applyI18n(); renderDD(); renderActivity(); renderOffers(); drawChart(); drawSparks();
   [["btn-ar","btn-en"],["pv-ar","pv-en"]].forEach(([a,b])=>{
     document.getElementById(a).setAttribute("aria-pressed", l==="ar");
     document.getElementById(b).setAttribute("aria-pressed", l==="en");
