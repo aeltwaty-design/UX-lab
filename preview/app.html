@@ -960,7 +960,7 @@ html[dir="ltr"] .ltr{text-align:left}
         <h1 style="font-size:24px;font-weight:700;letter-spacing:-.01em" data-i18n-coll="list.heading">Users</h1>
         <p style="font-size:14px;color:var(--n-700);margin-top:3px" data-i18n-coll="list.subtitle"></p>
       </div>
-      <button class="btn btn-primary" onclick="openReminder()">
+      <button class="btn btn-primary" id="hdrReminder" onclick="openReminder()" hidden>
         <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-userplus"/></svg>
         <span data-i18n="users.reminder.action">Send reminder</span>
       </button>
@@ -1016,7 +1016,7 @@ html[dir="ltr"] .ltr{text-align:left}
         <span class="selbar-n" id="selN"></span>
         <button class="btn-link" onclick="selectAllMatching()" id="selAllBtn"></button>
         <div style="flex:1"></div>
-        <button class="btn btn-primary btn-sm" onclick="openReminder()">
+        <button class="btn btn-primary btn-sm" id="selReminder" onclick="openReminder()" hidden>
           <svg viewBox="0 0 24 24" width="15" height="15"><use href="#i-userplus"/></svg>
           <span data-i18n="users.reminder.action"></span></button>
         <button class="btn btn-ghost btn-sm" onclick="clearSel()" data-i18n="users.selection.clear"></button>
@@ -2097,6 +2097,7 @@ function render(route, id){
   const main = document.getElementById("main");
   if (view === "overview"){ renderDD(); renderActivity(); renderOffers(); drawChart(); drawSparks(); }
   if (view === "list"){ counts(); renderRows(); }
+  applyReminderFlag();
   if (view === "detail"){ renderUser(); }
   applyI18n();
   main.setAttribute("aria-label", view === "overview" ? t("a11y.main") : ck("list.heading"));
@@ -2200,7 +2201,8 @@ function rowMenu(ev, id){
     { k:"users.actions.viewProfile", fn:`go(coll().detail,${id})`, icon:"i-user" },
     { k:"users.actions.transferPoints", fn:`toast(t('users.actions.transferPoints'))`, icon:"i-transfer" },
   ];
-  if (!u.registered) items.push({ k:"users.reminder.action", fn:`openReminder(${id})`, icon:"i-userplus" });
+  if (REMINDER_ENABLED && !u.registered)
+    items.push({ k:"users.reminder.action", fn:`openReminder(${id})`, icon:"i-userplus" });
   items.push({ k:"users.actions.copyId", fn:`copyId('${uid(u)}')`, icon:"i-receipt" });
 
   const el = document.createElement("div");
@@ -2364,7 +2366,7 @@ function renderUser(){
             ${interp(t(coll().sinceKey), { date: dfmt(u.joined) })}</div>
         </div>
         <div class="flex gap-2 flex-wrap">
-          ${!u.registered ? `<button class="btn btn-primary" onclick="openReminder(${u.id})">
+          ${REMINDER_ENABLED && !u.registered ? `<button class="btn btn-primary" onclick="openReminder(${u.id})">
             <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-userplus"/></svg>
             ${t(coll().inviteKey)}</button>` : ""}
           <button class="btn btn-ghost" onclick="toast(t('users.actions.transferPoints'))">
@@ -2374,7 +2376,7 @@ function renderUser(){
       </div>
       ${!u.registered ? `<div class="unreg-note">
         <svg viewBox="0 0 24 24" width="17" height="17" class="shrink-0"><use href="#i-userplus"/></svg>
-        <span>${t(coll().noticeKey)}</span></div>` : ""}
+        <span>${REMINDER_ENABLED ? t(coll().noticeKey) : splitPart(t(coll().noticeKey), "head")}</span></div>` : ""}
     </section>
 
     <div class="grid grid-cols-12 gap-4 mb-5">
@@ -2424,8 +2426,14 @@ function setTab(k){ TAB = k; renderUser(); }
    people and cannot be undone, exclude anyone still inside the cooldown,
    and surface the per-send cap instead of failing silently at submit.
    ===================================================================== */
+/* The reminder flow is hidden while the backend for it does not exist. This is
+   the single switch: set it true and the header action, the bulk action, the row
+   menu item and the profile call-to-action all come back. The dialog, the
+   cooldown and the cap are all still here, untouched. */
+const REMINDER_ENABLED = false;
 const CAP = 200, COOLDOWN_SHARE = 0.12;
 function openReminder(single){
+  if (!REMINDER_ENABLED) return;
   const rows = coll().rows();
   const pool = single != null ? [rows.find(u => u.id === single)]
              : (SEL.size ? rows.filter(u => SEL.has(u.id)) : matching());
@@ -2744,6 +2752,11 @@ function toggleAll(){
 }
 function selectAllMatching(){ matching().forEach(u => SEL.add(u.id)); renderRows(); }
 function clearSel(){ SEL.clear(); renderRows(); }
+function applyReminderFlag(){
+  ["hdrReminder","selReminder"].forEach(id => {
+    const el = document.getElementById(id); if (el) el.hidden = !REMINDER_ENABLED;
+  });
+}
 function renderSel(){
   const bar = document.getElementById("selbar"); if (!bar) return;
   bar.hidden = SEL.size === 0;
