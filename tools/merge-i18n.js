@@ -9,7 +9,10 @@ const flat = (o, pre = '', out = {}) => {
     v && typeof v === 'object' ? flat(v, pre + k + '.', out) : (out[pre + k] = v);
   return out;
 };
-const SOURCES = ['content.json', 'users-extra.json', 'users-filters.json', 'followers.json', 'transfers.json'];
+const SOURCES = ['content.json', 'users-extra.json', 'users-filters.json', 'followers.json',
+                 'transfers.json', 'transactions.json'];
+// prefixes whose page keys are replaced wholesale, so a deleted string really goes
+const OWNED = ['transfers.', 'transactions.'];
 const src = { en: {}, ar: {} };
 for (const f of SOURCES) {
   const raw = JSON.parse(fs.readFileSync('src/i18n/' + f, 'utf8'));
@@ -25,7 +28,7 @@ const I18N = eval('(' + h.slice(start + 'const I18N = '.length, end).replace(/;\
 let written = 0, removed = 0;
 for (const lang of ['en', 'ar']) {
   for (const k of Object.keys(I18N[lang]))
-    if (k.startsWith('transfers.') && !(k in src[lang])) { delete I18N[lang][k]; removed++; }
+    if (OWNED.some(o => k.startsWith(o)) && !(k in src[lang])) { delete I18N[lang][k]; removed++; }
   for (const [k, v] of Object.entries(src[lang])) { if (I18N[lang][k] !== v) written++; I18N[lang][k] = v; }
 }
 // Page keys with no source, split into two kinds. An alias - the same string

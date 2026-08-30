@@ -69,7 +69,14 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
   await scan('review dupes',   () => uprFilter('duplicate'));
   await scan('rejected batch', () => { closePanel(); openBatch('BCH-1034'); });
   await scan('ready batch',    () => { closePanel(); openBatch('BCH-1038'); });
-  await scan('empty state',    () => { closePanel(); setState('empty'); });
+  // the transactions screen and its panel
+  await scan('transactions',   () => { closePanel(); location.hash = '#/transactions'; });
+  await scan('txn filters',    () => xfilToggle());
+  await scan('txn columns',    () => { xfilClose(); xcolToggle(); });
+  await scan('txn panel',      () => { document.getElementById('xcolMenu').hidden = true;
+                                       openTxn(TXNS.find(x => x.batch).id); });
+  await scan('txn no ref',     () => { closePanel(); openTxn(TXNS.find(x => !x.ref).id); });
+  await scan('empty state',    () => { closePanel(); location.hash = '#/transfers'; setState('empty'); });
   await scan('error state',    () => setState('error'));
   await b.close();
 })();

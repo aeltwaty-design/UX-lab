@@ -1,6 +1,6 @@
-"""Every transfers.* key the built screen can ask for at runtime, including the
-   ones assembled from a prefix plus a variable — the kind a plain grep misses
-   and the user finds as English sitting in an Arabic page."""
+"""Every transfers.* and transactions.* key the built screens can ask for at
+   runtime, including the ones assembled from a prefix plus a variable — the
+   kind a plain grep misses and the user finds as English in an Arabic page."""
 import io, re, json, sys
 
 raw = io.open("preview/app.html", encoding="utf-8").read()
@@ -14,9 +14,10 @@ s = raw[:_a] + raw[_b:]
 keys = set()
 
 # literal keys
-for m in re.finditer(r'["\'](transfers\.[A-Za-z0-9._]+)["\']', s):
+PREFIX = r'(?:transfers|transactions)'
+for m in re.finditer(r'["\'](' + PREFIX + r'\.[A-Za-z0-9._]+)["\']', s):
     keys.add(m.group(1))
-for m in re.finditer(r'data-i18n[a-z-]*="(transfers\.[A-Za-z0-9._]+)"', s):
+for m in re.finditer(r'data-i18n[a-z-]*="(' + PREFIX + r'\.[A-Za-z0-9._]+)"', s):
     keys.add(m.group(1))
 
 # keys built from a prefix + a value: "transfers.status." + st
@@ -46,6 +47,18 @@ for k in ["charged","transferred","available"]:
     keys.add("transfers.summary." + k)
     keys.add("transfers.summary." + k + "Hint")
 
+# --- transactions: the same prefix-plus-variable problem -------------------
+XTYPES = ["file","loyalty","invoice","referral","b2b","welcome"]
+XCOLS  = ["user","reference","direction","points","value","type",
+          "registration","originId","comment","date"]
+for k in XTYPES: keys.add("transactions.type." + k)
+for k in XCOLS:  keys.add("transactions.columns." + k)
+for d in ["in","out"]:
+    keys.add("transactions.direction." + d)
+    keys.add("transactions.direction." + d + "Desc")
+for i in range(1, 6):
+    keys.add("transactions.sampleNote%d" % i)
+
 # drop the ones that were only ever prefixes
 keys = {k for k in keys if not k.endswith(".")}
 keys.discard("transfers.status.")
@@ -56,10 +69,21 @@ keys.discard("transfers.viewer.issue")
 keys.discard("transfers.viewer.filter")
 keys.discard("transfers.reject.preset")
 keys.discard("transfers.upload.rule")
+keys.discard("transactions.type.")
+keys.discard("transactions.columns.")
+keys.discard("transactions.direction.")
+keys.discard("transactions.sampleNote")
 
 req = sorted(keys)
 if len(sys.argv) > 1 and sys.argv[1] == "--check":
-    d = json.load(io.open("src/i18n/transfers.json", encoding="utf-8"))
+    d = {"en": {}, "ar": {}}
+    for f in ("transfers.json", "transactions.json"):
+        try:
+            x = json.load(io.open("src/i18n/" + f, encoding="utf-8"))
+        except FileNotFoundError:
+            continue
+        for lang in ("en", "ar"):
+            d[lang].update(x.get(lang, {}))
     for lang in ("en", "ar"):
         missing = [k for k in req if k not in d.get(lang, {})]
         print("%s: %d/%d present" % (lang, len(req) - len(missing), len(req)))

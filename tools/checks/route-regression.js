@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
 
   for (const lang of ['ar','en']) {
     console.log(`\n=== ${lang} ===`);
-    for (const route of ['overview','users','followers','transfers','transfers/individual','user/2423501','follower/2423601']) {
+    for (const route of ['overview','users','followers','transfers','transfers/individual','transactions','user/2423501','follower/2423601']) {
       const p = await b.newPage({ viewport:{ width:1440, height:1000 } });
       await p.route('**://**', r => r.request().url().startsWith('file:') ? r.continue() : r.abort());
       const errs = []; p.on('pageerror', e => errs.push(e.message));
@@ -18,7 +18,15 @@ const { chromium } = require('playwright');
       const r = await p.evaluate(() => {
         const on = [...document.querySelectorAll('.view')].filter(v=>v.classList.contains('on')).map(v=>v.id);
         const body = document.getElementById('main').textContent;
-        const rawKeys = (body.match(/\b(?:transfers|users|followers|nav|actions|states|attention)\.[a-zA-Z.]+/g)||[]);
+        // Match the SHAPE of an unresolved key rather than a list of prefixes.
+        // Deriving prefixes from the dictionary cannot catch a new screen whose
+        // keys are missing from it - which is exactly when they render raw.
+        const KEYISH = /\b[a-z][a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+){1,4}\b/g;
+        const NOT_A_KEY = /\.(csv|png|json|html|js|css|pdf|xlsx|com|net|org|sa)$/i;
+        // an email is two key-shaped halves either side of an @, so remove them
+        // from the text before looking rather than trying to exclude the halves
+        const prose = body.replace(/\S+@\S+/g, ' ');
+        const rawKeys = (prose.match(KEYISH)||[]).filter(k => !NOT_A_KEY.test(k));
         const braces  = (body.match(/\{[a-z]+\}/g)||[]);
         return { view: on[0]||'NONE', chars: body.length,
                  rawKeys: [...new Set(rawKeys)].slice(0,4),
@@ -67,6 +75,7 @@ const { chromium } = require('playwright');
   for (const [route, sel] of [['user', '#view-detail .card h1'],
                               ['follower', '#view-detail .card h1'],
                               ['transfers', '#view-transfers h1'],
+                              ['transactions', '#view-transactions h1'],
                               ['users', '#view-list h1'],
                               ['overview', '#view-overview .card-t']]) {
     const r = await p.evaluate(async ([route, sel]) => {
