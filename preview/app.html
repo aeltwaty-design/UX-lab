@@ -639,8 +639,10 @@ body[data-auth="1"] #view-login{display:block}
 /* a field with something inside it: an icon at the start, a control at the end */
 .f-wrap{position:relative;display:flex;align-items:center}
 .f-wrap > svg{position:absolute;inset-inline-start:14px;color:var(--n-600);pointer-events:none}
-.f-wrap .finp{padding-inline-start:44px}
-.f-wrap .finp.has-end{padding-inline-end:48px}
+html[dir="ltr"] .f-wrap .finp{padding-left:44px}
+html[dir="rtl"] .f-wrap .finp{padding-right:44px}
+html[dir="ltr"] .f-wrap .finp.has-end{padding-right:48px}
+html[dir="rtl"] .f-wrap .finp.has-end{padding-left:48px}
 .f-eye{position:absolute;inset-inline-end:6px;inline-size:38px;block-size:38px;border:none;
   background:none;border-radius:var(--r-100);color:var(--n-600);cursor:pointer;
   display:grid;place-items:center}
@@ -667,7 +669,7 @@ body[data-auth="1"] #view-login{display:block}
 
 /* --- the showcase ------------------------------------------------- */
 .auth-show{position:relative;overflow:hidden;padding:44px;display:flex;
-  flex-direction:column;justify-content:flex-end;color:#fff;
+  flex-direction:column;justify-content:space-between;gap:28px;color:#fff;
   background:linear-gradient(160deg,var(--p-600),var(--p-800) 60%,var(--p-900))}
 .auth-show::before,.auth-show::after{content:"";position:absolute;border-radius:50%;
   pointer-events:none}
@@ -679,21 +681,26 @@ body[data-auth="1"] #view-login{display:block}
 .show-b{position:relative;font-size:14.5px;line-height:1.65;margin-top:12px;color:rgba(255,255,255,.82);
   max-width:42ch}
 .show-cap{position:relative;font-size:11.5px;font-weight:600;letter-spacing:.06em;
-  text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:14px}
+  text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:10px;text-align:center}
 
 /* The film. Two identical runs side by side, translated by exactly half the
    track, so the loop has no seam and no jump. */
-.film{position:relative;margin-bottom:34px;
+.films{position:relative;display:flex;flex-direction:column;gap:14px;
+  justify-content:center;flex:1;min-height:0}
+.film{position:relative;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
 .film-track{display:flex;gap:14px;width:max-content;animation:film 34s linear infinite}
+/* The second run goes the other way, so the wall reads as movement rather
+   than as one belt. */
+.film.rev .film-track{animation-direction:reverse;animation-duration:44s}
 .film:hover .film-track{animation-play-state:paused}
 @keyframes film{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){
   .film-track{animation:none}
   .film{overflow-x:auto;scrollbar-width:thin}
 }
-.film-tile{inline-size:112px;block-size:112px;border-radius:var(--r-200);flex:none;
+.film-tile{inline-size:104px;block-size:104px;border-radius:var(--r-200);flex:none;
   background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);
   display:grid;place-items:center;backdrop-filter:blur(2px)}
 .film-tile svg{opacity:.92}
@@ -6755,7 +6762,9 @@ function renderLogin(){
   const el = document.getElementById("view-login"); if (!el) return;
   /* The strip is written twice and slid by exactly half its width, which is
      what makes the loop seamless rather than snapping back at the end. */
-  const tiles = FILM_MARKS.map(m => `<span class="film-tile">${m}</span>`).join("");
+  const tile  = m => `<span class="film-tile">${m}</span>`;
+  const tiles  = FILM_MARKS.map(tile).join("");
+  const tilesB = FILM_MARKS.slice(4).concat(FILM_MARKS.slice(0, 4)).map(tile).join("");
   el.innerHTML = `
   <div class="auth">
     <div class="auth-card">
@@ -6782,12 +6791,15 @@ function renderLogin(){
       </div>
 
       <div class="auth-show">
-        <div class="show-cap">${esc(t("login.showcase.brands"))}</div>
-        <div class="film" role="img" aria-label="${esc(t("login.showcase.brands"))}">
-          <div class="film-track" aria-hidden="true">${tiles}${tiles}</div>
+        <div class="films" role="img" aria-label="${esc(t("login.showcase.brands"))}">
+          <div class="show-cap">${esc(t("login.showcase.brands"))}</div>
+          <div class="film"><div class="film-track" aria-hidden="true">${tiles}${tiles}</div></div>
+          <div class="film rev"><div class="film-track" aria-hidden="true">${tilesB}${tilesB}</div></div>
         </div>
+        <div>
         <h2 class="show-h">${esc(t("login.showcase.heading"))}</h2>
         <p class="show-b">${esc(t("login.showcase.body"))}</p>
+        </div>
       </div>
     </div>
   </div>`;
