@@ -62,6 +62,7 @@
     "attention": {
       "heading": "Needs your attention",
       "subtitle": "A quick list of what needs action today.",
+      "openCount": "Open",
       "balanceIntegrity": {
         "title": "Balance under review",
         "description": "This figure has looked wrong for {value}. We're double-checking it before we show a number here.",
@@ -101,7 +102,8 @@
       "pointsRefunded": "Points refunded",
       "runway": "At the current rate, your balance covers about {value}.",
       "lowBalanceWarning": "Your balance is running low. Top up to keep transfers running smoothly.",
-      "topUpCta": "Charge points"
+      "topUpCta": "Charge points",
+      "emptyState": "No balance yet. When you charge points to your account, they'll show up here."
     },
     "flow": {
       "title": "Points issued vs. redeemed",
@@ -114,6 +116,7 @@
     },
     "funnel": {
       "heading": "Audience funnel",
+      "subtitle": "How your followers turn into active users.",
       "stageFollowers": "Followers",
       "stageRegistered": "Registered",
       "stageActive": "Active",
@@ -156,6 +159,9 @@
       "mainNavigation": "Main navigation",
       "mainContent": "Main content",
       "chartDescription": "Chart showing points issued and redeemed over the selected period."
+    },
+    "time": {
+      "days": "{n} days"
     }
   },
   "ar": {
@@ -221,6 +227,7 @@
     "attention": {
       "heading": "يحتاج انتباهك",
       "subtitle": "قائمة سريعة بما يحتاج إجراء اليوم.",
+      "openCount": "مفتوحة",
       "balanceIntegrity": {
         "title": "الرصيد قيد المراجعة",
         "description": "هذا الرقم غير صحيح منذ {value}. نتحقق منه قبل عرض أي رقم هنا.",
@@ -260,7 +267,8 @@
       "pointsRefunded": "النقاط المستردة",
       "runway": "بمعدلك الحالي، يكفي رصيدك لمدة {value} تقريبًا.",
       "lowBalanceWarning": "رصيدك منخفض. اشحن رصيدك لتستمر عمليات التحويل دون انقطاع.",
-      "topUpCta": "شحن النقاط"
+      "topUpCta": "شحن النقاط",
+      "emptyState": "لا يوجد رصيد بعد. عندما تشحن نقاطًا إلى حسابك، ستظهر هنا."
     },
     "flow": {
       "title": "النقاط الصادرة مقابل المستبدلة",
@@ -273,6 +281,7 @@
     },
     "funnel": {
       "heading": "مسار الجمهور",
+      "subtitle": "كيف يصبح متابعوك مستخدمين نشطين.",
       "stageFollowers": "المتابعين",
       "stageRegistered": "المسجلين",
       "stageActive": "النشطين",
@@ -315,6 +324,9 @@
       "mainNavigation": "التنقل الرئيسي",
       "mainContent": "المحتوى الرئيسي",
       "chartDescription": "رسم بياني يوضّح النقاط الصادرة والمستبدلة خلال الفترة المحددة."
+    },
+    "time": {
+      "days": "{n} أيام"
     }
   }
 }
