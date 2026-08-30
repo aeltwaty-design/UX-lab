@@ -1,0 +1,7 @@
+
+# review screenshots, regenerated on demand
+f-*.png
+s-*.png
+shot-*.png
+.stub.json
+node_modules/
