@@ -914,9 +914,8 @@ html[dir="rtl"] .vw-line{text-align:start}
     <a href="#/transfers" class="nav-item" data-route="transfers"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-transfer"/></svg>
       <span class="nav-label" data-i18n="nav.transfer">Transfer points</span>
       <span class="nav-badge num" id="navQueue" hidden></span></a>
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-receipt"/></svg>
-      <span class="nav-label" data-i18n="nav.transactions">Transactions</span>
-      <span class="nav-badge num">3</span></a>
+    <a href="#/transactions" class="nav-item" data-route="transactions"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-receipt"/></svg>
+      <span class="nav-label" data-i18n="nav.transactions">Transactions</span></a>
     <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-history"/></svg>
       <span class="nav-label" data-i18n="nav.chargeHistory">Charge history</span></a>
 
@@ -1354,6 +1353,7 @@ html[dir="rtl"] .vw-line{text-align:start}
   </div>
   <div id="view-detail" class="view"></div>
   <div id="view-transfers" class="view"></div>
+  <div id="view-transactions" class="view"></div>
 </main>
 </div>
 </div>
@@ -2659,6 +2659,7 @@ function setLang(l){
   // ledger in the previous language after a switch.
   if (VIEW_OF[ROUTE] === "detail") renderUser();
   if (ROUTE === "transfers") renderTransfers();
+  if (ROUTE === "transactions") renderTransactions();
   if (PSTACK.length) paintPanel();
   navQueueBadge();
   [["btn-ar","btn-en"],["pv-ar","pv-en"]].forEach(([a,b])=>{
@@ -2953,7 +2954,7 @@ function go(route, id){
   render(route, id);
 }
 const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"detail", follower:"detail",
-                  transfers:"transfers" };
+                  transfers:"transfers", transactions:"transactions" };
 const COLL_OF = { users:"users", user:"users", followers:"followers", follower:"followers" };
 function render(route, id){
   ROUTE = route; CURRENT = id ?? null;
@@ -2973,11 +2974,14 @@ function render(route, id){
     TTAB = (id === "individual") ? "individual" : "bulk";
     renderTransfers();
   }
+  if (view === "transactions") renderTransactions();
   attentionCounts();          // before applyI18n, which reads the counts
   navQueueBadge();
   applyI18n();
-  main.setAttribute("aria-label", view === "overview" ? t("a11y.main")
-    : view === "transfers" ? t("transfers.heading") : ck("list.heading"));
+  main.setAttribute("aria-label",
+      view === "overview"     ? t("a11y.main")
+    : view === "transfers"    ? t("transfers.heading")
+    : view === "transactions" ? t("transactions.heading") : ck("list.heading"));
   closeNav(); window.scrollTo(0, 0);
 }
 function onHash(){
@@ -2993,6 +2997,7 @@ let _rw; window.addEventListener("resize", () => {
   clearTimeout(_rw); _rw = setTimeout(() => {
     if (ROUTE === "users" || ROUTE === "followers") renderRows();
     if (ROUTE === "transfers") renderTRows();
+    if (ROUTE === "transactions") renderXRows();
   }, 120);
 });
 
@@ -4163,18 +4168,32 @@ function setTTab(k){
    always terminates; in practice it settles in two or three passes. When even
    the columns that can never be dropped will not fit, the table is the wrong
    shape for this screen and the rows are drawn as cards instead. */
-function renderTRows(){
-  if (!document.getElementById("thead-t")) return;
-  TDROP = 0;
-  paintTRows();
-  const sc = document.querySelector("#view-transfers .tbl-scroll");
-  const tbl = document.querySelector("#view-transfers .tbl");
+/* =====================================================================
+   FIT A TABLE TO ITS CONTAINER
+   Draw, measure, drop the least valuable column, draw again. Shared by
+   every table in the product so the behaviour cannot diverge between
+   screens. Bounded by the length of the drop list, so it terminates.
+   Returns how many columns it had to drop, and whether the result is
+   still a table at all — below three columns it has become a name and a
+   date, which a card says better.
+   ===================================================================== */
+function fitTable(view, dropLen, paint, shownCount){
+  let drop = 0;
+  paint(drop);
+  const sc  = document.querySelector(view + " .tbl-scroll");
+  const tbl = document.querySelector(view + " .tbl");
+  if (!sc || !tbl) return { drop, cards:false };
   const over = () => tbl.scrollWidth > sc.clientWidth + 1;
   let guard = 0;
-  while (over() && TDROP < DROP_ORDER[TTAB].length && guard++ < 12){ TDROP++; paintTRows(); }
-  // A table down to its last two columns has stopped being a table: it is a
-  // filename and a button, which a card says better.
-  if (over() || tshown().length < 3) useCards(true);
+  while (over() && drop < dropLen && guard++ < 12){ drop++; paint(drop); }
+  return { drop, cards: over() || shownCount() < 3 };
+}
+
+function renderTRows(){
+  if (!document.getElementById("thead-t")) return;
+  const r = fitTable("#view-transfers", DROP_ORDER[TTAB].length,
+                     d => { TDROP = d; paintTRows(); }, () => tshown().length);
+  if (r.cards) useCards(true);
 }
 function paintTRows(){
   const head = document.getElementById("thead-t"), body = document.getElementById("tbody-t");
@@ -4995,6 +5014,491 @@ function navQueueBadge(){
   const n = waitingCount();
   el.textContent = fmt(n); el.hidden = n === 0;
 }
+
+/* =====================================================================
+   TRANSACTIONS — data
+   One row per person per event: the global version of the ledger that
+   already sits on a customer's profile. Rows that came from an uploaded
+   file carry that file's id, so the two screens can be walked in either
+   direction — a batch says how many people it reached, this says who.
+   ===================================================================== */
+const TX_TYPES = ["file","loyalty","invoice","referral","b2b","welcome"];
+/* A comment is something a person typed, so the samples are keys resolved at
+   render time rather than strings baked into the data — they have to switch
+   language with everything else. */
+const TX_NOTES = [1,2,3,4,5].map(i => "transactions.sampleNote" + i);
+
+const TXNS = (function build(){
+  let s = 4177;
+  const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const pick = a => a[Math.floor(r() * a.length)];
+  const out = [];
+  const people = USERS.concat(FOLLOWERS);
+  let seq = 5192991;
+
+  const push = o => out.push(Object.assign({ id: "TX-" + (out.length + 1) }, o));
+
+  /* From the batches. A completed file of 1,240 records really would produce
+     1,240 rows; a prototype shows a sample of each and links back to the
+     whole. */
+  for (const b of BATCHES){
+    if (!["completed","ready","processing"].includes(b.status)) continue;
+    const n = Math.min(b.total, 3 + Math.floor(r() * 6));
+    for (let i = 0; i < n; i++){
+      const u = pick(people);
+      const pts = Math.round((r() * 900 + 50) / 50) * 50;
+      push({ ref: "COMTECHGOLD/" + (seq -= 7 + Math.floor(r() * 90)),
+             user: u, dir: "in", points: pts, type: b.src, batch: b.id,
+             at: new Date(b.doneAt || b.decidedAt || b.at),
+             originId: ["invoice","b2b"].includes(b.src)
+               ? "INV-" + (24010 + Math.floor(r() * 900)) : null,
+             comment: null });
+    }
+  }
+
+  /* Individual transfers: the ones a person made by hand, which is why they
+     are the ones that carry a note. */
+  for (const x of SINGLES.slice(0, 18)){
+    push({ ref: "COMTECHGOLD/DIRECT/" + (7226573 - out.length * 9),
+           user: x.to, dir: "in", points: x.points, type: x.src, batch: null,
+           at: new Date(x.at),
+           originId: ["invoice","b2b"].includes(x.src)
+             ? "INV-" + (24010 + Math.floor(r() * 900)) : null,
+           comment: r() > 0.55 ? pick(TX_NOTES) : null });
+  }
+
+  /* System events. Nobody references these, which is exactly why the old
+     screen's blank reference cells read as missing data. */
+  for (let i = 0; i < 9; i++){
+    const u = pick(people.filter(p => p.registered));
+    push({ ref: null, user: u, dir: "in", points: 10, type: "welcome", batch: null,
+           at: new Date(2026, 4 + Math.floor(r() * 4), 1 + Math.floor(r() * 27)),
+           originId: null, comment: null });
+  }
+  for (let i = 0; i < 7; i++){
+    const u = pick(people);
+    push({ ref: null, user: u, dir: "in", points: Math.round(r() * 10) * 10,
+           type: "referral", batch: null,
+           at: new Date(2026, 2 + Math.floor(r() * 5), 1 + Math.floor(r() * 27)),
+           originId: null, comment: null });
+  }
+
+  /* Points taken back. Without direction these are indistinguishable from an
+     award, which is the reason the column exists. */
+  for (let i = 0; i < 6; i++){
+    const u = pick(people.filter(p => p.registered));
+    push({ ref: "COMTECHGOLD/RET/" + (8810 + i * 13), user: u, dir: "out",
+           points: Math.round((r() * 600 + 50) / 50) * 50, type: pick(["file","loyalty","invoice"]),
+           batch: null, at: new Date(2026, 5 + Math.floor(r() * 3), 1 + Math.floor(r() * 27)),
+           originId: null, comment: r() > 0.5 ? pick(TX_NOTES) : null });
+  }
+  return out.sort((a, b) => b.at - a.at);
+})();
+const txById = id => TXNS.find(x => x.id === id);
+
+/* =====================================================================
+   TRANSACTIONS — view
+   One screen, no sub-routes. A row opens a panel rather than a page; the
+   person opens their profile; a reference opens the file it came from.
+   ===================================================================== */
+let XPAGE = 1, XPER = 10, XSORT = { k:"at", dir:"desc" }, XDROP = 0;
+const XFILT = { type:"all", dir:"all", reg:"all", from:"", to:"" };
+
+const XCOLS = [
+  { k:"user", always:true, on:true }, { k:"reference", on:true },
+  { k:"direction", on:true }, { k:"points", on:true }, { k:"value", on:true },
+  { k:"type", on:true }, { k:"registration", on:true },
+  { k:"originId", on:false }, { k:"comment", on:false }, { k:"date", on:true }
+];
+const XORDER = ["user","reference","direction","points","value","type",
+                "registration","originId","comment","date"];
+/* Least valuable first. Origin id and comment lead because they are empty on
+   most records; points and date go last because a ledger entry without them
+   is not a ledger entry. */
+const XDROP_ORDER = ["comment","originId","registration","reference","value",
+                     "type","direction","date","points"];
+const xshown = () => {
+  const dropped = XDROP_ORDER.filter(k => !XCOLS.find(c => c.k === k)?.pinned).slice(0, XDROP);
+  return XCOLS.filter(c => c.on && !dropped.includes(c.k))
+              .sort((a, b) => XORDER.indexOf(a.k) - XORDER.indexOf(b.k));
+};
+
+const xValue = pts => valueOf(pts);          // five points to the riyal, as everywhere
+const xNote  = t_ => t_ ? t(t_) : null;
+
+function xmatching(){
+  const q = (document.getElementById("xq")?.value || "").trim().toLowerCase();
+  const from = XFILT.from ? new Date(XFILT.from) : null;
+  const to   = XFILT.to   ? new Date(XFILT.to)   : null;
+  if (to) to.setHours(23, 59, 59);
+  return TXNS.filter(x => {
+    if (XFILT.type !== "all" && x.type !== XFILT.type) return false;
+    if (XFILT.dir  !== "all" && x.dir  !== XFILT.dir)  return false;
+    if (XFILT.reg  === "reg"   && !x.user.registered)  return false;
+    if (XFILT.reg  === "unreg" &&  x.user.registered)  return false;
+    if (from && x.at < from) return false;
+    if (to   && x.at > to)   return false;
+    if (!q) return true;
+    return [x.ref, x.user.name?.ar, x.user.name?.en, x.user.phone, x.originId,
+            xNote(x.comment)]
+      .filter(Boolean).some(v => String(v).toLowerCase().includes(q));
+  }).sort((a, b) => {
+    const dir = XSORT.dir === "asc" ? 1 : -1;
+    if (XSORT.k === "points") return (a.points - b.points) * dir;
+    return (a.at - b.at) * dir;
+  });
+}
+const xFilActive = () => (XFILT.type !== "all") + (XFILT.dir !== "all") +
+                         (XFILT.reg !== "all") + (!!XFILT.from || !!XFILT.to);
+function xClearFilters(){
+  XFILT.type = XFILT.dir = XFILT.reg = "all"; XFILT.from = XFILT.to = "";
+  const q = document.getElementById("xq"); if (q) q.value = "";
+  XPAGE = 1; renderTransactions();
+}
+
+/* Points in is an award, points out is a deduction — from the customer's side,
+   matching the ledger on their own profile. */
+const xDirPill = d => `<span class="pill ${d === "in" ? "pill-success" : "pill-stage"}"
+  title="${esc(t("transactions.direction." + d + "Desc"))}">
+  <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"
+       style="transform:rotate(${d === "in" ? 0 : 180}deg)"><use href="#i-up"/></svg>
+  ${esc(t("transactions.direction." + d))}</span>`;
+
+const xUserCell = u => `<div class="cell-person">
+  <span class="avatar ${u.registered ? "avatar-txt" : ""}" aria-hidden="true">${u.registered
+    ? esc(initials(u)) : `<svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-user"/></svg>`}</span>
+  <span class="min-w-0">
+    <span class="person-name${u.registered ? "" : " ltr num"}">${esc(u.registered ? u.name[LANG] : u.phone)}</span>
+    ${u.registered ? `<span class="person-sub ltr num">${esc(u.phone)}</span>` : ""}
+  </span></div>`;
+
+/* ---------- the screen --------------------------------------------------- */
+function renderTransactions(){
+  const el = document.getElementById("view-transactions"); if (!el) return;
+  el.innerHTML = `
+    <div class="flex flex-wrap items-end gap-4 page-head">
+      <div class="min-w-0 flex-1">
+        ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
+                  { label:t("transactions.heading") }])}
+        <h1 class="page-t">${esc(t("transactions.heading"))}</h1>
+        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("transactions.subtitle"))}</p>
+      </div>
+      <span class="pill pill-stage" style="font-size:13.5px;padding:8px 14px">${
+        esc(interp(t("transactions.count"), { n: fmt(TXNS.length) }))}</span>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-bar">
+        <label class="tbl-search">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
+          <input type="search" id="xq" oninput="XPAGE=1;renderXRows()"
+                 placeholder="${esc(t("transactions.search.placeholder"))}">
+        </label>
+        <div class="tbl-bar-actions">
+          <div class="dd">
+            <button class="btn btn-ghost" id="xcolBtn" aria-haspopup="listbox" aria-expanded="false"
+                    aria-controls="xcolMenu" onclick="xcolToggle()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+              <span>${esc(t("users.list.columns"))}</span></button>
+            <div class="dd-menu" id="xcolMenu" role="listbox" hidden></div>
+          </div>
+          <div class="dd">
+            <button class="btn btn-ghost" id="xfilBtn" aria-haspopup="dialog" aria-expanded="false"
+                    aria-controls="xfilMenu" onclick="xfilToggle()">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5.5h17l-6.6 7.8V19l-3.8 2v-7.7Z"/></svg>
+              <span>${esc(t("users.list.filters"))}</span>
+              <span class="fil-badge num" id="xfilBadge"${xFilActive() ? "" : " hidden"}>${xFilActive()}</span></button>
+            <div class="dd-menu fil-panel" id="xfilMenu" role="dialog" aria-modal="false"
+                 aria-label="${esc(t("users.list.filters"))}" hidden></div>
+          </div>
+          <button class="btn btn-ghost" onclick="toast(t('transfers.export.soon'))">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
+            <span>${esc(t("transactions.export"))}</span></button>
+        </div>
+      </div>
+
+      <div class="s-load p-5">
+        <div class="sk h-12 mb-2"></div><div class="sk h-16 mb-2"></div><div class="sk h-16 mb-2"></div>
+        <div class="sk h-16 mb-2"></div><div class="sk h-16"></div>
+      </div>
+      <div class="s-err empty">
+        <div class="empty-ico" style="background:var(--danger-50);color:var(--danger-700)">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-alert"/></svg></div>
+        <div class="empty-t">${esc(t("states.errorTitle"))}</div>
+        <div class="empty-d">${esc(t("states.errorBody"))}</div>
+        <button class="btn btn-ghost btn-sm mt-3"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-refresh"/></svg>
+          <span>${esc(t("actions.retry"))}</span></button>
+      </div>
+      <div class="s-empty empty">
+        <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-receipt"/></svg></div>
+        <div class="empty-t">${esc(t("transactions.empty.title"))}</div>
+        <div class="empty-d">${esc(t("transactions.empty.body"))}</div>
+      </div>
+
+      <div class="s-real">
+        <div class="tbl-scroll">
+          <table class="tbl"><thead><tr id="thead-x"></tr></thead><tbody id="tbody-x"></tbody></table>
+        </div>
+        <div class="cards" id="xCards" hidden></div>
+        <div id="xNoMatch" class="empty" hidden>
+          <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-search"/></svg></div>
+          <div class="empty-t">${esc(t("transactions.empty.noMatchTitle"))}</div>
+          <div class="empty-d">${esc(t("transactions.empty.noMatchBody"))}</div>
+          <button class="btn btn-ghost btn-sm mt-3" onclick="xClearFilters()">${esc(t("users.list.clearFilters"))}</button>
+        </div>
+        <div class="tbl-foot" id="xFoot"></div>
+      </div>
+    </div>`;
+  renderXRows();
+}
+
+function renderXRows(){
+  if (!document.getElementById("thead-x")) return;
+  const r = fitTable("#view-transactions", XDROP_ORDER.length,
+                     d => { XDROP = d; paintXRows(); }, () => xshown().length);
+  xUseCards(r.cards);
+}
+let XPAGE_ROWS = [];
+function paintXRows(){
+  const head = document.getElementById("thead-x"), body = document.getElementById("tbody-x");
+  if (!head || !body) return;
+  const cols = xshown(), rows = xmatching();
+  const pages = Math.max(1, Math.ceil(rows.length / XPER));
+  if (XPAGE > pages) XPAGE = pages;
+  const page = rows.slice((XPAGE - 1) * XPER, XPAGE * XPER);
+
+  const sortable = { points:1, date:1 };
+  head.innerHTML = cols.map(c => {
+    const label = esc(t("transactions.columns." + c.k));
+    if (!sortable[c.k]) return `<th>${label}</th>`;
+    const k = c.k === "date" ? "at" : c.k, on = XSORT.k === k;
+    return `<th aria-sort="${on ? (XSORT.dir === "asc" ? "ascending" : "descending") : "none"}">
+      <button class="th-sort" onclick="xsort('${k}')">${label}
+        <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><use href="#i-down"/></svg></button></th>`;
+  }).join("");
+
+  body.innerHTML = page.map(x => xRow(x, cols)).join("");
+  XPAGE_ROWS = page;
+  document.getElementById("xCards").hidden = true;
+  document.querySelector("#view-transactions .tbl-scroll").hidden = rows.length === 0;
+  document.getElementById("xNoMatch").hidden = rows.length > 0;
+  renderXFoot(rows.length, pages);
+}
+function xUseCards(on){
+  const host = document.getElementById("xCards"),
+        sc = document.querySelector("#view-transactions .tbl-scroll");
+  if (!on){ host.hidden = true; return; }
+  host.innerHTML = XPAGE_ROWS.map(xCard).join("");
+  host.hidden = XPAGE_ROWS.length === 0;
+  sc.hidden = true;
+}
+
+const xEmpty = () => `<span style="color:var(--n-600)">—</span>`;
+function xRow(x, cols){
+  const has = k => cols.some(c => c.k === k);
+  const sub = [];
+  if (!has("type"))      sub.push(t("transactions.type." + x.type));
+  if (!has("direction")) sub.push(t("transactions.direction." + x.dir));
+  const cell = k => {
+    switch (k){
+      case "user": return `<td>${xUserCell(x.user)}${sub.length
+        ? `<div class="file-sub" style="margin-inline-start:54px">${esc(sub.join(" · "))}</div>` : ""}</td>`;
+      case "reference": return `<td>${x.ref
+        ? `<span class="cell-id ltr">${esc(x.ref)}</span>` : xEmpty()}</td>`;
+      case "direction": return `<td>${xDirPill(x.dir)}</td>`;
+      case "points":    return `<td>${pointsCell(x.points)}</td>`;
+      case "value":     return `<td><span class="val">${riyal(xValue(x.points))}</span></td>`;
+      case "type":      return `<td><span class="pill pill-stage">${esc(t("transactions.type." + x.type))}</span></td>`;
+      case "registration": return `<td><span class="pill ${x.user.registered ? "pill-success" : "pill-stage"}">
+          <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-${x.user.registered ? "check" : "clock"}"/></svg>
+          ${esc(t(x.user.registered ? "users.status.registered" : "users.status.notRegistered"))}</span></td>`;
+      case "originId":  return `<td>${x.originId ? `<span class="cell-id ltr">${esc(x.originId)}</span>` : xEmpty()}</td>`;
+      case "comment":   return `<td><span class="cell-muted">${x.comment ? esc(xNote(x.comment)) : xEmpty()}</span></td>`;
+      case "date":      return `<td><span class="cell-date">${esc(dfmt(x.at))}</span></td>`;
+    }
+    return "<td></td>";
+  };
+  return `<tr onclick="openTxn('${x.id}')" tabindex="0"
+    onkeydown="if(event.key==='Enter'){openTxn('${x.id}')}">${cols.map(c => cell(c.k)).join("")}</tr>`;
+}
+function xCard(x){
+  return `<div class="card-row" onclick="openTxn('${x.id}')" tabindex="0"
+      onkeydown="if(event.key==='Enter'){openTxn('${x.id}')}">
+    <div class="card-top">${xUserCell(x.user)}</div>
+    <div class="card-meta" style="gap:10px">${xDirPill(x.dir)}
+      <span class="pill pill-stage">${esc(t("transactions.type." + x.type))}</span></div>
+    <div class="card-meta">${pointsCell(x.points)}<span class="val">${riyal(xValue(x.points))}</span>
+      <span class="cell-date" style="margin-inline-start:auto">${esc(dfmt(x.at))}</span></div>
+    ${x.ref ? `<div class="file-sub"><span class="ltr num">${esc(x.ref)}</span></div>` : ""}
+  </div>`;
+}
+function xsort(k){
+  if (XSORT.k === k) XSORT.dir = XSORT.dir === "asc" ? "desc" : "asc";
+  else { XSORT.k = k; XSORT.dir = "desc"; }
+  renderXRows();
+}
+function renderXFoot(total, pages){
+  const f = document.getElementById("xFoot"); if (!f) return;
+  const from = total === 0 ? 0 : (XPAGE - 1) * XPER + 1, to = Math.min(XPAGE * XPER, total);
+  const pg = (n, label, dis, cur) => `<button class="pg"${dis ? " disabled" : ""}
+    ${cur ? ' aria-current="page"' : ""} onclick="XPAGE=${n};renderXRows()">${label}</button>`;
+  const nums = [];
+  for (let i = 1; i <= pages; i++){
+    if (i === 1 || i === pages || Math.abs(i - XPAGE) <= 1) nums.push(pg(i, fmt(i), false, i === XPAGE));
+    else if (nums[nums.length - 1] !== "GAP") nums.push("GAP");
+  }
+  f.innerHTML = `<span style="font-size:13px;color:var(--n-700)">${
+      esc(interp(t("users.pagination.showingRange"), { from: fmt(from), to: fmt(to), total: fmt(total) }))}</span>
+    <div class="pager">
+      ${pg(Math.max(1, XPAGE - 1), esc(t("users.pagination.previous")), XPAGE === 1)}
+      ${nums.map(n => n === "GAP" ? `<span class="pg-gap">…</span>` : n).join("")}
+      ${pg(Math.min(pages, XPAGE + 1), esc(t("users.pagination.next")), XPAGE === pages)}
+    </div>
+    <label class="rpp"><span style="font-size:13px;color:var(--n-700)">${esc(t("users.pagination.rowsPerPage"))}</span>
+      <select onchange="XPER=+this.value;XPAGE=1;renderXRows()">
+        ${[10, 25, 50].map(n => `<option value="${n}"${n === XPER ? " selected" : ""}>${fmt(n)}</option>`).join("")}
+      </select></label>`;
+}
+
+/* ---------- one transaction ---------------------------------------------
+   Everything the columns could not fit, in one place, including the two
+   fields that are empty on most records and would otherwise cost every row
+   its width. */
+function openTxn(id){
+  const x = txById(id); if (!x) return;
+  const u = x.user, b = x.batch ? batchById(x.batch) : null;
+  openPanel({
+    title: x.ref ? interp(t("transactions.panel.title"), { reference: x.ref })
+                 : t("transactions.panel.noReference"),
+    sub: dfmt(x.at),
+    body: `
+      <div class="fgrp" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        ${xDirPill(x.dir)}
+        <span class="pill pill-stage">${esc(t("transactions.type." + x.type))}</span>
+      </div>
+      <div class="pv-val"><span class="pv-val-l">${esc(t("transactions.columns.points"))}</span>
+        <span class="pv-val-v">${pointsCell(x.points)}</span></div>
+      <div class="pv-val"><span class="pv-val-l">${esc(t("transactions.columns.value"))}</span>
+        <span class="pv-val-v">${riyal(xValue(x.points))}</span></div>
+      <div class="fhint" style="margin-bottom:18px">${esc(t("transfers.value.rate"))}</div>
+
+      <div class="trail-h" style="margin-bottom:4px">${esc(t("transactions.panel.sectionDetails"))}</div>
+      ${fldRow(t("transactions.columns.reference"),
+               x.ref ? `<span class="ltr num">${esc(x.ref)}</span>` : xEmpty())}
+      ${fldRow(t("transactions.columns.originId"),
+               x.originId ? `<span class="ltr num">${esc(x.originId)}</span>`
+                          : `<span style="color:var(--n-600)">${esc(t("transactions.panel.noOriginId"))}</span>`)}
+      ${fldRow(t("transactions.columns.comment"),
+               x.comment ? esc(xNote(x.comment))
+                         : `<span style="color:var(--n-600)">${esc(t("transactions.panel.noComment"))}</span>`)}
+      ${fldRow(t("transactions.columns.date"), esc(dfmt(x.at)))}
+
+      <div class="trail-h" style="margin:22px 0 4px">${esc(t("transactions.panel.sectionPerson"))}</div>
+      <div class="fld"><div class="fld-v" style="flex:1 1 100%">${xUserCell(u)}</div></div>
+      ${fldRow(t("transactions.columns.registration"),
+               `<span class="pill ${u.registered ? "pill-success" : "pill-stage"}">
+                  <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-${u.registered ? "check" : "clock"}"/></svg>
+                  ${esc(t(u.registered ? "users.status.registered" : "users.status.notRegistered"))}</span>`)}
+
+      ${b ? `<div style="margin-top:20px">
+        <button class="btn btn-ghost w-full" onclick="closePanel();goBatch('${b.id}')">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-file"/></svg>
+          <span>${esc(interp(t("transactions.panel.fromFile"), { file: b.file }))}</span></button></div>` : ""}`,
+    foot: `<button class="btn btn-primary" onclick="closePanel();go('user',${u.id})">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-user"/></svg>
+        <span>${esc(t("transactions.panel.viewProfile"))}</span></button>`
+  });
+}
+/* Walk back to the file a transaction came from, landing with it open rather
+   than leaving the reader to find it in the list. */
+function goBatch(id){
+  TTAB = "bulk"; TFILT.status = "all"; TFILT.src = TFILT.by = "all"; TPAGE = 1;
+  go("transfers");
+  setTimeout(() => openBatch(id), 120);
+}
+
+/* ---------- columns and filters ------------------------------------------ */
+function xcolToggle(){
+  const m = document.getElementById("xcolMenu"), b = document.getElementById("xcolBtn");
+  if (m.hidden){
+    const on = new Set(xshown().map(c => c.k));
+    m.innerHTML = XCOLS.filter(c => !c.always).map(c => `<button class="dd-opt" role="option"
+      aria-selected="${on.has(c.k)}" onclick="xcolPick('${c.k}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${esc(t("transactions.columns." + c.k))}</span></button>`).join("");
+    m.hidden = false; b.setAttribute("aria-expanded","true");
+  } else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function xcolPick(k){
+  const c = XCOLS.find(x => x.k === k);
+  c.on = !c.on; c.pinned = c.on;         // chosen by hand: the fit loop leaves it alone
+  document.getElementById("xcolMenu").hidden = true;
+  document.getElementById("xcolBtn").setAttribute("aria-expanded","false");
+  renderXRows();
+}
+function xfilToggle(){
+  const m = document.getElementById("xfilMenu"), b = document.getElementById("xfilBtn");
+  if (m.hidden){ renderXFilters(); m.hidden = false; b.setAttribute("aria-expanded","true"); }
+  else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function xfilClose(){
+  const m = document.getElementById("xfilMenu"); if (!m || m.hidden) return;
+  m.hidden = true; document.getElementById("xfilBtn").setAttribute("aria-expanded","false");
+}
+function renderXFilters(){
+  const m = document.getElementById("xfilMenu"); if (!m) return;
+  const group = (key, heading, opts) => `<div class="fil-group">
+    <div class="fil-h">${esc(heading)}</div>
+    ${opts.map(([val, label]) => `<button class="dd-opt" role="option" aria-selected="${XFILT[key] === val}"
+      onclick="event.stopPropagation();xfilPick('${key}','${val}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${esc(label)}</span></button>`).join("")}</div>`;
+  m.innerHTML =
+    group("type", t("transactions.filters.type"),
+      [["all", t("transfers.filters.any")], ...TX_TYPES.map(k => [k, t("transactions.type." + k)])]) +
+    group("dir", t("transactions.filters.direction"),
+      [["all", t("transfers.filters.any")], ["in", t("transactions.direction.in")],
+       ["out", t("transactions.direction.out")]]) +
+    group("reg", t("transactions.filters.registration"),
+      [["all", t("transfers.filters.any")], ["reg", t("users.status.registered")],
+       ["unreg", t("users.status.notRegistered")]]) +
+    `<div class="fil-group"><div class="fil-h">${esc(t("transactions.filters.dateRange"))}</div>
+      <div style="display:flex;gap:8px;padding:2px 6px 6px">
+        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:4px">${esc(t("transactions.filters.dateFrom"))}</span>
+          <input type="date" class="finp" style="height:44px;padding:6px 10px;font-size:13px" value="${XFILT.from}"
+                 onclick="event.stopPropagation()" onchange="event.stopPropagation();xfilDate('from',this.value)"></label>
+        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:4px">${esc(t("transactions.filters.dateTo"))}</span>
+          <input type="date" class="finp" style="height:44px;padding:6px 10px;font-size:13px" value="${XFILT.to}"
+                 onclick="event.stopPropagation()" onchange="event.stopPropagation();xfilDate('to',this.value)"></label>
+      </div></div>` +
+    `<div class="fil-foot"><button class="btn-link" onclick="event.stopPropagation();xClearFilters()">${
+       esc(t("usersFilters.reset"))}</button>
+     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();xfilClose()">${esc(t("usersFilters.apply"))}</button></div>`;
+}
+function xfilPick(key, val){
+  XFILT[key] = val; XPAGE = 1;
+  renderXFilters(); renderXRows(); xBadge();
+}
+function xfilDate(which, val){
+  XFILT[which] = val; XPAGE = 1;
+  renderXRows(); xBadge();
+}
+function xBadge(){
+  const badge = document.getElementById("xfilBadge"); if (!badge) return;
+  badge.textContent = xFilActive(); badge.hidden = !xFilActive();
+}
+document.addEventListener("click", e => {
+  for (const [btn, menu] of [["xcolBtn","xcolMenu"], ["xfilBtn","xfilMenu"]]){
+    if (!e.target.closest("#" + btn) && !e.target.closest("#" + menu)){
+      const m = document.getElementById(menu);
+      if (m && !m.hidden){ m.hidden = true; document.getElementById(btn)?.setAttribute("aria-expanded","false"); }
+    }
+  }
+});
 
 document.body.dataset.state = "normal";
 document.body.dataset.collapsed = "false";
