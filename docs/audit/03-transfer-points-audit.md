@@ -180,3 +180,51 @@ This screen shows 2,504 points sent against a value of ﷼1,150,150 — roughly 
 point, the inverse. The two cannot both describe the same relationship, and neither
 matches the platform's 5 points = 1 SAR. Likely placeholder data in the newer mockup, but
 it has to be settled before a value column ships anywhere.
+
+---
+
+## Resolved — answers from the client
+
+### R1. Value is the points' worth in riyal, at 5 points = 1 SAR
+Not the purchase value. So **both existing screens show wrong figures**: the batch list's
+2,830,000 points against 5,660.00 SAR implies 500:1, and the newer screen's 2,504 points
+against ﷼1,150,150 implies roughly 459:1 the other way. Neither is 5:1.
+
+Consequence for the build: the value column is **derived from the points**, not read from
+the field, and the live data is treated as a defect the same way the negative balance was.
+Where a stored value disagrees with points ÷ 5, the UI shows the derived figure and marks
+the row rather than printing a number it cannot stand behind.
+
+### R2. Six states, not four
+`Uploaded` → `Ready` → `Processing` → `Completed`, with `Rejected` off the first step and
+`Failed` off processing.
+
+Design consequences:
+- **Uploaded** is the only state that needs a human, so it carries the attention treatment
+  and drives the queue count.
+- **Processing** must be visibly in flight, so a stuck batch reads as stuck rather than as
+  quietly pending forever.
+- **Failed** is a real error; **Rejected** is a decision. They must not share a colour.
+  Rejected is a stage, not a fault — the same distinction drawn for unregistered users.
+
+### R3. Source type on both tabs, as column and filter
+`برامج ولاء` loyalty programme · `فاتورة` invoice · `ملف` file · `ترشيح` referral · `B2B`.
+On the bulk tab this describes what the batch is **for**, not how it arrived, so it varies
+and earns its place there too.
+
+### R4. The approval queue gets all four
+1. **Who uploaded** each batch — avatar, name and phone, matching the individual tab, so
+   the approver can see whose work they are judging.
+2. **A reason is required on rejection**, captured in the panel and shown to the uploader.
+   Without it a rejection communicates nothing and the conversation leaves the product.
+3. **Invalid and duplicate rows are marked in the file viewer**, and filterable, so the
+   count and the evidence finally live in the same place.
+4. **The three summary figures head the screen** — total charged, transferred, available
+   balance — so the approver sees the balance a batch will spend before approving it.
+
+## Still assumed
+
+- The individual-transfer constraints from the old form — minimum 50, maximum 10,000
+  points, 30-minute cooldown per user — are carried forward as stated.
+- Clicking a file name downloads it; the download itself is out of scope for a prototype,
+  so it will be shown as the affordance with a confirmation.
