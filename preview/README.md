@@ -17,13 +17,16 @@ Hash routing, so links work from anywhere in the file:
 | `#/followers`, `#/follower/:id` | Followers list and profile |
 | `#/transfers`, `#/transfers/individual` | Transfer points, bulk and individual |
 | `#/transactions` | Transactions — every point movement |
+| `#/charges` | Charge history — the partner buying points |
 
 The screens are linked to each other: the Overview's "waiting for your approval" and
 "transactions failed" rows count the real transfer queue and open it filtered; a
 registered user's profile can start a transfer with that person already chosen; the
 sidebar badge and the queue banner read the same field; and a file on Transfer points
 and the records it produced on Transactions each open the other, with the arriving
-scope shown as a chip that can be taken off.
+scope shown as a chip that can be taken off. The charges on `#/charges` total exactly
+what Transfer points reports as "Points charged", so the two agree rather than one
+asserting a number.
 
 ## Preview controls
 

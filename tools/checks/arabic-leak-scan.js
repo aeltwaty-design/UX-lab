@@ -28,11 +28,13 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
         while ((n = w.nextNode())) {
           const el = n.parentElement;
           if (!el || el.closest('#pv') || el.closest('script') || el.closest('style')) continue;
-          if (el.offsetParent === null && !el.closest('#pnl')) continue;
+          const pnl = el.closest('#pnl');
+          if (pnl && pnl.hidden) continue;          // a closed drawer is not on screen
+          if (el.offsetParent === null && !pnl) continue;
           const txt = n.textContent.trim();
           if (!txt || !LATIN.test(txt) || OK.test(txt)) continue;
           // a Latin acronym or format example inside an Arabic sentence is fine
-          const ALLOW = /^(?:CSV|B2B|COMTECHGOLD|DIRECT|RET|INV|BCH|TRF|TX|9665X+\.?|[A-Za-z0-9._-]+\.csv)$/;
+          const ALLOW = /^(?:CSV|B2B|COMTECHGOLD|DIRECT|RET|(?:INV|BCH|TRF|TX|CHG|PO)(?:-[0-9-]+)?|9665X+\.?|[a-z.]+@[a-z.]+|[A-Za-z0-9._-]+\.csv)$/;
           if (txt.split(/[^A-Za-z0-9._X-]+/).filter(w => /[A-Za-z]{2,}/.test(w)).every(w => ALLOW.test(w))) continue;
           out.push({ txt: txt.slice(0, 64), where: (el.className && String(el.className).slice(0,26)) || el.tagName });
         }
