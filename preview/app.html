@@ -3376,45 +3376,45 @@ function recCell(b){
    against the real cells rather than guessed: the file and the actions are
    the row's reason for existing and never drop; everything else arrives as
    there is room for it. Source is off by default — it is a filter first. */
-/* Thresholds are measured against the SCROLLER, not the window. Keyed to the
-   viewport they break at 1101px, where the sidebar appears and takes 264px
-   away: a column that fits at 1024 would vanish as the window got wider.
-   Each number is the container width at which one more column still fits.
-   Nothing a dropped column carried is lost — status and uploader fold into
-   the file cell instead. */
+/* No width thresholds. Every number I measured was wrong the moment something
+   changed — the sidebar appearing at 1101px, a dropped column folding into the
+   file cell and widening it, Arabic running shorter than English, and copy
+   that did not exist yet. So the table is fitted rather than predicted: draw
+   it, measure it, and if it overruns its scroller drop the least important
+   column and draw again. It settles in two or three passes and is correct in
+   any language at any width, including ones nobody thought to test.
+
+   DROP_ORDER is least-valuable first. File and actions are the row's reason
+   for existing and are never in it. */
 const BCOLS = [
-  { k:"file",       always:true, on:true, min:0 },
-  { k:"actions",    always:true, on:true, min:0 },
-  { k:"status",     on:true,  min:660 },
-  { k:"points",     on:true,  min:800 },
-  { k:"records",    on:true,  min:960 },
-  { k:"uploadedBy", on:true,  min:1160 },
-  { k:"value",      on:true,  min:1280 },
-  { k:"uploaded",   on:true,  min:1410 },
-  { k:"source",     on:false, min:1540 }
+  { k:"file", always:true, on:true }, { k:"actions", always:true, on:true },
+  { k:"status", on:true }, { k:"points", on:true }, { k:"records", on:true },
+  { k:"uploadedBy", on:true }, { k:"value", on:true }, { k:"uploaded", on:true },
+  { k:"source", on:false }
 ];
 const ICOLS = [
-  { k:"recipient",  always:true, on:true, min:0 },
-  { k:"points",     on:true,  min:420 },
-  { k:"date",       on:true,  min:560 },
-  { k:"sentBy",     on:true,  min:730 },
-  { k:"value",      on:true,  min:850 },
-  { k:"reference",  on:true,  min:1000 },
-  { k:"source",     on:false, min:1130 }
+  { k:"recipient", always:true, on:true }, { k:"points", on:true },
+  { k:"date", on:true }, { k:"sentBy", on:true }, { k:"value", on:true },
+  { k:"reference", on:true }, { k:"source", on:false }
 ];
-/* The scroller exists by the time rows are drawn; the fallback covers the one
-   frame before it does. */
+const DROP_ORDER = {
+  bulk:       ["source","uploaded","value","uploadedBy","records","points","status"],
+  individual: ["source","reference","value","sentBy","date","points"]
+};
+let TDROP = 0;
 function availW(){
   const sc = document.querySelector("#view-transfers .tbl-scroll");
-  if (sc && sc.clientWidth) return sc.clientWidth;
-  return window.innerWidth - (window.innerWidth >= 1101 ? 329 : 65);
+  return (sc && sc.clientWidth) || (window.innerWidth - (window.innerWidth >= 1101 ? 329 : 65));
 }
 const tcols  = () => (TTAB === "bulk" ? BCOLS : ICOLS);
 const BORDER = ["file","uploadedBy","records","points","value","source","status","uploaded","actions"];
 const IORDER = ["recipient","reference","sentBy","points","value","source","date"];
 const tshown = () => {
-  const order = TTAB === "bulk" ? BORDER : IORDER, w = availW();
-  return tcols().filter(c => c.on && w >= (c.min || 0))
+  const order = TTAB === "bulk" ? BORDER : IORDER;
+  // A column the reader switched on by hand is never dropped by the fit loop;
+  // their choice outranks our tidiness, and the table may scroll for it.
+  const dropped = DROP_ORDER[TTAB].filter(k => !tcols().find(c => c.k === k)?.pinned).slice(0, TDROP);
+  return tcols().filter(c => c.on && !dropped.includes(c.k))
                 .sort((a, b) => order.indexOf(a.k) - order.indexOf(b.k));
 };
 
@@ -3594,8 +3594,25 @@ function setTTab(k){
   go("transfers", k === "individual" ? "individual" : null);   // routes through render()
 }
 
-/* ---------- rows --------------------------------------------------------- */
+/* ---------- rows ---------------------------------------------------------
+   Draw, measure, drop, redraw. Bounded by the length of DROP_ORDER, so it
+   always terminates; in practice it settles in two or three passes. When even
+   the columns that can never be dropped will not fit, the table is the wrong
+   shape for this screen and the rows are drawn as cards instead. */
 function renderTRows(){
+  if (!document.getElementById("thead-t")) return;
+  TDROP = 0;
+  paintTRows();
+  const sc = document.querySelector("#view-transfers .tbl-scroll");
+  const tbl = document.querySelector("#view-transfers .tbl");
+  const over = () => tbl.scrollWidth > sc.clientWidth + 1;
+  let guard = 0;
+  while (over() && TDROP < DROP_ORDER[TTAB].length && guard++ < 12){ TDROP++; paintTRows(); }
+  // A table down to its last two columns has stopped being a table: it is a
+  // filename and a button, which a card says better.
+  if (over() || tshown().length < 3) useCards(true);
+}
+function paintTRows(){
   const head = document.getElementById("thead-t"), body = document.getElementById("tbody-t");
   if (!head || !body) return;
   const cols = tshown(), rows = tmatching();
@@ -3616,15 +3633,21 @@ function renderTRows(){
   }).join("");
 
   body.innerHTML = page.map(x => TTAB === "bulk" ? bulkRow(x, cols) : singleRow(x, cols)).join("");
-
-  // below the breakpoint the same rows are drawn as cards instead
-  const host = document.getElementById("tCards"), narrow = availW() < CARD_W;
-  host.innerHTML = narrow ? page.map(x => TTAB === "bulk" ? bulkCard(x) : singleCard(x)).join("") : "";
-  host.hidden = !narrow || rows.length === 0;
-  document.querySelector("#view-transfers .tbl-scroll").hidden = narrow || rows.length === 0;
-
+  TPAGE_ROWS = page;
+  useCards(false);
+  document.getElementById("tCards").hidden = true;
+  document.querySelector("#view-transfers .tbl-scroll").hidden = rows.length === 0;
   document.getElementById("tNoMatch").hidden = rows.length > 0;
   renderTFoot(rows.length, pages);
+}
+let TPAGE_ROWS = [];
+function useCards(on){
+  const host = document.getElementById("tCards"),
+        sc = document.querySelector("#view-transfers .tbl-scroll");
+  if (!on){ host.hidden = true; return; }
+  host.innerHTML = TPAGE_ROWS.map(x => TTAB === "bulk" ? bulkCard(x) : singleCard(x)).join("");
+  host.hidden = TPAGE_ROWS.length === 0;
+  sc.hidden = true;
 }
 
 function bulkRow(b, cols){
@@ -4246,8 +4269,9 @@ document.addEventListener("click", e => {
 function tcolToggle(){
   const m = document.getElementById("tcolMenu"), b = document.getElementById("tcolBtn");
   if (m.hidden){
+    const on = new Set(tshown().map(c => c.k));
     m.innerHTML = tcols().filter(c => !c.always).map(c => `<button class="dd-opt" role="option"
-      aria-selected="${c.on && availW() >= (c.min || 0)}" onclick="tcolPick('${c.k}')">
+      aria-selected="${on.has(c.k)}" onclick="tcolPick('${c.k}')">
       <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
       <span>${esc(t("transfers.columns." + c.k))}</span></button>`).join("");
@@ -4255,7 +4279,9 @@ function tcolToggle(){
   } else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
 }
 function tcolPick(k){
-  const c = tcols().find(x => x.k === k); c.on = !c.on;
+  const c = tcols().find(x => x.k === k);
+  c.on = !c.on;
+  c.pinned = c.on;                 // switched on by hand: the fit loop leaves it alone
   document.getElementById("tcolMenu").hidden = true;
   document.getElementById("tcolBtn").setAttribute("aria-expanded","false");
   renderTRows();
