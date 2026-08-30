@@ -404,6 +404,8 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
 .dlg-f{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
 
 .page-t{font-size:24px;font-weight:700;letter-spacing:-.01em}
+/* separation between a page heading block and the content under it */
+.page-head{margin-bottom:1.25rem}
 
 /* breadcrumb — hierarchy, not decoration. It only appears where there IS a
    hierarchy: Overview is the root, so it carries none of its own. The
@@ -414,6 +416,8 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
 .crumbs a:hover{color:var(--p-700);text-decoration:underline}
 .crumbs [aria-current="page"]{color:var(--n-950);font-weight:600;max-width:32ch;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crumb-home{display:inline-flex;align-items:center;color:var(--n-600);padding:2px}
+.crumb-home:hover{color:var(--p-700)}
 .crumb-sep{color:var(--n-500);display:inline-flex}
 .crumb-sep svg{transform:rotate(-90deg)}
 html[dir="rtl"] .crumb-sep svg{transform:rotate(90deg)}
@@ -435,6 +439,19 @@ html[dir="rtl"] .crumb-sep svg{transform:rotate(90deg)}
 .parked-note{margin:14px 20px 0;padding:11px 13px;border:1px dashed var(--n-300);border-radius:var(--r-100);
   background:var(--n-25);font-size:13px;color:var(--n-700)}
 @media (max-width:560px){ .fld-l{flex-basis:100%} }
+
+/* filter panel */
+.fil-panel{width:300px;max-height:min(70vh,520px);overflow-y:auto;padding:8px}
+.fil-group{padding:6px 0;border-top:1px solid var(--n-100)}
+.fil-group:first-child{border-top:none;padding-top:2px}
+.fil-h{font-size:11.5px;font-weight:700;color:var(--n-700);letter-spacing:.04em;
+  text-transform:uppercase;padding:6px 10px 4px}
+html[lang="ar"] .fil-h{letter-spacing:0;text-transform:none;font-size:12.5px}
+.fil-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 8px 4px;margin-top:6px;border-top:1px solid var(--n-200)}
+.fil-badge{background:var(--p-500);color:#fff;font-size:11px;font-weight:700;min-width:18px;
+  height:18px;border-radius:999px;display:inline-grid;place-items:center;padding:0 5px;
+  margin-inline-start:2px}
 
 /* row overflow menu + toast */
 .row-pop{position:fixed;min-width:210px;z-index:60}
@@ -507,7 +524,14 @@ table.tbl{width:100%;border-collapse:collapse;min-width:0}
   text-overflow:ellipsis;max-width:26ch}
 /* Latin strings inside an RTL row keep their own direction, or the digits
    and the @ reorder and the address becomes unreadable. */
-.ltr{direction:ltr;unicode-bidi:isolate;text-align:start}
+/* Latin and numeric strings need their own internal direction so digits and
+   @ signs do not reorder — but `text-align:start` then resolves against the
+   ELEMENT's direction, not the page's, which left-aligned every phone number
+   and email inside an otherwise right-aligned Arabic layout. Isolate the
+   content, align to the page. */
+.ltr{direction:ltr;unicode-bidi:isolate}
+html[dir="rtl"] .ltr{text-align:right}
+html[dir="ltr"] .ltr{text-align:left}
 
 .cell-id{font-size:14px;color:var(--n-800);font-variant-numeric:tabular-nums;white-space:nowrap}
 .cell-muted{font-size:14px;color:var(--n-800)}
@@ -925,10 +949,10 @@ table.tbl{width:100%;border-collapse:collapse;min-width:0}
   <div id="view-users" class="view">
 
     <!-- page header -->
-    <div class="flex flex-wrap items-end gap-4 mb-5">
+    <div class="flex flex-wrap items-end gap-4 page-head">
       <div class="min-w-0 flex-1">
         <nav class="crumbs" data-i18n-aria="a11y.breadcrumb">
-          <a href="#/overview" data-i18n="nav.overview"></a>
+          <a href="#/overview" class="crumb-home" data-i18n-aria="nav.overview" data-i18n-title="nav.overview"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-home"/></svg></a>
           <span class="crumb-sep" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none"
             stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 10 4 4 4-4"/></svg></span>
           <span aria-current="page" data-i18n="nav.users"></span>
@@ -969,10 +993,17 @@ table.tbl{width:100%;border-collapse:collapse;min-width:0}
             </button>
             <div class="dd-menu" id="colMenu" role="listbox" hidden></div>
           </div>
-          <button class="btn btn-ghost" data-i18n-aria="users.list.filter" aria-label="Filter" style="padding:0 12px">
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75"
-                 stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5.5h17l-6.6 7.8V19l-3.8 2v-7.7Z"/></svg>
-          </button>
+          <div class="dd">
+            <button class="btn btn-ghost" id="filBtn" aria-haspopup="dialog" aria-expanded="false"
+                    aria-controls="filMenu" onclick="filToggle()" data-i18n-aria="users.list.filter">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5.5h17l-6.6 7.8V19l-3.8 2v-7.7Z"/></svg>
+              <span data-i18n="users.list.filters">Filters</span>
+              <span class="fil-badge num" id="filBadge" hidden></span>
+            </button>
+            <div class="dd-menu fil-panel" id="filMenu" role="dialog" aria-modal="false"
+                 data-i18n-aria="users.list.filters" hidden></div>
+          </div>
           <button class="btn btn-ghost">
             <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-download"/></svg>
             <span data-i18n="users.list.export">Export</span>
@@ -1272,7 +1303,21 @@ const I18N = {
     "users.reminder.sent": "Reminder sent to {count} people.",
     "users.detail.pageHeading": "User profile",
     "a11y.breadcrumb": "Breadcrumb",
-    "users.table.sarAmount": "{value} SAR"
+    "users.table.sarAmount": "{value} SAR",
+    "usersFilters.statusHeading": "Status",
+    "usersFilters.joinedHeading": "Joined",
+    "usersFilters.balanceHeading": "Points balance",
+    "usersFilters.activityHeading": "Last activity",
+    "usersFilters.balanceAny": "Any balance",
+    "usersFilters.balanceZero": "No points",
+    "usersFilters.balanceUnder": "Under {value} points",
+    "usersFilters.balanceOver": "Over {value} points",
+    "usersFilters.activityAny": "Any activity",
+    "usersFilters.activityDays": "Active in the last {n} days",
+    "usersFilters.activityNever": "Never active",
+    "usersFilters.apply": "Apply",
+    "usersFilters.reset": "Reset",
+    "usersFilters.activeCount": "{count}"
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -1483,7 +1528,21 @@ const I18N = {
     "users.gender.female": "أنثى",
     "users.reminder.noneEligible": "لا أحد من المحددين بانتظار التسجيل.",
     "users.table.sarAmount": "{value} ريال",
-    "users.table.sar": "{value} ريال"
+    "users.table.sar": "{value} ريال",
+    "usersFilters.statusHeading": "الحالة",
+    "usersFilters.joinedHeading": "الانضمام",
+    "usersFilters.balanceHeading": "رصيد النقاط",
+    "usersFilters.activityHeading": "آخر نشاط",
+    "usersFilters.balanceAny": "أي رصيد",
+    "usersFilters.balanceZero": "بدون نقاط",
+    "usersFilters.balanceUnder": "أقل من {value} نقطة",
+    "usersFilters.balanceOver": "أكثر من {value} نقطة",
+    "usersFilters.activityAny": "أي نشاط",
+    "usersFilters.activityDays": "نشط خلال آخر {n} أيام",
+    "usersFilters.activityNever": "لم ينشط أبدًا",
+    "usersFilters.apply": "تطبيق",
+    "usersFilters.reset": "إعادة تعيين",
+    "usersFilters.activeCount": "{count}"
   }
 };
 
@@ -1848,6 +1907,78 @@ let _rw; window.addEventListener("resize", () => {
   clearTimeout(_rw); _rw = setTimeout(() => { if (ROUTE === "users") renderRows(); }, 120);
 });
 
+/* =====================================================================
+   FILTERS — the funnel opened nothing before this. Four dimensions, the
+   set the client asked for. Registration status appears here too, but
+   stays bound to the segmented control above so the two can never
+   disagree about what is being shown.
+   ===================================================================== */
+const FILT = { status:"all", joined:"any", balance:"any", activity:"any" };
+const BAL_THRESHOLD = 1000, ACT_DAYS = 30;
+
+function filActive(){
+  return Object.entries(FILT).filter(([k,v]) => v !== (k === "status" ? "all" : "any")).length;
+}
+function filToggle(){
+  const m = document.getElementById("filMenu"), b = document.getElementById("filBtn");
+  if (m.hidden){ renderFilters(); m.hidden = false; b.setAttribute("aria-expanded","true"); }
+  else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function filClose(){
+  const m = document.getElementById("filMenu"); if (!m || m.hidden) return;
+  m.hidden = true; document.getElementById("filBtn").setAttribute("aria-expanded","false");
+}
+function renderFilters(){
+  const m = document.getElementById("filMenu"); if (!m) return;
+  const group = (key, heading, opts) => `<div class="fil-group">
+    <div class="fil-h">${heading}</div>
+    ${opts.map(([val,label]) => `<button class="dd-opt" role="option" aria-selected="${FILT[key]===val}"
+      onclick="event.stopPropagation();filPick('${key}','${val}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${label}</span></button>`).join("")}</div>`;
+
+  m.innerHTML =
+    group("status", t("usersFilters.statusHeading"), [
+      ["all",   t("users.list.segmentAll")],
+      ["reg",   t("users.status.registered")],
+      ["unreg", t("users.status.notRegistered")]]) +
+    group("joined", t("usersFilters.joinedHeading"), [
+      ["any",       t("users.list.segmentAll")],
+      ["lastMonth", t("dateFilter.lastMonth")],
+      ["lastYear",  t("dateFilter.lastYear")]]) +
+    group("balance", t("usersFilters.balanceHeading"), [
+      ["any",   t("usersFilters.balanceAny")],
+      ["zero",  t("usersFilters.balanceZero")],
+      ["under", interp(t("usersFilters.balanceUnder"), { value: fmt(BAL_THRESHOLD) })],
+      ["over",  interp(t("usersFilters.balanceOver"),  { value: fmt(BAL_THRESHOLD) })]]) +
+    group("activity", t("usersFilters.activityHeading"), [
+      ["any",    t("usersFilters.activityAny")],
+      ["recent", interp(t("usersFilters.activityDays"), { n: fmt(ACT_DAYS) })],
+      ["never",  t("usersFilters.activityNever")]]) +
+    `<div class="fil-foot">
+       <button class="btn-link" onclick="event.stopPropagation();filReset()">${t("usersFilters.reset")}</button>
+       <button class="btn btn-primary btn-sm" onclick="filClose()">${t("usersFilters.apply")}</button>
+     </div>`;
+}
+function filPick(key, val){
+  FILT[key] = val;
+  // status is the same thing the segmented control shows — keep them one truth
+  if (key === "status"){ SEG = val; PAGE = 1;
+    document.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-selected", b.dataset.seg === val)); }
+  renderFilters(); renderRows();
+}
+function filReset(){
+  Object.keys(FILT).forEach(k => FILT[k] = k === "status" ? "all" : "any");
+  SEG = "all";
+  document.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-selected", b.dataset.seg === "all"));
+  renderFilters(); renderRows();
+}
+document.addEventListener("click", e => {
+  if (!e.target.closest("#filBtn") && !e.target.closest("#filMenu")) filClose();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") filClose(); });
+
 /* ---------- row overflow menu ---------- */
 let rowMenuEl = null;
 function closeRowMenu(){ if (rowMenuEl){ rowMenuEl.remove(); rowMenuEl = null; } }
@@ -1959,13 +2090,16 @@ function txTable(rows, kind){
 
 /* Breadcrumbs are built from strings the product already has — the nav labels
    and the person's own name — so they need no new copy in either language. */
+const HOME_ICON = `<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-home"/></svg>`;
 function crumbs(trail){
   const sep = `<span class="crumb-sep" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14"
     fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <path d="m8 10 4 4 4-4"/></svg></span>`;
   return `<nav class="crumbs" data-i18n-aria="a11y.breadcrumb">` + trail.map((c, i) =>
-    (i ? sep : "") + (c.href ? `<a href="${c.href}">${c.label}</a>`
-                             : `<span aria-current="page">${c.label}</span>`)).join("") + `</nav>`;
+    (i ? sep : "") + (c.href
+      ? `<a href="${c.href}"${c.icon ? ` class="crumb-home" aria-label="${c.label}" title="${c.label}"` : ""}>${
+          c.icon || c.label}</a>`
+      : `<span aria-current="page">${c.label}</span>`)).join("") + `</nav>`;
 }
 
 function renderUser(){
@@ -1979,10 +2113,10 @@ function renderUser(){
   const field = (label, value) => `<div class="fld"><div class="fld-l">${label}</div><div class="fld-v">${value}</div></div>`;
 
   host.innerHTML = `
-    ${crumbs([{ label: t("nav.overview"), href: "#/overview" },
+    ${crumbs([{ label: t("nav.overview"), href: "#/overview", icon: HOME_ICON },
               { label: t("nav.users"), href: "#/users" },
               { label: u.registered ? u.name[LANG] : u.phone }])}
-    <h1 class="page-t" style="margin-bottom:18px">${t("users.detail.pageHeading")}</h1>
+    <h1 class="page-t page-head">${t("users.detail.pageHeading")}</h1>
 
     <section class="card mb-5">
       <div class="px-5 py-5 flex flex-wrap items-start gap-4">
@@ -2154,6 +2288,20 @@ function matching(){
   return USERS.filter(u => {
     if (SEG === "reg"   && !u.registered) return false;
     if (SEG === "unreg" &&  u.registered) return false;
+    if (FILT.balance === "zero"  && u.points !== 0) return false;
+    if (FILT.balance === "under" && !(u.points > 0 && u.points < BAL_THRESHOLD)) return false;
+    if (FILT.balance === "over"  && u.points <= BAL_THRESHOLD) return false;
+    if (FILT.joined !== "any"){
+      const cutoff = new Date(2026, 7, 30);
+      cutoff.setMonth(cutoff.getMonth() - (FILT.joined === "lastMonth" ? 1 : 12));
+      if (u.joined < cutoff) return false;
+    }
+    if (FILT.activity === "never"  && u.lastActive) return false;
+    if (FILT.activity === "recent"){
+      if (!u.lastActive) return false;
+      const cutoff = new Date(2026, 7, 30); cutoff.setDate(cutoff.getDate() - ACT_DAYS);
+      if (u.lastActive < cutoff) return false;
+    }
     if (!q) return true;
     return [u.name?.ar, u.name?.en, u.phone, u.email, uid(u)]
       .filter(Boolean).some(v => String(v).toLowerCase().includes(q));
@@ -2237,6 +2385,8 @@ function renderRows(){
         <circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></td>
     </tr>`;
   }).join("");
+  const badge = document.getElementById("filBadge");
+  if (badge){ const n = filActive(); badge.hidden = n === 0; badge.textContent = n ? fmt(n) : ""; }
   renderHead(); renderFoot(all.length, pages); renderSel();
   applyI18n();
 }
@@ -2276,11 +2426,11 @@ function renderFoot(total, pages){
 function goPage(n){ PAGE = n; renderRows(); }
 function setSort(k){ SORT = { k, dir: SORT.k===k && SORT.dir==="desc" ? "asc" : "desc" }; renderRows(); }
 function setSeg(s){
-  SEG = s; PAGE = 1;
+  SEG = s; FILT.status = s; PAGE = 1;
   document.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-selected", b.dataset.seg === s));
   renderRows();
 }
-function clearFilters(){ SEG="all"; document.getElementById("q").value=""; setSeg("all"); }
+function clearFilters(){ document.getElementById("q").value=""; filReset(); }
 function counts(){
   const r = USERS.filter(u=>u.registered).length;
   document.getElementById("segNAll").textContent   = fmt(USERS.length);

@@ -1,0 +1,38 @@
+{
+  "en": {
+    "usersFilters": {
+      "statusHeading": "Status",
+      "joinedHeading": "Joined",
+      "balanceHeading": "Points balance",
+      "activityHeading": "Last activity",
+      "balanceAny": "Any balance",
+      "balanceZero": "No points",
+      "balanceUnder": "Under {value} points",
+      "balanceOver": "Over {value} points",
+      "activityAny": "Any activity",
+      "activityDays": "Active in the last {n} days",
+      "activityNever": "Never active",
+      "apply": "Apply",
+      "reset": "Reset",
+      "activeCount": "{count}"
+    }
+  },
+  "ar": {
+    "usersFilters": {
+      "statusHeading": "الحالة",
+      "joinedHeading": "الانضمام",
+      "balanceHeading": "رصيد النقاط",
+      "activityHeading": "آخر نشاط",
+      "balanceAny": "أي رصيد",
+      "balanceZero": "بدون نقاط",
+      "balanceUnder": "أقل من {value} نقطة",
+      "balanceOver": "أكثر من {value} نقطة",
+      "activityAny": "أي نشاط",
+      "activityDays": "نشط خلال آخر {n} أيام",
+      "activityNever": "لم ينشط أبدًا",
+      "apply": "تطبيق",
+      "reset": "إعادة تعيين",
+      "activeCount": "{count}"
+    }
+  }
+}
