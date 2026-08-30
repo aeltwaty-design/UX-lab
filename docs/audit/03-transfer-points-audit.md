@@ -279,3 +279,60 @@ from the sidebar, from the Overview's "waiting for your approval" and
 4. **Bulk approve.** Not built. Approving several files at once is a natural
    ask and a genuinely dangerous control; worth its own conversation rather
    than an assumption.
+
+---
+
+## Revised after the first review
+
+The client reviewed the built screen and corrected four things. Three of them
+overturn conclusions in this audit, so they are recorded here rather than left
+to contradict what is written above.
+
+### The zero-valid file cannot happen
+
+The audit made much of `sdsd.csv` — five records, two invalid, three
+duplicate, zero points transferred, marked "Completed". The client's answer is
+that this is not a state the product should be able to reach: **records are
+checked while a file is being uploaded, and only usable ones are uploaded.**
+
+So the queue never holds a file with problems in it, and everything the design
+had built to explain those problems — the breakdown bar, the invalid and
+duplicate counts, the "nothing could be sent" notice, the filter chips in the
+viewer — has no subject. All of it moved into the upload flow, where the
+person choosing the file sees what will and will not go through before
+submitting.
+
+This is the better arrangement. The old screen asked every reviewer to
+re-discover the same defects, and let the one person who could fix them find
+out last.
+
+### There is no failed state
+
+Only rejected. A transfer either goes through or an admin declines it. The
+six-state lifecycle settled earlier is five: uploaded → reviewing → ready →
+completed, with rejected off the first step.
+
+`Processing` is relabelled **Reviewing**, and each of the five now has its own
+colour — Reviewing and Ready had shared info-teal, separated only by their
+icons.
+
+### Value has no discrepancy to report
+
+The audit's finding B4 — a stored value a hundredth of what the points are
+worth — is not something the UI should be reconciling. The client: *"Calculate
+all with ordinary equation."* Value is points ÷ 5, computed every time, with
+no stored figure to compare against and no warning to show.
+
+The underlying data question does not disappear, but it belongs to whoever
+owns that field, not to this screen.
+
+### Records, not rows
+
+The product counts **records** (سجلات). Only the file viewer's line numbers
+refer to lines, because those are positions in a text file.
+
+### Two smaller notes
+
+Every labelled button is 12px taller. The balance tiles distribute their slack
+between their own lines rather than dumping it under the two shorter ones,
+which brought the three headline figures from 80px apart to 33.
