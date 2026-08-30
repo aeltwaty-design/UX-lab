@@ -40,20 +40,33 @@ default and it is wrong twice over: it tells an uploader their judgement call
 was a system fault, and it spends the one colour that should mean *something
 is broken*.
 
-### Five states, five colours
+### The states, and their colours
 
-No two states are told apart by their icon alone:
+No two are told apart by their icon alone:
 
 | State | Treatment |
 |---|---|
 | Uploaded | warning tint, pulsing dot — the only one addressed to a person |
-| Reviewing | info teal, spinning eye — in progress, with a clock |
+| Reviewing | *hidden for now* — info teal, spinning eye, with a clock |
 | Ready | brand purple, clock — approved, queued to send |
 | Completed | success green, check |
 | Rejected | neutral grey, circle-cross |
 
 The first draft gave Reviewing and Ready the same teal, separated only by
 their icons. That is a distinction a glance does not make.
+
+**Reviewing is hidden at the client's request** (`REVIEWING_ENABLED = false`).
+
+Hiding a status is not the same as hiding a pill. A record parked in a state
+nobody can see is a record no filter reaches, no count includes and no reader
+can explain — so the flag also moves any batch that would be under review into
+the state it is on its way to, keeps that state out of the filter menu,
+suppresses its progress and stuck notes, and counts those batches as committed
+against the balance like any other approved file. Flip the flag and all of it
+returns together.
+
+**Rule:** a feature flag that hides a state must also account for the records
+in it. Hiding the label alone leaves them stranded.
 
 ## 3. Reject is not delete
 

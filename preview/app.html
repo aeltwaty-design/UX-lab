@@ -3673,7 +3673,7 @@ function checkRows(total, invalid, dup){
 
 /* Balances. The available figure is the one an approval spends, so it is
    the one the header emphasises. */
-const BAL = { charged: 12_500_000, transferred: 10_100_000 };
+const BAL = { charged: 12_500_000, transferred: 9_000_000 };
 BAL.available = BAL.charged - BAL.transferred;
 
 /* =====================================================================
@@ -3696,6 +3696,15 @@ function elapsed(d){
   if (m < 1440) return interp(t("transfers.time.hours"),   { n: fmt(Math.round(m / 60)) });
   return interp(t("transfers.time.days"),                  { n: fmt(Math.round(m / 1440)) });
 }
+/* Reviewing is hidden for now. Hiding the pill alone would leave records
+   parked in a state nobody can see and no filter can reach, so a batch that
+   would be under review is shown in the state it is on its way to instead.
+   Flip this back on and the state, its progress count and its filter all
+   return together. */
+const REVIEWING_ENABLED = false;
+const shownStatus = b =>
+  (!REVIEWING_ENABLED && b.status === "processing") ? "ready" : b.status;
+
 const STUCK_MINS = 60;
 const isStuck = b => b.status === "processing" && b.startedAt &&
                      (NOW - b.startedAt) / 60000 > STUCK_MINS;
@@ -3712,7 +3721,7 @@ function doneRows(b){
   return Math.min(total, Math.floor(total * Math.min(0.96, mins / 9)));
 }
 function progressNote(b){
-  if (b.status !== "processing") return "";
+  if (!REVIEWING_ENABLED || b.status !== "processing") return "";
   const line = esc(interp(t("transfers.status.progress"),
                           { done: fmt(doneRows(b)), total: fmt(validOf(b)) }));
   return isStuck(b)
@@ -3724,7 +3733,7 @@ function progressNote(b){
 /* What the review queue has already spoken for. An approver looking at the
    available balance needs to know how much of it is promised to files that
    are still waiting on them, or they will approve their way past it. */
-const committed = () => BATCHES.filter(b => b.status === "uploaded" || b.status === "ready")
+const committed = () => BATCHES.filter(b => ["uploaded","ready"].includes(shownStatus(b)))
                                .reduce((n, b) => n + b.points, 0);
 
 /* Six states, three families. Uploaded is the only one addressed to a person,
@@ -3810,7 +3819,7 @@ function tmatching(){
   const q = (document.getElementById("tq")?.value || "").trim().toLowerCase();
   const rows = TTAB === "bulk" ? BATCHES : SINGLES;
   return rows.filter(x => {
-    if (TTAB === "bulk" && TFILT.status !== "all" && x.status !== TFILT.status) return false;
+    if (TTAB === "bulk" && TFILT.status !== "all" && shownStatus(x) !== TFILT.status) return false;
     if (TFILT.src !== "all" && x.src !== TFILT.src) return false;
     if (TFILT.by  !== "all" && x.by  !== TFILT.by)  return false;
     if (!q) return true;
@@ -4040,7 +4049,7 @@ function useCards(on){
 function bulkRow(b, cols){
   const has = k => cols.some(c => c.k === k);
   const sub = [b.id];
-  if (!has("status"))     sub.push(t("transfers.status." + b.status));
+  if (!has("status"))     sub.push(t("transfers.status." + shownStatus(b)));
   if (!has("uploadedBy")) sub.push(staffOf(b.by));
   const cell = k => {
     switch (k){
@@ -4059,7 +4068,7 @@ function bulkRow(b, cols){
       case "points":   return `<td>${pointsCell(b.points)}</td>`;
       case "value":    return `<td>${valueCell(b)}</td>`;
       case "source":   return `<td><span class="pill pill-stage">${esc(t("transfers.source." + b.src))}</span></td>`;
-      case "status":   return `<td>${statusPill(b.status)}${progressNote(b)}</td>`;
+      case "status":   return `<td>${statusPill(shownStatus(b))}${progressNote(b)}</td>`;
       case "uploaded": return `<td><span class="cell-date">${esc(dfmt(b.at))}</span></td>`;
       case "actions":  return `<td>${rowActions(b)}</td>`;
     }
@@ -4118,7 +4127,7 @@ function bulkCard(b){
         <span class="file-sub"><span class="num ltr">${esc(b.id)}</span><span>· ${esc(staffOf(b.by))}</span></span>
       </span>
     </div>
-    <div class="card-meta" style="gap:10px">${statusPill(b.status)}${progressNote(b)}</div>
+    <div class="card-meta" style="gap:10px">${statusPill(shownStatus(b))}${progressNote(b)}</div>
     ${recCell(b)}
     <div class="card-meta">${pointsCell(b.points)}${valueCell(b)}
       <span class="cell-date" style="margin-inline-start:auto">${esc(dfmt(b.at))}</span></div>
@@ -4260,7 +4269,7 @@ function openBatch(id){
     title: b.file,
     sub: b.id,
     body: `${trail}
-      <div style="margin-bottom:6px">${statusPill(b.status)}${isStuck(b)
+      <div style="margin-bottom:6px">${statusPill(shownStatus(b))}${REVIEWING_ENABLED && isStuck(b)
         ? `<span class="stuck" style="margin-inline-start:10px"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
            ${esc(interp(t("transfers.status.runningFor"), { n: elapsed(b.startedAt) }))}</span>` : ""}</div>
       ${fldRow(t("transfers.columns.uploadedBy"), `${esc(staffOf(b.by))} <span class="person-sub num ltr" style="display:block">${esc(STAFF[b.by]?.ph || "")}</span>`)}
@@ -4759,7 +4768,9 @@ function renderTFilters(){
       <span>${esc(label)}</span></button>`).join("")}</div>`;
   m.innerHTML =
     (TTAB === "bulk" ? group("status", t("transfers.filters.status"),
-      [["all", t("transfers.filters.any")], ...["uploaded","processing","ready","completed","rejected"]
+      [["all", t("transfers.filters.any")],
+       ...["uploaded","processing","ready","completed","rejected"]
+           .filter(k => REVIEWING_ENABLED || k !== "processing")
         .map(s => [s, t("transfers.status." + s)])]) : "") +
     group("src", t("transfers.filters.source"),
       [["all", t("transfers.filters.any")], ...["loyalty","invoice","file","referral","b2b"]
