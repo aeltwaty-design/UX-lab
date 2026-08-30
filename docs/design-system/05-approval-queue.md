@@ -209,3 +209,34 @@ its sentence sit as one block 12px apart, and tiles with more to say simply
 have less space above their figure.
 
 Learned by doing it the other way first and being corrected.
+
+## 13. Related records link both ways
+
+A file on Transfer points and the records it produced on Transactions are the
+same event seen from two ends. Either must reach the other: a transaction
+opens the file it came from, a file opens the records it produced.
+
+One direction is the easy half and the one most products stop at. It is the
+wrong half to have alone — the aggregate is where people start, and a batch
+that says it reached 1,240 people while offering no way to see one of them is
+a claim with the evidence removed, which is the same failure as a count that
+cannot be clicked (§4).
+
+**Rule:** where two screens describe the same event at different grain, both
+directions are navigable, and arriving by either lands with the thing already
+open rather than leaving the reader to find it.
+
+## 14. A scope the reader did not choose has to be visible and removable
+
+Arriving at Transactions from a file scopes the list to that file. That scope
+is shown as a chip above the table naming the file, with a control to take it
+off.
+
+Without it the reader sees a list of six where the product has a hundred and
+one, with nothing on screen explaining the difference. A filter you set
+yourself you remember; a filter that arrived with you, you do not — and a list
+that quietly misrepresents what it contains is worse than one that shows too
+much.
+
+**Rule:** any constraint the reader did not apply is named on screen and can be
+removed in one action.
