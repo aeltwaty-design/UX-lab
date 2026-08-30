@@ -228,3 +228,54 @@ and earns its place there too.
   points, 30-minute cooldown per user — are carried forward as stated.
 - Clicking a file name downloads it; the download itself is out of scope for a prototype,
   so it will be shown as the affordance with a confirmation.
+
+---
+
+## What was built
+
+Route `#/transfers`, with `#/transfers/individual` for the second tab. Reached
+from the sidebar, from the Overview's "waiting for your approval" and
+"transactions failed" rows, and from any registered user's profile.
+
+### Answers to the findings
+
+| Audit finding | What the screen does |
+|---|---|
+| The list never says who uploaded a file | An uploader column with avatar, name and phone, matching the individual tab. Below 1160px of table width it folds into the file cell rather than disappearing. |
+| Three unlabelled icon actions | Labelled buttons. A row offers only what it can do — an action that cannot apply is absent, never greyed out. |
+| Reject drawn as a red delete bin | Approve is a filled primary, reject a plain outline. No red, no bin: nothing is destroyed. |
+| No rejection reason captured | Required before the button will submit, with five presets, kept on the record and shown to the uploader. |
+| `sdsd.csv` — zero valid rows, "Completed" | The breakdown bar renders with no green segment at all, the row reads "nothing could be sent", and the detail panel says so plainly. Approving a zero-valid file is blocked. |
+| Amounts as `0.00 SAR`, `0 SAR`, `5660.00 SAR` | One derived figure, one format, the ﷼ glyph, tabular figures. |
+| The CSV rules contradicted themselves on commas | Four rules, one statement each. |
+| Counts of invalid and duplicate rows lead nowhere | Every count is a control that opens the file filtered to exactly those rows. |
+| The viewer skips file lines and repeats `num66` unmarked | Every row is shown, the file's own line numbers are kept, and a duplicate names the line it repeats. |
+| Two statuses visible, no lifecycle | Six states in three visual families, each with an explanation on hover. |
+| No sense of what a batch will cost | The approve panel gives the cost, the balance after it, and refuses to overdraw. The available figure carries what the queue has already committed. |
+
+### Deliberately not done
+
+- **The file does not really download.** Clicking a filename confirms the
+  action; a prototype has no file to hand over.
+- **The CSV is not really parsed.** Choosing a file produces a plausible batch
+  so the states after it can be designed, but no bytes are read.
+- **`Processing` does not really advance.** Its counter is derived from how
+  long the batch has been running, which is enough to design both the moving
+  and the stuck case.
+
+### Still open
+
+1. **The riyal symbol.** We use the legacy ﷼ (U+FDFC) because WalaOne's own
+   screens do. The 2025 official symbol is U+20C1 and font coverage is still
+   patchy. Someone should decide rather than let it drift — see
+   `docs/design-system/05-approval-queue.md` §9.
+2. **Stored values disagree with the rate.** Every value on this screen is
+   computed from the points at 5:1. On real data that will contradict what the
+   current system prints, in one case by a factor of a hundred. Whoever owns
+   that field should hear it from us before a partner notices.
+3. **Who may approve.** The screen assumes the viewer is an admin. If approval
+   is a permission, an uploader viewing their own batch needs a different set
+   of controls, and we have not designed that.
+4. **Bulk approve.** Not built. Approving several files at once is a natural
+   ask and a genuinely dangerous control; worth its own conversation rather
+   than an assumption.
