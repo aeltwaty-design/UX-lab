@@ -19,6 +19,7 @@ Hash routing, so links work from anywhere in the file:
 | `#/transactions` | Transactions — every point movement |
 | `#/charges` | Charge history — the partner buying points |
 | `#/exports` | Exports — every file the product generated |
+| `#/login` | Sign in, then the SMS code — outside the shell |
 
 The screens are linked to each other: the Overview's "waiting for your approval" and
 "transactions failed" rows count the real transfer queue and open it filtered; a

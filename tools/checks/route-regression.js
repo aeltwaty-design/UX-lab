@@ -78,6 +78,7 @@ const { chromium } = require('playwright');
                               ['transactions', '#view-transactions h1'],
                               ['charges', '#view-charges h1'],
                               ['exports', '#view-exports h1'],
+                              ['login', '#view-login .auth-h'],
                               ['users', '#view-list h1'],
                               ['overview', '#view-overview .card-t']]) {
     const r = await p.evaluate(async ([route, sel]) => {

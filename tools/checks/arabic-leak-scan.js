@@ -4,7 +4,7 @@ const { chromium } = require('playwright');
    Everything else that reads as English words is a leak. */
 // Reference codes, ids, filenames and the tenant's own name are Latin by
 // nature; everything else Latin in an Arabic page is a leak.
-const OK = /^(?:[\d\s.,:/·—–-]+|BCH-\d+|TRF-\d+|TX-\d+|USR-\d+|FLW-\d+|INV-\d+|COMTECHGOLD(?:\/[A-Z]+)?\/[0-9]+|CHG-\d+|PO-\d+-\d+|EXP-\d+|Admin Charge|[a-z.@]+|[0-9_]+_[a-z]+\.csv|B2B|CSV|CG|MA|\d+K|⌘K|[A-Za-z0-9._-]+\.csv|Comtech Gold|English|[A-Z]{1,2})$/;
+const OK = /^(?:[\d\s.,:/·—–-]+|BCH-\d+|TRF-\d+|TX-\d+|USR-\d+|FLW-\d+|INV-\d+|COMTECHGOLD(?:\/[A-Z]+)?\/[0-9]+|CHG-\d+|PO-\d+-\d+|EXP-\d+|Admin Charge|[a-z.@]+|[0-9_]+_[a-z]+\.csv|B2B|CSV|CG|MA|\d+K|⌘K|[A-Za-z0-9._-]+\.csv|Comtech Gold|WalaOne|English|[A-Z]{1,2})$/;
 const LATIN = /[A-Za-z]{2,}/;
 const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
 (async () => {
@@ -24,10 +24,12 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
       // One test for text and attributes alike. Attributes used to get only the
       // whole-string check, so an aria-label that legitimately names a file -
       // "تنزيل 2026_08_29_charges.csv" - was reported as a leak.
-      const ALLOW = /^(?:CSV|B2B|COMTECHGOLD|DIRECT|RET|(?:INV|BCH|TRF|TX|CHG|PO|EXP)(?:-[0-9-]+)?|9665X+\.?|[a-z.]+@[a-z.]+|[A-Za-z0-9._-]+\.csv)$/;
+      const ALLOW = /^(?:CSV|B2B|COMTECHGOLD|DIRECT|RET|(?:INV|BCH|TRF|TX|CHG|PO|EXP)(?:-[0-9-]+)?|WalaOne|9665X+\.?|[a-z.]+@[a-z.]+|[A-Za-z0-9._-]+\.csv)$/;
       const isLeak = txt => {
         if (!txt || !LATIN.test(txt) || OK.test(txt)) return false;
-        const words = txt.split(/[^A-Za-z0-9._@X-]+/).filter(w => /[A-Za-z]{2,}/.test(w));
+        const words = txt.split(/[^A-Za-z0-9._@X-]+/)
+                         .map(w => w.replace(/^\.+|\.+$/g, ''))     // sentence punctuation is not part of the word
+                         .filter(w => /[A-Za-z]{2,}/.test(w));
         return !words.every(w => ALLOW.test(w));
       };
       const out = [];
@@ -49,6 +51,9 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
       // placeholders, titles and aria-labels are text too
       document.querySelectorAll('[placeholder],[aria-label],[title]').forEach(el => {
         if (el.closest('#pv')) return;
+        const p2 = el.closest('#pnl');
+        if (p2 && p2.hidden) return;
+        if (!p2 && el.offsetParent === null && el.tagName !== 'BODY') return;
         ['placeholder','aria-label','title'].forEach(a => {
           const v = el.getAttribute(a);
           if (v && isLeak(v.trim()))
@@ -92,7 +97,13 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
   await scan('exports',        () => { closePanel(); location.hash = '#/exports'; });
   await scan('export filters', () => efilToggle());
   await scan('export columns', () => { efilClose(); ecolToggle(); });
-  await scan('empty state',    () => { closePanel(); location.hash = '#/transfers'; setState('empty'); });
+  // sign in, both steps, which live outside the shell
+  await scan('sign in',        () => { closePanel(); location.hash = '#/login'; });
+  await scan('sign in help',   () => lgHelp());
+  await scan('verify code',    () => { lgHelp(); AUTH_STEP='otp'; renderLogin(); startResend(); });
+  await scan('code resent',    () => { otpResend(); });
+  await scan('empty state',    () => { stopResend(); location.hash = '#/transfers'; setState('empty'); });
+  await scan('empty state 2',    () => { closePanel(); location.hash = '#/transfers'; setState('empty'); });
   await scan('error state',    () => setState('error'));
   await b.close();
 })();

@@ -687,7 +687,13 @@ html[dir="rtl"] .f-wrap .finp.has-end{padding-left:48px}
    track, so the loop has no seam and no jump. */
 .films{position:relative;display:flex;flex-direction:column;gap:14px;
   justify-content:center;flex:1;min-height:0}
-.film{position:relative;
+/* The strip is laid out left-to-right whatever the page direction. In RTL an
+   overflowing track is positioned from the right edge and extends left, so the
+   animation's translateX pushed it clean off the panel — the belt simply
+   vanished in Arabic. Its tiles are marks with no reading order, so nothing is
+   lost by pinning the direction and everything is gained by it behaving the
+   same in both languages. */
+.film{direction:ltr;position:relative;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
 .film-track{display:flex;gap:14px;width:max-content;animation:film 34s linear infinite}
@@ -2261,7 +2267,41 @@ const I18N = {
     "exports.empty.body": "Once you use the export button on another screen, it'll show up here.",
     "exports.empty.noMatchTitle": "No matches",
     "exports.empty.noMatchBody": "No exports match your filters. Try different search terms, or clear your filters to see more.",
-    "exports.a11y.table": "Exports table"
+    "exports.a11y.table": "Exports table",
+    "login.brandLine": "WalaOne partner dashboard",
+    "login.langToggle": "Switch language",
+    "login.heading": "Log in",
+    "login.subtitle": "Enter your email and password to continue.",
+    "login.emailLabel": "Email",
+    "login.emailPlaceholder": "Enter your email",
+    "login.passwordLabel": "Password",
+    "login.passwordPlaceholder": "Enter your password",
+    "login.showPassword": "Show password",
+    "login.hidePassword": "Hide password",
+    "login.submit": "Continue",
+    "login.forgot": "Need help signing in?",
+    "login.errEmail": "Enter a valid email address.",
+    "login.errPassword": "Enter your password.",
+    "login.errWrong": "We couldn't sign you in with that email and password.",
+    "otp.heading": "Verify your account",
+    "otp.subtitle": "We sent a 6-digit code to the mobile number on your account.",
+    "otp.codeLabel": "Verification code",
+    "otp.submit": "Log in",
+    "otp.resendIn": "Resend code in {n} seconds",
+    "otp.resend": "Resend code",
+    "otp.resent": "New code sent.",
+    "otp.back": "Back",
+    "otp.errIncomplete": "Enter all 6 digits.",
+    "otp.errWrong": "We couldn't verify that code.",
+    "otp.a11y.digit": "Digit {n} of 6",
+    "otp.a11y.group": "Verification code",
+    "login.showcase.heading": "Your points programme, managed from here.",
+    "login.showcase.body": "Track your followers, issue and redeem points, and manage your offers, all in one place.",
+    "login.showcase.brands": "Brands running their points programmes on WalaOne",
+    "login.rights": "© {year} WalaOne. All rights reserved.",
+    "login.terms": "Terms of service",
+    "login.privacy": "Privacy policy",
+    "login.forgotHelp": "WalaOne sets up and manages partner accounts, so you can't reset your details yourself. Contact your account manager or support, and they'll help you sign in again."
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -2967,7 +3007,41 @@ const I18N = {
     "exports.empty.body": "بمجرد أن تستخدم زر التصدير في أي شاشة أخرى، سيظهر الملف هنا.",
     "exports.empty.noMatchTitle": "لا توجد نتائج مطابقة",
     "exports.empty.noMatchBody": "لا توجد ملفات تصدير مطابقة لمعايير التصفية. جرّب كلمات بحث مختلفة أو امسح التصفية لعرض المزيد.",
-    "exports.a11y.table": "جدول ملفات التصدير"
+    "exports.a11y.table": "جدول ملفات التصدير",
+    "login.brandLine": "لوحة شركاء WalaOne",
+    "login.langToggle": "تبديل اللغة",
+    "login.heading": "تسجيل الدخول",
+    "login.subtitle": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة.",
+    "login.emailLabel": "البريد الإلكتروني",
+    "login.emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "login.passwordLabel": "كلمة المرور",
+    "login.passwordPlaceholder": "أدخل كلمة المرور",
+    "login.showPassword": "إظهار كلمة المرور",
+    "login.hidePassword": "إخفاء كلمة المرور",
+    "login.submit": "متابعة",
+    "login.forgot": "تحتاج مساعدة في تسجيل الدخول؟",
+    "login.errEmail": "أدخل بريدًا إلكترونيًا صحيحًا.",
+    "login.errPassword": "أدخل كلمة المرور.",
+    "login.errWrong": "تعذّر تسجيل الدخول بهذا البريد الإلكتروني وكلمة المرور.",
+    "otp.heading": "تحقق من حسابك",
+    "otp.subtitle": "أرسلنا رمزًا من 6 أرقام إلى رقم الجوال المسجّل في حسابك.",
+    "otp.codeLabel": "رمز التحقق",
+    "otp.submit": "تسجيل الدخول",
+    "otp.resendIn": "إعادة إرسال الرمز خلال {n} ثانية",
+    "otp.resend": "إعادة إرسال الرمز",
+    "otp.resent": "تم إرسال رمز جديد.",
+    "otp.back": "رجوع",
+    "otp.errIncomplete": "أدخل الأرقام الستة كاملة.",
+    "otp.errWrong": "تعذّر التحقق من الرمز.",
+    "otp.a11y.digit": "الرقم {n} من 6",
+    "otp.a11y.group": "رمز التحقق",
+    "login.showcase.heading": "برنامج نقاطك، تديره من هنا.",
+    "login.showcase.body": "راقب متابعيك، وأصدر النقاط واستبدلها، وأدر عروضك، كل ذلك من مكان واحد.",
+    "login.showcase.brands": "علامات تجارية تدير برامج نقاطها عبر WalaOne",
+    "login.rights": "© {year} WalaOne. جميع الحقوق محفوظة.",
+    "login.terms": "شروط الخدمة",
+    "login.privacy": "سياسة الخصوصية",
+    "login.forgotHelp": "تُنشئ WalaOne حسابات الشركاء وتديرها، فلا يمكنك إعادة تعيين بيانات حسابك بنفسك. تواصل مع مدير حسابك أو مع الدعم، وسيساعدونك على الدخول مجددًا."
   }
 };
 
@@ -6783,7 +6857,7 @@ function renderLogin(){
         </div>
         ${AUTH_STEP === "creds" ? credsStep() : otpStep()}
         <div class="auth-foot">
-          <span>${esc(interp(t("login.rights"), { year: fmt(2026) }))}</span>
+          <span>${esc(interp(t("login.rights"), { year: String(new Date().getFullYear()) }))}</span>
           <a href="#" onclick="return false">${esc(t("login.terms"))}</a>
           <span class="sep" aria-hidden="true">·</span>
           <a href="#" onclick="return false">${esc(t("login.privacy"))}</a>
@@ -6841,8 +6915,12 @@ function credsStep(){
       </div>
       <button class="btn btn-primary" style="margin-top:6px" onclick="doLogin()">${esc(t("login.submit"))}</button>
       <div style="text-align:center;margin-top:16px">
-        <button class="auth-link" onclick="toast(t('login.forgotHelp'))">${esc(t("login.forgot"))}</button>
+        <button class="auth-link" id="lgHelpBtn" aria-expanded="false" aria-controls="lgHelp"
+                onclick="lgHelp()">${esc(t("login.forgot"))}</button>
       </div>
+      <div class="fnote tone-quiet" id="lgHelp" style="margin-top:14px" hidden>
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
+        <span>${esc(t("login.forgotHelp"))}</span></div>
     </div>`;
 }
 
@@ -6882,6 +6960,11 @@ function lgEye(){
   i.type = show ? "text" : "password";
   const label = t(show ? "login.hidePassword" : "login.showPassword");
   b.setAttribute("aria-label", label); b.setAttribute("title", label);
+}
+function lgHelp(){
+  const n = document.getElementById("lgHelp"), b = document.getElementById("lgHelpBtn");
+  n.hidden = !n.hidden;
+  b.setAttribute("aria-expanded", String(!n.hidden));
 }
 function doLogin(){
   const em = document.getElementById("lgEmail"), pw = document.getElementById("lgPass");

@@ -1,0 +1,82 @@
+{
+  "en": {
+    "login.brandLine": "WalaOne partner dashboard",
+    "login.langToggle": "Switch language",
+
+    "login.heading": "Log in",
+    "login.subtitle": "Enter your email and password to continue.",
+    "login.emailLabel": "Email",
+    "login.emailPlaceholder": "Enter your email",
+    "login.passwordLabel": "Password",
+    "login.passwordPlaceholder": "Enter your password",
+    "login.showPassword": "Show password",
+    "login.hidePassword": "Hide password",
+    "login.submit": "Continue",
+    "login.forgot": "Need help signing in?",
+    "login.forgotHelp": "WalaOne sets up and manages partner accounts, so you can't reset your details yourself. Contact your account manager or support, and they'll help you sign in again.",
+    "login.errEmail": "Enter a valid email address.",
+    "login.errPassword": "Enter your password.",
+    "login.errWrong": "We couldn't sign you in with that email and password.",
+
+    "otp.heading": "Verify your account",
+    "otp.subtitle": "We sent a 6-digit code to the mobile number on your account.",
+    "otp.codeLabel": "Verification code",
+    "otp.submit": "Log in",
+    "otp.resendIn": "Resend code in {n} seconds",
+    "otp.resend": "Resend code",
+    "otp.resent": "New code sent.",
+    "otp.back": "Back",
+    "otp.errIncomplete": "Enter all 6 digits.",
+    "otp.errWrong": "We couldn't verify that code.",
+    "otp.a11y.digit": "Digit {n} of 6",
+    "otp.a11y.group": "Verification code",
+
+    "login.showcase.heading": "Your points programme, managed from here.",
+    "login.showcase.body": "Track your followers, issue and redeem points, and manage your offers, all in one place.",
+    "login.showcase.brands": "Brands running their points programmes on WalaOne",
+
+    "login.rights": "© {year} WalaOne. All rights reserved.",
+    "login.terms": "Terms of service",
+    "login.privacy": "Privacy policy"
+  },
+  "ar": {
+    "login.brandLine": "لوحة شركاء WalaOne",
+    "login.langToggle": "تبديل اللغة",
+
+    "login.heading": "تسجيل الدخول",
+    "login.subtitle": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة.",
+    "login.emailLabel": "البريد الإلكتروني",
+    "login.emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "login.passwordLabel": "كلمة المرور",
+    "login.passwordPlaceholder": "أدخل كلمة المرور",
+    "login.showPassword": "إظهار كلمة المرور",
+    "login.hidePassword": "إخفاء كلمة المرور",
+    "login.submit": "متابعة",
+    "login.forgot": "تحتاج مساعدة في تسجيل الدخول؟",
+    "login.forgotHelp": "تُنشئ WalaOne حسابات الشركاء وتديرها، فلا يمكنك إعادة تعيين بيانات حسابك بنفسك. تواصل مع مدير حسابك أو مع الدعم، وسيساعدونك على الدخول مجددًا.",
+    "login.errEmail": "أدخل بريدًا إلكترونيًا صحيحًا.",
+    "login.errPassword": "أدخل كلمة المرور.",
+    "login.errWrong": "تعذّر تسجيل الدخول بهذا البريد الإلكتروني وكلمة المرور.",
+
+    "otp.heading": "تحقق من حسابك",
+    "otp.subtitle": "أرسلنا رمزًا من 6 أرقام إلى رقم الجوال المسجّل في حسابك.",
+    "otp.codeLabel": "رمز التحقق",
+    "otp.submit": "تسجيل الدخول",
+    "otp.resendIn": "إعادة إرسال الرمز خلال {n} ثانية",
+    "otp.resend": "إعادة إرسال الرمز",
+    "otp.resent": "تم إرسال رمز جديد.",
+    "otp.back": "رجوع",
+    "otp.errIncomplete": "أدخل الأرقام الستة كاملة.",
+    "otp.errWrong": "تعذّر التحقق من الرمز.",
+    "otp.a11y.digit": "الرقم {n} من 6",
+    "otp.a11y.group": "رمز التحقق",
+
+    "login.showcase.heading": "برنامج نقاطك، تديره من هنا.",
+    "login.showcase.body": "راقب متابعيك، وأصدر النقاط واستبدلها، وأدر عروضك، كل ذلك من مكان واحد.",
+    "login.showcase.brands": "علامات تجارية تدير برامج نقاطها عبر WalaOne",
+
+    "login.rights": "© {year} WalaOne. جميع الحقوق محفوظة.",
+    "login.terms": "شروط الخدمة",
+    "login.privacy": "سياسة الخصوصية"
+  }
+}
