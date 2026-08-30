@@ -125,3 +125,59 @@ identical.
    and should the person's name link to their existing profile?
 6. **"ID number"** in the user cell — the الرقم التعريفي we just renamed, and
    does the phone number still appear beside it?
+
+---
+
+## Resolved — answers from the client
+
+### R1. The rate stays at 5 points = 1 ﷼; this screen's data is wrong
+
+Ten rows at exactly 500:1 are not evidence enough to move the rate. Value is
+points ÷ 5 here as everywhere else, computed rather than read, and the live
+figures on this screen are wrong by a factor of a hundred.
+
+That makes three screens now carrying the same discrepancy — the batch list,
+the newer reference screen, and this one — all consistent with each other and
+all inconsistent with the stated rate. **Whoever owns that field should hear
+this from us before a partner reconciles a statement**, because our figures
+will disagree with theirs everywhere.
+
+### R2. One list of types, and the filter is missing values
+
+Transaction type is a single dimension. *Welcoming points* belongs in it
+alongside File, Loyalty programme, Invoice, Referral and B2B — the filter was
+simply incomplete, which is why those rows could not be reached.
+
+### R3. Origin ID and Comment stay
+
+They are populated for some transaction types. Since they are empty far more
+often than not, they are **available as columns but off by default**, and
+always present in the side panel so a value is never lost.
+
+*Assumption, flagged:* an origin id belongs to transactions that came from
+something external — invoices and B2B settlements — and a comment to
+transfers a person made by hand. If either is populated for other types, say
+so and I will change which rows carry them.
+
+### R4. A row opens a side panel; the person links to their profile
+
+No new page, consistent with Transfer points. The reference also links back to
+the file the transaction came from, where it came from one.
+
+### R5. The user cell is avatar, name, phone
+
+*"Phone number, it's mistake from me"* — the third line is the phone, not the
+ID number. Identical to the Users table, which is the point: the same person
+should look the same everywhere in the product.
+
+### R6. One row per recipient, linked to its batch
+
+Approving a 1,240-record file produces 1,240 rows here, each able to open the
+batch it came from. That closes the loop between the two screens: a batch says
+how many people it reached, and this screen says who they were.
+
+### R7. Direction comes to this screen
+
+The profile's transactions tab already distinguishes points in from points
+out; without it here, a refund and an award look identical. The two tables now
+agree.
