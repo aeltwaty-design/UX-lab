@@ -1,4 +1,4 @@
-<title>WalaOne Users</title>
+<title>WalaOne Partner Console</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,6 +62,8 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
+.view{display:none}
+.view.on{display:block}
 [hidden]{display:none!important}
 html{color-scheme:light}
 body{margin:0;background:var(--n-50);color:var(--n-950);
@@ -389,6 +391,45 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
 <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.3 2.6 17.4A2 2 0 0 0 4.3 20.4h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4"/><circle cx="12" cy="16.8" r=".9" fill="currentColor" stroke="none"/></symbol>
 </defs></svg>
 <style>
+/* confirmation dialog */
+.dlg-back{position:fixed;inset:0;z-index:70;background:rgba(17,19,23,.45);display:grid;place-items:center;padding:20px}
+.dlg{background:#fff;border-radius:var(--r-200);box-shadow:var(--shadow-lg);max-width:460px;width:100%;padding:22px}
+.dlg-t{font-size:18px;font-weight:700;margin:0 0 10px}
+.dlg-b{font-size:14px;color:var(--n-800);line-height:1.55}
+.dlg-b p{margin:0 0 8px}
+.dlg-note{font-size:13px;color:var(--n-700);padding:9px 11px;background:var(--n-50);
+  border-radius:var(--r-100);border:1px solid var(--n-200)}
+.dlg-f{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+
+/* detail page */
+.fld{display:flex;gap:16px;padding:13px 0;border-top:1px solid var(--n-100);flex-wrap:wrap}
+.fld:first-of-type{border-top:none}
+.fld-l{flex:0 0 190px;font-size:13.5px;color:var(--n-700)}
+.fld-v{flex:1;min-width:0;font-size:14.5px;color:var(--n-950);font-weight:500;
+  display:flex;align-items:center;flex-wrap:wrap}
+/* tabs share a card with their panel — they are one component */
+.tabs{display:flex;gap:4px;padding:6px 12px 0;border-bottom:1px solid var(--n-200);overflow-x:auto}
+.tab{border:none;background:none;padding:12px 14px;font:inherit;font-size:14px;font-weight:600;
+  color:var(--n-700);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab:hover{color:var(--n-950)}
+.tab[aria-selected="true"]{color:var(--p-700);border-bottom-color:var(--p-500)}
+.unreg-note{display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--info-50);
+  border-top:1px solid var(--info-200);font-size:13.5px;color:var(--n-900)}
+.parked-note{margin:14px 20px 0;padding:11px 13px;border:1px dashed var(--n-300);border-radius:var(--r-100);
+  background:var(--n-25);font-size:13px;color:var(--n-700)}
+@media (max-width:560px){ .fld-l{flex-basis:100%} }
+
+/* row overflow menu + toast */
+.row-pop{position:fixed;min-width:210px;z-index:60}
+#toast{position:fixed;inset-block-end:22px;inset-inline-start:50%;transform:translateX(-50%) translateY(12px);
+  background:var(--n-950);color:#fff;padding:11px 18px;border-radius:var(--r-150);font-size:13.5px;
+  box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity .16s,transform .16s;z-index:80}
+#toast.on{opacity:1;transform:translateX(-50%)}
+html[dir="rtl"] #toast{transform:translateX(50%) translateY(12px)}
+html[dir="rtl"] #toast.on{transform:translateX(50%)}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+.tbl tbody tr{cursor:pointer}
+
 /* segmented split — the screen's spine, not a status pill */
 .segs{display:inline-flex;background:var(--n-100);border-radius:var(--r-150);padding:4px;gap:2px}
 .seg{display:inline-flex;align-items:center;gap:7px;border:none;background:none;cursor:pointer;
@@ -522,11 +563,11 @@ table.tbl{width:100%;border-collapse:collapse;min-width:940px}
   </div>
 
   <nav class="flex-1 overflow-y-auto pb-4" style="scrollbar-width:thin">
-    <a href="dashboard.html" class="nav-item">
+    <a href="#/overview" class="nav-item" data-route="overview">
       <svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-home"/></svg><span class="nav-label" data-i18n="nav.overview">Overview</span></a>
 
     <div class="nav-group-label" data-i18n="nav.groupAudience">Audience</div>
-    <a href="#" class="nav-item" aria-current="page"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-users"/></svg>
+    <a href="#/users" class="nav-item" data-route="users"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-users"/></svg>
       <span class="nav-label" data-i18n="nav.users">Users</span></a>
     <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-heart"/></svg>
       <span class="nav-label" data-i18n="nav.followers">Followers</span></a>
@@ -591,7 +632,273 @@ table.tbl{width:100%;border-collapse:collapse;min-width:940px}
     </button>
   </header>
 
-  <main id="main" class="p-6 flex-1" data-i18n-aria="a11y.main" aria-label="Users">
+  <main id="main" class="p-6 flex-1" data-i18n-aria="a11y.main" aria-label="Dashboard">
+  <div id="view-overview" class="view">
+    <!-- ---------- page header ---------- -->
+    <div class="flex flex-wrap items-end gap-4 mb-6">
+      <div class="min-w-0 flex-1">
+        <h1 style="font-size:24px;font-weight:700;letter-spacing:-.01em" data-i18n="header.greeting"></h1>
+        <p style="font-size:14px;color:var(--n-700);margin-top:3px" data-i18n="header.subtitle">Here's what needs you today.</p>
+      </div>
+      <div class="hdr-actions flex items-center gap-2 flex-wrap">
+        <div class="dd">
+          <button class="btn btn-ghost" id="ddBtn" aria-haspopup="listbox" aria-expanded="false"
+                  aria-controls="ddMenu" data-i18n-aria="dateFilter.label" onclick="ddToggle()">
+            <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-calendar"/></svg>
+            <span id="ddLabel">Last month</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" style="color:var(--n-500)" id="ddCaret"><use href="#i-chevron"/></svg>
+          </button>
+          <div class="dd-menu" id="ddMenu" role="listbox" data-i18n-aria="dateFilter.label" hidden></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-12 gap-5 mb-5">
+      <!-- WALLET — its own card now, separate from the supporting figures -->
+      <section class="card col-span-12 lg:col-span-4 flex flex-col">
+        <div class="card-h pb-3">
+          <div class="min-w-0">
+            <div class="card-t" data-i18n="wallet.heading"></div>
+            <div class="card-sub" data-i18n="wallet.availableCredits">Available credits</div>
+          </div>
+          <button class="icon-btn ms-auto shrink-0" style="border:1px solid var(--n-300)"
+                  data-i18n-aria="actions.chargePoints" aria-label="Charge points">
+            <svg viewBox="0 0 24 24" width="18" height="18"><use href="#i-plus"/></svg>
+          </button>
+        </div>
+        <div class="px-5 pb-5 pt-1 flex-1 flex flex-col">
+          <div class="s-load"><div class="sk h-4 w-28 mb-3"></div><div class="sk h-11 w-44 mb-2"></div><div class="sk h-4 w-32"></div></div>
+          <div class="s-err">
+            <div class="rounded-lg p-3" style="background:var(--danger-50);border:1px solid var(--danger-200)">
+              <div class="flex items-start gap-2.5">
+                <span class="shrink-0 mt-0.5" style="color:var(--danger-700)"><svg viewBox="0 0 24 24" width="18" height="18"><use href="#i-shield"/></svg></span>
+                <div class="min-w-0">
+                  <div style="font-size:14px;font-weight:700;color:var(--danger-700)" data-i18n="wallet.integrityTitle"></div>
+                  <div style="font-size:12px;color:var(--n-800);margin-top:3px;line-height:1.5" data-i18n="wallet.integrityBody" data-i18n-vars='{"value":"@time.days:3"}'></div>
+                  <button class="btn-link mt-2" data-i18n="actions.reportIssue"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="s-empty empty py-5">
+            <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-wallet"/></svg></div>
+            <div class="empty-t" data-i18n="wallet.emptyBody" data-i18n-part="head"></div>
+            <div class="empty-d" data-i18n="wallet.emptyBody" data-i18n-part="tail"></div>
+          </div>
+          <div class="s-real flex-1 flex flex-col">
+            <div class="flex items-center gap-2.5">
+              <svg viewBox="0 0 24 24" width="30" height="30" class="shrink-0" aria-hidden="true"><use href="#i-point"/></svg>
+              <span class="num" style="font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1">1,096,860</span>
+            </div>
+            <div style="font-size:13px;color:var(--n-700);margin-top:7px" data-i18n="wallet.sarEquivalent" data-i18n-vars='{"value":"219,372"}'>219,372 SAR</div>
+            <div class="pt-3" style="border-top:1px dashed var(--n-200);margin-top:auto">
+              <span class="pill rate-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13"><use href="#i-point"/></svg>
+                <span data-i18n="wallet.conversionRate" data-i18n-vars='{"points":5,"sar":1}'>5 points = 1 SAR</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUPPORTING FIGURES — separated into their own card -->
+      <section class="card col-span-12 lg:col-span-8">
+        <div class="card-h" style="padding-bottom:20px">
+          <div class="min-w-0">
+            <div class="card-t" data-i18n="metrics.heading">Points activity</div>
+            <div class="card-sub" data-i18n="metrics.subtitle"></div>
+          </div>
+          <span class="ms-auto" style="font-size:12px;color:var(--n-600)" data-i18n="header.comparedToPrevious"></span>
+        </div>
+        <div class="px-5 pb-5">
+          <div class="s-load grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="sk h-28"></div><div class="sk h-28"></div><div class="sk h-28"></div><div class="sk h-28"></div></div>
+          <div class="s-err empty py-6"><div class="empty-t" data-i18n="states.errorTitle"></div>
+            <button class="btn btn-ghost btn-sm mt-3"><span data-i18n="actions.retry"></span></button></div>
+          <div class="s-empty empty py-6"><div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-inbox"/></svg></div>
+            <div class="empty-t" data-i18n="flow.emptyBody" data-i18n-part="head"></div>
+            <div class="empty-d" data-i18n="flow.emptyBody" data-i18n-part="tail"></div></div>
+          <div class="s-real grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="mt" data-spark="issued" data-tone="up">
+              <div class="mt-l" data-i18n="wallet.issued"></div><div class="mt-v num">2,847,500</div>
+              <div class="mt-d"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-up"/></svg><span class="num">12.4%</span></div>
+              <svg class="mt-s" viewBox="0 0 120 58" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+            <div class="mt" data-spark="redeemed" data-tone="flat">
+              <div class="mt-l" data-i18n="wallet.redeemed"></div><div class="mt-v num">1,750,640</div>
+              <div class="mt-d"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-down"/></svg><span class="num">3.1%</span></div>
+              <svg class="mt-s" viewBox="0 0 120 58" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+            <div class="mt" data-spark="pending" data-tone="warn">
+              <div class="mt-l" data-i18n="wallet.pending"></div><div class="mt-v num">96,200</div>
+              <div class="mt-d"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-up"/></svg><span class="num">8.0%</span></div>
+              <svg class="mt-s" viewBox="0 0 120 58" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+            <div class="mt" data-spark="refunded" data-tone="flat">
+              <div class="mt-l" data-i18n="wallet.refunded"></div><div class="mt-v num">12,400</div>
+              <div class="mt-d"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-down"/></svg><span class="num">1.2%</span></div>
+              <svg class="mt-s" viewBox="0 0 120 58" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid grid-cols-12 gap-5 mb-5">
+<section class="card col-span-12 lg:col-span-8">
+        <div class="card-h pb-2 flex-wrap">
+          <div class="min-w-0">
+            <div class="card-t" data-i18n="flow.title">Points issued vs redeemed</div>
+            <div class="card-sub" data-i18n="flow.subtitleYear">Last 30 days</div>
+          </div>
+          <div class="flex items-center gap-4 ms-auto" style="font-size:12px">
+            <span class="flex items-center gap-1.5"><span style="width:10px;height:10px;border-radius:3px;background:var(--series-issued)"></span>
+              <span data-i18n="flow.legendIssued">Issued</span></span>
+            <span class="flex items-center gap-1.5"><span style="width:10px;height:10px;border-radius:3px;background:var(--series-redeemed)"></span>
+              <span data-i18n="flow.legendRedeemed">Redeemed</span></span>
+          </div>
+        </div>
+        <div class="px-5 pb-4 pt-3">
+          <div class="s-load"><div class="sk w-full" style="height:344px;border-radius:10px"></div></div>
+          <div class="s-err empty" style="height:344px;display:grid;place-content:center">
+            <div class="empty-t" data-i18n="states.errorTitle">Couldn't load this</div>
+            <button class="btn btn-ghost btn-sm mt-3 mx-auto"><span data-i18n="actions.retry">Try again</span></button></div>
+          <div class="s-empty empty" style="height:344px;display:grid;place-content:center">
+            <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-inbox"/></svg></div>
+            <div class="empty-t" data-i18n="flow.emptyBody" data-i18n-part="head">No activity in this period</div>
+            <div class="empty-d" data-i18n="flow.emptyBody" data-i18n-part="tail">When you issue or customers redeem points, the trend appears here.</div></div>
+          <div class="s-real chart-wrap">
+            <svg id="chart" viewBox="0 0 720 344" width="100%" height="344" role="img"
+                 data-i18n-aria="a11y.chartDesc" aria-label="Points issued versus redeemed over the last 30 days"></svg>
+            <div id="tooltip" role="status" aria-live="polite"></div>
+            <div class="yr-tot">
+              <span class="yr-lbl" data-i18n="flow.yearTotal"></span>
+              <span class="yr-item"><span class="yr-sw" style="background:var(--series-issued)"></span>
+                <span data-i18n="wallet.issued"></span><b class="num" id="totIssued"></b></span>
+              <span class="yr-item"><span class="yr-sw" style="background:var(--series-redeemed)"></span>
+                <span data-i18n="wallet.redeemed"></span><b class="num" id="totRedeemed"></b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- OFFERS — rebuilt around the offers themselves, not three stacked counts -->
+      <section class="card col-span-12 lg:col-span-4 flex flex-col">
+        <div class="card-h pb-3">
+          <div class="card-t" data-i18n="offers.heading"></div>
+          <button class="btn-link ms-auto" data-i18n="offers.manageAll">Manage all</button>
+        </div>
+        <div class="px-5 pb-5 pt-1 flex-1 flex flex-col">
+          <div class="s-load"><div class="sk h-12 mb-2"></div><div class="sk h-14 mb-2"></div><div class="sk h-14 mb-2"></div><div class="sk h-14"></div></div>
+          <div class="s-err empty py-6"><div class="empty-t" data-i18n="states.errorTitle"></div>
+            <button class="btn btn-ghost btn-sm mt-3"><span data-i18n="actions.retry"></span></button></div>
+          <div class="s-empty empty py-6"><div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-ticket"/></svg></div>
+            <div class="empty-t" data-i18n="offers.emptyBody" data-i18n-part="head"></div>
+            <div class="empty-d" data-i18n="offers.emptyBody" data-i18n-part="tail"></div></div>
+          <div class="s-real flex-1 flex flex-col">
+            <div class="of-sum">
+              <svg viewBox="0 0 24 24" width="16" height="16" class="shrink-0"><use href="#i-clock"/></svg>
+              <span class="num of-sum-n">5</span><span data-i18n="offers.expiringSoon"></span>
+            </div>
+            <div id="offerList" class="flex-1" style="display:flex;flex-direction:column;min-height:0"></div>
+            <div class="of-foot">
+              <span><b class="num">312</b> <span data-i18n="offers.active"></span></span>
+              <span><b class="num">4,094</b> <span data-i18n="offers.total"></span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid grid-cols-12 gap-5 mb-6">
+      <section class="card col-span-12">
+        <div class="card-h pb-3">
+          <div class="card-t" data-i18n="activity.heading">Recent activity</div>
+          <button class="btn-link ms-auto" data-i18n="actions.viewAll">View all</button>
+        </div>
+        <div class="px-5 pb-5 pt-1">
+          <div class="s-load"><div class="sk h-12 mb-2"></div><div class="sk h-12 mb-2"></div><div class="sk h-12 mb-2"></div><div class="sk h-12"></div></div>
+          <div class="s-err empty py-6"><div class="empty-t" data-i18n="states.errorTitle">Couldn't load this</div>
+            <button class="btn btn-ghost btn-sm mt-3"><span data-i18n="actions.retry">Try again</span></button></div>
+          <div class="s-empty empty py-6"><div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-inbox"/></svg></div>
+            <div class="empty-t" data-i18n="activity.emptyBody" data-i18n-part="head">Nothing has happened yet</div>
+            <div class="empty-d" data-i18n="activity.emptyBody" data-i18n-part="tail">Transfers, refunds and new sign-ups will appear here as they happen.</div></div>
+          <div class="s-real" id="activityList"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card overflow-hidden">
+      <div class="card-h pb-4 flex-wrap">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="min-w-0">
+            <div class="card-t" data-i18n="attention.sectionTitle">Action needed</div>
+            <div class="card-sub" data-i18n="attention.subtitle">Sorted by urgency. Clear these first.</div>
+          </div>
+        </div>
+        <span class="pill pill-critical s-real ms-auto"><span class="num">5</span>&nbsp;<span data-i18n="attention.openCount">open</span></span>
+      </div>
+
+      <!-- loading -->
+      <div class="s-load px-5 pb-5 pt-2">
+        <div class="sk h-14 mb-2 rounded-lg"></div><div class="sk h-14 mb-2 rounded-lg"></div><div class="sk h-14 rounded-lg"></div>
+      </div>
+
+      <!-- error -->
+      <div class="s-err empty">
+        <div class="empty-ico" style="background:var(--danger-50);color:var(--danger-700)"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-alert"/></svg></div>
+        <div class="empty-t" data-i18n="states.errorTitle">Couldn't load this</div>
+        <div class="empty-d" data-i18n="states.errorBody">Something went wrong on our side. Your data is safe.</div>
+        <button class="btn btn-ghost btn-sm mt-3"><svg viewBox="0 0 24 24" width="14" height="14"><use href="#i-refresh"/></svg><span data-i18n="actions.retry">Try again</span></button>
+      </div>
+
+      <!-- all clear -->
+      <div class="s-empty empty">
+        <div class="empty-ico" style="background:var(--success-50);color:var(--success-700)"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-check"/></svg></div>
+        <div class="empty-t" data-i18n="attention.allClearTitle">Nothing needs you right now</div>
+        <div class="empty-d" data-i18n="attention.allClearBody">Every transfer is approved and no offers are expiring this week.</div>
+      </div>
+
+      <div class="s-real mt-1">
+        <!-- 1. DATA INTEGRITY — the -1,096,860 bug, never shown as fact -->
+        <div class="att-row sev-critical">
+          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-shield"/></svg></div>
+          <div class="min-w-0 flex-1">
+            <div class="att-t" data-i18n="attention.integrityTitle">Your points balance can't be verified</div>
+            <div class="att-d" data-i18n="attention.integrityDesc" data-i18n-vars='{"value":"@time.days:3"}'></div>
+          </div>
+          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.integrityCta"></span></button>
+        </div>
+        <div class="att-row sev-critical">
+          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-xcircle"/></svg></div>
+          <div class="min-w-0 flex-1">
+            <div class="att-t" data-i18n="attention.failedTitle">Transactions failed</div>
+            <div class="att-d" data-i18n="attention.failedDesc" data-i18n-vars='{"count":3}'></div>
+          </div>
+          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.failedCta"></span></button>
+        </div>
+        <div class="att-row sev-warning">
+          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-hourglass"/></svg></div>
+          <div class="min-w-0 flex-1">
+            <div class="att-t" data-i18n="attention.pendingTitle">Transfers waiting for your approval</div>
+            <div class="att-d" data-i18n="attention.pendingDesc" data-i18n-vars='{"count":12}'></div>
+          </div>
+          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.pendingCta"></span></button>
+        </div>
+        <div class="att-row sev-warning">
+          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-clock"/></svg></div>
+          <div class="min-w-0 flex-1">
+            <div class="att-t" data-i18n="attention.expiringTitle">Offers expiring within 7 days</div>
+            <div class="att-d" data-i18n="attention.expiringDesc" data-i18n-vars='{"count":5}'></div>
+          </div>
+          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.expiringCta"></span></button>
+        </div>
+        <div class="att-row sev-info">
+          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-userplus"/></svg></div>
+          <div class="min-w-0 flex-1">
+            <div class="att-t" data-i18n="attention.backlogTitle">Followers who never finished signing up</div>
+            <div class="att-d" data-i18n="attention.backlogDesc" data-i18n-vars='{"count":148}'></div>
+          </div>
+          <a href="#/users?seg=unreg" class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.backlogCta"></span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div id="view-users" class="view">
 
     <!-- page header -->
     <div class="flex flex-wrap items-end gap-4 mb-5">
@@ -685,15 +992,28 @@ table.tbl{width:100%;border-collapse:collapse;min-width:940px}
         <!-- no rows matched the current filters -->
         <div id="noMatch" class="empty" hidden>
           <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-search"/></svg></div>
-          <div class="empty-t" data-i18n="users.empty.noMatchTitle"></div>
+          <div class="empty-t" data-i18n="users.empty.noMatchTitle" data-i18n-part="head"></div>
           <div class="empty-d" data-i18n="users.empty.noMatchBody"></div>
           <button class="btn btn-ghost btn-sm mt-3" onclick="clearFilters()" data-i18n="users.list.clearFilters"></button>
         </div>
         <div class="tbl-foot" id="tblFoot"></div>
       </div>
     </div>
-  </main>
+  </div>
+  <div id="view-user" class="view"></div>
+</main>
 </div>
+</div>
+
+<div id="dlg" class="dlg-back" hidden onclick="if(event.target===this)closeDlg()">
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+    <h2 id="dlgTitle" class="dlg-t" data-i18n="users.reminder.title"></h2>
+    <div id="dlgBody" class="dlg-b"></div>
+    <div class="dlg-f">
+      <button class="btn btn-ghost" onclick="closeDlg()" data-i18n="users.reminder.cancel"></button>
+      <button class="btn btn-primary" id="dlgOk" data-i18n="users.reminder.confirm"></button>
+    </div>
+  </div>
 </div>
 
 <!-- ===== PREVIEW CONTROLS — review harness, not part of the product ===== -->
@@ -843,20 +1163,20 @@ const I18N = {
     "dateFilter.label": "Date range filter",
     "dateFilter.applied": "Showing {range}",
     "users.list.heading": "Users",
-    "users.list.subtitle": "Find people who haven't registered yet and bring them in.",
-    "users.list.search": "Search by name, phone or email",
+    "users.list.subtitle": "Everyone in your points programme, whether they've registered or not.",
+    "users.list.search": "Search by name, phone or email…",
     "users.list.columns": "Columns",
     "users.list.export": "Export",
-    "users.list.filter": "Filter",
+    "users.list.filter": "Filters",
     "users.list.clearFilters": "Clear filters",
-    "users.list.segLabel": "Filter by registration",
+    "users.list.segLabel": "Filters",
     "users.list.segAll": "All",
     "users.status.registered": "Registered",
     "users.status.notRegistered": "Not registered",
     "users.columns.person": "Person",
     "users.columns.userId": "User ID",
     "users.columns.status": "Status",
-    "users.columns.points": "Points",
+    "users.columns.points": "Points balance",
     "users.columns.joined": "Joined",
     "users.columns.email": "Email",
     "users.columns.gender": "Gender",
@@ -864,20 +1184,63 @@ const I18N = {
     "users.columns.actions": "Actions",
     "users.gender.male": "Male",
     "users.gender.female": "Female",
-    "users.empty.noName": "No name yet",
+    "users.empty.noName": "Name not collected yet",
     "users.empty.notCollected": "Not collected yet",
-    "users.empty.tableBody": "No users yet. People who join your programme will appear here.",
-    "users.empty.noMatchTitle": "Nothing matches those filters",
-    "users.empty.noMatchBody": "Try a different search, or clear the filters to see everyone.",
+    "users.empty.tableBody": "No users yet. Once people join your points programme, they'll show up here.",
+    "users.empty.noMatchTitle": "No users match your filters. Try different search terms, or clear your filters to see more.",
+    "users.empty.noMatchBody": "No users match your filters. Try different search terms, or clear your filters to see more.",
     "users.selection.count": "{count} selected",
-    "users.selection.selectAllMatching": "Select all {count}",
-    "users.selection.clear": "Clear",
+    "users.selection.selectAllMatching": "Select all {count} matching",
+    "users.selection.clear": "Clear selection",
     "users.selection.selectPage": "Select all on this page",
     "users.reminder.action": "Send reminder",
-    "users.pagination.showing": "Showing {from}–{to} of {total}",
-    "users.pagination.prev": "Previous page",
-    "users.pagination.next": "Next page",
-    "users.pagination.perPage": "Rows per page"
+    "users.pagination.showing": "Showing {from} to {to} of {total}",
+    "users.pagination.prev": "Previous",
+    "users.pagination.next": "Next",
+    "users.pagination.perPage": "Rows per page",
+    "users.actions.viewProfile": "View profile",
+    "users.actions.transferPoints": "Transfer points",
+    "users.actions.copyId": "Copy user ID",
+    "users.actions.copied": "Copied",
+    "users.detail.back": "Back to users",
+    "users.detail.joinedOn": "Joined on {date}",
+    "users.detail.tabInfo": "Information",
+    "users.detail.tabTransactions": "Transactions",
+    "users.detail.tabParked": "Parked",
+    "users.detail.personalInfo": "Personal information",
+    "users.detail.fullName": "Full name",
+    "users.detail.mobile": "Mobile number",
+    "users.detail.email": "Email",
+    "users.detail.gender": "Gender",
+    "users.detail.userId": "User ID",
+    "users.detail.verified": "Verified",
+    "users.detail.parked": "Parked",
+    "users.detail.parkedWhat": "What is this?",
+    "users.detail.parkedExplainPending": "We don't have the rule for how points are parked or released yet. We'll add the explanation here as soon as we do.",
+    "users.detail.totalTransferred": "Total points transferred",
+    "users.detail.totalRefunded": "Total points refunded",
+    "users.table.reference": "Reference",
+    "users.table.direction": "Direction",
+    "users.table.points": "Points",
+    "users.table.purchaseValue": "Purchase value",
+    "users.table.date": "Date",
+    "users.table.in": "In",
+    "users.table.out": "Out",
+    "users.table.sar": "{value} SAR",
+    "users.table.zeroValue": "No purchase value",
+    "users.table.emptyTransactionsTitle": "No transactions yet. Once this user makes a purchase, they'll show up here.",
+    "users.table.emptyTransactionsBody": "No transactions yet. Once this user makes a purchase, they'll show up here.",
+    "users.table.emptyParkedTitle": "No parked points yet. If any of this user's points are parked, they'll appear here.",
+    "users.table.emptyParkedBody": "No parked points yet. If any of this user's points are parked, they'll appear here.",
+    "users.unregistered.notice": "This person hasn't completed registration yet, so their profile is just a phone number for now.",
+    "users.reminder.title": "Send a registration reminder?",
+    "users.reminder.body": "This sends a text message to {count} people and can't be undone.",
+    "users.reminder.cooldown": "{count} people were excluded because they were reminded recently.",
+    "users.reminder.cap": "You can send up to {cap} reminders in one batch.",
+    "users.reminder.noneEligible": "Nobody in this selection is waiting to register.",
+    "users.reminder.confirm": "Send reminder",
+    "users.reminder.cancel": "Cancel",
+    "users.reminder.sent": "Reminder sent to {count} people."
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -1007,7 +1370,80 @@ const I18N = {
     "dateFilter.custom": "مخصص",
     "dateFilter.customHelp": "اختر تاريخًا محددًا أو فترة",
     "dateFilter.label": "تصفية الفترة الزمنية",
-    "dateFilter.applied": "جارٍ عرض {range}"
+    "dateFilter.applied": "جارٍ عرض {range}",
+    "users.list.heading": "المستخدمين",
+    "users.list.subtitle": "كل الأشخاص في برنامج نقاطك، سواء سجّلوا أو لم يسجّلوا بعد.",
+    "users.list.search": "ابحث بالاسم أو رقم الجوال أو البريد الإلكتروني…",
+    "users.list.columns": "الأعمدة",
+    "users.list.export": "تصدير",
+    "users.list.filter": "التصفية",
+    "users.list.clearFilters": "مسح التصفية",
+    "users.list.segLabel": "التصفية",
+    "users.list.segAll": "الكل",
+    "users.status.registered": "مسجل",
+    "users.status.notRegistered": "غير مسجل",
+    "users.columns.person": "المستخدم",
+    "users.columns.userId": "معرف المستخدم",
+    "users.columns.status": "الحالة",
+    "users.columns.points": "رصيد النقاط",
+    "users.columns.joined": "الانضمام",
+    "users.columns.email": "البريد",
+    "users.columns.gender": "الجنس",
+    "users.columns.activity": "آخر نشاط",
+    "users.empty.noName": "الاسم غير متوفر بعد",
+    "users.empty.notCollected": "غير متوفر بعد",
+    "users.empty.tableBody": "لا يوجد مستخدمون بعد. بمجرد أن ينضم الأشخاص إلى برنامج نقاطك، سيظهرون هنا.",
+    "users.empty.noMatchTitle": "لا يوجد مستخدمون يطابقون معايير التصفية. جرّب كلمات بحث مختلفة أو امسح التصفية لعرض المزيد.",
+    "users.empty.noMatchBody": "لا يوجد مستخدمون يطابقون معايير التصفية. جرّب كلمات بحث مختلفة أو امسح التصفية لعرض المزيد.",
+    "users.selection.count": "{count} محددين",
+    "users.selection.selectAllMatching": "تحديد كل {count} مستخدمين مطابقين",
+    "users.selection.clear": "مسح التحديد",
+    "users.selection.selectPage": "تحديد الكل في هذه الصفحة",
+    "users.reminder.action": "إرسال تذكير",
+    "users.reminder.title": "إرسال تذكير بالتسجيل؟",
+    "users.reminder.body": "هذا الإجراء يرسل رسالة نصية إلى {count} أشخاص ولا يمكن التراجع عنه.",
+    "users.reminder.cooldown": "تم استبعاد {count} أشخاص تم تذكيرهم مؤخرًا.",
+    "users.reminder.cap": "يمكنك إرسال ما يصل إلى {cap} تذكيرات دفعة واحدة.",
+    "users.reminder.confirm": "إرسال تذكير",
+    "users.reminder.cancel": "إلغاء",
+    "users.reminder.sent": "تم إرسال التذكير إلى {count} أشخاص.",
+    "users.actions.viewProfile": "عرض الملف الشخصي",
+    "users.actions.transferPoints": "تحويل النقاط",
+    "users.actions.copyId": "نسخ معرف المستخدم",
+    "users.actions.copied": "تم النسخ",
+    "users.detail.joinedOn": "تاريخ الانضمام: {date}",
+    "users.detail.tabInfo": "المعلومات",
+    "users.detail.tabTransactions": "المعاملات",
+    "users.detail.tabParked": "المحجوزة",
+    "users.detail.personalInfo": "المعلومات الشخصية",
+    "users.detail.fullName": "الاسم الكامل",
+    "users.detail.mobile": "رقم الجوال",
+    "users.detail.email": "البريد الإلكتروني",
+    "users.detail.gender": "الجنس",
+    "users.detail.userId": "معرف المستخدم",
+    "users.detail.verified": "موثق",
+    "users.detail.parked": "المحجوزة",
+    "users.detail.parkedWhat": "ما المقصود؟",
+    "users.detail.parkedExplainPending": "لا تتوفر لدينا بعد القاعدة التي تحدد كيفية حجز النقاط أو الإفراج عنها. سنضيف الشرح هنا فور توفره.",
+    "users.detail.totalTransferred": "إجمالي النقاط المحوّلة",
+    "users.detail.totalRefunded": "إجمالي النقاط المستردة",
+    "users.table.reference": "المرجع",
+    "users.table.direction": "الاتجاه",
+    "users.table.points": "النقاط",
+    "users.table.purchaseValue": "قيمة الشراء",
+    "users.table.date": "التاريخ",
+    "users.table.in": "وارد",
+    "users.table.out": "صادر",
+    "users.table.zeroValue": "لا توجد قيمة شراء",
+    "users.table.emptyTransactionsTitle": "لا توجد معاملات بعد. بمجرد أن يقوم هذا المستخدم بعملية شراء، ستظهر هنا.",
+    "users.table.emptyTransactionsBody": "لا توجد معاملات بعد. بمجرد أن يقوم هذا المستخدم بعملية شراء، ستظهر هنا.",
+    "users.table.emptyParkedTitle": "لا توجد نقاط محجوزة بعد. إذا تم حجز أي من نقاط هذا المستخدم، ستظهر هنا.",
+    "users.table.emptyParkedBody": "لا توجد نقاط محجوزة بعد. إذا تم حجز أي من نقاط هذا المستخدم، ستظهر هنا.",
+    "users.unregistered.notice": "لم يكمل هذا الشخص تسجيله بعد، لذا يقتصر ملفه الشخصي على رقم الجوال حاليًا.",
+    "users.pagination.showing": "عرض {from} إلى {to} من {total}",
+    "users.pagination.prev": "السابق",
+    "users.pagination.next": "التالي",
+    "users.pagination.perPage": "الصفوف في الصفحة"
   }
 };
 
@@ -1092,6 +1528,507 @@ function toggleSidebar(){
   document.getElementById("pv-collapse").setAttribute("aria-pressed", c);
   document.getElementById("collapseBtn").setAttribute("aria-expanded", !c);
 }
+
+const ACTIVITY = [
+  {type:"transfer", n:{en:"Nawaf Al-Jasem", ar:"نواف الجاسم"},   v:2500,  mins:6,    sev:"info"},
+  {type:"refund",   n:{en:"Sara Al-Harbi",  ar:"سارة الحربي"},   v:1200,  mins:47,   sev:"warning"},
+  {type:"charge",   n:null,                                       v:500000,mins:180,  sev:"success"},
+  {type:"offer",    n:{en:"Ramadan 2x points", ar:"نقاط مضاعفة في رمضان"}, v:null, mins:1440, sev:"success"},
+  {type:"signup",   n:{en:"Abdullah Al-Qahtani", ar:"عبدالله القحطاني"},   v:null, mins:1620, sev:"info"}
+];
+
+function relTime(mins){
+  if (mins < 60)   return interp(t("time.min"),  { n: fmt(mins) });
+  if (mins < 1440) return interp(t("time.hour"), { n: fmt(Math.round(mins/60)) });
+  return t("time.yesterday");
+}
+function renderActivity(){
+  const icons = {transfer:"#i-transfer", refund:"#i-return", charge:"#i-plus", offer:"#i-ticket", signup:"#i-userplus"};
+  document.getElementById("activityList").innerHTML = ACTIVITY.map(a=>{
+    const name = a.n ? a.n[LANG] : "";
+    const txt  = interp(t("act."+a.type), { value: a.v!=null?fmt(a.v):"", name: name });
+    return `<div class="flex items-start gap-3 py-2.5" style="border-top:1px solid var(--n-100)">
+      <span class="grid place-items-center shrink-0 mt-0.5" style="width:30px;height:30px;border-radius:8px;
+            background:var(--${a.sev}-50);color:var(--${a.sev}-700)">
+        <svg width="15" height="15"><use href="${icons[a.type]}"/></svg></span>
+      <div class="min-w-0 flex-1">
+        <div style="font-size:13px;color:var(--n-900);line-height:1.45">${txt}</div>
+        <div style="font-size:11px;color:var(--n-600);margin-top:1px">${relTime(a.mins)}</div>
+      </div></div>`;
+  }).join("");
+}
+
+/* ===================== CHART =====================
+   Hand-built SVG so the mark spec is exact: 2px lines, hairline grid,
+   direct labels on both series (required — series 2 is sub-3:1 on white),
+   crosshair + tooltip on hover.
+   The time axis does NOT mirror in RTL: time runs left-to-right in every
+   locale. Only the surrounding layout flips.                              */
+const MONTHS = 12;
+const issued = [], redeemed = [];
+(function seed(){
+  // twelve months of a points economy: steady growth, a Ramadan/Eid spike, a
+  // summer dip. Redemption trails issuance, which is what the card is for.
+  const shape   = [1.00,1.06,1.34,1.22,1.10,0.92,0.88,0.97,1.12,1.20,1.42,1.55];
+  const redRate = [0.58,0.60,0.71,0.68,0.62,0.57,0.55,0.59,0.63,0.65,0.70,0.66];
+  for (let i=0;i<MONTHS;i++){
+    const base = 168000 + i*7400;
+    issued.push(Math.round(base * shape[i]));
+    redeemed.push(Math.round(base * shape[i] * redRate[i]));
+  }
+})();
+
+const W=720, H=344, PL=44, PR=14, PT=20, PB=30;
+const iw = W-PL-PR, ih = H-PT-PB;
+const maxY = Math.max(...issued, ...redeemed)*1.12;
+const X = i => PL + (i/(MONTHS-1))*iw;
+const Y = v => PT + ih - (v/maxY)*ih;
+const path = arr => arr.map((v,i)=>`${i?"L":"M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+const area = arr => path(arr)+`L${X(MONTHS-1).toFixed(1)},${(PT+ih).toFixed(1)}L${PL},${(PT+ih).toFixed(1)}Z`;
+const kfmt = v => v>=1000 ? fmt(Math.round(v/1000))+"k" : fmt(v);
+
+function drawChart(){
+  const svg = document.getElementById("chart");
+  if (!svg) return;
+  const ticks = 4, grid = [];
+  for (let g=0; g<=ticks; g++){
+    const v = (maxY/ticks)*g, y = Y(v);
+    grid.push(`<line x1="${PL}" y1="${y.toFixed(1)}" x2="${W-PR}" y2="${y.toFixed(1)}" stroke="var(--grid)" stroke-width="1"/>`);
+    grid.push(`<text x="${PL-10}" y="${(y+4).toFixed(1)}" text-anchor="end" font-size="11"
+      fill="var(--n-600)" font-family="var(--font-en)" style="font-variant-numeric:tabular-nums">${kfmt(v)}</text>`);
+  }
+  // a year reads as months, so every month gets a tick — no sampling
+  const xt = issued.map((_, i) => {
+    const d = new Date(2025, 8 + i, 1);
+    const lbl = d.toLocaleDateString(LANG==="ar" ? "ar-SA-u-ca-gregory-nu-latn" : "en-GB", { month:"short" });
+    return `<text x="${X(i).toFixed(1)}" y="${H-9}" text-anchor="middle" font-size="10.5"
+      fill="var(--n-600)" font-family="${LANG==='ar'?'var(--font-ar)':'var(--font-en)'}">${lbl}</text>`;
+  }).join("");
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="gi" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--series-issued)" stop-opacity=".20"/>
+        <stop offset="100%" stop-color="var(--series-issued)" stop-opacity="0"/></linearGradient>
+      <linearGradient id="gr" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--series-redeemed)" stop-opacity=".18"/>
+        <stop offset="100%" stop-color="var(--series-redeemed)" stop-opacity="0"/></linearGradient>
+    </defs>
+    ${grid.join("")}${xt}
+    <path d="${area(issued)}"   fill="url(#gi)"/>
+    <path d="${area(redeemed)}" fill="url(#gr)"/>
+    <path d="${path(redeemed)}" fill="none" stroke="var(--series-redeemed)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${path(issued)}"   fill="none" stroke="var(--series-issued)"   stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <line id="cross" x1="0" y1="${PT}" x2="0" y2="${PT+ih}" stroke="var(--n-400)" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>
+    <circle id="d1" r="5" fill="var(--series-issued)"   stroke="#fff" stroke-width="2" opacity="0"/>
+    <circle id="d2" r="5" fill="var(--series-redeemed)" stroke="#fff" stroke-width="2" opacity="0"/>
+    <text x="${(X(MONTHS-1)-2).toFixed(1)}" y="${(Y(issued[MONTHS-1])-11).toFixed(1)}" text-anchor="end" font-size="11.5" font-weight="700"
+      paint-order="stroke" stroke="#fff" stroke-width="4" stroke-linejoin="round"
+      fill="var(--series-issued)" font-family="var(--font-en)">${kfmt(issued[MONTHS-1])}</text>
+    <text x="${(X(MONTHS-1)-2).toFixed(1)}" y="${(Y(redeemed[MONTHS-1])-11).toFixed(1)}" text-anchor="end" font-size="11.5" font-weight="700"
+      paint-order="stroke" stroke="#fff" stroke-width="4" stroke-linejoin="round"
+      fill="var(--series-redeemed)" font-family="var(--font-en)">${kfmt(redeemed[MONTHS-1])}</text>
+    <rect id="hit" x="${PL}" y="${PT}" width="${iw}" height="${ih}" fill="transparent"/>`;
+
+  const hit=svg.querySelector("#hit"), tip=document.getElementById("tooltip"),
+        cross=svg.querySelector("#cross"), d1=svg.querySelector("#d1"), d2=svg.querySelector("#d2");
+  const hide=()=>{tip.style.opacity=0;cross.setAttribute("opacity",0);d1.setAttribute("opacity",0);d2.setAttribute("opacity",0)};
+  hit.addEventListener("mousemove", e=>{
+    const r=svg.getBoundingClientRect(), sx=(e.clientX-r.left)*(W/r.width);
+    let i=Math.round(((sx-PL)/iw)*(MONTHS-1)); i=Math.max(0,Math.min(MONTHS-1,i));
+    const px=X(i);
+    cross.setAttribute("x1",px);cross.setAttribute("x2",px);cross.setAttribute("opacity",1);
+    d1.setAttribute("cx",px);d1.setAttribute("cy",Y(issued[i]));d1.setAttribute("opacity",1);
+    d2.setAttribute("cx",px);d2.setAttribute("cy",Y(redeemed[i]));d2.setAttribute("opacity",1);
+    const d=new Date(2025, 8+i, 1);
+    tip.innerHTML=`<div style="font-weight:700">${d.toLocaleDateString(LANG==="ar"?"ar-SA-u-ca-gregory-nu-latn":"en-GB",{month:"long",year:"numeric"})}</div>
+      <div class="tt-row"><span class="tt-sw" style="background:var(--series-issued)"></span><span>${t("flow.legendIssued")}</span><span class="tt-v num">${fmt(issued[i])}</span></div>
+      <div class="tt-row"><span class="tt-sw" style="background:var(--series-redeemed)"></span><span>${t("flow.legendRedeemed")}</span><span class="tt-v num">${fmt(redeemed[i])}</span></div>`;
+    tip.style.opacity=1;
+    const wrap=svg.parentElement.getBoundingClientRect();
+    let lx=(px/W)*wrap.width+14;
+    if (lx+tip.offsetWidth>wrap.width) lx=(px/W)*wrap.width-tip.offsetWidth-14;
+    tip.style.left=Math.max(0,lx)+"px";
+    tip.style.top=Math.max(0,(Y(Math.max(issued[i],redeemed[i]))/H)*wrap.height-10)+"px";
+  });
+  hit.addEventListener("mouseleave", hide);
+
+  const sum = a => a.reduce((x,y)=>x+y,0);
+  const ti = document.getElementById("totIssued"), tr = document.getElementById("totRedeemed");
+  if (ti) ti.textContent = fmt(sum(issued));
+  if (tr) tr.textContent = fmt(sum(redeemed));
+}
+
+/* Sparklines on the metric tiles. One brand hue for every series: the status
+   palette is reserved for state, so direction is carried by the delta's arrow
+   and label, never by the line colour. */
+const SPARKS = {
+  issued:  [38,41,39,45,44,52,49,58,55,63,61,70,68,77,74,83,80,90,88,97,94,104,101,112,108,119,115,126,122,134],
+  redeemed:[30,32,31,34,33,37,35,39,38,41,40,44,42,46,44,48,46,50,49,53,51,55,53,57,55,59,57,61,59,62],
+  pending: [22,20,24,21,26,23,28,25,30,27,33,29,35,31,38,33,40,35,43,37,45,39,48,41,50,43,53,45,56,48],
+  refunded:[18,19,17,20,18,21,19,20,18,19,17,18,16,17,15,16,15,14,15,13,14,13,12,13,11,12,11,10,11,10]
+};
+function drawSparks(){
+  document.querySelectorAll(".mt[data-spark]").forEach(tile=>{
+    const svg = tile.querySelector(".mt-s"); if (!svg) return;
+    const d = SPARKS[tile.dataset.spark]; if (!d) return;
+    const W=120, H=30, pad=3;
+    const lo=Math.min(...d), hi=Math.max(...d), span=(hi-lo)||1;
+    const X=i=>(i/(d.length-1))*W;
+    const Y=v=>pad+(H-pad*2)-((v-lo)/span)*(H-pad*2);
+    const line=d.map((v,i)=>`${i?"L":"M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+    const id="sp"+tile.dataset.spark;
+    svg.innerHTML =
+      `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
+         <stop offset="0%" stop-color="var(--p-500)" stop-opacity=".22"/>
+         <stop offset="100%" stop-color="var(--p-500)" stop-opacity="0"/></linearGradient></defs>
+       <path d="${line}L${W},${H}L0,${H}Z" fill="url(#${id})"/>
+       <path d="${line}" fill="none" stroke="var(--p-500)" stroke-width="1.75"
+             stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+       <circle cx="${W}" cy="${Y(d[d.length-1]).toFixed(1)}" r="2.4" fill="var(--p-600)"/>`;
+  });
+}
+
+/* Offers list. Sample offers come from the content deck so both languages show
+   names a Saudi jeweller would actually run, not translated placeholders. */
+const OFFERS = [
+  { key:"offers.sampleOffer1", status:"expiring", days:3,  redeemed:1240 },
+  { key:"offers.sampleOffer2", status:"active",   days:24, redeemed:860  },
+  { key:"offers.sampleOffer3", status:"active",   days:47, redeemed:412  }
+];
+function renderOffers(){
+  const el = document.getElementById("offerList"); if (!el) return;
+  el.innerHTML = OFFERS.map(o => `
+    <div class="of-row">
+      <span class="of-dot"><svg viewBox="0 0 24 24" width="15" height="15"><use href="#i-ticket"/></svg></span>
+      <div class="min-w-0 flex-1">
+        <div class="of-n">${t(o.key)}</div>
+        <div class="of-m">${interp(t("offers.expiresIn"), { n: o.days })} · ${interp(t("offers.redeemedCount"), { count: o.redeemed })}</div>
+      </div>
+      <span class="pill ${o.status === "expiring" ? "pill-warning" : "pill-success"}">
+        ${t(o.status === "expiring" ? "offers.statusExpiring" : "offers.statusActive")}</span>
+    </div>`).join("");
+}
+
+/* Date range control. Presets first, custom behind a hairline at the foot with
+   its own explanation. Selection is marked by a check, never by colour alone. */
+const RANGES = ["yesterday","lastWeek","lastMonth","lastYear"];
+let RANGE = "lastMonth";
+function renderDD(){
+  const m = document.getElementById("ddMenu"); if (!m) return;
+  const opt = (k, sub) => `<button class="dd-opt${sub?" dd-custom":""}" role="option" data-k="${k}"
+      aria-selected="${RANGE===k}" onclick="ddPick('${k}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+           stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${t("dateFilter."+k)}${sub?`<span class="dd-sub">${t("dateFilter.customHelp")}</span>`:""}</span>
+    </button>`;
+  m.innerHTML = RANGES.map(k=>opt(k)).join("") + '<div class="dd-sep"></div>' + opt("custom", true);
+  document.getElementById("ddLabel").textContent = t("dateFilter." + RANGE);
+}
+function ddOpen(){
+  const m=document.getElementById("ddMenu"), b=document.getElementById("ddBtn");
+  m.hidden=false; b.setAttribute("aria-expanded","true");
+  document.getElementById("ddCaret").style.transform="rotate(180deg)";
+  (m.querySelector('[aria-selected="true"]')||m.querySelector(".dd-opt")).focus();
+}
+function ddClose(focus){
+  const m=document.getElementById("ddMenu"), b=document.getElementById("ddBtn");
+  if (m.hidden) return;
+  m.hidden=true; b.setAttribute("aria-expanded","false");
+  document.getElementById("ddCaret").style.transform="";
+  if (focus) b.focus();
+}
+function ddToggle(){ document.getElementById("ddMenu").hidden ? ddOpen() : ddClose(true); }
+function ddPick(k){
+  RANGE = k;
+  // 'custom' would open a date picker in the real product; here it just selects.
+  renderDD(); ddClose(true);
+  const live = document.getElementById("ddLive");
+  if (live) live.textContent = interp(t("dateFilter.applied"), { range: t("dateFilter."+k) });
+}
+document.addEventListener("click", e => {
+  if (!e.target.closest(".dd")) ddClose(false);
+});
+document.addEventListener("keydown", e => {
+  const m = document.getElementById("ddMenu");
+  if (!m || m.hidden) return;
+  const opts = [...m.querySelectorAll(".dd-opt")];
+  const i = opts.indexOf(document.activeElement);
+  if (e.key === "Escape"){ e.preventDefault(); ddClose(true); }
+  else if (e.key === "ArrowDown"){ e.preventDefault(); opts[(i+1) % opts.length].focus(); }
+  else if (e.key === "ArrowUp"){ e.preventDefault(); opts[(i-1+opts.length) % opts.length].focus(); }
+  else if (e.key === "Home"){ e.preventDefault(); opts[0].focus(); }
+  else if (e.key === "End"){ e.preventDefault(); opts[opts.length-1].focus(); }
+});
+
+/* =====================================================================
+   ROUTER — one shell, three views. The sidebar drives it, the hash keeps
+   it linkable, and the dashboard's unfinished-invites row deep-links into
+   the Users list already filtered, so the two features agree on what the
+   reader was looking at.
+   ===================================================================== */
+let ROUTE = "overview", CURRENT = null;
+
+function parseHash(){
+  const h = location.hash.replace(/^#\/?/, "");
+  const [path, qs] = h.split("?");
+  const seg = new URLSearchParams(qs || "").get("seg");
+  const [route, id] = path.split("/");
+  return { route: route || "overview", id: id ? +id : null, seg };
+}
+function go(route, id){
+  const target = route === "user" && id ? `#/user/${id}` : `#/${route}`;
+  if (location.hash !== target) { location.hash = target; return; }  // hashchange re-enters
+  render(route, id);
+}
+function render(route, id){
+  ROUTE = route; CURRENT = id ?? null;
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "view-" + route));
+  document.querySelectorAll(".nav-item[data-route]").forEach(a => {
+    const on = a.dataset.route === route || (route === "user" && a.dataset.route === "users");
+    if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  const main = document.getElementById("main");
+  if (route === "overview"){ renderDD(); renderActivity(); renderOffers(); drawChart(); drawSparks(); }
+  if (route === "users"){ counts(); renderRows(); }
+  if (route === "user"){ renderUser(); }
+  main.setAttribute("aria-label", t(route === "overview" ? "a11y.main" : "users.list.heading"));
+  closeNav(); window.scrollTo(0, 0);
+}
+function onHash(){
+  const { route, id, seg } = parseHash();
+  if (seg && (seg === "reg" || seg === "unreg")) {
+    SEG = seg; PAGE = 1;
+    document.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-selected", b.dataset.seg === seg));
+  }
+  render(["overview","users","user"].includes(route) ? route : "overview", id);
+}
+window.addEventListener("hashchange", onHash);
+
+/* ---------- row overflow menu ---------- */
+let rowMenuEl = null;
+function closeRowMenu(){ if (rowMenuEl){ rowMenuEl.remove(); rowMenuEl = null; } }
+function rowMenu(ev, id){
+  ev.stopPropagation();
+  const wasFor = rowMenuEl && +rowMenuEl.dataset.for === id;
+  closeRowMenu();
+  if (wasFor) return;
+  const u = USERS.find(x => x.id === id);
+  const items = [
+    { k:"users.actions.viewProfile", fn:`go('user',${id})`, icon:"i-user" },
+    { k:"users.actions.transferPoints", fn:`toast(t('users.actions.transferPoints'))`, icon:"i-transfer" },
+  ];
+  if (!u.registered) items.push({ k:"users.reminder.action", fn:`openReminder(${id})`, icon:"i-userplus" });
+  items.push({ k:"users.actions.copyId", fn:`copyId('${uid(u)}')`, icon:"i-receipt" });
+
+  const el = document.createElement("div");
+  el.className = "dd-menu row-pop"; el.dataset.for = id; el.setAttribute("role","menu");
+  el.innerHTML = items.map(i => `<button class="dd-opt" role="menuitem" onclick="closeRowMenu();${i.fn}">
+      <svg viewBox="0 0 24 24" width="16" height="16" style="color:var(--n-600)"><use href="#${i.icon}"/></svg>
+      <span>${t(i.k)}</span></button>`).join("");
+  document.body.appendChild(el);
+  const r = ev.currentTarget.getBoundingClientRect();
+  const rtl = document.documentElement.dir === "rtl";
+  el.style.top = (r.bottom + 6) + "px";
+  el.style.insetInlineEnd = (rtl ? r.left : window.innerWidth - r.right) + "px";
+  if (r.bottom + el.offsetHeight + 12 > window.innerHeight)
+    el.style.top = (r.top - el.offsetHeight - 6) + "px";
+  rowMenuEl = el;
+}
+document.addEventListener("click", () => closeRowMenu());
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeRowMenu(); });
+
+function toast(msg){
+  let el = document.getElementById("toast");
+  if (!el){ el = document.createElement("div"); el.id = "toast"; el.setAttribute("role","status");
+            el.setAttribute("aria-live","polite"); document.body.appendChild(el); }
+  el.textContent = msg; el.classList.add("on");
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 2600);
+}
+function copyId(v){
+  navigator.clipboard?.writeText(v).catch(()=>{});
+  toast(interp(t("users.actions.copied"), { value: v }));
+}
+function openUser(id){ go("user", id); }
+
+/* =====================================================================
+   USER DETAIL — one template, two shapes. A registered person has a name,
+   verified contact and history; an unregistered record is a phone number,
+   so its fields read "not collected yet" rather than sitting blank, and
+   the reminder becomes the page's primary action.
+   ===================================================================== */
+let TAB = "info";
+const LEDGER = {};                    // deterministic per-user mock history
+function ledger(u){
+  if (LEDGER[u.id]) return LEDGER[u.id];
+  let s = u.id;
+  const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const n = u.registered ? Math.floor(r() * 7) : Math.floor(r() * 2);
+  const tx = [], parked = [];
+  for (let i = 0; i < n; i++){
+    const pts = Math.round((r() * 900 + 20) / 10) * 10;
+    tx.push({ ref: 5324000 + Math.floor(r()*9000), dir: r() > 0.32 ? "in" : "out",
+              points: pts, value: Math.round(pts / 5 * (r() > .8 ? 0 : 1)),
+              date: new Date(2026, Math.floor(r()*8), 1 + Math.floor(r()*27)) });
+  }
+  const pn = u.points > 0 ? 1 + Math.floor(r() * 2) : 0;
+  let left = u.points;
+  for (let i = 0; i < pn; i++){
+    const pts = i === pn - 1 ? left : Math.round(left * 0.6 / 10) * 10;
+    left -= pts;
+    parked.push({ ref: 5324000 + Math.floor(r()*9000), points: pts,
+                  value: Math.round(pts / 5), date: new Date(2026, Math.floor(r()*8), 1 + Math.floor(r()*27)) });
+  }
+  return (LEDGER[u.id] = { tx, parked: parked.filter(x => x.points > 0) });
+}
+
+function splitPart(s, part){
+  const cut = s.search(/[.!?\u061F\u06D4]\s/);
+  if (cut < 0) return part === "head" ? s : "";
+  return part === "head" ? s.slice(0, cut+1) : s.slice(cut+2).trim();
+}
+const notCollected = () => `<span class="person-name is-empty">${t("users.empty.notCollected")}</span>`;
+const money = v => v > 0 ? interp(t("users.table.sar"), { value: fmt(v) }) : t("users.table.zeroValue");
+
+function txTable(rows, kind){
+  if (!rows.length) return `<div class="empty" style="padding:30px 20px">
+      <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-inbox"/></svg></div>
+      <div class="empty-t">${splitPart(t("users.table.empty"+kind+"Title"),"head")}</div>
+      <div class="empty-d">${splitPart(t("users.table.empty"+kind+"Body"),"tail")}</div></div>`;
+  const isTx = kind === "Transactions";
+  return `<div class="tbl-scroll"><table class="tbl" style="min-width:640px"><thead><tr>
+      <th>${t("users.table.reference")}</th>
+      ${isTx ? `<th>${t("users.table.direction")}</th>` : ""}
+      <th>${t("users.table.points")}</th>
+      <th>${t("users.table.purchaseValue")}</th>
+      <th>${t("users.table.date")}</th></tr></thead><tbody>
+      ${rows.map(x => `<tr style="cursor:default">
+        <td><span class="cell-id ltr">${x.ref}</span></td>
+        ${isTx ? `<td><span class="pill ${x.dir === "in" ? "pill-success" : "pill-stage"}">
+            <svg viewBox="0 0 24 24" width="12" height="12" style="transform:rotate(${x.dir==="in"?0:180}deg)"><use href="#i-up"/></svg>
+            ${t("users.table." + x.dir)}</span></td>` : ""}
+        <td><span class="cell-bal"><svg viewBox="0 0 24 24" width="18" height="18"><use href="#i-point"/></svg>
+            <span class="num">${fmt(x.points)}</span></span></td>
+        <td><span class="cell-muted">${money(x.value)}</span></td>
+        <td><span class="cell-date">${dfmt(x.date)}</span></td></tr>`).join("")}
+      </tbody></table></div>`;
+}
+
+function renderUser(){
+  const host = document.getElementById("view-user");
+  const u = USERS.find(x => x.id === CURRENT);
+  if (!host) return;
+  if (!u){ host.innerHTML = `<div class="empty" style="padding:60px 20px">
+      <div class="empty-t">${t("states.emptyTitle")}</div>
+      <button class="btn btn-ghost btn-sm mt-3" onclick="go('users')">${t("users.detail.back")}</button></div>`; return; }
+  const L = ledger(u);
+  const field = (label, value) => `<div class="fld"><div class="fld-l">${label}</div><div class="fld-v">${value}</div></div>`;
+
+  host.innerHTML = `
+    <button class="btn-link mb-4" onclick="go('users')" style="display:inline-flex;align-items:center;gap:6px">
+      <svg viewBox="0 0 24 24" width="15" height="15" style="transform:rotate(90deg)" fill="none" stroke="currentColor"
+        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 10 4 4 4-4"/></svg>
+      ${t("users.detail.back")}</button>
+
+    <section class="card mb-5">
+      <div class="px-5 py-5 flex flex-wrap items-start gap-4">
+        <span class="avatar ${u.registered ? "avatar-txt" : ""}" style="inline-size:56px;block-size:56px;font-size:17px">
+          ${u.registered ? initials(u) : `<svg viewBox="0 0 24 24" width="26" height="26"><use href="#i-user"/></svg>`}</span>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <h1 style="font-size:21px;font-weight:700" class="${u.registered ? "" : "person-name is-empty"}">
+              ${u.registered ? u.name[LANG] : t("users.empty.noName")}</h1>
+            <span class="pill ${u.registered ? "pill-success" : "pill-stage"}">
+              <svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-${u.registered ? "check" : "clock"}"/></svg>
+              ${t(u.registered ? "users.status.registered" : "users.status.notRegistered")}</span>
+          </div>
+          <div class="ltr num" style="font-size:14px;color:var(--n-700);margin-top:4px">${u.phone}</div>
+          <div style="font-size:13px;color:var(--n-600);margin-top:2px">
+            ${interp(t("users.detail.joinedOn"), { date: dfmt(u.joined) })}</div>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          ${!u.registered ? `<button class="btn btn-primary" onclick="openReminder(${u.id})">
+            <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-userplus"/></svg>
+            ${t("users.reminder.action")}</button>` : ""}
+          <button class="btn btn-ghost" onclick="toast(t('users.actions.transferPoints'))">
+            <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-transfer"/></svg>
+            ${t("users.actions.transferPoints")}</button>
+        </div>
+      </div>
+      ${!u.registered ? `<div class="unreg-note">
+        <svg viewBox="0 0 24 24" width="17" height="17" class="shrink-0"><use href="#i-userplus"/></svg>
+        <span>${t("users.unregistered.notice")}</span></div>` : ""}
+    </section>
+
+    <div class="grid grid-cols-12 gap-4 mb-5">
+      <div class="mt col-span-12 md:col-span-4" style="border-color:var(--p-200);background:var(--p-50)">
+        <div class="mt-l" style="display:flex;align-items:center;gap:6px">
+          <svg viewBox="0 0 24 24" width="13" height="13"><use href="#i-shield"/></svg>${t("users.detail.parked")}
+          <button class="btn-link" style="font-size:11px" onclick="toast(t('users.detail.parkedExplainPending'))">
+            ${t("users.detail.parkedWhat")}</button></div>
+        <div class="mt-v num" style="font-size:26px;color:var(--p-700)">${fmt(u.points)}</div>
+      </div>
+      <div class="mt col-span-6 md:col-span-4"><div class="mt-l">${t("users.detail.totalTransferred")}</div>
+        <div class="mt-v num">${fmt(L.tx.filter(x=>x.dir==="in").reduce((a,b)=>a+b.points,0))}</div></div>
+      <div class="mt col-span-6 md:col-span-4"><div class="mt-l">${t("users.detail.totalRefunded")}</div>
+        <div class="mt-v num">${fmt(L.tx.filter(x=>x.dir==="out").reduce((a,b)=>a+b.points,0))}</div></div>
+    </div>
+
+    <section class="card">
+      <div class="tabs" role="tablist">
+        ${[["info","tabInfo"],["tx","tabTransactions"],["parked","tabParked"]].map(([k,lbl]) =>
+          `<button class="tab" role="tab" aria-selected="${TAB===k}" onclick="setTab('${k}')">${t("users.detail."+lbl)}</button>`).join("")}
+      </div>
+      <div class="tab-panel" role="tabpanel">
+        ${TAB === "info" ? `<div class="px-5 py-4">
+            <div class="card-t mb-3">${t("users.detail.personalInfo")}</div>
+            ${field(t("users.detail.fullName"), u.registered ? u.name[LANG] : notCollected())}
+            ${field(t("users.detail.mobile"), `<span class="ltr num">${u.phone}</span>` +
+              (u.registered ? ` <span class="pill pill-success" style="margin-inline-start:8px">
+                <svg viewBox="0 0 24 24" width="11" height="11"><use href="#i-check"/></svg>${t("users.detail.verified")}</span>` : ""))}
+            ${field(t("users.detail.email"), u.email ? `<span class="ltr">${u.email}</span>` : notCollected())}
+            ${field(t("users.detail.gender"), u.gender ? t("users.gender."+u.gender) : notCollected())}
+            ${field(t("users.detail.userId"), `<span class="ltr cell-id">${uid(u)}</span>
+              <button class="btn-link" style="margin-inline-start:8px;font-size:12px"
+                onclick="copyId('${uid(u)}')">${t("users.actions.copyId")}</button>`)}
+          </div>`
+        : TAB === "tx" ? txTable(L.tx, "Transactions")
+        : `<div><div class="parked-note">${t("users.detail.parkedExplainPending")}</div>${txTable(L.parked, "Parked")}</div>`}
+      </div>
+    </section>`;
+}
+function setTab(k){ TAB = k; renderUser(); }
+
+/* =====================================================================
+   BULK REMINDER — this does not exist in the backend yet, so the flow is
+   the spec: state the recipient count, say plainly that it reaches real
+   people and cannot be undone, exclude anyone still inside the cooldown,
+   and surface the per-send cap instead of failing silently at submit.
+   ===================================================================== */
+const CAP = 200, COOLDOWN_SHARE = 0.12;
+function openReminder(single){
+  const pool = single != null ? [USERS.find(u => u.id === single)]
+             : (SEL.size ? USERS.filter(u => SEL.has(u.id)) : matching());
+  const targets = pool.filter(u => !u.registered);
+  const cooling = Math.round(targets.length * COOLDOWN_SHARE);
+  const eligible = Math.min(CAP, targets.length - cooling);
+  const dlg = document.getElementById("dlg");
+  document.getElementById("dlgBody").innerHTML =
+    `<p>${interp(t("users.reminder.body"), { count: fmt(eligible) })}</p>
+     ${cooling ? `<p class="dlg-note">${interp(t("users.reminder.cooldown"), { count: fmt(cooling) })}</p>` : ""}
+     ${targets.length - cooling > CAP ? `<p class="dlg-note">${interp(t("users.reminder.cap"), { cap: fmt(CAP) })}</p>` : ""}
+     ${!targets.length ? `<p class="dlg-note">${t("users.reminder.noneEligible")}</p>` : ""}`;
+  document.getElementById("dlgOk").disabled = eligible <= 0;
+  document.getElementById("dlgOk").onclick = () => {
+    closeDlg(); toast(interp(t("users.reminder.sent"), { count: fmt(eligible) }));
+    if (single == null) clearSel();
+  };
+  dlg.hidden = false; document.getElementById("dlgOk").focus();
+}
+function closeDlg(){ const d = document.getElementById("dlg"); if (d) d.hidden = true; }
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDlg(); });
+
+/* ===================== controls ===================== */
 
 /* =====================================================================
    USERS — data, table rendering, selection, paging.
@@ -1232,12 +2169,12 @@ function renderRows(){
             ? dfmt(u.lastActive) : `<span class="person-name is-empty">${t("users.empty.notCollected")}</span>`}</span></td>`;
       }
     };
-    return `<tr data-selected="${sel}">
-      <td><button class="cb" role="checkbox" aria-checked="${sel}" onclick="toggleOne(${u.id})">
+    return `<tr data-selected="${sel}" onclick="openUser(${u.id})">
+      <td><button class="cb" role="checkbox" aria-checked="${sel}" onclick="event.stopPropagation();toggleOne(${u.id})">
         <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.2"
         stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg></button></td>
       ${COLS.filter(c=>c.on).map(c=>cell(c.k)).join("")}
-      <td><button class="row-menu" data-i18n-aria="users.columns.actions">
+      <td><button class="row-menu" onclick="rowMenu(event,${u.id})" data-i18n-aria="users.columns.actions">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" stroke="none">
         <circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></td>
     </tr>`;
@@ -1343,4 +2280,5 @@ document.body.dataset.state = "normal";
 document.body.dataset.collapsed = "false";
 document.body.dataset.nav = "closed";
 setLang("ar");
+onHash();
 </script>

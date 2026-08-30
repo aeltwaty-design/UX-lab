@@ -175,6 +175,107 @@
       "sampleOffer3": "Double Points Weekend",
       "emptyState": "No offers yet. Create your first offer to start attracting followers."
     },
+    "users": {
+      "list": {
+        "heading": "Users",
+        "subtitle": "Everyone in your points programme, whether they've registered or not.",
+        "count": "{count} users",
+        "segmentAll": "All",
+        "segmentRegistered": "Registered",
+        "segmentNotRegistered": "Not registered",
+        "searchPlaceholder": "Search by name, phone or email…",
+        "filters": "Filters",
+        "columnsToggle": "Columns",
+        "export": "Export",
+        "clearFilters": "Clear filters",
+        "matchingCount": "Showing {count} matching users"
+      },
+      "columns": {
+        "person": "Person",
+        "contact": "Contact",
+        "status": "Status",
+        "pointsBalance": "Points balance",
+        "joined": "Joined",
+        "userId": "User ID",
+        "email": "Email",
+        "gender": "Gender",
+        "lastActivity": "Last activity"
+      },
+      "status": {
+        "registered": "Registered",
+        "notRegistered": "Not registered"
+      },
+      "empty": {
+        "noName": "Name not collected yet",
+        "fieldNotCollected": "Not collected yet",
+        "noUsersYet": "No users yet. Once people join your points programme, they'll show up here.",
+        "noMatches": "No users match your filters. Try different search terms, or clear your filters to see more."
+      },
+      "selection": {
+        "countSelected": "{count} selected",
+        "selectPage": "Select all on this page",
+        "selectAllMatching": "Select all {count} matching",
+        "clearSelection": "Clear selection"
+      },
+      "reminder": {
+        "action": "Send reminder",
+        "dialogTitle": "Send a registration reminder?",
+        "dialogBody": "This sends a text message to {count} people and can't be undone.",
+        "confirm": "Send reminder",
+        "cancel": "Cancel",
+        "success": "Reminder sent to {count} people.",
+        "cooldownNote": "{count} people were excluded because they were reminded recently.",
+        "capNote": "You can send up to {cap} reminders in one batch."
+      },
+      "actions": {
+        "viewProfile": "View profile",
+        "transferPoints": "Transfer points",
+        "sendReminder": "Send reminder",
+        "copyUserId": "Copy user ID",
+        "copiedConfirmation": "Copied"
+      },
+      "detail": {
+        "pageHeading": "User profile",
+        "joinedOn": "Joined on {date}",
+        "tabInformation": "Information",
+        "tabTransactions": "Transactions",
+        "tabParked": "Parked",
+        "sectionPersonalInfo": "Personal information",
+        "fieldFullName": "Full name",
+        "fieldMobile": "Mobile number",
+        "fieldEmail": "Email",
+        "fieldGender": "Gender",
+        "fieldUserId": "User ID",
+        "verifiedBadge": "Verified",
+        "summaryTransferred": "Total points transferred",
+        "summaryRefunded": "Total points refunded",
+        "summaryParked": "Parked",
+        "parkedWhatIsThis": "What is this?",
+        "parkedExplainPending": "We don't have the rule for how points are parked or released yet. We'll add the explanation here as soon as we do."
+      },
+      "table": {
+        "colReference": "Reference",
+        "colDirection": "Direction",
+        "colPoints": "Points",
+        "colPurchaseValue": "Purchase value",
+        "colDate": "Date",
+        "directionIn": "In",
+        "directionOut": "Out",
+        "emptyTransactions": "No transactions yet. Once this user makes a purchase, they'll show up here.",
+        "emptyParked": "No parked points yet. If any of this user's points are parked, they'll appear here.",
+        "zeroPurchaseValue": "No purchase value"
+      },
+      "unregistered": {
+        "notice": "This person hasn't completed registration yet, so their profile is just a phone number for now.",
+        "encourage": "Send a reminder to help them finish registering."
+      },
+      "pagination": {
+        "showingRange": "Showing {from} to {to} of {total}",
+        "previous": "Previous",
+        "next": "Next",
+        "rowsPerPage": "Rows per page"
+      }
+    },
     "states": {
       "loading": "Loading…",
       "errorTitle": "Something went wrong",
@@ -369,6 +470,107 @@
       "sampleOffer2": "خصم 23% بمناسبة اليوم الوطني",
       "sampleOffer3": "نقاط مضاعفة",
       "emptyState": "لا توجد عروض بعد. أنشئ أول عرض لك لجذب المتابعين."
+    },
+    "users": {
+      "list": {
+        "heading": "المستخدمين",
+        "subtitle": "كل الأشخاص في برنامج نقاطك، سواء سجّلوا أو لم يسجّلوا بعد.",
+        "count": "{count} مستخدمين",
+        "segmentAll": "الكل",
+        "segmentRegistered": "المسجلين",
+        "segmentNotRegistered": "غير المسجلين",
+        "searchPlaceholder": "ابحث بالاسم أو رقم الجوال أو البريد الإلكتروني…",
+        "filters": "التصفية",
+        "columnsToggle": "الأعمدة",
+        "export": "تصدير",
+        "clearFilters": "مسح التصفية",
+        "matchingCount": "جارٍ عرض {count} مستخدمين مطابقين"
+      },
+      "columns": {
+        "person": "المستخدم",
+        "contact": "التواصل",
+        "status": "الحالة",
+        "pointsBalance": "رصيد النقاط",
+        "joined": "الانضمام",
+        "userId": "معرف المستخدم",
+        "email": "البريد",
+        "gender": "الجنس",
+        "lastActivity": "آخر نشاط"
+      },
+      "status": {
+        "registered": "مسجل",
+        "notRegistered": "غير مسجل"
+      },
+      "empty": {
+        "noName": "الاسم غير متوفر بعد",
+        "fieldNotCollected": "غير متوفر بعد",
+        "noUsersYet": "لا يوجد مستخدمون بعد. بمجرد أن ينضم الأشخاص إلى برنامج نقاطك، سيظهرون هنا.",
+        "noMatches": "لا يوجد مستخدمون يطابقون معايير التصفية. جرّب كلمات بحث مختلفة أو امسح التصفية لعرض المزيد."
+      },
+      "selection": {
+        "countSelected": "{count} محددين",
+        "selectPage": "تحديد الكل في هذه الصفحة",
+        "selectAllMatching": "تحديد كل {count} مستخدمين مطابقين",
+        "clearSelection": "مسح التحديد"
+      },
+      "reminder": {
+        "action": "إرسال تذكير",
+        "dialogTitle": "إرسال تذكير بالتسجيل؟",
+        "dialogBody": "هذا الإجراء يرسل رسالة نصية إلى {count} أشخاص ولا يمكن التراجع عنه.",
+        "confirm": "إرسال تذكير",
+        "cancel": "إلغاء",
+        "success": "تم إرسال التذكير إلى {count} أشخاص.",
+        "cooldownNote": "تم استبعاد {count} أشخاص تم تذكيرهم مؤخرًا.",
+        "capNote": "يمكنك إرسال ما يصل إلى {cap} تذكيرات دفعة واحدة."
+      },
+      "actions": {
+        "viewProfile": "عرض الملف الشخصي",
+        "transferPoints": "تحويل النقاط",
+        "sendReminder": "إرسال تذكير",
+        "copyUserId": "نسخ معرف المستخدم",
+        "copiedConfirmation": "تم النسخ"
+      },
+      "detail": {
+        "pageHeading": "الملف الشخصي للمستخدم",
+        "joinedOn": "تاريخ الانضمام: {date}",
+        "tabInformation": "المعلومات",
+        "tabTransactions": "المعاملات",
+        "tabParked": "المحجوزة",
+        "sectionPersonalInfo": "المعلومات الشخصية",
+        "fieldFullName": "الاسم الكامل",
+        "fieldMobile": "رقم الجوال",
+        "fieldEmail": "البريد الإلكتروني",
+        "fieldGender": "الجنس",
+        "fieldUserId": "معرف المستخدم",
+        "verifiedBadge": "موثق",
+        "summaryTransferred": "إجمالي النقاط المحوّلة",
+        "summaryRefunded": "إجمالي النقاط المستردة",
+        "summaryParked": "المحجوزة",
+        "parkedWhatIsThis": "ما المقصود؟",
+        "parkedExplainPending": "لا تتوفر لدينا بعد القاعدة التي تحدد كيفية حجز النقاط أو الإفراج عنها. سنضيف الشرح هنا فور توفره."
+      },
+      "table": {
+        "colReference": "المرجع",
+        "colDirection": "الاتجاه",
+        "colPoints": "النقاط",
+        "colPurchaseValue": "قيمة الشراء",
+        "colDate": "التاريخ",
+        "directionIn": "وارد",
+        "directionOut": "صادر",
+        "emptyTransactions": "لا توجد معاملات بعد. بمجرد أن يقوم هذا المستخدم بعملية شراء، ستظهر هنا.",
+        "emptyParked": "لا توجد نقاط محجوزة بعد. إذا تم حجز أي من نقاط هذا المستخدم، ستظهر هنا.",
+        "zeroPurchaseValue": "لا توجد قيمة شراء"
+      },
+      "unregistered": {
+        "notice": "لم يكمل هذا الشخص تسجيله بعد، لذا يقتصر ملفه الشخصي على رقم الجوال حاليًا.",
+        "encourage": "أرسل تذكيرًا لمساعدته على إكمال التسجيل."
+      },
+      "pagination": {
+        "showingRange": "عرض {from} إلى {to} من {total}",
+        "previous": "السابق",
+        "next": "التالي",
+        "rowsPerPage": "الصفوف في الصفحة"
+      }
     },
     "states": {
       "loading": "جارٍ التحميل…",
