@@ -43,6 +43,12 @@ dashboards summarise.
 
 ## 2. Patterns worth stealing (competitor teardown)
 
+> **Domain note.** This first pass surveyed HR/workforce dashboards before the actual
+> product was known. WalaOne is a **loyalty-points partner console**, not an HR system.
+> The patterns below are still transferable (they are generic dashboard mechanics), but
+> the on-domain teardown — loyalty, rewards and partner-program consoles — lives in
+> `docs/audit/01-dashboard-audit.md` and should be the primary reference.
+
 Screens reviewed on Mobbin — HR / workforce platforms, web:
 
 | Product | Pattern worth taking |
