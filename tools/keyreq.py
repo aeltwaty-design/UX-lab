@@ -3,7 +3,14 @@
    and the user finds as English sitting in an Arabic page."""
 import io, re, json, sys
 
-s = io.open("preview/app.html", encoding="utf-8").read()
+raw = io.open("preview/app.html", encoding="utf-8").read()
+
+# The inlined I18N dictionary is the ANSWER, not the question. Scanning it made
+# every key it happened to contain look like one the screen had asked for, so a
+# key deleted from the copy file was reported missing rather than surplus.
+_a = raw.index("const I18N = {")
+_b = raw.index("\n\nlet LANG = ", _a)
+s = raw[:_a] + raw[_b:]
 keys = set()
 
 # literal keys
