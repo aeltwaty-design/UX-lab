@@ -43,13 +43,15 @@ const { chromium } = require('playwright');
   await p.evaluate(() => setLang('ar')); await p.waitForTimeout(250);
   const att = await p.evaluate(() => ({
     pending: document.querySelector('#attPending .att-d')?.textContent.trim(),
-    failed:  document.querySelector('#attFailed .att-d')?.textContent.trim(),
     navBadge: document.getElementById('navQueue')?.textContent }));
-  check('overview counts come from the queue', /3/.test(att.pending||'') && /1/.test(att.failed||'') && att.navBadge==='3',
-        JSON.stringify(att));
-  const jump = await p.evaluate(async () => { goTransfers('failed'); await new Promise(r=>setTimeout(r,300));
+  check('overview count comes from the queue', /3/.test(att.pending||'') && att.navBadge==='3', JSON.stringify(att));
+  const jump = await p.evaluate(async () => { goTransfers('uploaded'); await new Promise(r=>setTimeout(r,300));
     return { route: location.hash, filter: TFILT.status, rows: document.querySelectorAll('#tbody-t tr, .card-row').length }; });
-  check('overview -> failed batches', jump.route==='#/transfers' && jump.filter==='failed' && jump.rows===1, JSON.stringify(jump));
+  check('overview -> the review queue', jump.route==='#/transfers' && jump.filter==='uploaded' && jump.rows===3, JSON.stringify(jump));
+  // no failed state exists any more; nothing should be able to filter to one
+  const noFailed = await p.evaluate(() => ({ inData: BATCHES.some(b => b.status === 'failed'),
+                                             inMap: 'failed' in TSTAT }));
+  check('no failed state anywhere', !noFailed.inData && !noFailed.inMap, JSON.stringify(noFailed));
   const fromUser = await p.evaluate(async () => { location.hash='#/users'; await new Promise(r=>setTimeout(r,300));
     const u = USERS.find(x=>x.registered); openSingleFor(u.id); await new Promise(r=>setTimeout(r,300));
     return { open: !document.getElementById('pnl').hidden,
