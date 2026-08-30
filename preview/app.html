@@ -2463,7 +2463,7 @@ function renderFilters(){
       ["never",  t("usersFilters.activityNever")]]) +
     `<div class="fil-foot">
        <button class="btn-link" onclick="event.stopPropagation();filReset()">${t("usersFilters.reset")}</button>
-       <button class="btn btn-primary btn-sm" onclick="filClose()">${t("usersFilters.apply")}</button>
+       <button class="btn btn-primary btn-sm" onclick="filClose()">${t("transfers.filters.apply")}</button>
      </div>`;
 }
 function filPick(key, val){
@@ -3511,7 +3511,7 @@ function renderTransfers(){
             <div class="dd-menu fil-panel" id="tfilMenu" role="dialog" aria-modal="false"
                  aria-label="${esc(t("users.list.filters"))}" hidden></div>
           </div>
-          <button class="btn btn-ghost" onclick="toast(t('states.exportSoon'))">
+          <button class="btn btn-ghost" onclick="toast(t('transfers.export.soon'))">
             <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
             <span>${esc(t("users.list.export"))}</span></button>
         </div>
@@ -4181,16 +4181,16 @@ function renderTFilters(){
       <span>${esc(label)}</span></button>`).join("")}</div>`;
   m.innerHTML =
     (TTAB === "bulk" ? group("status", t("transfers.filters.status"),
-      [["all", t("usersFilters.any")], ...["uploaded","ready","processing","completed","rejected","failed"]
+      [["all", t("transfers.filters.any")], ...["uploaded","ready","processing","completed","rejected","failed"]
         .map(s => [s, t("transfers.status." + s)])]) : "") +
     group("src", t("transfers.filters.source"),
-      [["all", t("usersFilters.any")], ...["loyalty","invoice","file","referral","b2b"]
+      [["all", t("transfers.filters.any")], ...["loyalty","invoice","file","referral","b2b"]
         .map(s => [s, t("transfers.source." + s)])]) +
     group("by", TTAB === "bulk" ? t("transfers.filters.uploader") : t("transfers.filters.sender"),
-      [["all", t("usersFilters.any")], ...Object.keys(STAFF).map(k => [k, staffOf(k)])]) +
+      [["all", t("transfers.filters.any")], ...Object.keys(STAFF).map(k => [k, staffOf(k)])]) +
     `<div class="fil-foot"><button class="btn-link" onclick="event.stopPropagation();tclearFilters()">${
        esc(t("users.list.clearFilters"))}</button>
-     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();tfilClose()">${esc(t("usersFilters.apply"))}</button></div>`;
+     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();tfilClose()">${esc(t("transfers.filters.apply"))}</button></div>`;
 }
 function tfilPick(key, val){
   TFILT[key] = val; TPAGE = 1;
