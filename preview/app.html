@@ -697,7 +697,9 @@ html[dir="ltr"] .ltr{text-align:left}
   max-width:17ch}
 .file-cell:hover .file-n{color:var(--p-700);text-decoration:underline}
 .file-cell:hover .file-ico{background:var(--p-50);color:var(--p-600)}
-.file-sub{font-size:12.5px;color:var(--n-700);margin-top:1px;display:flex;align-items:center;gap:5px}
+.file-sub{font-size:12.5px;color:var(--n-700);margin-top:1px;display:flex;align-items:center;gap:5px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-sub > span{white-space:nowrap}
 
 /* --- value column: derived, never trusted from the field ---------- */
 .val{display:inline-flex;align-items:center;gap:5px;font-size:14.5px;font-weight:600;
@@ -722,6 +724,23 @@ html[dir="rtl"] .row-acts{justify-content:flex-start}
    never a bin. Red and trash iconography stay reserved for destruction. */
 .act-no{border-color:var(--n-400);color:var(--n-900)}
 .act-no:hover{background:var(--n-100);border-color:var(--n-500)}
+
+/* --- narrow layout: a card per row -------------------------------
+   Two labelled buttons and a filename cannot share 390px, and a primary
+   action reachable only by scrolling sideways is not reachable. Below the
+   breakpoint each record becomes a card that stacks what the columns
+   carried, in the order the decision needs it. */
+.cards{display:flex;flex-direction:column}
+.card-row{display:flex;flex-direction:column;gap:11px;padding:16px;
+  border-bottom:1px solid var(--n-100);cursor:pointer}
+.card-row:last-child{border-bottom:none}
+.card-row:hover{background:var(--n-25)}
+.card-top{display:flex;align-items:flex-start;gap:11px}
+.card-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.card-acts{display:flex;gap:8px}
+/* min-width:0 or the flex item refuses to shrink below its label and the
+   pair pushes out of the card. */
+.card-acts .act{flex:1 1 0;min-width:0;justify-content:center;max-width:none;height:38px}
 
 /* --- side panel ---------------------------------------------------
    Every action on this screen opens a drawer, not a modal, so the list
@@ -751,6 +770,8 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
   background:var(--n-25)}
 .pnl-f .btn{flex:1}
 @media (max-width:620px){
+  .page-head .dd{width:100%}
+  .page-head .dd > .btn{width:100%;justify-content:center}
   .tabs-row .segs{display:flex;width:100%}
   .tabs-row .seg{flex:1 1 0;min-width:0;justify-content:center}
   .tabs-row .seg > span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -3208,7 +3229,7 @@ function fileRows(b){
   if (FILEROWS[b.id]) return FILEROWS[b.id];
   let s = b.total * 31 + b.invalid * 7 + b.dup * 3 + 11;
   const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
-  const cap = Math.min(b.total, 400);            // enough to browse, not to choke
+  const cap = b.total;      // every row, so the chips agree with the row that opened them
   const issues = ["badPhone","missingPoints","badPoints","unknown"];
   const flags = new Array(cap).fill("");
   let bad = Math.min(b.invalid, cap), dups = Math.min(b.dup, cap - bad);
@@ -3229,7 +3250,7 @@ function fileRows(b){
       if (row.why === "badPoints")      row.points = "12.5";
     }
     if (flags[i] === "duplicate"){
-      const earlier = rows.filter(x => !x.issue);
+      const earlier = rows.filter(x => !x.issue);      // a duplicate of a row already read
       const src = earlier.length ? earlier[Math.floor(r() * earlier.length)] : null;
       if (src){ row.name = src.name; row.phone = src.phone; row.dupOf = src.line; }
       else { row.issue = ""; }
@@ -3260,9 +3281,9 @@ const staffOf = k => STAFF[k] ? nameOf(STAFF[k].n) : "";
    for three hours" — the one thing that separates busy from stuck. */
 function elapsed(d){
   const m = Math.max(0, Math.round((NOW - d) / 60000));
-  if (m < 60)   return interp(t("time.min"),  { n: fmt(m) });
-  if (m < 1440) return interp(t("time.hour"), { n: fmt(Math.round(m / 60)) });
-  return interp(t("transfers.time.days"), { n: fmt(Math.round(m / 1440)) });
+  if (m < 60)   return interp(t("transfers.time.minutes"), { n: fmt(m) });
+  if (m < 1440) return interp(t("transfers.time.hours"),   { n: fmt(Math.round(m / 60)) });
+  return interp(t("transfers.time.days"),                  { n: fmt(Math.round(m / 1440)) });
 }
 const STUCK_MINS = 60;
 const isStuck = b => b.status === "processing" && b.startedAt &&
@@ -3273,9 +3294,11 @@ const isStuck = b => b.status === "processing" && b.startedAt &&
    so a batch that has stopped moving says so instead of waiting quietly. */
 function doneRows(b){
   if (b.status !== "processing") return validOf(b);
+  const total = validOf(b);
+  // A hung job stopped counting; it does not creep to completion with time.
+  if (isStuck(b)) return Math.floor(total * 0.34);
   const mins = (NOW - b.startedAt) / 60000;
-  const rate = isStuck(b) ? 0.12 : 0.9;                 // a stuck job barely moved
-  return Math.min(validOf(b), Math.floor(validOf(b) * Math.min(1, mins / 8 * rate)));
+  return Math.min(total, Math.floor(total * Math.min(0.96, mins / 9)));
 }
 function progressNote(b){
   if (b.status !== "processing") return "";
@@ -3552,6 +3575,7 @@ function renderTransfers(){
         <div class="tbl-scroll">
           <table class="tbl"><thead><tr id="thead-t"></tr></thead><tbody id="tbody-t"></tbody></table>
         </div>
+        <div class="cards" id="tCards" hidden></div>
         <div id="tNoMatch" class="empty" hidden>
           <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-search"/></svg></div>
           <div class="empty-t">${esc(t("transfers.empty.noMatchTitle"))}</div>
@@ -3592,8 +3616,14 @@ function renderTRows(){
   }).join("");
 
   body.innerHTML = page.map(x => TTAB === "bulk" ? bulkRow(x, cols) : singleRow(x, cols)).join("");
+
+  // below the breakpoint the same rows are drawn as cards instead
+  const host = document.getElementById("tCards"), narrow = availW() < CARD_W;
+  host.innerHTML = narrow ? page.map(x => TTAB === "bulk" ? bulkCard(x) : singleCard(x)).join("") : "";
+  host.hidden = !narrow || rows.length === 0;
+  document.querySelector("#view-transfers .tbl-scroll").hidden = narrow || rows.length === 0;
+
   document.getElementById("tNoMatch").hidden = rows.length > 0;
-  document.querySelector("#view-transfers .tbl-scroll").hidden = rows.length === 0;
   renderTFoot(rows.length, pages);
 }
 
@@ -3665,6 +3695,54 @@ function singleRow(s, cols){
 }
 
 const initialsOf = n => (n || "").trim().split(/\s+/).slice(0, 2).map(w => w[0] || "").join("");
+
+/* Cards carry the same facts as the columns, ordered by what a decision needs:
+   which file, from whom, what state it is in, what is wrong with it, what it
+   costs — then the two buttons, full width, where a thumb can reach them. */
+const CARD_W = 620;
+function bulkCard(b){
+  return `<div class="card-row" onclick="openBatch('${b.id}')" tabindex="0"
+      onkeydown="if(event.key==='Enter'){openBatch('${b.id}')}">
+    <div class="card-top">
+      <span class="file-ico"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-file"/></svg></span>
+      <span class="min-w-0 flex-1">
+        <span class="file-n ltr" style="display:block;max-width:none">${esc(b.file)}</span>
+        <span class="file-sub"><span class="num ltr">${esc(b.id)}</span><span>· ${esc(staffOf(b.by))}</span></span>
+      </span>
+    </div>
+    <div class="card-meta" style="gap:10px">${statusPill(b.status)}${progressNote(b)}</div>
+    ${recCell(b)}
+    <div class="card-meta">${pointsCell(b.points)}${valueCell(b)}
+      <span class="cell-date" style="margin-inline-start:auto">${esc(dfmt(b.at))}</span></div>
+    ${b.status === "uploaded" ? `<div class="card-acts">
+        <button class="act act-go" onclick="event.stopPropagation();openApprove('${b.id}')">
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg>
+          <span>${esc(t("transfers.actions.approve"))}</span></button>
+        <button class="act act-no" onclick="event.stopPropagation();openReject('${b.id}')">
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-xcircle"/></svg>
+          <span>${esc(t("transfers.actions.reject"))}</span></button>
+      </div>` : b.status === "failed" ? `<div class="card-acts">
+        <button class="act" onclick="event.stopPropagation();retryBatch('${b.id}')">
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-refresh"/></svg>
+          <span>${esc(t("transfers.actions.retry"))}</span></button></div>` : ""}
+  </div>`;
+}
+function singleCard(s){
+  return `<div class="card-row" onclick="go('user',${s.to.id})" tabindex="0"
+      onkeydown="if(event.key==='Enter'){go('user',${s.to.id})}">
+    <div class="card-top">
+      <span class="avatar avatar-txt" aria-hidden="true">${esc(initials(s.to))}</span>
+      <span class="min-w-0 flex-1">
+        <span class="person-name" style="display:block">${esc(nameOf(s.to.name))}</span>
+        <span class="person-sub num ltr" style="display:block">${esc(s.to.phone)}</span>
+      </span>
+      <span class="pill pill-stage">${esc(t("transfers.source." + s.src))}</span>
+    </div>
+    <div class="card-meta">${pointsCell(s.points)}<span class="val">${riyal(valueOf(s.points))}</span>
+      <span class="cell-date" style="margin-inline-start:auto">${esc(dfmt(s.at))}</span></div>
+    <div class="file-sub">${esc(s.ref)} · ${esc(staffOf(s.by))}</div>
+  </div>`;
+}
 
 function tsort(k){
   if (TSORT.k === k) TSORT.dir = TSORT.dir === "asc" ? "desc" : "asc";
