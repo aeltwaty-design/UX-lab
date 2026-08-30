@@ -6,7 +6,7 @@
       "role": "Partner"
     },
     "nav": {
-      "overview": "Overview",
+      "overview": "Home",
       "groupAudience": "Audience",
       "users": "Users",
       "followers": "Followers",
@@ -373,7 +373,7 @@
       "role": "شريك"
     },
     "nav": {
-      "overview": "نظرة عامة",
+      "overview": "الرئيسية",
       "groupAudience": "الجمهور",
       "users": "المستخدمين",
       "followers": "المتابعين",
@@ -563,7 +563,7 @@
         "status": "الحالة",
         "pointsBalance": "رصيد النقاط",
         "joined": "الانضمام",
-        "userId": "معرف المستخدم",
+        "userId": "الرقم التعريفي",
         "email": "البريد",
         "gender": "الجنس",
         "lastActivity": "آخر نشاط",
@@ -600,7 +600,7 @@
         "viewProfile": "عرض الملف الشخصي",
         "transferPoints": "تحويل النقاط",
         "sendReminder": "إرسال تذكير",
-        "copyUserId": "نسخ معرف المستخدم",
+        "copyUserId": "نسخ الرقم التعريفي",
         "copiedConfirmation": "تم النسخ"
       },
       "detail": {
@@ -614,7 +614,7 @@
         "fieldMobile": "رقم الجوال",
         "fieldEmail": "البريد الإلكتروني",
         "fieldGender": "الجنس",
-        "fieldUserId": "معرف المستخدم",
+        "fieldUserId": "الرقم التعريفي",
         "verifiedBadge": "موثق",
         "summaryTransferred": "إجمالي النقاط المحوّلة",
         "summaryRefunded": "إجمالي النقاط المستردة",

@@ -58,6 +58,36 @@ const { chromium } = require('playwright');
              prefilled: document.getElementById('sgWho')?.value?.length>0 }; });
   check('user profile -> transfer with recipient set', fromUser.open && fromUser.prefilled, JSON.stringify(fromUser));
   check('no JS errors across connections', errs.length===0, errs[0]||'');
+
+  // Switching language AFTER arriving on a route, not before. Views built in
+  // JS carry no data-i18n attributes, so applyI18n cannot reach them and each
+  // has to be redrawn by name - a view missing from that list keeps the old
+  // language and nothing else notices.
+  const AR = /[\u0600-\u06FF]/;
+  for (const [route, sel] of [['user', '#view-detail .card h1'],
+                              ['follower', '#view-detail .card h1'],
+                              ['transfers', '#view-transfers h1'],
+                              ['users', '#view-list h1'],
+                              ['overview', '#view-overview .card-t']]) {
+    const r = await p.evaluate(async ([route, sel]) => {
+      const id = route === 'user' ? USERS.find(u => u.registered).id
+               : route === 'follower' ? FOLLOWERS.find(u => u.registered).id : null;
+      location.hash = id ? `#/${route}/${id}` : `#/${route}`;
+      await new Promise(r => setTimeout(r, 260));
+      setLang('ar'); await new Promise(r => setTimeout(r, 220));
+      const before = document.querySelector(sel)?.textContent.trim() || '';
+      setLang('en'); await new Promise(r => setTimeout(r, 220));
+      const after = document.querySelector(sel)?.textContent.trim() || '';
+      // sweep the whole view, not just the heading
+      const stray = [...document.querySelectorAll('.view.on *')]
+        .filter(e => e.children.length === 0 && /[\u0600-\u06FF]/.test(e.textContent))
+        .map(e => e.textContent.trim().slice(0, 24));
+      return { before, after, stray: [...new Set(stray)].slice(0, 3) };
+    }, [route, sel]);
+    check(`${route.padEnd(10)} redraws on language switch`,
+          !AR.test(r.after) && r.stray.length === 0,
+          r.stray.length ? 'still Arabic: ' + r.stray.join(' | ') : r.after.slice(0, 30));
+  }
   await p.close();
   await b.close();
   console.log(fails ? `\n${fails} FAILURE(S)` : '\nall green');

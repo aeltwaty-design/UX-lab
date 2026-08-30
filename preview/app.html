@@ -127,9 +127,9 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .icon-btn{width:38px;height:38px;display:grid;place-items:center;border-radius:var(--r-100);
   color:var(--n-700);background:none;border:none;cursor:pointer;position:relative}
 .icon-btn:hover{background:var(--n-100)}
-.dot{position:absolute;top:7px;inset-inline-end:7px;min-width:16px;height:16px;padding:0 4px;
-  background:var(--danger-500);color:#fff;font-size:10px;font-weight:700;border-radius:999px;
-  display:grid;place-items:center;border:2px solid #fff}
+.dot{position:absolute;top:-3px;inset-inline-end:-3px;min-width:18px;height:18px;padding:0 5px;
+  background:var(--danger-500);color:#fff;font-size:10.5px;font-weight:700;border-radius:999px;
+  display:grid;place-items:center;border:2px solid #fff;line-height:1}
 .langtog{display:flex;background:var(--n-100);border-radius:var(--r-100);padding:3px;gap:2px}
 .langtog button{border:none;background:none;padding:5px 12px;border-radius:var(--r-50);
   font-size:13px;font-weight:600;color:var(--n-700);cursor:pointer}
@@ -954,7 +954,7 @@ html[dir="rtl"] .vw-line{text-align:start}
     </button>
     <div style="flex:1"></div>
     <button class="icon-btn" data-i18n-aria="topbar.notifications" aria-label="Notifications">
-      <svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-bell"/></svg><span class="dot num">4</span>
+      <svg viewBox="0 0 24 24" width="23" height="23"><use href="#i-bell"/></svg><span class="dot num">4</span>
     </button>
     <div class="langtog" role="group" data-i18n-aria="topbar.language" aria-label="Language">
       <button onclick="setLang('ar')" id="btn-ar" aria-pressed="true">عربي</button>
@@ -2491,6 +2491,11 @@ function setLang(l){
   applyI18n(); counts();
   document.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-selected", b.dataset.seg === SEG));
   renderRows();
+  // Views built entirely in JS carry no data-i18n attributes, so applyI18n
+  // cannot reach them: each has to be redrawn by name. The profile was missing
+  // from this list, which left a person's name, their tabs and their whole
+  // ledger in the previous language after a switch.
+  if (VIEW_OF[ROUTE] === "detail") renderUser();
   if (ROUTE === "transfers") renderTransfers();
   if (PSTACK.length) paintPanel();
   navQueueBadge();
@@ -3072,13 +3077,13 @@ function renderUser(){
           ${u.registered ? initials(u) : `<svg viewBox="0 0 24 24" width="26" height="26"><use href="#i-user"/></svg>`}</span>
         <div class="min-w-0 flex-1">
           <div class="flex items-center gap-2.5 flex-wrap">
-            <h1 style="font-size:21px;font-weight:700" class="${u.registered ? "" : "person-name is-empty"}">
-              ${u.registered ? u.name[LANG] : ck("empty.noName")}</h1>
+            <h1 style="font-size:21px;font-weight:700" class="${u.registered ? "" : "ltr num"}">
+              ${u.registered ? u.name[LANG] : u.phone}</h1>
             <span class="pill ${u.registered ? "pill-success" : "pill-stage"}">
               <svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-${u.registered ? "check" : "clock"}"/></svg>
               ${t(u.registered ? coll().statusOn : coll().statusOff)}</span>
           </div>
-          <div class="ltr num" style="font-size:14px;color:var(--n-700);margin-top:4px">${u.phone}</div>
+          ${u.registered ? `<div class="ltr num" style="font-size:14px;color:var(--n-700);margin-top:4px">${u.phone}</div>` : ""}
           <div style="font-size:13px;color:var(--n-600);margin-top:2px">
             ${interp(t(coll().sinceKey), { date: dfmt(u.joined) })}</div>
         </div>
@@ -3371,9 +3376,9 @@ function renderRows(){
             <span class="avatar ${u.registered ? "avatar-txt" : ""}">${u.registered
               ? initials(u) : `<svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-user"/></svg>`}</span>
             <div class="min-w-0">
-              <div class="person-name ${u.registered ? "" : "is-empty"}">${u.registered
-                ? u.name[LANG] : ck("empty.noName")}</div>
-              <div class="person-sub ltr num">${u.phone}</div>
+              <div class="person-name${u.registered ? "" : " ltr num"}">${u.registered
+                ? u.name[LANG] : u.phone}</div>
+              ${u.registered ? `<div class="person-sub ltr num">${u.phone}</div>` : ""}
               ${shown().some(c=>c.k==="status") ? "" : `<span class="pill ${u.registered ? "pill-success" : "pill-stage"}"
                 style="margin-top:6px"><svg viewBox="0 0 24 24" width="11" height="11"><use href="#i-${u.registered?"check":"clock"}"/></svg>
                 ${t(u.registered ? coll().statusOn : coll().statusOff)}</span>`}
