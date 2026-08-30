@@ -602,6 +602,46 @@ html[dir="ltr"] .ltr{text-align:left}
 }
 
 /* ===================================================================
+   RELEASE NOTES
+   Prose, not records. The list is a table because it is scanned; the
+   note itself is set as something to read.
+   =================================================================== */
+.rel-doc{max-width:720px}
+.rel-date{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--n-700)}
+.rel-title{font-size:26px;font-weight:700;color:var(--n-950);letter-spacing:-.015em;
+  line-height:1.3;margin-top:10px}
+.rel-body{margin-top:22px}
+.rel-body p{font-size:16px;line-height:1.8;color:var(--n-900);margin:0 0 18px;max-width:66ch}
+.rel-body p:last-child{margin-bottom:0}
+
+/* the same note in the other language, folded away until wanted */
+.rel-alt{margin-top:32px;border-top:1px solid var(--n-200);padding-top:20px}
+.rel-alt-btn{display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;
+  font:inherit;font-size:13.5px;font-weight:600;color:var(--p-700);cursor:pointer}
+.rel-alt-btn:hover{text-decoration:underline}
+.rel-alt-btn svg{transition:transform .18s}
+.rel-alt-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.rel-alt-body{margin-top:18px;padding:20px 22px;border-radius:var(--r-150);
+  background:var(--n-25);border:1px solid var(--n-200)}
+.rel-alt-body h3{font-size:17px;font-weight:700;color:var(--n-950);margin:0 0 12px;line-height:1.35}
+.rel-alt-body p{font-size:14.5px;line-height:1.75;color:var(--n-800);margin:0 0 12px}
+.rel-alt-body p:last-child{margin-bottom:0}
+
+/* moving between notes without going back to the list */
+.rel-nav{display:flex;gap:12px;margin-top:36px;padding-top:22px;border-top:1px solid var(--n-200)}
+.rel-nav .btn{flex:1;justify-content:flex-start;height:auto;padding:14px 16px;text-align:start}
+.rel-nav .btn:last-child{justify-content:flex-end;text-align:end}
+.rel-nav-k{display:block;font-size:11.5px;font-weight:600;color:var(--n-600);
+  letter-spacing:.04em;text-transform:uppercase}
+.rel-nav-t{display:block;font-size:14px;font-weight:600;color:var(--n-950);margin-top:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:26ch}
+@media (max-width:620px){
+  .rel-title{font-size:21px}
+  .rel-body p{font-size:15px}
+  .rel-nav{flex-direction:column}
+}
+
+/* ===================================================================
    SETTINGS
    The partner's own profile, and the text their customers read. The two
    are not the same weight: a name is a field, terms and conditions are
@@ -1155,7 +1195,7 @@ html[dir="rtl"] .vw-line{text-align:start}
   </nav>
 
   <div class="border-t py-3" style="border-color:var(--n-200)">
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-sparkle"/></svg>
+    <a href="#/releases" class="nav-item" data-route="releases"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-sparkle"/></svg>
       <span class="nav-label" data-i18n="nav.whatsNew">What's new</span></a>
     <a href="#/settings" class="nav-item" data-route="settings"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-settings"/></svg>
       <span class="nav-label" data-i18n="nav.settings">Settings</span></a>
@@ -1583,6 +1623,8 @@ html[dir="rtl"] .vw-line{text-align:start}
   <div id="view-charges" class="view"></div>
   <div id="view-exports" class="view"></div>
   <div id="view-settings" class="view"></div>
+  <div id="view-releases" class="view"></div>
+  <div id="view-release" class="view"></div>
 </main>
 </div>
 </div>
@@ -3305,6 +3347,8 @@ function setLang(l){
   if (ROUTE === "exports") renderExports();
   if (ROUTE === "login") renderLogin();
   if (ROUTE === "settings") renderSettings();
+  if (ROUTE === "releases") renderReleases();
+  if (ROUTE === "release") renderRelease();
   if (PSTACK.length) paintPanel();
   navQueueBadge();
   [["btn-ar","btn-en"],["pv-ar","pv-en"]].forEach(([a,b])=>{
@@ -3599,7 +3643,7 @@ function go(route, id){
   render(route, id);
 }
 const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"detail", follower:"detail",
-                  transfers:"transfers", transactions:"transactions", charges:"charges", exports:"exports", settings:"settings" };
+                  transfers:"transfers", transactions:"transactions", charges:"charges", exports:"exports", settings:"settings", releases:"releases", release:"release" };
 const COLL_OF = { users:"users", user:"users", followers:"followers", follower:"followers" };
 function render(route, id){
   ROUTE = route; CURRENT = id ?? null;
@@ -3614,7 +3658,8 @@ function render(route, id){
   const view = VIEW_OF[route] || "overview";
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "view-" + view));
   document.querySelectorAll(".nav-item[data-route]").forEach(a => {
-    const on = a.dataset.route === route || a.dataset.route === COLL_OF[route];
+    const on = a.dataset.route === route || a.dataset.route === COLL_OF[route]
+             || (route === "release" && a.dataset.route === "releases");
     if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
   const main = document.getElementById("main");
@@ -3630,6 +3675,8 @@ function render(route, id){
   if (view === "charges") renderCharges();
   if (view === "exports") renderExports();
   if (view === "settings") renderSettings();
+  if (view === "releases") renderReleases();
+  if (view === "release"){ REL_ALT = false; renderRelease(); }
   attentionCounts();          // before applyI18n, which reads the counts
   navQueueBadge();
   applyI18n();
@@ -3639,7 +3686,8 @@ function render(route, id){
     : view === "transactions" ? t("transactions.heading")
     : view === "charges"      ? t("charge.heading")
     : view === "exports"      ? t("exports.heading")
-    : view === "settings"     ? t("settings.heading") : ck("list.heading"));
+    : view === "settings"     ? t("settings.heading")
+    : view === "releases" || view === "release" ? t("releases.heading") : ck("list.heading"));
   closeNav(); window.scrollTo(0, 0);
 }
 function onHash(){
@@ -7454,6 +7502,160 @@ function setSave(){
   renderSettings();
   toast(t("settings.saved"));
 }
+
+/* =====================================================================
+   LATEST APP RELEASES
+   What changed in the customer app, written by WalaOne and read by
+   partners so they know what their own customers are now seeing.
+
+   Each note exists in both languages. The old screen printed both at
+   once, with the language named underneath the value it described and
+   every label repeated — so the same field appeared twice with nothing
+   saying which was which until after you had read it. Here the note is
+   in the reader's language and the other one folds out beneath it.
+   ===================================================================== */
+const RELEASES = [1,2,3,4,5,6].map((n, i) => ({
+  id: n,
+  at: [ new Date(2026,7,12), new Date(2026,5,28), new Date(2026,3,9),
+        new Date(2026,1,17), new Date(2025,10,30), new Date(2025,8,4) ][i]
+}));
+const releaseById = id => RELEASES.find(r => r.id === id);
+/* Sorted by the date on the note, not by the id behind it: the old list ran
+   17/08, 12/06, 17/05, 14/05, 15/05, 01/05 — descending by id, which put a
+   May the 14th above a May the 15th on a screen whose whole promise is
+   "latest". */
+const relSorted = () => RELEASES.slice().sort((a, b) => b.at - a.at);
+
+const relText = (id, part, lang) => {
+  const k = "releases.sample." + id + "." + part;
+  const dict = I18N[lang] || I18N.en;
+  return dict[k] ?? I18N.en[k] ?? k;
+};
+const relTitle = (id, lang) => relText(id, "title", lang || LANG);
+const relBody  = (id, lang) => relText(id, "body",  lang || LANG);
+const relParas = (id, lang) => relBody(id, lang).split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
+const relOther = () => (LANG === "ar" ? "en" : "ar");
+
+let RELQ = "";
+function relMatching(){
+  const q = RELQ.trim().toLowerCase();
+  const rows = relSorted();
+  if (!q) return rows;
+  return rows.filter(r => [relTitle(r.id), relBody(r.id), relTitle(r.id, "en"), relBody(r.id, "en")]
+    .some(v => String(v).toLowerCase().includes(q)));
+}
+
+function renderReleases(){
+  const el = document.getElementById("view-releases"); if (!el) return;
+  const rows = relMatching();
+  el.innerHTML = `
+    <div class="flex flex-wrap items-end gap-4 page-head">
+      <div class="min-w-0 flex-1">
+        ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
+                  { label:t("releases.heading") }])}
+        <h1 class="page-t">${esc(t("releases.heading"))}</h1>
+        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("releases.subtitle"))}</p>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-bar">
+        <label class="tbl-search">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
+          <input type="search" id="relq" value="${esc(RELQ)}" oninput="RELQ=this.value;renderReleases()"
+                 placeholder="${esc(t("releases.search.placeholder"))}">
+        </label>
+      </div>
+
+      <div class="s-load p-5"><div class="sk h-12 mb-2"></div><div class="sk h-16 mb-2"></div>
+        <div class="sk h-16 mb-2"></div><div class="sk h-16"></div></div>
+      <div class="s-err empty">
+        <div class="empty-ico" style="background:var(--danger-50);color:var(--danger-700)">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-alert"/></svg></div>
+        <div class="empty-t">${esc(t("states.errorTitle"))}</div>
+        <div class="empty-d">${esc(t("states.errorBody"))}</div>
+      </div>
+      <div class="s-empty empty">
+        <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-sparkle"/></svg></div>
+        <div class="empty-t">${esc(t("releases.empty.title"))}</div>
+        <div class="empty-d">${esc(t("releases.empty.body"))}</div>
+      </div>
+
+      <div class="s-real">
+        ${rows.length ? `<div class="tbl-scroll">
+          <table class="tbl" aria-label="${esc(t("releases.a11y.table"))}"><thead><tr>
+            <th style="width:1%">${esc(t("releases.columns.index"))}</th>
+            <th>${esc(t("releases.columns.title"))}</th>
+            <th>${esc(t("releases.columns.description"))}</th>
+            <th>${esc(t("releases.columns.releaseAt"))}</th>
+          </tr></thead><tbody>
+            ${rows.map((r, i) => `<tr onclick="go('release',${r.id})" tabindex="0"
+                onkeydown="if(event.key==='Enter'){go('release',${r.id})}">
+              <td><span class="cell-muted num">${fmt(i + 1)}</span></td>
+              <td><span class="person-name" style="max-width:34ch;overflow:hidden;text-overflow:ellipsis;
+                    white-space:nowrap;display:block">${esc(relTitle(r.id))}</span></td>
+              <td><span class="cell-muted" style="display:block;max-width:52ch;overflow:hidden;
+                    text-overflow:ellipsis;white-space:nowrap">${esc(relParas(r.id)[0] || "")}</span></td>
+              <td><span class="cell-date">${esc(dfmt(r.at))}</span></td>
+            </tr>`).join("")}
+          </tbody></table></div>`
+        : `<div class="empty">
+            <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-search"/></svg></div>
+            <div class="empty-t">${esc(t("releases.empty.noMatchTitle"))}</div>
+            <div class="empty-d">${esc(t("releases.empty.noMatchBody"))}</div>
+            <button class="btn btn-ghost btn-sm mt-3" onclick="RELQ='';renderReleases()">${
+              esc(t("users.list.clearFilters"))}</button></div>`}
+      </div>
+    </div>`;
+}
+
+let REL_ALT = false;
+function renderRelease(){
+  const el = document.getElementById("view-release"); if (!el) return;
+  const r = releaseById(CURRENT);
+  if (!r){ go("releases"); return; }
+  const order = relSorted(), i = order.findIndex(x => x.id === r.id);
+  const newer = order[i - 1], older = order[i + 1];
+  const other = relOther();
+  const otherLabel = t(other === "ar" ? "releases.detail.inArabic" : "releases.detail.inEnglish");
+
+  el.innerHTML = `
+    <div class="flex flex-wrap items-end gap-4 page-head">
+      <div class="min-w-0 flex-1">
+        ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
+                  { href:"#/releases", label:t("releases.heading") },
+                  { label:relTitle(r.id) }])}
+      </div>
+    </div>
+
+    <div class="card rel-doc" style="padding:32px">
+      <span class="rel-date">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-calendar"/></svg>
+        ${esc(interp(t("releases.detail.releasedOn"), { date: dfmt(r.at) }))}</span>
+      <h1 class="rel-title">${esc(relTitle(r.id))}</h1>
+      <div class="rel-body">${relParas(r.id).map(p => `<p>${esc(p)}</p>`).join("")}</div>
+
+      <div class="rel-alt">
+        <button class="rel-alt-btn" aria-expanded="${REL_ALT}" aria-controls="relAlt" onclick="relToggleAlt()">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-down"/></svg>
+          ${esc(interp(t("releases.detail.otherLanguage"), { language: otherLabel }))}</button>
+        <div class="rel-alt-body" id="relAlt" dir="${other === "ar" ? "rtl" : "ltr"}"${REL_ALT ? "" : " hidden"}>
+          <h3>${esc(relTitle(r.id, other))}</h3>
+          ${relParas(r.id, other).map(p => `<p>${esc(p)}</p>`).join("")}
+        </div>
+      </div>
+
+      <div class="rel-nav">
+        ${older ? `<button class="btn btn-ghost" onclick="go('release',${older.id})">
+          <span><span class="rel-nav-k">${esc(t("releases.detail.previous"))}</span>
+            <span class="rel-nav-t">${esc(relTitle(older.id))}</span></span></button>` : `<span style="flex:1"></span>`}
+        ${newer ? `<button class="btn btn-ghost" onclick="go('release',${newer.id})">
+          <span><span class="rel-nav-k">${esc(t("releases.detail.next"))}</span>
+            <span class="rel-nav-t">${esc(relTitle(newer.id))}</span></span></button>` : `<span style="flex:1"></span>`}
+      </div>
+    </div>`;
+}
+function relToggleAlt(){ REL_ALT = !REL_ALT; renderRelease(); }
 
 document.body.dataset.state = "normal";
 document.body.dataset.collapsed = "false";

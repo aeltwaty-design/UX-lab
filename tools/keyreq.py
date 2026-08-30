@@ -14,7 +14,7 @@ s = raw[:_a] + raw[_b:]
 keys = set()
 
 # literal keys
-PREFIX = r'(?:transfers|transactions|charge|exports|login|otp|settings)'
+PREFIX = r'(?:transfers|transactions|charge|exports|login|otp|settings|releases)'
 for m in re.finditer(r'["\'](' + PREFIX + r'\.[A-Za-z0-9._]+)["\']', s):
     keys.add(m.group(1))
 for m in re.finditer(r'data-i18n[a-z-]*="(' + PREFIX + r'\.[A-Za-z0-9._]+)"', s):
@@ -85,6 +85,12 @@ for k in ["name","description","supportEmail","supportPhone","terms","about","lo
     keys.add("settings.field." + k + "Hint")
 for k in ["description","terms","about"]: keys.add("settings.sample." + k)
 
+# --- releases: six notes, each with a title and a body --------------------
+for k in ["index","title","description","releaseAt"]: keys.add("releases.columns." + k)
+for n in range(1, 7):
+    keys.add("releases.sample.%d.title" % n)
+    keys.add("releases.sample.%d.body" % n)
+
 # drop the ones that were only ever prefixes
 keys = {k for k in keys if not k.endswith(".")}
 keys.discard("transfers.status.")
@@ -106,12 +112,14 @@ keys.discard("exports.columns.")
 keys.discard("exports.target.")
 keys.discard("settings.field.")
 keys.discard("settings.sample.")
+keys.discard("releases.columns.")
+keys = {k for k in keys if not k.startswith("releases.sample.") or k.count(".") == 3}
 
 req = sorted(keys)
 if len(sys.argv) > 1 and sys.argv[1] == "--check":
     d = {"en": {}, "ar": {}}
     for f in ("transfers.json", "transactions.json", "chargehistory.json", "exports.json",
-              "login.json", "settings.json"):
+              "login.json", "settings.json", "releases.json"):
         try:
             x = json.load(io.open("src/i18n/" + f, encoding="utf-8"))
         except FileNotFoundError:
