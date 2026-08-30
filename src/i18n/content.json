@@ -316,6 +316,54 @@
       "apply": "Apply",
       "reset": "Reset",
       "activeCount": "{count}"
+    },
+    "followers": {
+      "list": {
+        "heading": "Followers",
+        "subtitle": "Everyone who follows your brand to receive its offers, whether or not they also have an account.",
+        "count": "{count} followers",
+        "segmentAll": "All",
+        "segmentHasAccount": "Has an account",
+        "segmentFollowsOnly": "Follows only",
+        "searchPlaceholder": "Search by name, phone or email…",
+        "matchingCount": "Showing {count} matching followers"
+      },
+      "columns": {
+        "person": "Person",
+        "status": "Status",
+        "followed": "Followed",
+        "lastOfferViewed": "Last offer viewed",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "status": {
+        "hasAccount": "Has account",
+        "followsOnly": "Follows only"
+      },
+      "empty": {
+        "noFollowersYet": "No followers yet. Once people follow your brand, they'll show up here.",
+        "noMatches": "No followers match your filters. Try different search terms, or clear your filters to see more.",
+        "noName": "Name not available"
+      },
+      "detail": {
+        "pageHeading": "Follower profile",
+        "followingSince": "Following since {date}",
+        "tabInformation": "Information",
+        "tabOffers": "Offers",
+        "sectionPersonalInfo": "Personal information",
+        "summaryOffersRedeemed": "Total offers redeemed",
+        "encourageInvite": "This follower is already interested in your brand. Invite them to register so they can start earning points on their purchases."
+      },
+      "actions": {
+        "inviteToRegister": "Invite to register",
+        "viewProfile": "View profile",
+        "sendOffer": "Send offer"
+      },
+      "offersTab": {
+        "colOffer": "Offer",
+        "colEngagedOn": "Engaged on",
+        "emptyOffers": "No offer engagement yet. Once this follower engages with an offer, it'll show up here."
+      }
     }
   },
   "ar": {
@@ -635,6 +683,54 @@
       "apply": "تطبيق",
       "reset": "إعادة تعيين",
       "activeCount": "{count}"
+    },
+    "followers": {
+      "list": {
+        "heading": "المتابعين",
+        "subtitle": "كل الأشخاص الذين يتابعون علامتك التجارية لتصلهم عروضها، سواء كان لديهم حساب أيضًا أو لم يكن.",
+        "count": "{count} متابعين",
+        "segmentAll": "الكل",
+        "segmentHasAccount": "لديهم حساب",
+        "segmentFollowsOnly": "يتابعون فقط",
+        "searchPlaceholder": "ابحث بالاسم أو رقم الجوال أو البريد الإلكتروني…",
+        "matchingCount": "جارٍ عرض {count} متابعين مطابقين"
+      },
+      "columns": {
+        "person": "المتابع",
+        "status": "الحالة",
+        "followed": "المتابعة",
+        "lastOfferViewed": "آخر عرض شوهد",
+        "email": "البريد",
+        "phone": "الجوال"
+      },
+      "status": {
+        "hasAccount": "لديه حساب",
+        "followsOnly": "يتابع فقط"
+      },
+      "empty": {
+        "noFollowersYet": "لا يوجد متابعون بعد. بمجرد أن يتابع الأشخاص علامتك التجارية، سيظهرون هنا.",
+        "noMatches": "لا يوجد متابعون يطابقون معايير التصفية. جرّب كلمات بحث مختلفة أو امسح التصفية لعرض المزيد.",
+        "noName": "الاسم غير متاح"
+      },
+      "detail": {
+        "pageHeading": "الملف الشخصي للمتابع",
+        "followingSince": "متابع منذ {date}",
+        "tabInformation": "المعلومات",
+        "tabOffers": "العروض",
+        "sectionPersonalInfo": "المعلومات الشخصية",
+        "summaryOffersRedeemed": "إجمالي العروض المستبدلة",
+        "encourageInvite": "هذا المتابع مهتم بالفعل بعلامتك التجارية. ادعه للتسجيل ليبدأ بكسب النقاط على مشترياته."
+      },
+      "actions": {
+        "inviteToRegister": "دعوة للتسجيل",
+        "viewProfile": "عرض الملف الشخصي",
+        "sendOffer": "إرسال عرض"
+      },
+      "offersTab": {
+        "colOffer": "العرض",
+        "colEngagedOn": "تاريخ التفاعل",
+        "emptyOffers": "لا يوجد تفاعل مع العروض بعد. بمجرد أن يتفاعل هذا المتابع مع عرض، سيظهر هنا."
+      }
     }
   }
 }
