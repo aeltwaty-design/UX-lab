@@ -391,6 +391,12 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
 <symbol id="i-return" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5.5 4.5 10 9 14.5"/><path d="M4.5 10h9a6 6 0 0 1 0 12h-3"/></symbol>
 <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-13.8-4.6L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 13.8 4.6L21 15"/><path d="M21 20v-5h-5"/></symbol>
 <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.3 2.6 17.4A2 2 0 0 0 4.3 20.4h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4"/><circle cx="12" cy="16.8" r=".9" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 16.5h4"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12s3.6-6 9-6 9 6 9 6-3.6 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5"/><path d="m7.5 9.5 4.5-4.5 4.5 4.5"/><path d="M4 17.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5l13 13M18.5 5.5l-13 13"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H4"/><path d="m10 6-6 6 6 6"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6h.01"/></symbol>
 </defs></svg>
 <style>
 /* confirmation dialog */
@@ -493,7 +499,7 @@ html[dir="rtl"] #toast.on{transform:translateX(50%)}
 .tbl-search input{flex:1;min-width:0;border:none;outline:none;background:none;
   font:inherit;color:var(--n-950)}
 .tbl-search input::placeholder{color:var(--n-600)}
-.tbl-bar-actions{display:flex;align-items:center;gap:10px;margin-inline-start:auto}
+.tbl-bar-actions{display:flex;align-items:center;gap:10px;margin-inline-start:auto;flex-wrap:wrap}
 
 /* The scroller must be told it cannot grow past its parent. Without an
    explicit max-width the table's min-width propagates up and the PAGE
@@ -587,6 +593,257 @@ html[dir="ltr"] .ltr{text-align:left}
   .tbl-foot{padding:12px 14px}
   .pager{margin-inline:0;order:3;flex-basis:100%;justify-content:center}
 }
+
+/* ===================================================================
+   TRANSFER POINTS
+   An approval queue, not a report. Everything below serves one job:
+   let a reviewer see what is waiting, judge it, and act — without
+   leaving the list or guessing what a status means.
+   =================================================================== */
+
+/* --- balance strip: three figures read as one balance sheet, so they
+       are segments of a single card rather than three loose tiles --- */
+.bal-strip{display:flex;background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
+  box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem;flex-wrap:wrap}
+.bal{flex:1 1 200px;min-width:0;padding:18px 20px;border-inline-start:1px solid var(--n-200)}
+.bal:first-child{border-inline-start:none}
+.bal-l{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--n-700);
+  letter-spacing:.01em}
+.bal-v{display:flex;align-items:baseline;gap:7px;font-size:26px;font-weight:700;color:var(--n-950);
+  line-height:1.15;letter-spacing:-.015em;margin-top:7px}
+.bal-v svg{align-self:center}
+.bal-sub{font-size:12px;color:var(--n-700);margin-top:5px;line-height:1.45}
+/* the balance a pending approval will actually spend earns the accent */
+.bal-key{background:linear-gradient(180deg,var(--p-50),#fff 70%)}
+.bal-key .bal-v{color:var(--p-700)}
+.bal-key.is-low{background:linear-gradient(180deg,var(--warning-50),#fff 70%)}
+.bal-key.is-low .bal-v{color:var(--warning-700)}
+.bal-warn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+  color:var(--warning-700);margin-top:6px}
+
+/* --- queue banner: the one thing on this screen that is addressed to
+       the reviewer personally --- */
+.queue{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:var(--r-150);
+  background:var(--warning-50);border:1px solid var(--warning-200);margin-bottom:1.25rem}
+.queue-ico{flex:0 0 38px;height:38px;border-radius:var(--r-100);display:grid;place-items:center;
+  background:#fff;color:var(--warning-700);border:1px solid var(--warning-200)}
+.queue-t{font-size:14px;font-weight:700;color:var(--n-950)}
+.queue-d{font-size:13px;color:var(--n-800);margin-top:1px}
+.queue .btn{margin-inline-start:auto;flex:none}
+.queue.is-clear{background:var(--n-50);border-color:var(--n-200)}
+.queue.is-clear .queue-ico{color:var(--success-700);border-color:var(--success-200)}
+
+/* --- statuses -----------------------------------------------------
+   Six states, three families. Rejected is a DECISION and takes the
+   neutral stage treatment; failed is a FAULT and takes danger. They
+   must never be mistaken for one another, so they share no colour,
+   no icon and no shape.                                             */
+.pill-dot{inline-size:7px;block-size:7px;border-radius:50%;background:currentColor;flex:none}
+.pill-attn{background:var(--warning-50);color:var(--warning-700);
+  box-shadow:inset 0 0 0 1px var(--warning-200)}
+.pill-attn .pill-dot{animation:attn 2.4s ease-in-out infinite}
+@keyframes attn{0%,100%{opacity:1}50%{opacity:.35}}
+.spin{animation:spin 1s linear infinite;transform-origin:50% 50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){
+  .spin,.pill-attn .pill-dot{animation:none}
+}
+/* a status that is going nowhere should say so rather than sit quietly */
+.stuck{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
+  color:var(--danger-700);margin-top:4px}
+.prog{font-size:11.5px;color:var(--n-700);margin-top:4px;font-variant-numeric:tabular-nums}
+
+/* Riyal amounts read left-to-right whatever the page direction, so a figure
+   never scrambles inside an Arabic sentence. The glyph is drawn from an
+   Arabic face because Poppins does not carry it. */
+.amt{display:inline-flex;align-items:baseline;gap:3px;direction:ltr;unicode-bidi:isolate;
+  font-variant-numeric:tabular-nums}
+.rial{font-family:"IBM Plex Sans Arabic","Noto Sans Arabic","Segoe UI",sans-serif;
+  font-weight:600;font-size:.92em}
+
+/* --- record breakdown: the count and the offending rows finally in
+       one place. Each segment opens the viewer filtered to itself. --- */
+.rec{min-width:118px;max-width:190px}
+.rec-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--n-200);
+  margin-bottom:6px}
+.rec-seg{border:none;padding:0;height:100%;cursor:pointer;transition:filter .12s}
+.rec-seg:hover{filter:brightness(1.15)}
+.rec-seg:focus-visible{outline:2px solid var(--n-950);outline-offset:1px}
+.rec-ok{background:var(--success-500)}
+.rec-bad{background:var(--danger-500)}
+.rec-dup{background:var(--warning-500)}
+.rec-txt{font-size:12.5px;color:var(--n-800);display:flex;flex-wrap:wrap;gap:4px 9px;
+  align-items:center}
+.rec-n{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.rec-n::before{content:"";inline-size:7px;block-size:7px;border-radius:2px;flex:none}
+.rec-n.ok::before{background:var(--success-500)}
+.rec-n.bad::before{background:var(--danger-500)}
+.rec-n.dup::before{background:var(--warning-500)}
+.rec-none{font-size:12.5px;font-weight:600;color:var(--danger-700)}
+.rec-tot{font-size:13.5px;font-weight:600;color:var(--n-950);white-space:nowrap}
+
+/* On Users the person IS the row, so the avatar is 42px. Here the uploader is
+   context beside a file, and a full-size avatar would outrank its subject. */
+#view-transfers .avatar{inline-size:34px;block-size:34px;font-size:11.5px}
+#view-transfers .person-name{font-size:14px}
+#view-transfers .person-sub{font-size:12px;max-width:15ch}
+
+/* --- file cell: a filename that downloads should look like one --- */
+.file-cell{display:inline-flex;align-items:center;gap:9px;min-width:0;background:none;border:none;
+  padding:0;font:inherit;cursor:pointer;color:var(--n-950);text-align:start}
+.file-ico{flex:0 0 34px;height:34px;border-radius:var(--r-100);display:grid;place-items:center;
+  background:var(--n-100);color:var(--n-700)}
+.file-n{font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:17ch}
+.file-cell:hover .file-n{color:var(--p-700);text-decoration:underline}
+.file-cell:hover .file-ico{background:var(--p-50);color:var(--p-600)}
+.file-sub{font-size:12.5px;color:var(--n-700);margin-top:1px;display:flex;align-items:center;gap:5px}
+
+/* --- value column: derived, never trusted from the field ---------- */
+.val{display:inline-flex;align-items:center;gap:5px;font-size:14.5px;font-weight:600;
+  color:var(--n-950);white-space:nowrap;font-variant-numeric:tabular-nums}
+.val-flag{inline-size:16px;block-size:16px;color:var(--warning-700);flex:none;cursor:help}
+
+/* --- row actions: labelled, and absent when they do not apply ----- */
+.row-acts{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+html[dir="rtl"] .row-acts{justify-content:flex-start}
+.act{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:var(--r-100);
+  max-width:15ch;overflow:hidden;
+  border:1px solid var(--n-300);background:#fff;font:inherit;font-size:13px;font-weight:600;
+  color:var(--n-800);cursor:pointer;white-space:nowrap;transition:background .12s,border-color .12s}
+.act:hover{background:var(--n-50);border-color:var(--n-400)}
+/* Approve is the filled primary and reject the plain outline. A green/red
+   pair carries its whole meaning in hue, which is exactly what a colour-blind
+   reader cannot use; weight and fill survive where hue does not. */
+.act-go{background:var(--p-500);border-color:var(--p-500);color:#fff}
+.act-go:hover{background:var(--p-600);border-color:var(--p-600)}
+/* reject is a decision, so it is bordered and neutral-dark — never red,
+   never a bin. Red and trash iconography stay reserved for destruction. */
+.act-no{border-color:var(--n-400);color:var(--n-900)}
+.act-no:hover{background:var(--n-100);border-color:var(--n-500)}
+
+/* --- side panel ---------------------------------------------------
+   Every action on this screen opens a drawer, not a modal, so the list
+   behind it stays readable while you decide.                        */
+.pnl-back{position:fixed;inset:0;z-index:80;background:rgba(17,19,23,.4);opacity:0;
+  transition:opacity .2s ease}
+.pnl-back.on{opacity:1}
+.pnl{position:fixed;inset-block:0;inset-inline-end:0;z-index:81;width:min(520px,100vw);
+  background:#fff;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;
+  transition:transform .24s cubic-bezier(.32,.72,0,1)}
+/* Both closed states are scoped to :not(.on). Written as a bare
+   `html[dir="rtl"] .pnl` the RTL rule outscores `.pnl.on` and the drawer never
+   opens in Arabic — which is exactly what it did. */
+.pnl:not(.on){transform:translateX(100%)}
+html[dir="rtl"] .pnl:not(.on){transform:translateX(-100%)}
+.pnl.on{transform:translateX(0)}
+.pnl.pnl-wide{width:min(840px,100vw)}
+.pnl-h{display:flex;align-items:flex-start;gap:12px;padding:20px 22px 16px;
+  border-bottom:1px solid var(--n-200);flex:none}
+.pnl-t{font-size:18px;font-weight:700;color:var(--n-950);letter-spacing:-.01em;line-height:1.3}
+.pnl-sub{font-size:13px;color:var(--n-700);margin-top:3px;line-height:1.5}
+.pnl-x{margin-inline-start:auto;flex:none}
+.pnl-back-btn{flex:none;margin-inline-end:2px}
+html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
+.pnl-b{flex:1;overflow-y:auto;padding:20px 22px}
+.pnl-f{flex:none;display:flex;gap:10px;padding:16px 22px;border-top:1px solid var(--n-200);
+  background:var(--n-25)}
+.pnl-f .btn{flex:1}
+@media (max-width:620px){
+  .tabs-row .segs{display:flex;width:100%}
+  .tabs-row .seg{flex:1 1 0;min-width:0;justify-content:center}
+  .tabs-row .seg > span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bal{flex-basis:100%;border-inline-start:none;border-top:1px solid var(--n-200)}
+  .bal:first-child{border-top:none}
+  .queue{flex-wrap:wrap}
+  .queue .btn{margin-inline-start:0;width:100%}
+}
+@media (max-width:560px){
+  .pnl,.pnl.pnl-wide{width:100vw}
+  .pnl-b{padding:16px}
+  .pnl-h,.pnl-f{padding-inline:16px}
+}
+
+/* --- form controls inside panels ---------------------------------- */
+.fgrp{margin-bottom:18px}
+.flab{display:block;font-size:13px;font-weight:600;color:var(--n-900);margin-bottom:6px}
+.fopt{font-weight:400;color:var(--n-600)}
+.finp,.ftxt,.fsel{width:100%;border:1px solid var(--n-300);border-radius:var(--r-100);
+  padding:10px 12px;font:inherit;font-size:14px;color:var(--n-950);background:#fff;outline:none;
+  transition:border-color .12s,box-shadow .12s}
+.finp:focus,.ftxt:focus,.fsel:focus{border-color:var(--p-500);box-shadow:var(--focus)}
+.ftxt{min-height:84px;resize:vertical;line-height:1.55}
+.fhint{font-size:12.5px;color:var(--n-700);margin-top:6px;line-height:1.5}
+.ferr{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
+  color:var(--danger-700);margin-top:6px}
+.finp[aria-invalid="true"],.ftxt[aria-invalid="true"]{border-color:var(--danger-500)}
+.fnote{display:flex;gap:10px;padding:12px 14px;border-radius:var(--r-100);background:var(--info-50);
+  border:1px solid var(--info-200);font-size:13px;color:var(--n-900);line-height:1.55}
+.fnote svg{flex:none;color:var(--info-700);margin-top:1px}
+.fnote.tone-warn{background:var(--warning-50);border-color:var(--warning-200)}
+.fnote.tone-warn svg{color:var(--warning-700)}
+.fnote.tone-quiet{background:var(--n-50);border-color:var(--n-200)}
+.fnote.tone-quiet svg{color:var(--n-700)}
+
+/* preset reasons — chips, because typing the same sentence weekly is a tax */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chip{border:1px solid var(--n-300);background:#fff;border-radius:999px;padding:7px 13px;
+  font:inherit;font-size:13px;color:var(--n-800);cursor:pointer;text-align:start;
+  transition:background .12s,border-color .12s,color .12s}
+.chip:hover{background:var(--n-50);border-color:var(--n-400)}
+.chip[aria-pressed="true"]{background:var(--p-50);border-color:var(--p-300);color:var(--p-700);
+  font-weight:600}
+
+/* the points a transfer will move, previewed in riyal as you type */
+.pv-val{display:flex;align-items:baseline;gap:8px;padding:13px 15px;border-radius:var(--r-100);
+  background:var(--n-50);border:1px solid var(--n-200);margin-top:10px}
+.pv-val-l{font-size:12.5px;color:var(--n-700)}
+.pv-val-v{font-size:19px;font-weight:700;color:var(--n-950);margin-inline-start:auto;
+  font-variant-numeric:tabular-nums}
+
+/* dropzone */
+.drop{border:1.5px dashed var(--n-300);border-radius:var(--r-150);padding:28px 20px;text-align:center;
+  background:var(--n-25);transition:border-color .12s,background .12s}
+.drop:hover{border-color:var(--p-400);background:var(--p-50)}
+.drop-ico{width:46px;height:46px;border-radius:var(--r-100);background:#fff;border:1px solid var(--n-200);
+  display:grid;place-items:center;margin:0 auto 12px;color:var(--n-700)}
+.drop-t{font-size:14px;font-weight:600;color:var(--n-950)}
+.drop-d{font-size:12.5px;color:var(--n-700);margin-top:4px}
+.drop.has-file{border-style:solid;border-color:var(--success-200);background:var(--success-50)}
+.drop.has-file .drop-ico{color:var(--success-700);border-color:var(--success-200)}
+.rules{margin:0;padding:0;list-style:none}
+.rules li{display:flex;gap:9px;font-size:13px;color:var(--n-800);line-height:1.55;padding:5px 0}
+.rules li svg{flex:none;color:var(--success-700);margin-top:3px}
+
+/* --- file viewer -------------------------------------------------- */
+.vw-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.vw-tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.vw-tbl th{text-align:start;font-size:12px;font-weight:700;color:var(--n-700);
+  padding:8px 10px;border-bottom:1px solid var(--n-200);white-space:nowrap;
+  letter-spacing:.02em;text-transform:uppercase}
+.vw-tbl td{padding:11px 10px;border-bottom:1px solid var(--n-100);vertical-align:top}
+.vw-tbl tr[data-issue]:not([data-issue=""]) td{background:var(--danger-50)}
+.vw-tbl tr[data-issue="duplicate"] td{background:var(--warning-50)}
+.vw-line{font-variant-numeric:tabular-nums;color:var(--n-600);font-size:12.5px;width:1%;
+  white-space:nowrap;text-align:end}
+html[dir="rtl"] .vw-line{text-align:start}
+.vw-name{font-weight:600;color:var(--n-950)}
+.vw-issue{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;
+  padding:3px 8px;border-radius:999px;white-space:nowrap}
+.vw-issue.bad{background:var(--danger-100);color:var(--danger-700)}
+.vw-issue.dup{background:var(--warning-100);color:var(--warning-700)}
+.vw-issue.ok{color:var(--success-700)}
+
+/* --- decision trail: what a reviewer did, and why ------------------ */
+.trail{border:1px solid var(--n-200);border-radius:var(--r-150);padding:14px 16px;margin-bottom:18px}
+.trail-h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--n-950)}
+.trail-r{font-size:13.5px;color:var(--n-900);line-height:1.6;margin-top:8px;
+  padding-inline-start:12px;border-inline-start:2px solid var(--n-300)}
+.trail-m{font-size:12px;color:var(--n-700);margin-top:8px}
+
+/* --- tabs on this screen reuse the segmented control, so switching a
+       view looks the same here as it does on Users ------------------ */
+.tabs-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:1.25rem}
 </style>
 <div id="navScrim" onclick="closeNav()" aria-hidden="true"></div>
 <div class="shell">
@@ -621,8 +878,9 @@ html[dir="ltr"] .ltr{text-align:left}
       <span class="nav-label" data-i18n="nav.followers">Followers</span></a>
 
     <div class="nav-group-label" data-i18n="nav.groupPoints">Points</div>
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-transfer"/></svg>
-      <span class="nav-label" data-i18n="nav.transfer">Transfer points</span></a>
+    <a href="#/transfers" class="nav-item" data-route="transfers"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-transfer"/></svg>
+      <span class="nav-label" data-i18n="nav.transfer">Transfer points</span>
+      <span class="nav-badge num" id="navQueue" hidden></span></a>
     <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-receipt"/></svg>
       <span class="nav-label" data-i18n="nav.transactions">Transactions</span>
       <span class="nav-badge num">3</span></a>
@@ -911,21 +1169,21 @@ html[dir="ltr"] .ltr{text-align:left}
           </div>
           <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.integrityCta"></span></button>
         </div>
-        <div class="att-row sev-critical">
+        <div class="att-row sev-critical" id="attFailed">
           <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-xcircle"/></svg></div>
           <div class="min-w-0 flex-1">
             <div class="att-t" data-i18n="attention.failedTitle">Transactions failed</div>
             <div class="att-d" data-i18n="attention.failedDesc" data-i18n-vars='{"count":3}'></div>
           </div>
-          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.failedCta"></span></button>
+          <button class="btn btn-ghost btn-sm shrink-0" onclick="goTransfers('failed')"><span data-i18n="attention.failedCta"></span></button>
         </div>
-        <div class="att-row sev-warning">
+        <div class="att-row sev-warning" id="attPending">
           <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-hourglass"/></svg></div>
           <div class="min-w-0 flex-1">
             <div class="att-t" data-i18n="attention.pendingTitle">Transfers waiting for your approval</div>
             <div class="att-d" data-i18n="attention.pendingDesc" data-i18n-vars='{"count":12}'></div>
           </div>
-          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.pendingCta"></span></button>
+          <button class="btn btn-ghost btn-sm shrink-0" onclick="goTransfers('uploaded')"><span data-i18n="attention.pendingCta"></span></button>
         </div>
         <div class="att-row sev-warning">
           <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-clock"/></svg></div>
@@ -1062,6 +1320,7 @@ html[dir="ltr"] .ltr{text-align:left}
     </div>
   </div>
   <div id="view-detail" class="view"></div>
+  <div id="view-transfers" class="view"></div>
 </main>
 </div>
 </div>
@@ -1076,6 +1335,26 @@ html[dir="ltr"] .ltr{text-align:left}
     </div>
   </div>
 </div>
+
+<!-- Side panel. Every action on Transfer points happens here rather than in a
+     dialog, so the list being judged stays on screen while a decision is made. -->
+<div id="pnlBack" class="pnl-back" hidden onclick="closePanel()"></div>
+<aside id="pnl" class="pnl" role="dialog" aria-modal="true" aria-labelledby="pnlTitle" hidden>
+  <div class="pnl-h">
+    <button class="icon-btn pnl-back-btn" id="pnlBackBtn" onclick="panelBack()"
+            data-i18n-aria="transfers.a11y.backPanel" aria-label="Back" hidden>
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-back"/></svg></button>
+    <div class="min-w-0">
+      <h2 id="pnlTitle" class="pnl-t"></h2>
+      <div id="pnlSub" class="pnl-sub ltr" hidden></div>
+    </div>
+    <button class="icon-btn pnl-x" onclick="closePanel()"
+            data-i18n-aria="transfers.a11y.closePanel" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="pnl-b" id="pnlBody"></div>
+  <div class="pnl-f" id="pnlFoot" hidden></div>
+</aside>
 
 <!-- ===== PREVIEW CONTROLS — review harness, not part of the product ===== -->
 <div id="pv" data-open="true">
@@ -1794,6 +2073,9 @@ function setLang(l){
   applyI18n(); counts();
   document.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-selected", b.dataset.seg === SEG));
   renderRows();
+  if (ROUTE === "transfers") renderTransfers();
+  if (PSTACK.length) paintPanel();
+  navQueueBadge();
   [["btn-ar","btn-en"],["pv-ar","pv-en"]].forEach(([a,b])=>{
     document.getElementById(a).setAttribute("aria-pressed", l==="ar");
     document.getElementById(b).setAttribute("aria-pressed", l==="en");
@@ -2076,14 +2358,17 @@ function parseHash(){
   const [path, qs] = h.split("?");
   const seg = new URLSearchParams(qs || "").get("seg");
   const [route, id] = path.split("/");
-  return { route: route || "overview", id: id ? +id : null, seg };
+  // a detail route carries a numeric id; the transfers route carries a tab name
+  const parsed = id ? (/^\d+$/.test(id) ? +id : id) : null;
+  return { route: route || "overview", id: parsed, seg };
 }
 function go(route, id){
   const target = id ? `#/${route}/${id}` : `#/${route}`;
   if (location.hash !== target) { location.hash = target; return; }  // hashchange re-enters
   render(route, id);
 }
-const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"detail", follower:"detail" };
+const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"detail", follower:"detail",
+                  transfers:"transfers" };
 const COLL_OF = { users:"users", user:"users", followers:"followers", follower:"followers" };
 function render(route, id){
   ROUTE = route; CURRENT = id ?? null;
@@ -2099,8 +2384,15 @@ function render(route, id){
   if (view === "list"){ counts(); renderRows(); }
   applyReminderFlag();
   if (view === "detail"){ renderUser(); }
+  if (view === "transfers"){
+    TTAB = (id === "individual") ? "individual" : "bulk";
+    renderTransfers();
+  }
+  attentionCounts();          // before applyI18n, which reads the counts
+  navQueueBadge();
   applyI18n();
-  main.setAttribute("aria-label", view === "overview" ? t("a11y.main") : ck("list.heading"));
+  main.setAttribute("aria-label", view === "overview" ? t("a11y.main")
+    : view === "transfers" ? t("transfers.heading") : ck("list.heading"));
   closeNav(); window.scrollTo(0, 0);
 }
 function onHash(){
@@ -2113,7 +2405,10 @@ function onHash(){
 }
 window.addEventListener("hashchange", onHash);
 let _rw; window.addEventListener("resize", () => {
-  clearTimeout(_rw); _rw = setTimeout(() => { if (ROUTE === "users") renderRows(); }, 120);
+  clearTimeout(_rw); _rw = setTimeout(() => {
+    if (ROUTE === "users" || ROUTE === "followers") renderRows();
+    if (ROUTE === "transfers") renderTRows();
+  }, 120);
 });
 
 /* =====================================================================
@@ -2199,8 +2494,9 @@ function rowMenu(ev, id){
   const u = coll().rows().find(x => x.id === id);
   const items = [
     { k:"users.actions.viewProfile", fn:`go(coll().detail,${id})`, icon:"i-user" },
-    { k:"users.actions.transferPoints", fn:`toast(t('users.actions.transferPoints'))`, icon:"i-transfer" },
   ];
+  if (u.registered)
+    items.push({ k:"users.actions.transferPoints", fn:`openSingleFor(${u.id})`, icon:"i-transfer" });
   if (REMINDER_ENABLED && !u.registered)
     items.push({ k:"users.reminder.action", fn:`openReminder(${id})`, icon:"i-userplus" });
   items.push({ k:"users.actions.copyId", fn:`copyId('${uid(u)}')`, icon:"i-receipt" });
@@ -2272,7 +2568,10 @@ function splitPart(s, part){
   return part === "head" ? s.slice(0, cut+1) : s.slice(cut+2).trim();
 }
 const notCollected = () => `<span class="person-name is-empty">${t("users.empty.notCollected")}</span>`;
-const money = v => v > 0 ? interp(t("users.table.sar"), { value: fmt(v) }) : t("users.table.zeroValue");
+/* The riyal glyph, not the letters "SAR" — it is what the rest of the
+   product uses and what a Saudi reader expects. riyal() is defined with the
+   transfers module and is in scope by the time anything renders. */
+const money = v => v > 0 ? riyal(v) : t("users.table.zeroValue");
 
 function txTable(rows, kind){
   if (!rows.length) return `<div class="empty" style="padding:30px 20px">
@@ -2369,7 +2668,7 @@ function renderUser(){
           ${REMINDER_ENABLED && !u.registered ? `<button class="btn btn-primary" onclick="openReminder(${u.id})">
             <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-userplus"/></svg>
             ${t(coll().inviteKey)}</button>` : ""}
-          <button class="btn btn-ghost" onclick="toast(t('users.actions.transferPoints'))">
+          <button class="btn btn-ghost" onclick="openSingleFor(${u.id})">
             <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-transfer"/></svg>
             ${t("users.actions.transferPoints")}</button>
         </div>
@@ -2792,6 +3091,1154 @@ document.addEventListener("click", e => {
     if (m && !m.hidden){ m.hidden = true; document.getElementById("colBtn").setAttribute("aria-expanded","false"); }
   }
 });
+
+
+/* =====================================================================
+   TRANSFER POINTS — data
+   5 points = 1 riyal, so the value of a batch is arithmetic, not a field
+   to be trusted. Two of the records below carry a stored value that
+   disagrees with that arithmetic; the UI shows the derived figure and
+   says so, rather than printing a number it cannot stand behind.
+   ===================================================================== */
+const PTS_PER_RIYAL = 5;
+const valueOf = pts => pts / PTS_PER_RIYAL;
+
+const STAFF = {
+  u1: { n:{ ar:"ريم العتيبي",   en:"Reem Al-Otaibi" },    ph:"966501122334" },
+  u2: { n:{ ar:"خالد الدوسري",  en:"Khalid Al-Dosari" },  ph:"966553344556" },
+  u3: { n:{ ar:"نورة الشمري",   en:"Noura Al-Shammari" }, ph:"966547788990" },
+  u4: { n:{ ar:"ماجد القحطاني", en:"Majed Al-Qahtani" },  ph:"966512233445" },
+  me: { n:{ ar:"محمد العراقي",  en:"Mohammed Al-Iraqi" }, ph:"966500000000" }
+};
+
+const NOW = new Date(2026, 7, 30, 14, 20);
+const ago = m => new Date(NOW.getTime() - m * 60000);
+
+/* Hand-authored rather than generated: the interesting cases — a file with
+   nothing usable in it, a batch stuck in processing, a stored value off by
+   a factor of a hundred — have to be present every time, not by chance. */
+let BATCHES = [
+  { id:"BCH-1041", file:"ramadan-campaign-r2.csv", by:"u1", src:"loyalty",
+    total:1240, invalid:12, dup:5, points:614_150, status:"uploaded", at:ago(38) },
+  { id:"BCH-1040", file:"invoice-settlement-aug.csv", by:"u2", src:"invoice",
+    total:386, invalid:0, dup:2, points:192_000, status:"uploaded", at:ago(95) },
+  { id:"BCH-1039", file:"b2b-partner-rewards.csv", by:"u3", src:"b2b",
+    total:52, invalid:1, dup:0, points:255_000, status:"uploaded", at:ago(212) },
+  { id:"BCH-1038", file:"tier-upgrade-gold.csv", by:"u1", src:"loyalty",
+    total:640, invalid:3, dup:1, points:318_000, status:"ready",
+    at:ago(300), decidedBy:"me", decidedAt:ago(238) },
+  { id:"BCH-1037", file:"referral-week-34.csv", by:"u4", src:"referral",
+    total:118, invalid:2, dup:0, points:58_000, status:"processing",
+    at:ago(430), decidedBy:"me", decidedAt:ago(24), startedAt:ago(7) },
+  /* started over three hours ago and still going — the case a status pill
+     alone would hide, so the row says how long it has been running. */
+  { id:"BCH-1036", file:"bulk-transfer-sept.csv", by:"u2", src:"file",
+    total:2100, invalid:0, dup:14, points:1_043_000, status:"processing",
+    at:ago(1500), decidedBy:"me", decidedAt:ago(205), startedAt:ago(196) },
+  { id:"BCH-1035", file:"loyalty-double-points.csv", by:"u3", src:"loyalty",
+    total:874, invalid:6, dup:3, points:433_250, status:"completed",
+    at:ago(1620), decidedBy:"me", decidedAt:ago(1580), doneAt:ago(1570) },
+  /* an admin declined it. The file is untouched and the reason is on the
+     record, so the uploader is not left guessing. */
+  { id:"BCH-1034", file:"referral-week-33.csv", by:"u4", src:"referral",
+    total:96, invalid:41, dup:12, points:21_500, status:"rejected",
+    at:ago(2900), decidedBy:"me", decidedAt:ago(2850),
+    reason:{ ar:"عدد كبير من الصفوف غير صالحة — أكثر من 40 صفًا فيها أرقام جوال غير صحيحة. رجاءً صحّح الملف وارفعه مرة أخرى.",
+             en:"Too many records are unusable — more than 40 rows have malformed phone numbers. Please correct the file and upload it again." } },
+  /* processing broke. Not a decision, and it must not read like one. */
+  { id:"BCH-1033", file:"invoice-settlement-jul.csv", by:"u2", src:"invoice",
+    total:412, invalid:0, dup:0, points:206_000, status:"failed",
+    at:ago(4300), decidedBy:"me", decidedAt:ago(4250), startedAt:ago(4240) },
+  { id:"BCH-1032", file:"welcome-bonus-batch.csv", by:"u1", src:"loyalty",
+    total:1520, invalid:8, dup:0, points:152_000, status:"completed",
+    at:ago(5760), decidedBy:"me", decidedAt:ago(5700), doneAt:ago(5690) },
+  /* five records, two malformed, three duplicated: nothing was left to send.
+     It transferred zero points and the old system still called it complete. */
+  { id:"BCH-1031", file:"sdsd.csv", by:"u4", src:"file",
+    total:5, invalid:2, dup:3, points:0, status:"completed",
+    at:ago(7200), decidedBy:"me", decidedAt:ago(7180), doneAt:ago(7175) },
+  { id:"BCH-1030", file:"b2b-q2-settlement.csv", by:"u3", src:"b2b",
+    total:34, invalid:0, dup:0, points:510_000, status:"completed",
+    at:ago(8900), decidedBy:"me", decidedAt:ago(8860), doneAt:ago(8850) },
+  /* 2,830,000 points against a stored 5,660.00 — a hundredth of what the
+     rate makes it worth. The derived figure is shown and the row is flagged. */
+  { id:"BCH-1029", file:"weekly-payout-2830.csv", by:"u2", src:"file",
+    total:5660, invalid:0, dup:0, points:2_830_000, storedValue:5660, status:"completed",
+    at:ago(10300), decidedBy:"me", decidedAt:ago(10250), doneAt:ago(10240) },
+  { id:"BCH-1028", file:"eid-campaign-final.csv", by:"u1", src:"loyalty",
+    total:2340, invalid:19, dup:7, points:1_157_000, status:"completed",
+    at:ago(11800), decidedBy:"me", decidedAt:ago(11750), doneAt:ago(11740) },
+  { id:"BCH-1027", file:"invoice-settlement-jun.csv", by:"u2", src:"invoice",
+    total:298, invalid:1, dup:1, points:148_000, status:"completed",
+    at:ago(13200), decidedBy:"me", decidedAt:ago(13150), doneAt:ago(13140) },
+  { id:"BCH-1026", file:"partner-signup-drive.csv", by:"u3", src:"referral",
+    total:76, invalid:0, dup:2, points:37_000, status:"rejected",
+    at:ago(14600), decidedBy:"me", decidedAt:ago(14550),
+    reason:{ ar:"المبلغ أعلى من المتوقع لهذه الحملة. تأكّد من الميزانية مع مالكها ثم ارفع الملف من جديد.",
+             en:"The amount is higher than expected for this campaign. Please confirm the budget with its owner, then upload the file again." } }
+];
+const batchById = id => BATCHES.find(b => b.id === id);
+const validOf = b => Math.max(0, b.total - b.invalid - b.dup);
+
+/* Individual transfers. The old bulk list never said who acted; this one
+   always has, which is exactly the column the bulk list was missing. */
+const SINGLES = (function build(){
+  const src = ["loyalty","invoice","referral","b2b","file"];
+  let s = 91; const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const pool = USERS.filter(u => u.registered);
+  const out = [];
+  for (let i = 0; i < 34; i++){
+    const u = pool[Math.floor(r() * pool.length)];
+    out.push({ ref: "TRF-" + (48210 - i * 3),
+               by: ["u1","u2","u3","u4","me"][Math.floor(r() * 5)],
+               to: u, points: Math.round((r() * 4800 + 50) / 50) * 50,
+               src: src[Math.floor(r() * src.length)],
+               at: ago(Math.floor(r() * 26000) + 20) });
+  }
+  return out.sort((a, b) => b.at - a.at);
+})();
+
+/* The rows of an uploaded file, built once per batch and kept. Line numbers
+   are the file's own, header included, so row 2 is the first record — the
+   viewer never renumbers and never drops a row, because a count of problems
+   that cannot be traced back to a row is not evidence of anything. */
+const FILEROWS = {};
+function fileRows(b){
+  if (FILEROWS[b.id]) return FILEROWS[b.id];
+  let s = b.total * 31 + b.invalid * 7 + b.dup * 3 + 11;
+  const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const cap = Math.min(b.total, 400);            // enough to browse, not to choke
+  const issues = ["badPhone","missingPoints","badPoints","unknown"];
+  const flags = new Array(cap).fill("");
+  let bad = Math.min(b.invalid, cap), dups = Math.min(b.dup, cap - bad);
+  while (bad > 0){ const i = Math.floor(r() * cap); if (!flags[i]){ flags[i] = "invalid"; bad--; } }
+  while (dups > 0){ const i = Math.floor(r() * cap); if (!flags[i] && i > 0){ flags[i] = "duplicate"; dups--; } }
+  const rows = [];
+  for (let i = 0; i < cap; i++){
+    const female = r() > 0.6;
+    const fa = female ? FIRST_F[Math.floor(r()*FIRST_F.length)] : FIRST_M[Math.floor(r()*FIRST_M.length)];
+    const la = FAMILY[Math.floor(r()*FAMILY.length)];
+    const row = { line: i + 2, name:{ ar: fa + " " + la, en: LATIN_F[fa] + " " + LATIN_L[la] },
+                  phone: "9665" + String(Math.floor(r()*90000000) + 10000000),
+                  points: Math.round((r() * 900 + 50) / 50) * 50, issue: flags[i] };
+    if (flags[i] === "invalid"){
+      row.why = issues[Math.floor(r() * issues.length)];
+      if (row.why === "badPhone")       row.phone = "05" + String(Math.floor(r()*9000000) + 1000000);
+      if (row.why === "missingPoints")  row.points = null;
+      if (row.why === "badPoints")      row.points = "12.5";
+    }
+    if (flags[i] === "duplicate"){
+      const earlier = rows.filter(x => !x.issue);
+      const src = earlier.length ? earlier[Math.floor(r() * earlier.length)] : null;
+      if (src){ row.name = src.name; row.phone = src.phone; row.dupOf = src.line; }
+      else { row.issue = ""; }
+    }
+    rows.push(row);
+  }
+  return (FILEROWS[b.id] = rows);
+}
+
+/* Balances. The available figure is the one an approval spends, so it is
+   the one the header emphasises. */
+const BAL = { charged: 12_500_000, transferred: 10_100_000 };
+BAL.available = BAL.charged - BAL.transferred;
+
+/* =====================================================================
+   TRANSFER POINTS — view
+   ===================================================================== */
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+let TTAB = "bulk", TPAGE = 1, TPER = 10, TSORT = { k:"at", dir:"desc" };
+const TFILT = { status:"all", src:"all", by:"all" };
+const nameOf  = p => (p && p[LANG]) || (p && p.en) || "";
+const staffOf = k => STAFF[k] ? nameOf(STAFF[k].n) : "";
+
+/* Elapsed time in words. The existing relTime() stops at "yesterday", which
+   is fine for an activity feed and useless for "this job has been running
+   for three hours" — the one thing that separates busy from stuck. */
+function elapsed(d){
+  const m = Math.max(0, Math.round((NOW - d) / 60000));
+  if (m < 60)   return interp(t("time.min"),  { n: fmt(m) });
+  if (m < 1440) return interp(t("time.hour"), { n: fmt(Math.round(m / 60)) });
+  return interp(t("transfers.time.days"), { n: fmt(Math.round(m / 1440)) });
+}
+const STUCK_MINS = 60;
+const isStuck = b => b.status === "processing" && b.startedAt &&
+                     (NOW - b.startedAt) / 60000 > STUCK_MINS;
+
+/* A pill saying "processing" looks identical whether a job is moving or hung.
+   A count that advances, and the time it has been running, tell them apart —
+   so a batch that has stopped moving says so instead of waiting quietly. */
+function doneRows(b){
+  if (b.status !== "processing") return validOf(b);
+  const mins = (NOW - b.startedAt) / 60000;
+  const rate = isStuck(b) ? 0.12 : 0.9;                 // a stuck job barely moved
+  return Math.min(validOf(b), Math.floor(validOf(b) * Math.min(1, mins / 8 * rate)));
+}
+function progressNote(b){
+  if (b.status !== "processing") return "";
+  const line = esc(interp(t("transfers.status.progress"),
+                          { done: fmt(doneRows(b)), total: fmt(validOf(b)) }));
+  return isStuck(b)
+    ? `<div class="stuck"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
+       ${line} · ${esc(interp(t("transfers.status.runningFor"), { n: elapsed(b.startedAt) }))}</div>`
+    : `<div class="prog">${line} · ${esc(interp(t("transfers.status.runningFor"), { n: elapsed(b.startedAt) }))}</div>`;
+}
+
+/* What the review queue has already spoken for. An approver looking at the
+   available balance needs to know how much of it is promised to files that
+   are still waiting on them, or they will approve their way past it. */
+const committed = () => BATCHES.filter(b => b.status === "uploaded" || b.status === "ready")
+                               .reduce((n, b) => n + b.points, 0);
+
+/* Six states, three families. Uploaded is the only one addressed to a person,
+   so it is the only one that pulses. Rejected takes the neutral stage
+   treatment and a circle; failed takes danger and a triangle — a decision and
+   a fault must not share a colour, an icon or a shape. */
+const TSTAT = {
+  uploaded:   { cls:"pill-attn",     dot:true },
+  ready:      { cls:"pill-info",     ico:"#i-clock" },
+  processing: { cls:"pill-info",     ico:"#i-refresh", spin:true },
+  completed:  { cls:"pill-success",  ico:"#i-check" },
+  rejected:   { cls:"pill-stage",    ico:"#i-xcircle" },
+  failed:     { cls:"pill-critical", ico:"#i-alert" }
+};
+function statusPill(st){
+  const m = TSTAT[st] || TSTAT.completed;
+  const face = m.dot
+    ? `<span class="pill-dot"></span>`
+    : `<svg viewBox="0 0 24 24" width="13" height="13"${m.spin ? ' class="spin"' : ""} aria-hidden="true"><use href="${m.ico}"/></svg>`;
+  return `<span class="pill ${m.cls}" title="${esc(t("transfers.status." + st + "Desc"))}">${face}<span>${esc(t("transfers.status." + st))}</span></span>`;
+}
+
+/* Riyal amounts carry the glyph, and always read left-to-right so the figure
+   does not scramble inside an Arabic sentence. */
+const riyal = v => `<span class="amt"><span class="rial" aria-hidden="true">﷼</span><span class="num">${fmt(Math.round(v))}</span><span class="sr-only"> ${esc(t("transfers.value.currency"))}</span></span>`;
+const pointsCell = p => `<span class="cell-bal"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-point"/></svg><span class="num">${fmt(p)}</span></span>`;
+
+/* The value column is arithmetic on the points, never the stored field. Where
+   the two disagree the derived figure wins and the row says so. */
+function valueCell(b){
+  const derived = valueOf(b.points);
+  const off = b.storedValue != null && Math.abs(b.storedValue - derived) > 1;
+  return `<span class="val">${riyal(derived)}${off ? `<svg class="val-flag" viewBox="0 0 24 24" width="16" height="16"
+      tabindex="0" role="img" aria-label="${esc(t("transfers.value.mismatch"))}"
+      title="${esc(t("transfers.value.mismatch"))}"><use href="#i-alert"/></svg>` : ""}</span>`;
+}
+
+/* The count and the offending rows, finally in one place: each segment of the
+   bar opens the file filtered to exactly the rows it represents. */
+function recCell(b){
+  const ok = validOf(b), pct = n => b.total ? (n / b.total * 100) : 0;
+  const seg = (n, cls, key, filter) => n
+    ? `<button class="rec-seg ${cls}" style="width:${pct(n)}%" tabindex="-1" aria-hidden="true"
+         onclick="event.stopPropagation();openViewer('${b.id}','${filter}')"></button>` : "";
+  const num = (n, cls, key, filter) => n
+    ? `<button class="rec-n ${cls} btn-link" style="font-weight:500;font-size:12.5px;color:var(--n-800)"
+         onclick="event.stopPropagation();openViewer('${b.id}','${filter}')">${esc(interp(t(key), { n: fmt(n) }))}</button>` : "";
+  return `<div class="rec">
+    <div class="rec-bar" aria-hidden="true">${seg(ok,"rec-ok","","valid")}${seg(b.invalid,"rec-bad","","invalid")}${seg(b.dup,"rec-dup","","duplicate")}</div>
+    <div class="rec-txt">
+      ${ok ? num(ok, "ok", "transfers.records.valid", "valid")
+           : `<span class="rec-none">${esc(t("transfers.records.noneValid"))}</span>`}
+      ${num(b.invalid, "bad", "transfers.records.invalid", "invalid")}
+      ${num(b.dup, "dup", "transfers.records.duplicate", "duplicate")}
+    </div></div>`;
+}
+
+/* ---------- columns, same width-driven dropping as the Users table ------- */
+/* Thresholds are the width at which a column earns its place, measured
+   against the real cells rather than guessed: the file and the actions are
+   the row's reason for existing and never drop; everything else arrives as
+   there is room for it. Source is off by default — it is a filter first. */
+const BCOLS = [
+  { k:"file",       always:true, on:true, min:0 },
+  { k:"actions",    always:true, on:true, min:0 },
+  { k:"status",     on:true,  min:520 },
+  { k:"points",     on:true,  min:700 },
+  { k:"records",    on:true,  min:900 },
+  { k:"uploadedBy", on:true,  min:1180 },
+  { k:"value",      on:true,  min:1400 },
+  { k:"uploaded",   on:true,  min:1560 },
+  { k:"source",     on:false, min:1660 }
+];
+const ICOLS = [
+  { k:"recipient",  always:true, on:true, min:0 },
+  { k:"points",     on:true,  min:560 },
+  { k:"date",       on:true,  min:760 },
+  { k:"sentBy",     on:true,  min:980 },
+  { k:"value",      on:true,  min:1200 },
+  { k:"reference",  on:true,  min:1400 },
+  { k:"source",     on:false, min:1560 }
+];
+const tcols  = () => (TTAB === "bulk" ? BCOLS : ICOLS);
+const BORDER = ["file","uploadedBy","records","points","value","source","status","uploaded","actions"];
+const IORDER = ["recipient","reference","sentBy","points","value","source","date"];
+const tshown = () => {
+  const order = TTAB === "bulk" ? BORDER : IORDER;
+  return tcols().filter(c => c.on && window.innerWidth >= (c.min || 0))
+                .sort((a, b) => order.indexOf(a.k) - order.indexOf(b.k));
+};
+
+/* ---------- filtering ---------------------------------------------------- */
+function tmatching(){
+  const q = (document.getElementById("tq")?.value || "").trim().toLowerCase();
+  const rows = TTAB === "bulk" ? BATCHES : SINGLES;
+  return rows.filter(x => {
+    if (TTAB === "bulk" && TFILT.status !== "all" && x.status !== TFILT.status) return false;
+    if (TFILT.src !== "all" && x.src !== TFILT.src) return false;
+    if (TFILT.by  !== "all" && x.by  !== TFILT.by)  return false;
+    if (!q) return true;
+    const hay = TTAB === "bulk"
+      ? [x.file, x.id, staffOf(x.by), STAFF[x.by]?.n.en, STAFF[x.by]?.n.ar]
+      : [x.ref, nameOf(x.to.name), x.to.name?.en, x.to.name?.ar, x.to.phone, staffOf(x.by)];
+    return hay.filter(Boolean).some(v => String(v).toLowerCase().includes(q));
+  }).sort((a, b) => {
+    const dir = TSORT.dir === "asc" ? 1 : -1;
+    if (TSORT.k === "points") return (a.points - b.points) * dir;
+    if (TSORT.k === "records") return ((a.total || 0) - (b.total || 0)) * dir;
+    return (a.at - b.at) * dir;
+  });
+}
+const tfilActive = () => Object.values(TFILT).filter(v => v !== "all").length;
+function tclearFilters(){
+  TFILT.status = TFILT.src = TFILT.by = "all";
+  const q = document.getElementById("tq"); if (q) q.value = "";
+  TPAGE = 1; renderTransfers();
+}
+const waitingCount = () => BATCHES.filter(b => b.status === "uploaded").length;
+function showQueue(){ TTAB = "bulk"; TFILT.status = "uploaded"; TPAGE = 1; renderTransfers(); }
+
+/* ---------- the screen --------------------------------------------------- */
+function renderTransfers(){
+  const el = document.getElementById("view-transfers"); if (!el) return;
+  const waiting = waitingCount();
+  const com     = committed();
+  const lowBal  = (BAL.available - com) / BAL.charged < 0.2;
+
+  const balTile = (key, pts, cls) => `<div class="bal ${cls || ""}${cls && lowBal ? " is-low" : ""}">
+    <div class="bal-l">${esc(t("transfers.summary." + key))}</div>
+    <div class="bal-v"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><use href="#i-point"/></svg>
+      <span class="num">${fmt(pts)}</span></div>
+    <div class="bal-sub">${riyal(valueOf(pts))} · ${esc(t("transfers.summary." + key + "Hint"))}</div>
+    ${cls && com ? `<div class="bal-warn" style="color:var(--n-700)">
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-hourglass"/></svg>
+      ${esc(interp(t("transfers.summary.committed"), { n: fmt(com) }))}</div>` : ""}
+    ${cls && lowBal ? `<div class="bal-warn"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+      ${esc(t("transfers.summary.lowBalance"))}</div>` : ""}</div>`;
+
+  const tabBtn = (k, n) => `<button class="seg" role="tab" aria-selected="${TTAB === k}"
+      onclick="setTTab('${k}')"><span>${esc(t("transfers.tabs." + k))}</span><span class="seg-n num">${fmt(n)}</span></button>`;
+
+  el.innerHTML = `
+    <div class="flex flex-wrap items-end gap-4 page-head">
+      <div class="min-w-0 flex-1">
+        ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
+                  { label:t("transfers.heading") }])}
+        <h1 class="page-t">${esc(t("transfers.heading"))}</h1>
+        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("transfers.subtitle"))}</p>
+      </div>
+      <div class="dd">
+        <button class="btn btn-primary" id="ctaBtn" aria-haspopup="menu" aria-expanded="false"
+                aria-controls="ctaMenu" onclick="ctaToggle()">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-transfer"/></svg>
+          <span>${esc(t("transfers.cta.label"))}</span>
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" style="margin-inline-start:-2px"><use href="#i-down"/></svg>
+        </button>
+        <div class="dd-menu" id="ctaMenu" role="menu" style="width:290px" hidden>
+          <button class="dd-opt dd-custom" role="menuitem" onclick="ctaPick('single')">
+            <svg viewBox="0 0 24 24" width="18" height="18" style="color:var(--p-600);flex:none" aria-hidden="true"><use href="#i-userplus"/></svg>
+            <span><span style="font-weight:600">${esc(t("transfers.cta.single"))}</span>
+              <span class="dd-sub">${esc(t("transfers.cta.singleDesc"))}</span></span></button>
+          <button class="dd-opt dd-custom" role="menuitem" onclick="ctaPick('bulk')">
+            <svg viewBox="0 0 24 24" width="18" height="18" style="color:var(--p-600);flex:none" aria-hidden="true"><use href="#i-upload"/></svg>
+            <span><span style="font-weight:600">${esc(t("transfers.cta.bulk"))}</span>
+              <span class="dd-sub">${esc(t("transfers.cta.bulkDesc"))}</span></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bal-strip">
+      ${balTile("charged", BAL.charged)}
+      ${balTile("transferred", BAL.transferred)}
+      ${balTile("available", BAL.available, "bal-key")}
+    </div>
+
+    ${waiting ? `<div class="queue">
+      <div class="queue-ico"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><use href="#i-hourglass"/></svg></div>
+      <div class="min-w-0">
+        <div class="queue-t">${esc(waiting === 1 ? t("transfers.queue.waitingOne")
+                                : interp(t("transfers.queue.waiting"), { n: fmt(waiting) }))}</div>
+        <div class="queue-d">${esc(t("transfers.queue.waitingHint"))}</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="showQueue()">${esc(t("transfers.queue.action"))}</button>
+    </div>` : `<div class="queue is-clear">
+      <div class="queue-ico"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><use href="#i-check"/></svg></div>
+      <div class="min-w-0"><div class="queue-t">${esc(t("transfers.queue.clear"))}</div></div>
+    </div>`}
+
+    <div class="tabs-row">
+      <div class="segs" role="tablist" aria-label="${esc(t("transfers.a11y.tabs"))}">
+        ${tabBtn("bulk", BATCHES.length)}${tabBtn("individual", SINGLES.length)}
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-bar">
+        <label class="tbl-search">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
+          <input type="search" id="tq" oninput="TPAGE=1;renderTRows()"
+                 placeholder="${esc(t(TTAB === "bulk" ? "transfers.search.placeholder" : "transfers.search.placeholderIndividual"))}">
+        </label>
+        <div class="tbl-bar-actions">
+          <div class="dd">
+            <button class="btn btn-ghost" id="tcolBtn" aria-haspopup="listbox" aria-expanded="false"
+                    aria-controls="tcolMenu" onclick="tcolToggle()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+              <span>${esc(t("users.list.columns"))}</span></button>
+            <div class="dd-menu" id="tcolMenu" role="listbox" hidden></div>
+          </div>
+          <div class="dd">
+            <button class="btn btn-ghost" id="tfilBtn" aria-haspopup="dialog" aria-expanded="false"
+                    aria-controls="tfilMenu" onclick="tfilToggle()">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5.5h17l-6.6 7.8V19l-3.8 2v-7.7Z"/></svg>
+              <span>${esc(t("users.list.filters"))}</span>
+              <span class="fil-badge num" id="tfilBadge"${tfilActive() ? "" : " hidden"}>${tfilActive()}</span></button>
+            <div class="dd-menu fil-panel" id="tfilMenu" role="dialog" aria-modal="false"
+                 aria-label="${esc(t("users.list.filters"))}" hidden></div>
+          </div>
+          <button class="btn btn-ghost" onclick="toast(t('states.exportSoon'))">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
+            <span>${esc(t("users.list.export"))}</span></button>
+        </div>
+      </div>
+
+      <div class="s-load p-5">
+        <div class="sk h-12 mb-2"></div><div class="sk h-16 mb-2"></div><div class="sk h-16 mb-2"></div>
+        <div class="sk h-16 mb-2"></div><div class="sk h-16"></div>
+      </div>
+      <div class="s-err empty">
+        <div class="empty-ico" style="background:var(--danger-50);color:var(--danger-700)">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-alert"/></svg></div>
+        <div class="empty-t">${esc(t("states.errorTitle"))}</div>
+        <div class="empty-d">${esc(t("states.errorBody"))}</div>
+        <button class="btn btn-ghost btn-sm mt-3"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-refresh"/></svg>
+          <span>${esc(t("actions.retry"))}</span></button>
+      </div>
+      <div class="s-empty empty">
+        <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-transfer"/></svg></div>
+        <div class="empty-t">${esc(t(TTAB === "bulk" ? "transfers.empty.bulkTitle" : "transfers.empty.individualTitle"))}</div>
+        <div class="empty-d">${esc(t(TTAB === "bulk" ? "transfers.empty.bulkBody" : "transfers.empty.individualBody"))}</div>
+      </div>
+
+      <div class="s-real">
+        <div class="tbl-scroll">
+          <table class="tbl"><thead><tr id="thead-t"></tr></thead><tbody id="tbody-t"></tbody></table>
+        </div>
+        <div id="tNoMatch" class="empty" hidden>
+          <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-search"/></svg></div>
+          <div class="empty-t">${esc(t("transfers.empty.noMatchTitle"))}</div>
+          <div class="empty-d">${esc(t("transfers.empty.noMatchBody"))}</div>
+          <button class="btn btn-ghost btn-sm mt-3" onclick="tclearFilters()">${esc(t("users.list.clearFilters"))}</button>
+        </div>
+        <div class="tbl-foot" id="tFoot"></div>
+      </div>
+    </div>`;
+  renderTRows();
+}
+
+function setTTab(k){
+  if (TTAB === k) return;
+  TTAB = k; TPAGE = 1; TFILT.status = "all";
+  go("transfers", k === "individual" ? "individual" : null);
+  renderTransfers();
+}
+
+/* ---------- rows --------------------------------------------------------- */
+function renderTRows(){
+  const head = document.getElementById("thead-t"), body = document.getElementById("tbody-t");
+  if (!head || !body) return;
+  const cols = tshown(), rows = tmatching();
+  const pages = Math.max(1, Math.ceil(rows.length / TPER));
+  if (TPAGE > pages) TPAGE = pages;
+  const page = rows.slice((TPAGE - 1) * TPER, TPAGE * TPER);
+
+  const sortable = { points:1, records:1, uploaded:1, date:1 };
+  const sortKey  = k => (k === "uploaded" || k === "date") ? "at" : k;
+  head.innerHTML = cols.map(c => {
+    const label = esc(t("transfers.columns." + c.k));
+    if (c.k === "actions") return `<th style="text-align:end"><span class="sr-only">${label}</span></th>`;
+    if (!sortable[c.k]) return `<th>${label}</th>`;
+    const k = sortKey(c.k), on = TSORT.k === k;
+    return `<th aria-sort="${on ? (TSORT.dir === "asc" ? "ascending" : "descending") : "none"}">
+      <button class="th-sort" onclick="tsort('${k}')" aria-sort="${on ? (TSORT.dir === "asc" ? "ascending" : "descending") : "none"}">
+        ${label}<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><use href="#i-down"/></svg></button></th>`;
+  }).join("");
+
+  body.innerHTML = page.map(x => TTAB === "bulk" ? bulkRow(x, cols) : singleRow(x, cols)).join("");
+  document.getElementById("tNoMatch").hidden = rows.length > 0;
+  document.querySelector("#view-transfers .tbl-scroll").hidden = rows.length === 0;
+  renderTFoot(rows.length, pages);
+}
+
+function bulkRow(b, cols){
+  const narrow = !cols.some(c => c.k === "status");
+  const cell = k => {
+    switch (k){
+      case "file": return `<td><button class="file-cell" onclick="event.stopPropagation();downloadFile('${b.id}')"
+          title="${esc(t("transfers.actions.download"))}">
+          <span class="file-ico"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-file"/></svg></span>
+          <span class="min-w-0"><span class="file-n ltr">${esc(b.file)}</span>
+            <span class="file-sub"><span class="num ltr">${esc(b.id)}</span>${narrow ? " · " + esc(t("transfers.status." + b.status)) : ""}</span>
+          </span></button></td>`;
+      case "uploadedBy": return `<td><div class="cell-person">
+          <span class="avatar avatar-txt" aria-hidden="true">${esc(initialsOf(staffOf(b.by)))}</span>
+          <span class="min-w-0"><span class="person-name">${esc(staffOf(b.by))}</span>
+            <span class="person-sub num ltr">${esc(STAFF[b.by]?.ph || "")}</span></span></div></td>`;
+      case "records":  return `<td>${recCell(b)}</td>`;
+      case "points":   return `<td>${pointsCell(b.points)}</td>`;
+      case "value":    return `<td>${valueCell(b)}</td>`;
+      case "source":   return `<td><span class="pill pill-stage">${esc(t("transfers.source." + b.src))}</span></td>`;
+      case "status":   return `<td>${statusPill(b.status)}${progressNote(b)}</td>`;
+      case "uploaded": return `<td><span class="cell-date">${esc(dfmt(b.at))}</span></td>`;
+      case "actions":  return `<td>${rowActions(b)}</td>`;
+    }
+    return "<td></td>";
+  };
+  return `<tr onclick="openBatch('${b.id}')" tabindex="0"
+    onkeydown="if(event.key==='Enter'){openBatch('${b.id}')}">${cols.map(c => cell(c.k)).join("")}</tr>`;
+}
+
+/* A row only offers what it can actually do. Nothing renders greyed-out: an
+   action that cannot apply to this batch is absent, not disabled. */
+function rowActions(b){
+  const btn = (cls, ico, key, fn) => `<button class="act ${cls}" onclick="event.stopPropagation();${fn}"
+    title="${esc(t(key))}"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="${ico}"/></svg>
+    <span class="act-l">${esc(t(key))}</span></button>`;
+  if (b.status === "uploaded")
+    return `<div class="row-acts">
+      ${btn("act-go", "#i-check",   "transfers.actions.approve", `openApprove('${b.id}')`)}
+      ${btn("act-no", "#i-xcircle", "transfers.actions.reject",  `openReject('${b.id}')`)}</div>`;
+  if (b.status === "failed")
+    return `<div class="row-acts">${btn("", "#i-refresh", "transfers.actions.retry", `retryBatch('${b.id}')`)}</div>`;
+  return `<div class="row-acts">${btn("", "#i-eye", "transfers.actions.viewFile", `openViewer('${b.id}','all')`)}</div>`;
+}
+
+function singleRow(s, cols){
+  const cell = k => {
+    switch (k){
+      case "recipient": return `<td><div class="cell-person">
+          <span class="avatar avatar-txt" aria-hidden="true">${esc(initials(s.to))}</span>
+          <span class="min-w-0"><span class="person-name">${esc(nameOf(s.to.name))}</span>
+            <span class="person-sub num ltr">${esc(s.to.phone)}</span></span></div></td>`;
+      case "reference": return `<td><span class="cell-id ltr">${esc(s.ref)}</span></td>`;
+      case "sentBy":    return `<td><span class="cell-muted">${esc(staffOf(s.by))}</span></td>`;
+      case "points":    return `<td>${pointsCell(s.points)}</td>`;
+      case "value":     return `<td><span class="val">${riyal(valueOf(s.points))}</span></td>`;
+      case "source":    return `<td><span class="pill pill-stage">${esc(t("transfers.source." + s.src))}</span></td>`;
+      case "date":      return `<td><span class="cell-date">${esc(dfmt(s.at))}</span></td>`;
+    }
+    return "<td></td>";
+  };
+  return `<tr onclick="go('user',${s.to.id})" tabindex="0"
+    onkeydown="if(event.key==='Enter'){go('user',${s.to.id})}">${cols.map(c => cell(c.k)).join("")}</tr>`;
+}
+
+const initialsOf = n => (n || "").trim().split(/\s+/).slice(0, 2).map(w => w[0] || "").join("");
+
+function tsort(k){
+  if (TSORT.k === k) TSORT.dir = TSORT.dir === "asc" ? "desc" : "asc";
+  else { TSORT.k = k; TSORT.dir = "desc"; }
+  renderTRows();
+}
+function renderTFoot(total, pages){
+  const f = document.getElementById("tFoot"); if (!f) return;
+  const from = total === 0 ? 0 : (TPAGE - 1) * TPER + 1, to = Math.min(TPAGE * TPER, total);
+  const pg = (n, label, dis, cur) => `<button class="pg"${dis ? " disabled" : ""}
+    ${cur ? ' aria-current="page"' : ""} onclick="TPAGE=${n};renderTRows()">${label}</button>`;
+  const nums = [];
+  for (let i = 1; i <= pages; i++){
+    if (i === 1 || i === pages || Math.abs(i - TPAGE) <= 1) nums.push(pg(i, fmt(i), false, i === TPAGE));
+    else if (nums[nums.length - 1] !== "GAP") nums.push("GAP");
+  }
+  f.innerHTML = `<span style="font-size:13px;color:var(--n-700)">${
+      esc(interp(t("users.pagination.showingRange"), { from: fmt(from), to: fmt(to), total: fmt(total) }))}</span>
+    <div class="pager">
+      ${pg(Math.max(1, TPAGE - 1), esc(t("users.pagination.previous")), TPAGE === 1)}
+      ${nums.map(n => n === "GAP" ? `<span class="pg-gap">…</span>` : n).join("")}
+      ${pg(Math.min(pages, TPAGE + 1), esc(t("users.pagination.next")), TPAGE === pages)}
+    </div>
+    <label class="rpp"><span style="font-size:13px;color:var(--n-700)">${esc(t("users.pagination.rowsPerPage"))}</span>
+      <select onchange="TPER=+this.value;TPAGE=1;renderTRows()">
+        ${[10, 25, 50].map(n => `<option value="${n}"${n === TPER ? " selected" : ""}>${fmt(n)}</option>`).join("")}
+      </select></label>`;
+}
+
+/* =====================================================================
+   SIDE PANELS
+   Every action on this screen happens in a drawer, never a dialog, so the
+   list you are judging stays on screen while you decide. Panels stack: the
+   file viewer can open from a row, and a rejection can open from the
+   viewer, with a back arrow that returns you to what you were reading.
+   ===================================================================== */
+const PSTACK = [];
+let PRETURN = null;
+
+function openPanel(spec){
+  if (!PSTACK.length) PRETURN = document.activeElement;
+  PSTACK.push(spec);
+  paintPanel();
+}
+function panelBack(){
+  PSTACK.pop();
+  if (PSTACK.length) paintPanel(); else closePanel();
+}
+function closePanel(){
+  PSTACK.length = 0;
+  const p = document.getElementById("pnl"), b = document.getElementById("pnlBack");
+  p.classList.remove("on"); b.classList.remove("on");
+  setTimeout(() => { if (!PSTACK.length){ p.hidden = true; b.hidden = true; } }, 220);
+  document.body.style.overflow = "";
+  if (PRETURN && document.contains(PRETURN)) PRETURN.focus();
+  PRETURN = null;
+}
+function paintPanel(){
+  const spec = PSTACK[PSTACK.length - 1];
+  const p = document.getElementById("pnl"), back = document.getElementById("pnlBack");
+  p.hidden = false; back.hidden = false;
+  p.classList.toggle("pnl-wide", !!spec.wide);
+  document.getElementById("pnlTitle").textContent = spec.title;
+  const sub = document.getElementById("pnlSub");
+  sub.textContent = spec.sub || ""; sub.hidden = !spec.sub;
+  document.getElementById("pnlBackBtn").hidden = PSTACK.length < 2;
+  document.getElementById("pnlBody").innerHTML = spec.body;
+  const foot = document.getElementById("pnlFoot");
+  foot.innerHTML = spec.foot || ""; foot.hidden = !spec.foot;
+  document.getElementById("pnlBody").scrollTop = 0;
+  requestAnimationFrame(() => { p.classList.add("on"); back.classList.add("on"); });
+  document.body.style.overflow = "hidden";
+  const first = p.querySelector("[data-autofocus]") || p.querySelector(".pnl-b input, .pnl-b textarea, .pnl-b button") || p;
+  setTimeout(() => first.focus?.(), 60);
+  if (spec.after) setTimeout(spec.after, 0);
+}
+/* Escape steps back one panel rather than dumping you out of the stack, and
+   Tab is held inside the drawer so a keyboard user cannot wander behind it. */
+document.addEventListener("keydown", e => {
+  if (!PSTACK.length) return;
+  if (e.key === "Escape"){ e.stopPropagation(); panelBack(); return; }
+  if (e.key !== "Tab") return;
+  const p = document.getElementById("pnl");
+  const f = [...p.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),textarea,select,[tabindex]:not([tabindex="-1"])')]
+              .filter(el => el.offsetParent !== null);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+});
+
+const fldRow = (label, value) => `<div class="fld"><div class="fld-l">${esc(label)}</div><div class="fld-v">${value}</div></div>`;
+
+/* ---------- batch detail ------------------------------------------------- */
+function openBatch(id){
+  const b = batchById(id); if (!b) return;
+  const decided = b.decidedAt ? `${staffOf(b.decidedBy)} · ${dfmt(b.decidedAt)}` : null;
+  const trail = b.status === "rejected" ? `<div class="trail">
+      <div class="trail-h"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-xcircle"/></svg>
+        ${esc(t("transfers.rejected.reasonHeading"))}</div>
+      <div class="trail-r">${esc(nameOf(b.reason))}</div>
+      <div class="trail-m">${esc(interp(t("transfers.rejected.by"), { name: staffOf(b.decidedBy) }))} · ${esc(dfmt(b.decidedAt))}</div>
+    </div>` : "";
+  const failNote = b.status === "failed" ? `<div class="fnote tone-warn" style="margin-bottom:18px">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
+      <span>${esc(t("transfers.status.failedDesc"))}</span></div>` : "";
+  const zeroNote = validOf(b) === 0 ? `<div class="fnote tone-warn" style="margin-bottom:18px">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
+      <span>${esc(t("transfers.records.noneValidLong"))}</span></div>` : "";
+  const mismatch = b.storedValue != null && Math.abs(b.storedValue - valueOf(b.points)) > 1
+    ? `<div class="fnote tone-warn" style="margin-bottom:18px">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
+        <span>${esc(t("transfers.value.mismatch"))} ${esc(t("transfers.value.derived"))}</span></div>` : "";
+
+  openPanel({
+    title: b.file,
+    sub: b.id,
+    body: `${failNote}${zeroNote}${mismatch}${trail}
+      <div style="margin-bottom:6px">${statusPill(b.status)}${isStuck(b)
+        ? `<span class="stuck" style="margin-inline-start:10px"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
+           ${esc(interp(t("transfers.status.runningFor"), { n: elapsed(b.startedAt) }))}</span>` : ""}</div>
+      ${fldRow(t("transfers.columns.uploadedBy"), `${esc(staffOf(b.by))} <span class="person-sub num ltr" style="display:block">${esc(STAFF[b.by]?.ph || "")}</span>`)}
+      ${fldRow(t("transfers.columns.uploaded"), esc(dfmt(b.at)))}
+      ${fldRow(t("transfers.source.label"), `<span class="pill pill-stage">${esc(t("transfers.source." + b.src))}</span>`)}
+      ${fldRow(t("transfers.columns.records"), recCell(b))}
+      ${fldRow(t("transfers.columns.points"), pointsCell(b.points))}
+      ${fldRow(t("transfers.columns.value"), `${valueCell(b)}<span class="fhint">${esc(t("transfers.value.rate"))}</span>`)}
+      ${decided && b.status !== "rejected" ? fldRow(t("transfers.detail.decidedBy"), esc(decided)) : ""}
+      <div style="margin-top:18px">
+        <button class="btn btn-ghost w-full" onclick="openViewer('${b.id}','all')">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-eye"/></svg>
+          <span>${esc(t("transfers.actions.viewFile"))}</span></button>
+      </div>`,
+    foot: b.status === "uploaded"
+      ? `<button class="btn btn-ghost" onclick="openReject('${b.id}')">
+           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-xcircle"/></svg>
+           <span>${esc(t("transfers.actions.reject"))}</span></button>
+         <button class="btn btn-primary" onclick="openApprove('${b.id}')">
+           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-check"/></svg>
+           <span>${esc(t("transfers.actions.approve"))}</span></button>`
+      : `<button class="btn btn-ghost" onclick="downloadFile('${b.id}')">
+           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
+           <span>${esc(t("transfers.actions.download"))}</span></button>`
+  });
+}
+
+/* ---------- approve ------------------------------------------------------
+   An approval spends the balance, so the panel states what it costs and what
+   is left afterwards, and refuses rather than overdrawing.               */
+function openApprove(id){
+  const b = batchById(id); if (!b) return;
+  const ok = validOf(b), cost = valueOf(b.points), after = BAL.available - b.points;
+  const short = after < 0;
+  openPanel({
+    title: t("transfers.approve.title"),
+    sub: b.file,
+    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:16px">${
+        esc(interp(t("transfers.approve.body"), { points: fmt(b.points), count: fmt(ok) }))}</p>
+      <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.approve.cost"))}</span>
+        <span class="pv-val-v">${riyal(cost)}</span></div>
+      <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.approve.after"))}</span>
+        <span class="pv-val-v" style="${short ? "color:var(--danger-700)" : ""}">${pointsCell(after)}</span></div>
+      ${ok === 0 ? `<div class="fnote tone-warn" style="margin-top:16px">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
+        <span>${esc(t("transfers.records.noneValidLong"))}</span></div>` : ""}
+      ${short ? `<div class="fnote tone-warn" style="margin-top:16px">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
+        <span>${esc(t("transfers.approve.insufficient"))}</span></div>` : ""}`,
+    foot: `<button class="btn btn-ghost" onclick="panelBack()">${esc(t("transfers.approve.cancel"))}</button>
+      <button class="btn btn-primary" ${short || ok === 0 ? "disabled style=\"opacity:.5;cursor:not-allowed\"" : ""}
+        onclick="doApprove('${b.id}')" data-autofocus>${esc(t("transfers.approve.confirm"))}</button>`
+  });
+}
+function doApprove(id){
+  const b = batchById(id); if (!b) return;
+  b.status = "ready"; b.decidedBy = "me"; b.decidedAt = new Date();
+  closePanel(); renderTransfers();
+  toast(interp(t("transfers.approve.done"), { file: b.file }));
+}
+
+/* ---------- reject -------------------------------------------------------
+   A reason is required and travels with the record, because a rejection that
+   explains nothing just moves the conversation somewhere we cannot see.  */
+let RJ_PRESET = null;
+function openReject(id){
+  const b = batchById(id); if (!b) return;
+  RJ_PRESET = null;
+  openPanel({
+    title: t("transfers.reject.title"),
+    sub: b.file,
+    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:16px">${esc(t("transfers.reject.intro"))}</p>
+      <div class="fgrp">
+        <span class="flab">${esc(t("transfers.reject.presetsLabel"))}</span>
+        <div class="chips" id="rjChips">
+          ${[1,2,3,4,5].map(i => `<button class="chip" type="button" aria-pressed="false"
+            onclick="rjPreset(${i})">${esc(t("transfers.reject.preset" + i))}</button>`).join("")}
+        </div>
+      </div>
+      <div class="fgrp">
+        <label class="flab" for="rjReason">${esc(t("transfers.reject.reasonLabel"))}</label>
+        <textarea class="ftxt" id="rjReason" data-autofocus oninput="rjValidate()"
+          placeholder="${esc(t("transfers.reject.reasonPlaceholder"))}"></textarea>
+        <div class="ferr" id="rjErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+          ${esc(t("transfers.reject.required"))}</div>
+      </div>
+      <div class="fnote tone-quiet">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
+        <span>${esc(t("transfers.reject.keptNote"))}</span></div>`,
+    foot: `<button class="btn btn-ghost" onclick="panelBack()">${esc(t("transfers.reject.cancel"))}</button>
+      <button class="btn btn-primary" onclick="doReject('${b.id}')">${esc(t("transfers.reject.confirm"))}</button>`
+  });
+}
+function rjPreset(i){
+  const box = document.getElementById("rjReason");
+  RJ_PRESET = RJ_PRESET === i ? null : i;
+  [...document.querySelectorAll("#rjChips .chip")].forEach((c, n) =>
+    c.setAttribute("aria-pressed", String(n + 1 === RJ_PRESET)));
+  if (RJ_PRESET) box.value = t("transfers.reject.preset" + RJ_PRESET);
+  rjValidate(); box.focus();
+}
+function rjValidate(){
+  const box = document.getElementById("rjReason"), err = document.getElementById("rjErr");
+  const bad = !box.value.trim();
+  err.hidden = !bad || !box.dataset.touched;
+  box.setAttribute("aria-invalid", String(bad && !!box.dataset.touched));
+  return !bad;
+}
+function doReject(id){
+  const b = batchById(id), box = document.getElementById("rjReason");
+  box.dataset.touched = "1";
+  if (!rjValidate()){ box.focus(); return; }
+  const txt = box.value.trim();
+  b.status = "rejected"; b.decidedBy = "me"; b.decidedAt = new Date();
+  b.reason = { ar: txt, en: txt };
+  closePanel(); renderTransfers();
+  toast(interp(t("transfers.reject.done"), { file: b.file }));
+}
+function retryBatch(id){
+  const b = batchById(id); if (!b) return;
+  b.status = "processing"; b.startedAt = new Date();
+  renderTransfers(); toast(t("transfers.retry.done"));
+}
+function downloadFile(id){
+  const b = batchById(id); if (!b) return;
+  toast(interp(t("transfers.download.started"), { file: b.file }));
+}
+
+/* ---------- file viewer --------------------------------------------------
+   The old viewer printed a count of problems in one place and the rows in
+   another, with nothing joining them, and quietly dropped lines it could not
+   read. This one shows every row, keeps the file's own line numbers, marks
+   what is wrong with each, and can be narrowed to just the offenders.    */
+let VW = { id:null, filter:"all" };
+const VW_CAP = 150;
+
+function openViewer(id, filter){
+  const b = batchById(id); if (!b) return;
+  VW = { id, filter: filter || "all" };
+  openPanel({
+    wide: true,
+    title: interp(t("transfers.viewer.title"), { file: b.file }),
+    sub: interp(t("transfers.viewer.subtitle"), { n: fmt(b.total) }),
+    body: `<div id="vwHost"></div>`,
+    foot: `<button class="btn btn-ghost" onclick="downloadFile('${b.id}')">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
+        <span>${esc(t("transfers.viewer.download"))}</span></button>
+      ${b.status === "uploaded" ? `<button class="btn btn-ghost" onclick="openReject('${b.id}')">${esc(t("transfers.actions.reject"))}</button>
+        <button class="btn btn-primary" onclick="openApprove('${b.id}')">${esc(t("transfers.actions.approve"))}</button>` : ""}`,
+    after: renderViewer
+  });
+}
+function vwFilter(f){ VW.filter = f; renderViewer(); }
+function renderViewer(){
+  const host = document.getElementById("vwHost"); if (!host) return;
+  const b = batchById(VW.id), all = fileRows(b);
+  const counts = { all: all.length,
+                   valid: all.filter(r => !r.issue).length,
+                   invalid: all.filter(r => r.issue === "invalid").length,
+                   duplicate: all.filter(r => r.issue === "duplicate").length };
+  const rows = VW.filter === "all" ? all
+             : VW.filter === "valid" ? all.filter(r => !r.issue)
+             : all.filter(r => r.issue === VW.filter);
+  const chip = k => `<button class="chip" type="button" aria-pressed="${VW.filter === k}" onclick="vwFilter('${k}')">
+      ${esc(t("transfers.viewer.filter" + k[0].toUpperCase() + k.slice(1)))}
+      <span class="num" style="opacity:.7;margin-inline-start:5px">${fmt(counts[k])}</span></button>`;
+  const shown = rows.slice(0, VW_CAP);
+  const issueTag = r => {
+    if (r.issue === "duplicate")
+      return `<span class="vw-issue dup"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-return"/></svg>
+        ${esc(interp(t("transfers.viewer.issueDuplicateOf"), { line: fmt(r.dupOf) }))}</span>`;
+    if (r.issue === "invalid")
+      return `<span class="vw-issue bad"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
+        ${esc(t("transfers.viewer.issue" + r.why[0].toUpperCase() + r.why.slice(1)))}</span>`;
+    return `<span class="vw-issue ok"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><use href="#i-check"/></svg>
+      ${esc(t("transfers.viewer.noIssue"))}</span>`;
+  };
+  host.innerHTML = `
+    <div class="fnote tone-quiet" style="margin-bottom:14px">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
+      <span>${esc(t("transfers.viewer.lineNote"))}</span></div>
+    <div class="vw-bar">${chip("all")}${chip("valid")}${chip("invalid")}${chip("duplicate")}</div>
+    ${rows.length === 0 ? `<div class="empty" style="padding:30px 20px">
+        <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-inbox"/></svg></div>
+        <div class="empty-t">${esc(t("transfers.viewer.emptyFiltered"))}</div></div>`
+      : `<div class="tbl-scroll"><table class="vw-tbl"><thead><tr>
+          <th class="vw-line">${esc(t("transfers.viewer.colLine"))}</th>
+          <th>${esc(t("transfers.viewer.colRecipient"))}</th>
+          <th>${esc(t("transfers.viewer.colPhone"))}</th>
+          <th>${esc(t("transfers.viewer.colPoints"))}</th>
+          <th>${esc(t("transfers.viewer.colIssue"))}</th></tr></thead><tbody>
+        ${shown.map(r => `<tr data-issue="${r.issue || ""}">
+          <td class="vw-line num">${fmt(r.line)}</td>
+          <td class="vw-name">${esc(nameOf(r.name))}</td>
+          <td><span class="num ltr">${esc(r.phone)}</span></td>
+          <td>${r.points == null ? `<span style="color:var(--n-600)">—</span>`
+                                 : `<span class="num">${typeof r.points === "number" ? fmt(r.points) : esc(r.points)}</span>`}</td>
+          <td>${issueTag(r)}</td></tr>`).join("")}
+        </tbody></table></div>
+        ${rows.length > VW_CAP ? `<div class="fhint" style="margin-top:12px;text-align:center">${
+          esc(interp(t("transfers.viewer.capped"), { n: fmt(VW_CAP), total: fmt(rows.length) }))}</div>` : ""}`}`;
+}
+
+/* ---------- single transfer ---------------------------------------------- */
+const TR_MIN = 50, TR_MAX = 10000;
+let SG = { user:null, points:"", src:"loyalty" };
+function openSingle(){
+  SG = { user:null, points:"", src:"loyalty" };
+  openPanel({
+    title: t("transfers.single.title"),
+    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:18px">${esc(t("transfers.single.intro"))}</p>
+      <div class="fgrp">
+        <label class="flab" for="sgWho">${esc(t("transfers.single.recipientLabel"))}</label>
+        <input class="finp" id="sgWho" data-autofocus autocomplete="off" role="combobox"
+          aria-expanded="false" aria-controls="sgList" oninput="sgSearch()"
+          placeholder="${esc(t("transfers.single.recipientPlaceholder"))}">
+        <div id="sgList" role="listbox" style="margin-top:6px"></div>
+        <div class="ferr" id="sgWhoErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+          ${esc(t("transfers.single.errNoRecipient"))}</div>
+      </div>
+      <div class="fgrp">
+        <label class="flab" for="sgPts">${esc(t("transfers.single.pointsLabel"))}</label>
+        <input class="finp num" id="sgPts" type="number" inputmode="numeric" min="${TR_MIN}" max="${TR_MAX}"
+          oninput="sgPreview()" placeholder="${fmt(TR_MIN)}">
+        <div class="fhint">${esc(interp(t("transfers.single.pointsHint"), { min: fmt(TR_MIN), max: fmt(TR_MAX) }))}</div>
+        <div class="ferr" id="sgPtsErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+          <span id="sgPtsErrTxt"></span></div>
+        <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.single.valuePreview"))}</span>
+          <span class="pv-val-v" id="sgVal">${riyal(0)}</span></div>
+      </div>
+      <div class="fgrp">
+        <label class="flab" for="sgSrc">${esc(t("transfers.single.sourceLabel"))}</label>
+        <select class="fsel" id="sgSrc">
+          ${["loyalty","invoice","referral","b2b","file"].map(s =>
+            `<option value="${s}">${esc(t("transfers.source." + s))}</option>`).join("")}
+        </select>
+      </div>
+      <div class="fgrp">
+        <label class="flab" for="sgNote">${esc(t("transfers.single.noteLabel"))}
+          <span class="fopt">${esc(t("transfers.single.noteOptional"))}</span></label>
+        <textarea class="ftxt" id="sgNote" placeholder="${esc(t("transfers.single.notePlaceholder"))}"></textarea>
+      </div>
+      <div class="fnote tone-quiet">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
+        <span>${esc(t("transfers.single.cooldown"))}</span></div>`,
+    foot: `<button class="btn btn-ghost" onclick="panelBack()">${esc(t("transfers.single.cancel"))}</button>
+      <button class="btn btn-primary" onclick="doSingle()">${esc(t("transfers.single.submit"))}</button>`
+  });
+}
+function sgSearch(){
+  const q = document.getElementById("sgWho").value.trim().toLowerCase();
+  const list = document.getElementById("sgList");
+  if (!q){ list.innerHTML = ""; SG.user = null; return; }
+  const hits = USERS.filter(u => u.registered).filter(u =>
+    [u.name?.ar, u.name?.en, u.phone].filter(Boolean).some(v => String(v).toLowerCase().includes(q))).slice(0, 5);
+  list.innerHTML = hits.length ? hits.map(u => `<button class="dd-opt" role="option" aria-selected="false"
+      type="button" onclick="sgPick(${u.id})" style="border:1px solid var(--n-200);border-radius:var(--r-100);margin-bottom:4px">
+      <span class="avatar avatar-txt" style="inline-size:30px;block-size:30px;font-size:11px" aria-hidden="true">${esc(initials(u))}</span>
+      <span class="min-w-0 text-start"><span style="font-weight:600;display:block">${esc(nameOf(u.name))}</span>
+        <span class="num ltr" style="font-size:12px;color:var(--n-700)">${esc(u.phone)}</span></span></button>`).join("")
+    : `<div class="fhint">${esc(t("transfers.empty.noMatchTitle"))}</div>`;
+}
+function sgPick(id){
+  SG.user = USERS.find(u => u.id === id);
+  document.getElementById("sgWho").value = nameOf(SG.user.name) + " · " + SG.user.phone;
+  document.getElementById("sgList").innerHTML = "";
+  document.getElementById("sgWhoErr").hidden = true;
+  document.getElementById("sgPts").focus();
+}
+function sgPreview(){
+  const v = +document.getElementById("sgPts").value || 0;
+  document.getElementById("sgVal").innerHTML = riyal(valueOf(v));
+  const err = document.getElementById("sgPtsErr"), txt = document.getElementById("sgPtsErrTxt");
+  let msg = "";
+  if (v && v < TR_MIN)        msg = interp(t("transfers.single.errBelowMin"), { min: fmt(TR_MIN) });
+  else if (v > TR_MAX)        msg = interp(t("transfers.single.errAboveMax"), { max: fmt(TR_MAX) });
+  else if (v > BAL.available) msg = t("transfers.single.errBalance");
+  txt.textContent = msg; err.hidden = !msg;
+  document.getElementById("sgPts").setAttribute("aria-invalid", String(!!msg));
+  return !msg;
+}
+function doSingle(){
+  const pts = +document.getElementById("sgPts").value || 0;
+  let bad = false;
+  if (!SG.user){ document.getElementById("sgWhoErr").hidden = false; bad = true; }
+  if (!pts || !sgPreview() || pts < TR_MIN){
+    const err = document.getElementById("sgPtsErr"), txt = document.getElementById("sgPtsErrTxt");
+    if (!pts){ txt.textContent = interp(t("transfers.single.errBelowMin"), { min: fmt(TR_MIN) }); err.hidden = false; }
+    bad = true;
+  }
+  if (bad) return;
+  SINGLES.unshift({ ref: "TRF-" + (48300 + SINGLES.length), by: "me", to: SG.user, points: pts,
+                    src: document.getElementById("sgSrc").value, at: new Date() });
+  BAL.transferred += pts; BAL.available -= pts;
+  closePanel(); TTAB = "individual"; TPAGE = 1; renderTransfers();
+  toast(interp(t("transfers.single.done"), { points: fmt(pts), name: nameOf(SG.user.name) }));
+}
+
+/* ---------- CSV upload ---------------------------------------------------
+   The old panel's rules contradicted each other on commas. These four say one
+   thing each, and the template is offered before the rules rather than after,
+   because a correct file beats a well-explained rejection.               */
+let UP = { file:null };
+function openUpload(){
+  UP = { file:null };
+  openPanel({
+    title: t("transfers.upload.title"),
+    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:18px">${esc(t("transfers.upload.intro"))}</p>
+      <button class="btn btn-ghost w-full" style="margin-bottom:16px" onclick="toast(t('transfers.upload.templateStarted'))">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
+        <span>${esc(t("transfers.upload.template"))}</span></button>
+      <div class="drop" id="upDrop">
+        <div class="drop-ico"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><use href="#i-upload"/></svg></div>
+        <div class="drop-t" id="upName">${esc(t("transfers.upload.dropzone"))}</div>
+        <div class="drop-d" id="upHint">${esc(t("transfers.upload.dropzoneHint"))}</div>
+        <button class="btn btn-ghost btn-sm mt-3" onclick="upPick()">${esc(t("transfers.upload.browse"))}</button>
+      </div>
+      <div class="fgrp" style="margin-top:18px">
+        <label class="flab" for="upSrc">${esc(t("transfers.upload.sourceLabel"))}</label>
+        <select class="fsel" id="upSrc">
+          ${["loyalty","invoice","referral","b2b","file"].map(s =>
+            `<option value="${s}"${s === "file" ? " selected" : ""}>${esc(t("transfers.source." + s))}</option>`).join("")}
+        </select>
+      </div>
+      <div class="fgrp">
+        <span class="flab">${esc(t("transfers.upload.rulesHeading"))}</span>
+        <ul class="rules">${[1,2,3,4].map(i => `<li>
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg>
+          <span>${esc(t("transfers.upload.rule" + i))}</span></li>`).join("")}</ul>
+      </div>`,
+    foot: `<button class="btn btn-ghost" onclick="panelBack()">${esc(t("transfers.upload.cancel"))}</button>
+      <button class="btn btn-primary" onclick="doUpload()">${esc(t("transfers.upload.submit"))}</button>`
+  });
+}
+/* A prototype cannot parse a real file, so picking one is simulated — but the
+   states it produces (named file, record counts, a queue entry awaiting a
+   decision) are the ones the real flow has to handle. */
+function upPick(){
+  UP.file = "campaign-upload-" + (BATCHES.length + 1) + ".csv";
+  document.getElementById("upDrop").classList.add("has-file");
+  document.getElementById("upName").textContent = UP.file;
+  document.getElementById("upHint").textContent = t("transfers.upload.checking");
+  setTimeout(() => { const h = document.getElementById("upHint");
+    if (h) h.textContent = interp(t("transfers.records.total"), { n: fmt(214) }); }, 700);
+}
+function doUpload(){
+  if (!UP.file){ toast(t("transfers.upload.errNoFile")); return; }
+  BATCHES.unshift({ id:"BCH-" + (1042 + BATCHES.length - 16), file: UP.file, by:"me",
+                    src: document.getElementById("upSrc").value,
+                    total:214, invalid:3, dup:1, points:106_500, status:"uploaded", at:new Date() });
+  closePanel(); TTAB = "bulk"; TPAGE = 1; renderTransfers();
+  toast(t("transfers.upload.done"));
+}
+
+/* ---------- CTA menu ------------------------------------------------------ */
+function ctaToggle(){
+  const m = document.getElementById("ctaMenu"), b = document.getElementById("ctaBtn");
+  const open = m.hidden;
+  m.hidden = !open; b.setAttribute("aria-expanded", String(open));
+}
+function ctaPick(k){
+  document.getElementById("ctaMenu").hidden = true;
+  document.getElementById("ctaBtn").setAttribute("aria-expanded", "false");
+  k === "single" ? openSingle() : openUpload();
+}
+document.addEventListener("click", e => {
+  if (!e.target.closest("#ctaBtn") && !e.target.closest("#ctaMenu")){
+    const m = document.getElementById("ctaMenu");
+    if (m && !m.hidden){ m.hidden = true; document.getElementById("ctaBtn")?.setAttribute("aria-expanded","false"); }
+  }
+  if (!e.target.closest("#tcolBtn") && !e.target.closest("#tcolMenu")){
+    const m = document.getElementById("tcolMenu");
+    if (m && !m.hidden){ m.hidden = true; document.getElementById("tcolBtn")?.setAttribute("aria-expanded","false"); }
+  }
+  if (!e.target.closest("#tfilBtn") && !e.target.closest("#tfilMenu")){
+    const m = document.getElementById("tfilMenu");
+    if (m && !m.hidden){ m.hidden = true; document.getElementById("tfilBtn")?.setAttribute("aria-expanded","false"); }
+  }
+});
+
+/* ---------- columns and filters ------------------------------------------ */
+function tcolToggle(){
+  const m = document.getElementById("tcolMenu"), b = document.getElementById("tcolBtn");
+  if (m.hidden){
+    m.innerHTML = tcols().filter(c => !c.always).map(c => `<button class="dd-opt" role="option"
+      aria-selected="${c.on && window.innerWidth >= (c.min || 0)}" onclick="tcolPick('${c.k}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${esc(t("transfers.columns." + c.k))}</span></button>`).join("");
+    m.hidden = false; b.setAttribute("aria-expanded","true");
+  } else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function tcolPick(k){
+  const c = tcols().find(x => x.k === k); c.on = !c.on;
+  document.getElementById("tcolMenu").hidden = true;
+  document.getElementById("tcolBtn").setAttribute("aria-expanded","false");
+  renderTRows();
+}
+function tfilToggle(){
+  const m = document.getElementById("tfilMenu"), b = document.getElementById("tfilBtn");
+  if (m.hidden){ renderTFilters(); m.hidden = false; b.setAttribute("aria-expanded","true"); }
+  else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function renderTFilters(){
+  const m = document.getElementById("tfilMenu"); if (!m) return;
+  const group = (key, heading, opts) => `<div class="fil-group">
+    <div class="fil-h">${esc(heading)}</div>
+    ${opts.map(([val, label]) => `<button class="dd-opt" role="option" aria-selected="${TFILT[key] === val}"
+      onclick="event.stopPropagation();tfilPick('${key}','${val}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${esc(label)}</span></button>`).join("")}</div>`;
+  m.innerHTML =
+    (TTAB === "bulk" ? group("status", t("transfers.filters.status"),
+      [["all", t("usersFilters.any")], ...["uploaded","ready","processing","completed","rejected","failed"]
+        .map(s => [s, t("transfers.status." + s)])]) : "") +
+    group("src", t("transfers.filters.source"),
+      [["all", t("usersFilters.any")], ...["loyalty","invoice","file","referral","b2b"]
+        .map(s => [s, t("transfers.source." + s)])]) +
+    group("by", TTAB === "bulk" ? t("transfers.filters.uploader") : t("transfers.filters.sender"),
+      [["all", t("usersFilters.any")], ...Object.keys(STAFF).map(k => [k, staffOf(k)])]) +
+    `<div class="fil-foot"><button class="btn-link" onclick="event.stopPropagation();tclearFilters()">${
+       esc(t("users.list.clearFilters"))}</button>
+     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();tfilClose()">${esc(t("usersFilters.apply"))}</button></div>`;
+}
+function tfilPick(key, val){
+  TFILT[key] = val; TPAGE = 1;
+  renderTFilters(); renderTRows();
+  const badge = document.getElementById("tfilBadge");
+  badge.textContent = tfilActive(); badge.hidden = !tfilActive();
+}
+function tfilClose(){
+  const m = document.getElementById("tfilMenu"); if (!m || m.hidden) return;
+  m.hidden = true; document.getElementById("tfilBtn").setAttribute("aria-expanded","false");
+}
+
+/* The sidebar count is the same fact as the queue banner, so it is derived
+   from the same place rather than kept in step by hand. */
+/* Jump into the queue from anywhere, landing on the filter that matches what
+   was clicked rather than on an unfiltered list the reader must narrow again. */
+function goTransfers(status){
+  TTAB = "bulk"; TFILT.status = status || "all"; TFILT.src = TFILT.by = "all"; TPAGE = 1;
+  go("transfers");
+  renderTransfers();
+}
+/* Transferring to one person, opened from that person. The recipient is
+   already chosen, so the panel starts at the only question left: how many. */
+function openSingleFor(id){
+  const u = USERS.find(x => x.id === id) || FOLLOWERS.find(x => x.id === id);
+  if (!u || !u.registered) return;
+  openSingle();
+  setTimeout(() => { sgPick(u.id); }, 80);
+}
+
+/* The Overview's "waiting for approval" and "failed" rows are the same facts
+   as this screen's queue, so they are counted from it rather than typed in
+   twice and left to drift apart. */
+function attentionCounts(){
+  const set = (id, n) => {
+    const el = document.querySelector("#" + id + " .att-d"); if (!el) return;
+    el.dataset.i18nVars = JSON.stringify({ count: n });
+    document.getElementById(id).hidden = n === 0;
+  };
+  set("attPending", BATCHES.filter(b => b.status === "uploaded").length);
+  set("attFailed",  BATCHES.filter(b => b.status === "failed").length);
+}
+
+function navQueueBadge(){
+  const el = document.getElementById("navQueue"); if (!el) return;
+  const n = waitingCount();
+  el.textContent = fmt(n); el.hidden = n === 0;
+}
 
 document.body.dataset.state = "normal";
 document.body.dataset.collapsed = "false";
