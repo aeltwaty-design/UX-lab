@@ -617,7 +617,7 @@ html[dir="ltr"] .ltr{text-align:left}
     <div class="nav-group-label" data-i18n="nav.groupAudience">Audience</div>
     <a href="#/users" class="nav-item" data-route="users"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-users"/></svg>
       <span class="nav-label" data-i18n="nav.users">Users</span></a>
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-heart"/></svg>
+    <a href="#/followers" class="nav-item" data-route="followers"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-heart"/></svg>
       <span class="nav-label" data-i18n="nav.followers">Followers</span></a>
 
     <div class="nav-group-label" data-i18n="nav.groupPoints">Points</div>
@@ -946,7 +946,7 @@ html[dir="ltr"] .ltr{text-align:left}
       </div>
     </section>
   </div>
-  <div id="view-users" class="view">
+  <div id="view-list" class="view">
 
     <!-- page header -->
     <div class="flex flex-wrap items-end gap-4 page-head">
@@ -957,8 +957,8 @@ html[dir="ltr"] .ltr{text-align:left}
             stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 10 4 4 4-4"/></svg></span>
           <span aria-current="page" data-i18n="nav.users"></span>
         </nav>
-        <h1 style="font-size:24px;font-weight:700;letter-spacing:-.01em" data-i18n="users.list.heading">Users</h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px" data-i18n="users.list.subtitle"></p>
+        <h1 style="font-size:24px;font-weight:700;letter-spacing:-.01em" data-i18n-coll="list.heading">Users</h1>
+        <p style="font-size:14px;color:var(--n-700);margin-top:3px" data-i18n-coll="list.subtitle"></p>
       </div>
       <button class="btn btn-primary" onclick="openReminder()">
         <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-userplus"/></svg>
@@ -971,9 +971,9 @@ html[dir="ltr"] .ltr{text-align:left}
       <button class="seg" role="tab" aria-selected="true"  data-seg="all"  onclick="setSeg('all')">
         <span data-i18n="users.list.segAll">All</span><span class="seg-n num" id="segNAll"></span></button>
       <button class="seg" role="tab" aria-selected="false" data-seg="reg"  onclick="setSeg('reg')">
-        <span data-i18n="users.status.registered">Registered</span><span class="seg-n num" id="segNReg"></span></button>
+        <span id="segLReg">Registered</span><span class="seg-n num" id="segNReg"></span></button>
       <button class="seg" role="tab" aria-selected="false" data-seg="unreg" onclick="setSeg('unreg')">
-        <span data-i18n="users.status.notRegistered">Not registered</span><span class="seg-n num" id="segNUnreg"></span></button>
+        <span id="segLUnreg">Not registered</span><span class="seg-n num" id="segNUnreg"></span></button>
     </div>
 
     <div class="tbl-wrap">
@@ -981,7 +981,7 @@ html[dir="ltr"] .ltr{text-align:left}
       <div class="tbl-bar">
         <label class="tbl-search">
           <svg viewBox="0 0 24 24" width="17" height="17"><use href="#i-search"/></svg>
-          <input type="search" id="q" oninput="renderRows()" data-i18n-ph="users.list.search">
+          <input type="search" id="q" oninput="renderRows()" data-i18n-coll-ph="list.searchPlaceholder">
         </label>
         <div class="tbl-bar-actions">
           <div class="dd">
@@ -1039,8 +1039,8 @@ html[dir="ltr"] .ltr{text-align:left}
       <!-- empty -->
       <div class="s-empty empty">
         <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-users"/></svg></div>
-        <div class="empty-t" data-i18n="users.empty.tableBody" data-i18n-part="head"></div>
-        <div class="empty-d" data-i18n="users.empty.tableBody" data-i18n-part="tail"></div>
+        <div class="empty-t" data-i18n-coll="empty.noneYet" data-i18n-part="head"></div>
+        <div class="empty-d" data-i18n-coll="empty.noneYet" data-i18n-part="tail"></div>
       </div>
 
       <div class="s-real">
@@ -1053,15 +1053,15 @@ html[dir="ltr"] .ltr{text-align:left}
         <!-- no rows matched the current filters -->
         <div id="noMatch" class="empty" hidden>
           <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-search"/></svg></div>
-          <div class="empty-t" data-i18n="users.empty.noMatchTitle" data-i18n-part="head"></div>
-          <div class="empty-d" data-i18n="users.empty.noMatchBody"></div>
+          <div class="empty-t" data-i18n-coll="empty.noMatches" data-i18n-part="head"></div>
+          <div class="empty-d" data-i18n-coll="empty.noMatches" data-i18n-part="tail"></div>
           <button class="btn btn-ghost btn-sm mt-3" onclick="clearFilters()" data-i18n="users.list.clearFilters"></button>
         </div>
         <div class="tbl-foot" id="tblFoot"></div>
       </div>
     </div>
   </div>
-  <div id="view-user" class="view"></div>
+  <div id="view-detail" class="view"></div>
 </main>
 </div>
 </div>
@@ -1884,22 +1884,27 @@ function parseHash(){
   return { route: route || "overview", id: id ? +id : null, seg };
 }
 function go(route, id){
-  const target = route === "user" && id ? `#/user/${id}` : `#/${route}`;
+  const target = id ? `#/${route}/${id}` : `#/${route}`;
   if (location.hash !== target) { location.hash = target; return; }  // hashchange re-enters
   render(route, id);
 }
+const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"detail", follower:"detail" };
+const COLL_OF = { users:"users", user:"users", followers:"followers", follower:"followers" };
 function render(route, id){
   ROUTE = route; CURRENT = id ?? null;
-  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "view-" + route));
+  if (COLL_OF[route] && COLL_OF[route] !== COLL){ COLL = COLL_OF[route]; SEL.clear(); PAGE = 1; }
+  const view = VIEW_OF[route] || "overview";
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "view-" + view));
   document.querySelectorAll(".nav-item[data-route]").forEach(a => {
-    const on = a.dataset.route === route || (route === "user" && a.dataset.route === "users");
+    const on = a.dataset.route === route || a.dataset.route === COLL_OF[route];
     if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
   const main = document.getElementById("main");
-  if (route === "overview"){ renderDD(); renderActivity(); renderOffers(); drawChart(); drawSparks(); }
-  if (route === "users"){ counts(); renderRows(); }
-  if (route === "user"){ renderUser(); }
-  main.setAttribute("aria-label", t(route === "overview" ? "a11y.main" : "users.list.heading"));
+  if (view === "overview"){ renderDD(); renderActivity(); renderOffers(); drawChart(); drawSparks(); }
+  if (view === "list"){ counts(); renderRows(); }
+  if (view === "detail"){ renderUser(); }
+  applyI18n();
+  main.setAttribute("aria-label", view === "overview" ? t("a11y.main") : ck("list.heading"));
   closeNav(); window.scrollTo(0, 0);
 }
 function onHash(){
@@ -1908,7 +1913,7 @@ function onHash(){
     SEG = seg; PAGE = 1;
     document.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-selected", b.dataset.seg === seg));
   }
-  render(["overview","users","user"].includes(route) ? route : "overview", id);
+  render(VIEW_OF[route] ? route : "overview", id);
 }
 window.addEventListener("hashchange", onHash);
 let _rw; window.addEventListener("resize", () => {
@@ -1995,9 +2000,9 @@ function rowMenu(ev, id){
   const wasFor = rowMenuEl && +rowMenuEl.dataset.for === id;
   closeRowMenu();
   if (wasFor) return;
-  const u = USERS.find(x => x.id === id);
+  const u = coll().rows().find(x => x.id === id);
   const items = [
-    { k:"users.actions.viewProfile", fn:`go('user',${id})`, icon:"i-user" },
+    { k:"users.actions.viewProfile", fn:`go(coll().detail,${id})`, icon:"i-user" },
     { k:"users.actions.transferPoints", fn:`toast(t('users.actions.transferPoints'))`, icon:"i-transfer" },
   ];
   if (!u.registered) items.push({ k:"users.reminder.action", fn:`openReminder(${id})`, icon:"i-userplus" });
@@ -2031,7 +2036,7 @@ function copyId(v){
   navigator.clipboard?.writeText(v).catch(()=>{});
   toast(interp(t("users.actions.copied"), { value: v }));
 }
-function openUser(id){ go("user", id); }
+function openUser(id){ go(coll().detail, id); }
 
 /* =====================================================================
    USER DETAIL — one template, two shapes. A registered person has a name,
@@ -2110,9 +2115,30 @@ function crumbs(trail){
       : `<span aria-current="page">${c.label}</span>`)).join("") + `</nav>`;
 }
 
+/* A follower's engagement with offers — the equivalent of a user's ledger.
+   Same table anatomy, different subject. */
+function offersTable(u){
+  const seen = u.offerSeen ? [{ key:u.offerSeen, date:u.lastActive || u.joined }] : [];
+  if (u.redeemed > 1 && u.offerSeen)
+    seen.push({ key: u.offerSeen === "offers.sampleOffer1" ? "offers.sampleOffer2" : "offers.sampleOffer1",
+                date: u.joined });
+  if (!seen.length) return `<div class="empty" style="padding:30px 20px">
+      <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-ticket"/></svg></div>
+      <div class="empty-t">${splitPart(t("followers.offersTab.empty"), "head")}</div>
+      <div class="empty-d">${splitPart(t("followers.offersTab.empty"), "tail")}</div></div>`;
+  return `<div class="tbl-scroll"><table class="tbl" style="min-width:0"><thead><tr>
+      <th>${t("followers.offersTab.colOffer")}</th>
+      <th>${t("followers.offersTab.colEngaged")}</th></tr></thead><tbody>
+      ${seen.map(o => `<tr style="cursor:default">
+        <td><div class="cell-person"><span class="of-dot"><svg viewBox="0 0 24 24" width="15" height="15">
+          <use href="#i-ticket"/></svg></span><span class="person-name">${t(o.key)}</span></div></td>
+        <td><span class="cell-date">${dfmt(o.date)}</span></td></tr>`).join("")}
+      </tbody></table></div>`;
+}
+
 function renderUser(){
-  const host = document.getElementById("view-user");
-  const u = USERS.find(x => x.id === CURRENT);
+  const host = document.getElementById("view-detail");
+  const u = coll().rows().find(x => x.id === CURRENT);
   if (!host) return;
   if (!u){ host.innerHTML = `<div class="empty" style="padding:60px 20px">
       <div class="empty-t">${t("states.emptyTitle")}</div>
@@ -2124,7 +2150,7 @@ function renderUser(){
     ${crumbs([{ label: t("nav.overview"), href: "#/overview", icon: HOME_ICON },
               { label: t("nav.users"), href: "#/users" },
               { label: u.registered ? u.name[LANG] : u.phone }])}
-    <h1 class="page-t page-head">${t("users.detail.pageHeading")}</h1>
+    <h1 class="page-t page-head">${ck("detail.pageHeading")}</h1>
 
     <section class="card mb-5">
       <div class="px-5 py-5 flex flex-wrap items-start gap-4">
@@ -2140,7 +2166,7 @@ function renderUser(){
           </div>
           <div class="ltr num" style="font-size:14px;color:var(--n-700);margin-top:4px">${u.phone}</div>
           <div style="font-size:13px;color:var(--n-600);margin-top:2px">
-            ${interp(t("users.detail.joinedOn"), { date: dfmt(u.joined) })}</div>
+            ${interp(t(coll().sinceKey), { date: dfmt(u.joined) })}</div>
         </div>
         <div class="flex gap-2 flex-wrap">
           ${!u.registered ? `<button class="btn btn-primary" onclick="openReminder(${u.id})">
@@ -2172,11 +2198,13 @@ function renderUser(){
 
     <section class="card">
       <div class="tabs" role="tablist">
-        ${[["info","tabInfo"],["tx","tabTransactions"],["parked","tabParked"]].map(([k,lbl]) =>
-          `<button class="tab" role="tab" aria-selected="${TAB===k}" onclick="setTab('${k}')">${t("users.detail."+lbl)}</button>`).join("")}
+        ${coll().tabs.map(([k,key]) =>
+          `<button class="tab" role="tab" aria-selected="${TAB===k}" onclick="setTab('${k}')">${t(key)}</button>`).join("")}
       </div>
       <div class="tab-panel" role="tabpanel">
-        ${TAB === "info" ? `<div class="px-5 py-4">
+        ${!coll().tabs.some(([k]) => k === TAB) ? (TAB = "info", "") : ""}
+        ${TAB === "offers" ? offersTable(u)
+        : TAB === "info" ? `<div class="px-5 py-4">
             <div class="card-t mb-3">${t("users.detail.personalInfo")}</div>
             ${field(t("users.detail.fullName"), u.registered ? u.name[LANG] : notCollected())}
             ${field(t("users.detail.mobile"), `<span class="ltr num">${u.phone}</span>` +
@@ -2203,8 +2231,9 @@ function setTab(k){ TAB = k; renderUser(); }
    ===================================================================== */
 const CAP = 200, COOLDOWN_SHARE = 0.12;
 function openReminder(single){
-  const pool = single != null ? [USERS.find(u => u.id === single)]
-             : (SEL.size ? USERS.filter(u => SEL.has(u.id)) : matching());
+  const rows = coll().rows();
+  const pool = single != null ? [rows.find(u => u.id === single)]
+             : (SEL.size ? rows.filter(u => SEL.has(u.id)) : matching());
   const targets = pool.filter(u => !u.registered);
   const cooling = Math.round(targets.length * COOLDOWN_SHARE);
   const eligible = Math.min(CAP, targets.length - cooling);
@@ -2269,6 +2298,59 @@ const USERS = (function build(){
   return out;
 })();
 
+/* =====================================================================
+   FOLLOWERS — an audience, not a subset of Users. A follower subscribed
+   to the brand for its offers; some of them also hold an account. The
+   two screens are siblings and share every component below, so they can
+   never drift apart visually or behaviourally.
+   ===================================================================== */
+const FOLLOWERS = (function build(){
+  let seed = 31;
+  const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const OFFERS_SEEN = ["offers.sampleOffer1","offers.sampleOffer2","offers.sampleOffer3"];
+  const out = [];
+  for (let i = 0; i < 58; i++){
+    const hasAccount = rnd() > 0.55;
+    const female = rnd() > 0.6;
+    const fa = female ? FIRST_F[Math.floor(rnd()*FIRST_F.length)] : FIRST_M[Math.floor(rnd()*FIRST_M.length)];
+    const la = FAMILY[Math.floor(rnd()*FAMILY.length)];
+    const named = hasAccount || rnd() > 0.45;
+    const d = new Date(2025, Math.floor(rnd()*12), 1 + Math.floor(rnd()*28));
+    out.push({
+      id: 7710000 + i,
+      registered: hasAccount,                 // the flag the shared table reads
+      name: named ? { ar: fa + " " + la, en: LATIN_F[fa] + " " + LATIN_L[la] } : null,
+      phone: "9665" + String(Math.floor(rnd()*90000000) + 10000000),
+      email: hasAccount ? (LATIN_F[fa] + "." + LATIN_L[la]).toLowerCase().replace("-","") + "@example.com" : null,
+      gender: named ? (female ? "female" : "male") : null,
+      points: hasAccount ? Math.floor(rnd()*9000) : 0,
+      joined: d,                              // "followed since" for this collection
+      lastActive: rnd() > 0.3 ? new Date(2026, 7, 1 + Math.floor(rnd()*29)) : null,
+      redeemed: Math.floor(rnd()*6),
+      offerSeen: OFFERS_SEEN[Math.floor(rnd()*OFFERS_SEEN.length)]
+    });
+  }
+  return out;
+})();
+
+/* Which collection the shared list and detail views are showing. */
+const COLLECTIONS = {
+  users:     { rows: () => USERS,     idPrefix: "USR-", detail: "user",
+               statusOn: "users.status.registered",  statusOff: "users.status.notRegistered",
+               dateCol: "users.columns.joined", sinceKey: "users.detail.joinedOn",
+               tabs: [["info","users.detail.tabInformation"],
+                      ["tx","users.detail.tabTransactions"],
+                      ["parked","users.detail.tabParked"]] },
+  followers: { rows: () => FOLLOWERS, idPrefix: "FLW-", detail: "follower",
+               statusOn: "followers.status.hasAccount", statusOff: "followers.status.followsOnly",
+               dateCol: "followers.columns.followed", sinceKey: "followers.detail.followingSince",
+               tabs: [["info","followers.detail.tabInformation"],
+                      ["offers","followers.detail.tabOffers"]] }
+};
+let COLL = "users";
+const coll = () => COLLECTIONS[COLL];
+const ck = suffix => t(COLL + "." + suffix);
+
 /* Columns. Person, status, points, joined and the row menu are always on;
    the rest are the ones the client wanted kept without crowding the table. */
 const COLS = [
@@ -2289,11 +2371,11 @@ const SEL = new Set();
 
 const dfmt = d => d.toLocaleDateString(LANG === "ar" ? "ar-SA-u-ca-gregory-nu-latn" : "en-GB",
                     { day:"numeric", month:"short", year:"numeric" });
-const uid = u => "USR-" + u.id;
+const uid = u => coll().idPrefix + u.id;
 
 function matching(){
   const q = (document.getElementById("q")?.value || "").trim().toLowerCase();
-  return USERS.filter(u => {
+  return coll().rows().filter(u => {
     if (SEG === "reg"   && !u.registered) return false;
     if (SEG === "unreg" &&  u.registered) return false;
     if (FILT.balance === "zero"  && u.points !== 0) return false;
@@ -2324,7 +2406,7 @@ function renderHead(){
   const th = document.getElementById("thead"); if (!th) return;
   const sortable = { points:1, joined:1 };
   const cells = shown().map(c => {
-    const label = t("users.columns." + c.k);
+    const label = c.k === "joined" ? t(coll().dateCol) : ck("columns." + c.k);
     if (sortable[c.k]) {
       const state = SORT.k === c.k ? (SORT.dir === "asc" ? "ascending" : "descending") : "none";
       return `<th aria-sort="${state}"><button class="th-sort" aria-sort="${state}" onclick="setSort('${c.k}')">
@@ -2341,7 +2423,7 @@ function renderHead(){
       data-i18n-aria="users.selection.selectPage"><svg viewBox="0 0 24 24" width="12" height="12" fill="none"
       stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="m5 12.5 4.5 4.5L19 7"/></svg></button></th>`
-    + cells + `<th style="width:56px">${t("users.columns.actions")}</th>`;
+    + cells + `<th style="width:56px">${ck("columns.actions")}</th>`;
 }
 
 function renderRows(){
@@ -2371,7 +2453,7 @@ function renderRows(){
         case "userId": return `<td><span class="cell-id ltr">${uid(u)}</span></td>`;
         case "status": return `<td><span class="pill ${u.registered ? "pill-success" : "pill-stage"}">
             <svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-${u.registered ? "check" : "clock"}"/></svg>
-            ${t(u.registered ? "users.status.registered" : "users.status.notRegistered")}</span></td>`;
+            ${t(u.registered ? coll().statusOn : coll().statusOff)}</span></td>`;
         case "points": return `<td><span class="cell-bal"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-point"/></svg>
             <span class="num">${fmt(u.points)}</span></span></td>`;
         case "joined": return `<td><span class="cell-date">${dfmt(u.joined)}</span></td>`;
@@ -2440,10 +2522,13 @@ function setSeg(s){
 }
 function clearFilters(){ document.getElementById("q").value=""; filReset(); }
 function counts(){
-  const r = USERS.filter(u=>u.registered).length;
-  document.getElementById("segNAll").textContent   = fmt(USERS.length);
+  const rows = coll().rows(), r = rows.filter(u=>u.registered).length;
+  const lr = document.getElementById("segLReg"), lu = document.getElementById("segLUnreg");
+  if (lr) lr.textContent = t(coll().statusOn);
+  if (lu) lu.textContent = t(coll().statusOff);
+  document.getElementById("segNAll").textContent   = fmt(rows.length);
   document.getElementById("segNReg").textContent   = fmt(r);
-  document.getElementById("segNUnreg").textContent = fmt(USERS.length - r);
+  document.getElementById("segNUnreg").textContent = fmt(rows.length - r);
 }
 
 /* selection */
@@ -2475,7 +2560,7 @@ function colToggle(){
       aria-selected="${c.on && window.innerWidth >= (c.min||0)}" onclick="colPick('${c.k}')">
       <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
       stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
-      <span>${t("users.columns."+c.k)}</span></button>`).join("");
+      <span>${ck("columns."+c.k)}</span></button>`).join("");
     m.hidden = false; b.setAttribute("aria-expanded","true");
   } else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
 }
