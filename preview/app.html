@@ -738,6 +738,10 @@ html[dir="rtl"] .row-acts{justify-content:flex-start}
 /* reject is a decision, so it is bordered and neutral-dark — never red,
    never a bin. Red and trash iconography stay reserved for destruction. */
 .act-no{border-color:var(--n-400);color:var(--n-900)}
+/* Icon alone, where one action has one unambiguous meaning. Square rather
+   than a clipped label, and its name lives on the button for hover and for
+   anyone listening rather than looking. */
+.act-icon{inline-size:44px;padding:0;justify-content:center;max-width:none}
 .act-no:hover{background:var(--n-100);border-color:var(--n-500)}
 
 /* A scope the reader did not set, worn openly and removable. */
@@ -948,7 +952,7 @@ html[dir="rtl"] .vw-line{text-align:start}
       <span class="nav-label" data-i18n="nav.offers">Offers</span></a>
 
     <div class="nav-group-label" data-i18n="nav.groupReports">Reports</div>
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-download"/></svg>
+    <a href="#/exports" class="nav-item" data-route="exports"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-download"/></svg>
       <span class="nav-label" data-i18n="nav.exports">Exports</span></a>
   </nav>
 
@@ -1380,6 +1384,7 @@ html[dir="rtl"] .vw-line{text-align:start}
   <div id="view-transfers" class="view"></div>
   <div id="view-transactions" class="view"></div>
   <div id="view-charges" class="view"></div>
+  <div id="view-exports" class="view"></div>
 </main>
 </div>
 </div>
@@ -2869,6 +2874,7 @@ function setLang(l){
   if (ROUTE === "transfers") renderTransfers();
   if (ROUTE === "transactions") renderTransactions();
   if (ROUTE === "charges") renderCharges();
+  if (ROUTE === "exports") renderExports();
   if (PSTACK.length) paintPanel();
   navQueueBadge();
   [["btn-ar","btn-en"],["pv-ar","pv-en"]].forEach(([a,b])=>{
@@ -3163,7 +3169,7 @@ function go(route, id){
   render(route, id);
 }
 const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"detail", follower:"detail",
-                  transfers:"transfers", transactions:"transactions", charges:"charges" };
+                  transfers:"transfers", transactions:"transactions", charges:"charges", exports:"exports" };
 const COLL_OF = { users:"users", user:"users", followers:"followers", follower:"followers" };
 function render(route, id){
   ROUTE = route; CURRENT = id ?? null;
@@ -3185,6 +3191,7 @@ function render(route, id){
   }
   if (view === "transactions") renderTransactions();
   if (view === "charges") renderCharges();
+  if (view === "exports") renderExports();
   attentionCounts();          // before applyI18n, which reads the counts
   navQueueBadge();
   applyI18n();
@@ -3192,7 +3199,8 @@ function render(route, id){
       view === "overview"     ? t("a11y.main")
     : view === "transfers"    ? t("transfers.heading")
     : view === "transactions" ? t("transactions.heading")
-    : view === "charges"      ? t("charge.heading") : ck("list.heading"));
+    : view === "charges"      ? t("charge.heading")
+    : view === "exports"      ? t("exports.heading") : ck("list.heading"));
   closeNav(); window.scrollTo(0, 0);
 }
 function onHash(){
@@ -3210,6 +3218,7 @@ let _rw; window.addEventListener("resize", () => {
     if (ROUTE === "transfers") renderTRows();
     if (ROUTE === "transactions") renderXRows();
     if (ROUTE === "charges") renderCRows();
+    if (ROUTE === "exports") renderERows();
   }, 120);
 });
 
@@ -6190,6 +6199,337 @@ function cfilPick(key, val){
 }
 document.addEventListener("click", e => {
   for (const [btn, menu] of [["ccolBtn","ccolMenu"], ["cfilBtn","cfilMenu"]]){
+    if (!e.target.closest("#" + btn) && !e.target.closest("#" + menu)){
+      const m = document.getElementById(menu);
+      if (m && !m.hidden){ m.hidden = true; document.getElementById(btn)?.setAttribute("aria-expanded","false"); }
+    }
+  }
+});
+
+/* =====================================================================
+   EXPORTS — where every Export button on every other screen lands.
+   ===================================================================== */
+const EX_TARGETS = ["users","followers","transactions","transfers","charges"];
+const EXPORTS = (function build(){
+  let s = 811;
+  const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const pad = n => String(n).padStart(2, "0");
+  const who = ["admin@gold.com", "m.helal@walaplus.com", "r.alotaibi@walaplus.com"];
+  const out = [];
+  for (let i = 0; i < 34; i++){
+    const at = new Date(NOW.getTime() - (i * 19 + Math.floor(r() * 40)) * 3600000);
+    const target = EX_TARGETS[Math.floor(r() * EX_TARGETS.length)];
+    /* The filename is the timestamp plus the source, which is how the real
+       system names them — so it is derived here rather than invented, and a
+       reader can match a row to a file in their downloads folder. */
+    const name = `${at.getFullYear()}_${pad(at.getMonth()+1)}_${pad(at.getDate())}_` +
+                 `${pad(at.getHours())}_${pad(at.getMinutes())}_${pad(at.getSeconds())}_${target}.csv`;
+    out.push({ id:"EXP-" + (1000 + i), name, target, at,
+               done: new Date(at.getTime() + Math.floor(r() * 90) * 1000),
+               by: who[Math.floor(r() * who.length)] });
+  }
+  return out.sort((a, b) => b.at - a.at);
+})();
+const exportById = id => EXPORTS.find(x => x.id === id);
+
+let EPAGE = 1, EPER = 10, ESORT = { k:"at", dir:"desc" }, EDROP = 0;
+const EFILT = { target:"all", by:"all", from:"", to:"" };
+
+const ECOLS = [
+  { k:"index", on:true }, { k:"name", always:true, on:true },
+  { k:"exportedTo", on:true }, { k:"requestedAt", on:true },
+  { k:"processedAt", on:true }, { k:"requestedBy", on:true },
+  { k:"actions", always:true, on:true }
+];
+const EORDER = ["index","name","exportedTo","requestedAt","processedAt","requestedBy","actions"];
+const EDROP_ORDER = ["index","processedAt","requestedBy","exportedTo","requestedAt"];
+const eshown = () => {
+  const dropped = EDROP_ORDER.filter(k => !ECOLS.find(c => c.k === k)?.pinned).slice(0, EDROP);
+  return ECOLS.filter(c => c.on && !dropped.includes(c.k))
+              .sort((a, b) => EORDER.indexOf(a.k) - EORDER.indexOf(b.k));
+};
+
+function ematching(){
+  const q = (document.getElementById("eq")?.value || "").trim().toLowerCase();
+  const from = EFILT.from ? new Date(EFILT.from) : null;
+  const to   = EFILT.to   ? new Date(EFILT.to)   : null;
+  if (to) to.setHours(23, 59, 59);
+  return EXPORTS.filter(x => {
+    if (EFILT.target !== "all" && x.target !== EFILT.target) return false;
+    if (EFILT.by !== "all" && x.by !== EFILT.by) return false;
+    if (from && x.at < from) return false;
+    if (to && x.at > to) return false;
+    if (!q) return true;
+    return [x.name, x.by].some(v => String(v).toLowerCase().includes(q));
+  }).sort((a, b) => {
+    const dir = ESORT.dir === "asc" ? 1 : -1;
+    if (ESORT.k === "done") return (a.done - b.done) * dir;
+    if (ESORT.k === "name") return a.name.localeCompare(b.name) * dir;
+    return (a.at - b.at) * dir;
+  });
+}
+const eFilActive = () => (EFILT.target !== "all") + (EFILT.by !== "all") + (!!EFILT.from || !!EFILT.to);
+function eClearFilters(){
+  EFILT.target = EFILT.by = "all"; EFILT.from = EFILT.to = "";
+  const q = document.getElementById("eq"); if (q) q.value = "";
+  EPAGE = 1; renderExports();
+}
+const edfmt = d => dfmt(d) + " " + String(d.getHours()).padStart(2,"0") + ":" +
+                   String(d.getMinutes()).padStart(2,"0");
+
+function renderExports(){
+  const el = document.getElementById("view-exports"); if (!el) return;
+  el.innerHTML = `
+    <div class="flex flex-wrap items-end gap-4 page-head">
+      <div class="min-w-0 flex-1">
+        ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
+                  { label:t("exports.heading") }])}
+        <h1 class="page-t">${esc(t("exports.heading"))}</h1>
+        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("exports.subtitle"))}</p>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-bar">
+        <label class="tbl-search">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
+          <input type="search" id="eq" oninput="EPAGE=1;renderERows()"
+                 placeholder="${esc(t("exports.search.placeholder"))}">
+        </label>
+        <div class="tbl-bar-actions">
+          <div class="dd">
+            <button class="btn btn-ghost" id="ecolBtn" aria-haspopup="listbox" aria-expanded="false"
+                    aria-controls="ecolMenu" onclick="ecolToggle()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+              <span>${esc(t("users.list.columns"))}</span></button>
+            <div class="dd-menu" id="ecolMenu" role="listbox" hidden></div>
+          </div>
+          <div class="dd">
+            <button class="btn btn-ghost" id="efilBtn" aria-haspopup="dialog" aria-expanded="false"
+                    aria-controls="efilMenu" onclick="efilToggle()">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5.5h17l-6.6 7.8V19l-3.8 2v-7.7Z"/></svg>
+              <span>${esc(t("users.list.filters"))}</span>
+              <span class="fil-badge num" id="efilBadge"${eFilActive() ? "" : " hidden"}>${eFilActive()}</span></button>
+            <div class="dd-menu fil-panel" id="efilMenu" role="dialog" aria-modal="false"
+                 aria-label="${esc(t("users.list.filters"))}" hidden></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s-load p-5">
+        <div class="sk h-12 mb-2"></div><div class="sk h-16 mb-2"></div><div class="sk h-16 mb-2"></div>
+        <div class="sk h-16"></div>
+      </div>
+      <div class="s-err empty">
+        <div class="empty-ico" style="background:var(--danger-50);color:var(--danger-700)">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-alert"/></svg></div>
+        <div class="empty-t">${esc(t("states.errorTitle"))}</div>
+        <div class="empty-d">${esc(t("states.errorBody"))}</div>
+      </div>
+      <div class="s-empty empty">
+        <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-download"/></svg></div>
+        <div class="empty-t">${esc(t("exports.empty.title"))}</div>
+        <div class="empty-d">${esc(t("exports.empty.body"))}</div>
+      </div>
+
+      <div class="s-real">
+        <div class="tbl-scroll">
+          <table class="tbl" aria-label="${esc(t("exports.a11y.table"))}">
+            <thead><tr id="thead-e"></tr></thead><tbody id="tbody-e"></tbody></table>
+        </div>
+        <div class="cards" id="eCards" hidden></div>
+        <div id="eNoMatch" class="empty" hidden>
+          <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-search"/></svg></div>
+          <div class="empty-t">${esc(t("exports.empty.noMatchTitle"))}</div>
+          <div class="empty-d">${esc(t("exports.empty.noMatchBody"))}</div>
+          <button class="btn btn-ghost btn-sm mt-3" onclick="eClearFilters()">${esc(t("users.list.clearFilters"))}</button>
+        </div>
+        <div class="tbl-foot" id="eFoot"></div>
+      </div>
+    </div>`;
+  renderERows();
+}
+
+function renderERows(){
+  if (!document.getElementById("thead-e")) return;
+  const r = fitTable("#view-exports", EDROP_ORDER.length,
+                     d => { EDROP = d; paintERows(); }, () => eshown().length);
+  eUseCards(r.cards);
+}
+let EPAGE_ROWS = [];
+function paintERows(){
+  const head = document.getElementById("thead-e"), body = document.getElementById("tbody-e");
+  if (!head || !body) return;
+  const cols = eshown(), rows = ematching();
+  const pages = Math.max(1, Math.ceil(rows.length / EPER));
+  if (EPAGE > pages) EPAGE = pages;
+  const page = rows.slice((EPAGE - 1) * EPER, EPAGE * EPER);
+  const first = (EPAGE - 1) * EPER;
+
+  const sortable = { name:"name", requestedAt:"at", processedAt:"done" };
+  head.innerHTML = cols.map(c => {
+    const label = esc(t("exports.columns." + c.k));
+    if (c.k === "actions") return `<th style="text-align:end"><span class="sr-only">${label}</span></th>`;
+    if (c.k === "index")   return `<th style="width:1%">${label}</th>`;
+    if (!sortable[c.k])    return `<th>${label}</th>`;
+    const k = sortable[c.k], on = ESORT.k === k;
+    return `<th aria-sort="${on ? (ESORT.dir === "asc" ? "ascending" : "descending") : "none"}">
+      <button class="th-sort" onclick="esort('${k}')">${label}
+        <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><use href="#i-down"/></svg></button></th>`;
+  }).join("");
+
+  body.innerHTML = page.map((x, i) => eRow(x, cols, first + i + 1)).join("");
+  EPAGE_ROWS = page.map((x, i) => [x, first + i + 1]);
+  document.getElementById("eCards").hidden = true;
+  document.querySelector("#view-exports .tbl-scroll").hidden = rows.length === 0;
+  document.getElementById("eNoMatch").hidden = rows.length > 0;
+  renderEFoot(rows.length, pages);
+}
+function eUseCards(on){
+  const host = document.getElementById("eCards"),
+        sc = document.querySelector("#view-exports .tbl-scroll");
+  if (!on){ host.hidden = true; return; }
+  host.innerHTML = EPAGE_ROWS.map(([x, n]) => eCard(x, n)).join("");
+  host.hidden = EPAGE_ROWS.length === 0;
+  sc.hidden = true;
+}
+
+/* An icon alone, as asked. It is one action with one meaning, so a glyph
+   carries it — but the name is on the button for a screen reader and on hover,
+   and it names the file, since every row's button is otherwise identical. */
+const eDownload = x => `<button class="act act-icon" onclick="event.stopPropagation();exDownload('${x.id}')"
+  title="${esc(t("exports.actions.download"))}"
+  aria-label="${esc(interp(t("exports.a11y.download"), { file: x.name }))}">
+  <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-download"/></svg></button>`;
+
+function eRow(x, cols, n){
+  const cell = k => {
+    switch (k){
+      case "index":       return `<td><span class="cell-muted num">${fmt(n)}</span></td>`;
+      case "name":        return `<td><span class="file-cell" style="cursor:default">
+          <span class="file-ico"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-file"/></svg></span>
+          <span class="file-n ltr" style="max-width:30ch">${esc(x.name)}</span></span></td>`;
+      case "exportedTo":  return `<td><span class="pill pill-stage">${esc(t("exports.target." + x.target))}</span></td>`;
+      case "requestedAt": return `<td><span class="cell-date">${esc(edfmt(x.at))}</span></td>`;
+      case "processedAt": return `<td><span class="cell-date">${esc(edfmt(x.done))}</span></td>`;
+      case "requestedBy": return `<td><span class="cell-muted ltr">${esc(x.by)}</span></td>`;
+      case "actions":     return `<td><div class="row-acts">${eDownload(x)}</div></td>`;
+    }
+    return "<td></td>";
+  };
+  return `<tr>${cols.map(c => cell(c.k)).join("")}</tr>`;
+}
+function eCard(x, n){
+  return `<div class="card-row" style="cursor:default">
+    <div class="card-top">
+      <span class="file-ico"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-file"/></svg></span>
+      <span class="min-w-0 flex-1">
+        <span class="file-n ltr" style="display:block;max-width:none">${esc(x.name)}</span>
+        <span class="file-sub">${esc(edfmt(x.at))} · ${esc(x.by)}</span></span>
+      ${eDownload(x)}
+    </div>
+    <div class="card-meta"><span class="pill pill-stage">${esc(t("exports.target." + x.target))}</span></div>
+  </div>`;
+}
+function esort(k){
+  if (ESORT.k === k) ESORT.dir = ESORT.dir === "asc" ? "desc" : "asc";
+  else { ESORT.k = k; ESORT.dir = "desc"; }
+  renderERows();
+}
+function exDownload(id){
+  const x = exportById(id); if (!x) return;
+  toast(interp(t("exports.download.started"), { file: x.name }));
+}
+function renderEFoot(total, pages){
+  const f = document.getElementById("eFoot"); if (!f) return;
+  const from = total === 0 ? 0 : (EPAGE - 1) * EPER + 1, to = Math.min(EPAGE * EPER, total);
+  const pg = (n, label, dis, cur) => `<button class="pg"${dis ? " disabled" : ""}
+    ${cur ? ' aria-current="page"' : ""} onclick="EPAGE=${n};renderERows()">${label}</button>`;
+  const nums = [];
+  for (let i = 1; i <= pages; i++){
+    if (i === 1 || i === pages || Math.abs(i - EPAGE) <= 1) nums.push(pg(i, fmt(i), false, i === EPAGE));
+    else if (nums[nums.length - 1] !== "GAP") nums.push("GAP");
+  }
+  f.innerHTML = `<span style="font-size:13px;color:var(--n-700)">${
+      esc(interp(t("users.pagination.showingRange"), { from: fmt(from), to: fmt(to), total: fmt(total) }))}</span>
+    <div class="pager">
+      ${pg(Math.max(1, EPAGE - 1), esc(t("users.pagination.previous")), EPAGE === 1)}
+      ${nums.map(n => n === "GAP" ? `<span class="pg-gap">…</span>` : n).join("")}
+      ${pg(Math.min(pages, EPAGE + 1), esc(t("users.pagination.next")), EPAGE === pages)}
+    </div>
+    <label class="rpp"><span style="font-size:13px;color:var(--n-700)">${esc(t("users.pagination.rowsPerPage"))}</span>
+      <select onchange="EPER=+this.value;EPAGE=1;renderERows()">
+        ${[10, 25, 50].map(n => `<option value="${n}"${n === EPER ? " selected" : ""}>${fmt(n)}</option>`).join("")}
+      </select></label>`;
+}
+
+/* ---------- columns and filters ------------------------------------------ */
+function ecolToggle(){
+  const m = document.getElementById("ecolMenu"), b = document.getElementById("ecolBtn");
+  if (m.hidden){
+    const on = new Set(eshown().map(c => c.k));
+    m.innerHTML = ECOLS.filter(c => !c.always).map(c => `<button class="dd-opt" role="option"
+      aria-selected="${on.has(c.k)}" onclick="ecolPick('${c.k}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${esc(t("exports.columns." + c.k))}</span></button>`).join("");
+    m.hidden = false; b.setAttribute("aria-expanded","true");
+  } else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function ecolPick(k){
+  const c = ECOLS.find(x => x.k === k);
+  c.on = !c.on; c.pinned = c.on;
+  document.getElementById("ecolMenu").hidden = true;
+  document.getElementById("ecolBtn").setAttribute("aria-expanded","false");
+  renderERows();
+}
+function efilToggle(){
+  const m = document.getElementById("efilMenu"), b = document.getElementById("efilBtn");
+  if (m.hidden){ renderEFilters(); m.hidden = false; b.setAttribute("aria-expanded","true"); }
+  else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function efilClose(){
+  const m = document.getElementById("efilMenu"); if (!m || m.hidden) return;
+  m.hidden = true; document.getElementById("efilBtn").setAttribute("aria-expanded","false");
+}
+function renderEFilters(){
+  const m = document.getElementById("efilMenu"); if (!m) return;
+  const group = (key, heading, opts) => `<div class="fil-group">
+    <div class="fil-h">${esc(heading)}</div>
+    ${opts.map(([val, label]) => `<button class="dd-opt" role="option" aria-selected="${EFILT[key] === val}"
+      onclick="event.stopPropagation();efilPick('${key}','${val}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${esc(label)}</span></button>`).join("")}</div>`;
+  const people = [...new Set(EXPORTS.map(x => x.by))];
+  m.innerHTML =
+    group("target", t("exports.filters.exportedTo"),
+      [["all", t("transfers.filters.any")], ...EX_TARGETS.map(k => [k, t("exports.target." + k)])]) +
+    group("by", t("exports.filters.requestedBy"),
+      [["all", t("transfers.filters.any")], ...people.map(p => [p, p])]) +
+    `<div class="fil-group"><div class="fil-h">${esc(t("exports.filters.dateRange"))}</div>
+      <div style="display:flex;gap:8px;padding:2px 6px 6px">
+        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:4px">${esc(t("exports.filters.dateFrom"))}</span>
+          <input type="date" class="finp" style="height:44px;padding:6px 10px;font-size:13px" value="${EFILT.from}"
+                 onclick="event.stopPropagation()" onchange="event.stopPropagation();efilDate('from',this.value)"></label>
+        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:4px">${esc(t("exports.filters.dateTo"))}</span>
+          <input type="date" class="finp" style="height:44px;padding:6px 10px;font-size:13px" value="${EFILT.to}"
+                 onclick="event.stopPropagation()" onchange="event.stopPropagation();efilDate('to',this.value)"></label>
+      </div></div>` +
+    `<div class="fil-foot"><button class="btn-link" onclick="event.stopPropagation();eClearFilters()">${
+       esc(t("usersFilters.reset"))}</button>
+     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();efilClose()">${esc(t("usersFilters.apply"))}</button></div>`;
+}
+function efilPick(key, val){ EFILT[key] = val; EPAGE = 1; renderEFilters(); renderERows(); eBadge(); }
+function efilDate(which, val){ EFILT[which] = val; EPAGE = 1; renderERows(); eBadge(); }
+function eBadge(){
+  const b = document.getElementById("efilBadge"); if (!b) return;
+  b.textContent = eFilActive(); b.hidden = !eFilActive();
+}
+document.addEventListener("click", e => {
+  for (const [btn, menu] of [["ecolBtn","ecolMenu"], ["efilBtn","efilMenu"]]){
     if (!e.target.closest("#" + btn) && !e.target.closest("#" + menu)){
       const m = document.getElementById(menu);
       if (m && !m.hidden){ m.hidden = true; document.getElementById(btn)?.setAttribute("aria-expanded","false"); }

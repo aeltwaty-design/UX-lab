@@ -9,7 +9,8 @@ const TABLES = [
   { name:'transfers indiv', route:'transfers/individual', view:'#view-transfers',    head:'#thead-t', cards:'tCards', prefix:'transfers.columns.' },
   { name:'transactions',    route:'transactions',         view:'#view-transactions', head:'#thead-x', cards:'xCards', prefix:'transactions.columns.' },
   { name:'charge history',  route:'charges',              view:'#view-charges',      head:'#thead-c', cards:'cCards', prefix:'charge.columns.' },
-  { name:'users',           route:'users',                view:'#view-list',         head:'#thead',   cards:null,     prefix:'users.columns.' },
+  { name:'exports',         route:'exports',              view:'#view-exports',      head:'#thead-e', cards:'eCards', prefix:'exports.columns.' },
+  { name:'users',           route:'users',                view:'#view-list',         head:'#thead',   cards:'uCards', prefix:'users.columns.' },
 ];
 const WIDTHS = [360, 480, 640, 760, 900, 1024, 1180, 1280, 1440, 1600, 1800];
 
