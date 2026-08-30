@@ -162,7 +162,7 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .card-sub{font-size:12px;color:var(--n-700);margin-top:2px}
 
 /* ---- buttons ---- */
-.btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;
+.btn{display:inline-flex;align-items:center;gap:8px;height:50px;padding:0 18px;
   border-radius:var(--r-100);font-size:14px;font-weight:600;cursor:pointer;border:1px solid transparent;
   white-space:nowrap;transition:background .12s,border-color .12s}
 .btn-primary{background:var(--p-500);color:#fff}
@@ -170,7 +170,7 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .btn-primary:active{background:var(--p-700)}
 .btn-ghost{background:#fff;border-color:var(--n-300);color:var(--n-800)}
 .btn-ghost:hover{background:var(--n-50);border-color:var(--n-400)}
-.btn-sm{height:32px;padding:0 12px;font-size:13px}
+.btn-sm{height:44px;padding:0 14px;font-size:13px}
 .btn-link{background:none;border:none;color:var(--p-700);font-weight:600;font-size:13px;cursor:pointer;padding:0}
 .btn-link:hover{text-decoration:underline}
 
@@ -492,7 +492,7 @@ html[dir="rtl"] #toast.on{transform:translateX(50%)}
 .tbl-wrap{background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
   box-shadow:var(--shadow-xs);overflow:hidden}
 .tbl-bar{display:flex;align-items:center;gap:12px;padding:16px 20px;flex-wrap:wrap}
-.tbl-search{flex:1;max-width:440px;display:flex;align-items:center;gap:9px;height:42px;
+.tbl-search{flex:1;max-width:440px;display:flex;align-items:center;gap:9px;height:50px;
   padding:0 14px;background:#fff;border:1px solid var(--n-300);border-radius:var(--r-150);
   color:var(--n-600);font-size:14px}
 .tbl-search:focus-within{border-color:var(--p-500);box-shadow:var(--focus)}
@@ -574,7 +574,7 @@ html[dir="ltr"] .ltr{text-align:left}
 .selbar{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--p-50);
   border-bottom:1px solid var(--p-200);flex-wrap:wrap}
 .selbar-n{font-size:14px;font-weight:700;color:var(--p-700)}
-.selbar .btn{height:34px}
+.selbar .btn{height:44px}
 
 /* status pill: not-registered is a stage, never an error, so it takes the
    informational tone rather than danger */
@@ -605,12 +605,17 @@ html[dir="ltr"] .ltr{text-align:left}
        are segments of a single card rather than three loose tiles --- */
 .bal-strip{display:flex;background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
   box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem;flex-wrap:wrap}
-.bal{flex:1 1 200px;min-width:0;padding:18px 20px;border-inline-start:1px solid var(--n-200)}
+.bal{flex:1 1 200px;min-width:0;padding:18px 20px;border-inline-start:1px solid var(--n-200);
+  display:flex;flex-direction:column}
+/* The available-balance tile carries two lines the others do not, which left
+   the shorter two trailing empty space. The slack is now distributed between
+   their lines rather than dumped in one gap, so the three read as one strip. */
+.bal{justify-content:space-between}
 .bal:first-child{border-inline-start:none}
 .bal-l{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--n-700);
   letter-spacing:.01em}
 .bal-v{display:flex;align-items:baseline;gap:7px;font-size:26px;font-weight:700;color:var(--n-950);
-  line-height:1.15;letter-spacing:-.015em;margin-top:7px}
+  line-height:1.15;letter-spacing:-.015em;padding-top:14px}
 .bal-v svg{align-self:center}
 .bal-sub{font-size:12px;color:var(--n-700);margin-top:5px;line-height:1.45}
 /* the balance a pending approval will actually spend earns the accent */
@@ -641,6 +646,7 @@ html[dir="ltr"] .ltr{text-align:left}
 .pill-dot{inline-size:7px;block-size:7px;border-radius:50%;background:currentColor;flex:none}
 .pill-attn{background:var(--warning-50);color:var(--warning-700);
   box-shadow:inset 0 0 0 1px var(--warning-200)}
+.pill-brand{background:var(--p-50);color:var(--p-700)}
 .pill-attn .pill-dot{animation:attn 2.4s ease-in-out infinite}
 @keyframes attn{0%,100%{opacity:1}50%{opacity:.35}}
 .spin{animation:spin 1s linear infinite;transform-origin:50% 50%}
@@ -666,9 +672,7 @@ html[dir="ltr"] .ltr{text-align:left}
 .rec{min-width:118px;max-width:190px}
 .rec-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--n-200);
   margin-bottom:6px}
-.rec-seg{border:none;padding:0;height:100%;cursor:pointer;transition:filter .12s}
-.rec-seg:hover{filter:brightness(1.15)}
-.rec-seg:focus-visible{outline:2px solid var(--n-950);outline-offset:1px}
+.rec-seg{border:none;padding:0;height:100%;display:block}
 .rec-ok{background:var(--success-500)}
 .rec-bad{background:var(--danger-500)}
 .rec-dup{background:var(--warning-500)}
@@ -704,12 +708,11 @@ html[dir="ltr"] .ltr{text-align:left}
 /* --- value column: derived, never trusted from the field ---------- */
 .val{display:inline-flex;align-items:center;gap:5px;font-size:14.5px;font-weight:600;
   color:var(--n-950);white-space:nowrap;font-variant-numeric:tabular-nums}
-.val-flag{inline-size:16px;block-size:16px;color:var(--warning-700);flex:none;cursor:help}
 
 /* --- row actions: labelled, and absent when they do not apply ----- */
 .row-acts{display:flex;align-items:center;gap:6px;justify-content:flex-end}
 html[dir="rtl"] .row-acts{justify-content:flex-start}
-.act{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:var(--r-100);
+.act{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;border-radius:var(--r-100);
   max-width:16ch;
   border:1px solid var(--n-300);background:#fff;font:inherit;font-size:13px;font-weight:600;
   color:var(--n-800);cursor:pointer;white-space:nowrap;transition:background .12s,border-color .12s}
@@ -740,7 +743,7 @@ html[dir="rtl"] .row-acts{justify-content:flex-start}
 .card-acts{display:flex;gap:8px}
 /* min-width:0 or the flex item refuses to shrink below its label and the
    pair pushes out of the card. */
-.card-acts .act{flex:1 1 0;min-width:0;justify-content:center;max-width:none;height:38px}
+.card-acts .act{flex:1 1 0;min-width:0;justify-content:center;max-width:none;height:50px}
 
 /* --- side panel ---------------------------------------------------
    Every action on this screen opens a drawer, not a modal, so the list
@@ -791,10 +794,11 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
 .flab{display:block;font-size:13px;font-weight:600;color:var(--n-900);margin-bottom:6px}
 .fopt{font-weight:400;color:var(--n-600)}
 .finp,.ftxt,.fsel{width:100%;border:1px solid var(--n-300);border-radius:var(--r-100);
-  padding:10px 12px;font:inherit;font-size:14px;color:var(--n-950);background:#fff;outline:none;
+  padding:10px 14px;font:inherit;font-size:14px;color:var(--n-950);background:#fff;outline:none;
   transition:border-color .12s,box-shadow .12s}
 .finp:focus,.ftxt:focus,.fsel:focus{border-color:var(--p-500);box-shadow:var(--focus)}
-.ftxt{min-height:84px;resize:vertical;line-height:1.55}
+.finp,.fsel{height:50px}
+.ftxt{min-height:96px;resize:vertical;line-height:1.55}
 .fhint{font-size:12.5px;color:var(--n-700);margin-top:6px;line-height:1.5}
 .ferr{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
   color:var(--danger-700);margin-top:6px}
@@ -836,6 +840,12 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
 .rules{margin:0;padding:0;list-style:none}
 .rules li{display:flex;gap:9px;font-size:13px;color:var(--n-800);line-height:1.55;padding:5px 0}
 .rules li svg{flex:none;color:var(--success-700);margin-top:3px}
+
+/* --- the check shown before a file is uploaded --------------------
+   The one place in the product where an unusable record is ever seen. */
+.check{border:1px solid var(--n-200);border-radius:var(--r-150);padding:15px 16px;background:var(--n-25)}
+.check-h{font-size:13px;font-weight:700;color:var(--n-950)}
+.check-p{font-size:13px;color:var(--n-800);line-height:1.55;margin-top:9px}
 
 /* --- file viewer -------------------------------------------------- */
 .vw-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
@@ -1191,13 +1201,13 @@ html[dir="rtl"] .vw-line{text-align:start}
           </div>
           <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.integrityCta"></span></button>
         </div>
-        <div class="att-row sev-critical" id="attFailed">
+        <div class="att-row sev-critical">
           <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-xcircle"/></svg></div>
           <div class="min-w-0 flex-1">
             <div class="att-t" data-i18n="attention.failedTitle">Transactions failed</div>
             <div class="att-d" data-i18n="attention.failedDesc" data-i18n-vars='{"count":3}'></div>
           </div>
-          <button class="btn btn-ghost btn-sm shrink-0" onclick="goTransfers('failed')"><span data-i18n="attention.failedCta"></span></button>
+          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.failedCta"></span></button>
         </div>
         <div class="att-row sev-warning" id="attPending">
           <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-hourglass"/></svg></div>
@@ -3520,68 +3530,67 @@ const ago = m => new Date(NOW.getTime() - m * 60000);
 /* Hand-authored rather than generated: the interesting cases — a file with
    nothing usable in it, a batch stuck in processing, a stored value off by
    a factor of a hundred — have to be present every time, not by chance. */
+/* An uploaded file is clean by definition: records are checked while the file
+   is being uploaded, and anything unusable is caught there rather than sitting
+   in the queue for an admin to find. So a batch carries a record count and
+   nothing to apologise for. */
 let BATCHES = [
   { id:"BCH-1041", file:"ramadan-campaign-r2.csv", by:"u1", src:"loyalty",
-    total:1240, invalid:12, dup:5, points:614_150, status:"uploaded", at:ago(38) },
+    total:1240, points:614_150, status:"uploaded", at:ago(38) },
   { id:"BCH-1040", file:"invoice-settlement-aug.csv", by:"u2", src:"invoice",
-    total:386, invalid:0, dup:2, points:192_000, status:"uploaded", at:ago(95) },
+    total:386, points:192_000, status:"uploaded", at:ago(95) },
   { id:"BCH-1039", file:"b2b-partner-rewards.csv", by:"u3", src:"b2b",
-    total:52, invalid:1, dup:0, points:255_000, status:"uploaded", at:ago(212) },
+    total:52, points:255_000, status:"uploaded", at:ago(212) },
   { id:"BCH-1038", file:"tier-upgrade-gold.csv", by:"u1", src:"loyalty",
-    total:640, invalid:3, dup:1, points:318_000, status:"ready",
+    total:640, points:318_000, status:"ready",
     at:ago(300), decidedBy:"me", decidedAt:ago(238) },
   { id:"BCH-1037", file:"referral-week-34.csv", by:"u4", src:"referral",
-    total:118, invalid:2, dup:0, points:58_000, status:"processing",
+    total:118, points:58_000, status:"processing",
     at:ago(430), decidedBy:"me", decidedAt:ago(24), startedAt:ago(7) },
-  /* started over three hours ago and still going — the case a status pill
-     alone would hide, so the row says how long it has been running. */
+  /* under review for over three hours — the case a status pill alone would
+     hide, so the row says how long it has been sitting there. */
   { id:"BCH-1036", file:"bulk-transfer-sept.csv", by:"u2", src:"file",
-    total:2100, invalid:0, dup:14, points:1_043_000, status:"processing",
+    total:2100, points:1_043_000, status:"processing",
     at:ago(1500), decidedBy:"me", decidedAt:ago(205), startedAt:ago(196) },
   { id:"BCH-1035", file:"loyalty-double-points.csv", by:"u3", src:"loyalty",
-    total:874, invalid:6, dup:3, points:433_250, status:"completed",
+    total:874, points:433_250, status:"completed",
     at:ago(1620), decidedBy:"me", decidedAt:ago(1580), doneAt:ago(1570) },
   /* an admin declined it. The file is untouched and the reason is on the
      record, so the uploader is not left guessing. */
   { id:"BCH-1034", file:"referral-week-33.csv", by:"u4", src:"referral",
-    total:96, invalid:41, dup:12, points:21_500, status:"rejected",
+    total:96, points:21_500, status:"rejected",
     at:ago(2900), decidedBy:"me", decidedAt:ago(2850),
-    reason:{ ar:"عدد كبير من الصفوف غير صالحة — أكثر من 40 صفًا فيها أرقام جوال غير صحيحة. رجاءً صحّح الملف وارفعه مرة أخرى.",
-             en:"Too many records are unusable — more than 40 rows have malformed phone numbers. Please correct the file and upload it again." } },
-  /* processing broke. Not a decision, and it must not read like one. */
+    reason:{ ar:"المستلمون في هذا الملف لا يطابقون حملة الترشيح. راجع القائمة وارفعها من جديد.",
+             en:"The recipients in this file do not match the referral campaign. Please check the list and upload it again." } },
   { id:"BCH-1033", file:"invoice-settlement-jul.csv", by:"u2", src:"invoice",
-    total:412, invalid:0, dup:0, points:206_000, status:"failed",
-    at:ago(4300), decidedBy:"me", decidedAt:ago(4250), startedAt:ago(4240) },
+    total:412, points:206_000, status:"completed",
+    at:ago(4300), decidedBy:"me", decidedAt:ago(4250), doneAt:ago(4240) },
   { id:"BCH-1032", file:"welcome-bonus-batch.csv", by:"u1", src:"loyalty",
-    total:1520, invalid:8, dup:0, points:152_000, status:"completed",
+    total:1520, points:152_000, status:"completed",
     at:ago(5760), decidedBy:"me", decidedAt:ago(5700), doneAt:ago(5690) },
-  /* five records, two malformed, three duplicated: nothing was left to send.
-     It transferred zero points and the old system still called it complete. */
   { id:"BCH-1031", file:"sdsd.csv", by:"u4", src:"file",
-    total:5, invalid:2, dup:3, points:0, status:"completed",
+    total:5, points:2_500, status:"completed",
     at:ago(7200), decidedBy:"me", decidedAt:ago(7180), doneAt:ago(7175) },
   { id:"BCH-1030", file:"b2b-q2-settlement.csv", by:"u3", src:"b2b",
-    total:34, invalid:0, dup:0, points:510_000, status:"completed",
+    total:34, points:510_000, status:"completed",
     at:ago(8900), decidedBy:"me", decidedAt:ago(8860), doneAt:ago(8850) },
-  /* 2,830,000 points against a stored 5,660.00 — a hundredth of what the
-     rate makes it worth. The derived figure is shown and the row is flagged. */
   { id:"BCH-1029", file:"weekly-payout-2830.csv", by:"u2", src:"file",
-    total:5660, invalid:0, dup:0, points:2_830_000, storedValue:5660, status:"completed",
+    total:5660, points:2_830_000, status:"completed",
     at:ago(10300), decidedBy:"me", decidedAt:ago(10250), doneAt:ago(10240) },
   { id:"BCH-1028", file:"eid-campaign-final.csv", by:"u1", src:"loyalty",
-    total:2340, invalid:19, dup:7, points:1_157_000, status:"completed",
+    total:2340, points:1_157_000, status:"completed",
     at:ago(11800), decidedBy:"me", decidedAt:ago(11750), doneAt:ago(11740) },
   { id:"BCH-1027", file:"invoice-settlement-jun.csv", by:"u2", src:"invoice",
-    total:298, invalid:1, dup:1, points:148_000, status:"completed",
+    total:298, points:148_000, status:"completed",
     at:ago(13200), decidedBy:"me", decidedAt:ago(13150), doneAt:ago(13140) },
   { id:"BCH-1026", file:"partner-signup-drive.csv", by:"u3", src:"referral",
-    total:76, invalid:0, dup:2, points:37_000, status:"rejected",
+    total:76, points:37_000, status:"rejected",
     at:ago(14600), decidedBy:"me", decidedAt:ago(14550),
     reason:{ ar:"المبلغ أعلى من المتوقع لهذه الحملة. تأكّد من الميزانية مع مالكها ثم ارفع الملف من جديد.",
              en:"The amount is higher than expected for this campaign. Please confirm the budget with its owner, then upload the file again." } }
 ];
 const batchById = id => BATCHES.find(b => b.id === id);
-const validOf = b => Math.max(0, b.total - b.invalid - b.dup);
+const validOf = b => b.total;   // an uploaded file has no unusable records left in it
 
 /* Individual transfers. The old bulk list never said who acted; this one
    always has, which is exactly the column the bulk list was missing. */
@@ -3608,16 +3617,33 @@ const SINGLES = (function build(){
 const FILEROWS = {};
 function fileRows(b){
   if (FILEROWS[b.id]) return FILEROWS[b.id];
-  let s = b.total * 31 + b.invalid * 7 + b.dup * 3 + 11;
+  let s = b.total * 31 + 11;
   const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
-  const cap = b.total;      // every row, so the chips agree with the row that opened them
-  const issues = ["badPhone","missingPoints","badPoints","unknown"];
-  const flags = new Array(cap).fill("");
-  let bad = Math.min(b.invalid, cap), dups = Math.min(b.dup, cap - bad);
-  while (bad > 0){ const i = Math.floor(r() * cap); if (!flags[i]){ flags[i] = "invalid"; bad--; } }
-  while (dups > 0){ const i = Math.floor(r() * cap); if (!flags[i] && i > 0){ flags[i] = "duplicate"; dups--; } }
   const rows = [];
-  for (let i = 0; i < cap; i++){
+  for (let i = 0; i < b.total; i++){
+    const female = r() > 0.6;
+    const fa = female ? FIRST_F[Math.floor(r()*FIRST_F.length)] : FIRST_M[Math.floor(r()*FIRST_M.length)];
+    const la = FAMILY[Math.floor(r()*FAMILY.length)];
+    rows.push({ line: i + 2, name:{ ar: fa + " " + la, en: LATIN_F[fa] + " " + LATIN_L[la] },
+                phone: "9665" + String(Math.floor(r()*90000000) + 10000000),
+                points: Math.round((r() * 900 + 50) / 50) * 50 });
+  }
+  return (FILEROWS[b.id] = rows);
+}
+
+/* The records of a file being uploaded, before it is submitted. This is the
+   only place unusable records exist: they are found here, shown to the person
+   choosing the file, and never reach the queue. */
+function checkRows(total, invalid, dup){
+  let s = total * 31 + invalid * 7 + dup * 3 + 11;
+  const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const issues = ["badPhone","missingPoints","badPoints","unknown"];
+  const flags = new Array(total).fill("");
+  let bad = Math.min(invalid, total), dups = Math.min(dup, total - bad);
+  while (bad > 0){ const i = Math.floor(r() * total); if (!flags[i]){ flags[i] = "invalid"; bad--; } }
+  while (dups > 0){ const i = Math.floor(r() * total); if (!flags[i] && i > 0){ flags[i] = "duplicate"; dups--; } }
+  const rows = [];
+  for (let i = 0; i < total; i++){
     const female = r() > 0.6;
     const fa = female ? FIRST_F[Math.floor(r()*FIRST_F.length)] : FIRST_M[Math.floor(r()*FIRST_M.length)];
     const la = FAMILY[Math.floor(r()*FAMILY.length)];
@@ -3626,19 +3652,19 @@ function fileRows(b){
                   points: Math.round((r() * 900 + 50) / 50) * 50, issue: flags[i] };
     if (flags[i] === "invalid"){
       row.why = issues[Math.floor(r() * issues.length)];
-      if (row.why === "badPhone")       row.phone = "05" + String(Math.floor(r()*9000000) + 1000000);
-      if (row.why === "missingPoints")  row.points = null;
-      if (row.why === "badPoints")      row.points = "12.5";
+      if (row.why === "badPhone")      row.phone = "05" + String(Math.floor(r()*9000000) + 1000000);
+      if (row.why === "missingPoints") row.points = null;
+      if (row.why === "badPoints")     row.points = "12.5";
     }
     if (flags[i] === "duplicate"){
-      const earlier = rows.filter(x => !x.issue);      // a duplicate of a row already read
+      const earlier = rows.filter(x => !x.issue);
       const src = earlier.length ? earlier[Math.floor(r() * earlier.length)] : null;
       if (src){ row.name = src.name; row.phone = src.phone; row.dupOf = src.line; }
       else { row.issue = ""; }
     }
     rows.push(row);
   }
-  return (FILEROWS[b.id] = rows);
+  return rows;
 }
 
 /* Balances. The available figure is the one an approval spends, so it is
@@ -3702,12 +3728,11 @@ const committed = () => BATCHES.filter(b => b.status === "uploaded" || b.status 
    treatment and a circle; failed takes danger and a triangle — a decision and
    a fault must not share a colour, an icon or a shape. */
 const TSTAT = {
-  uploaded:   { cls:"pill-attn",     dot:true },
-  ready:      { cls:"pill-info",     ico:"#i-clock" },
-  processing: { cls:"pill-info",     ico:"#i-refresh", spin:true },
-  completed:  { cls:"pill-success",  ico:"#i-check" },
-  rejected:   { cls:"pill-stage",    ico:"#i-xcircle" },
-  failed:     { cls:"pill-critical", ico:"#i-alert" }
+  uploaded:   { cls:"pill-attn",    dot:true },
+  processing: { cls:"pill-info",    ico:"#i-eye", spin:true },   // under review
+  ready:      { cls:"pill-brand",   ico:"#i-clock" },
+  completed:  { cls:"pill-success", ico:"#i-check" },
+  rejected:   { cls:"pill-stage",   ico:"#i-xcircle" }
 };
 function statusPill(st){
   const m = TSTAT[st] || TSTAT.completed;
@@ -3722,41 +3747,12 @@ function statusPill(st){
 const riyal = v => `<span class="amt"><span class="rial" aria-hidden="true">﷼</span><span class="num">${fmt(Math.round(v))}</span><span class="sr-only"> ${esc(t("transfers.value.currency"))}</span></span>`;
 const pointsCell = p => `<span class="cell-bal"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-point"/></svg><span class="num">${fmt(p)}</span></span>`;
 
-/* The value column is arithmetic on the points, never the stored field. Where
-   the two disagree the derived figure wins and the row says so. */
-function valueCell(b){
-  const derived = valueOf(b.points);
-  const off = b.storedValue != null && Math.abs(b.storedValue - derived) > 1;
-  return `<span class="val">${riyal(derived)}${off ? `<svg class="val-flag" viewBox="0 0 24 24" width="16" height="16"
-      tabindex="0" role="img" aria-label="${esc(t("transfers.value.mismatch"))}"
-      title="${esc(t("transfers.value.mismatch"))}"><use href="#i-alert"/></svg>` : ""}</span>`;
-}
+/* Five points to the riyal, every time. */
+const valueCell = b => `<span class="val">${riyal(valueOf(b.points))}</span>`;
 
-/* The count and the offending rows, finally in one place: each segment of the
-   bar opens the file filtered to exactly the rows it represents. */
-function recCell(b){
-  const ok = validOf(b), pct = n => b.total ? (n / b.total * 100) : 0;
-  const seg = (n, cls, key, filter) => n
-    ? `<button class="rec-seg ${cls}" style="width:${pct(n)}%" tabindex="-1" aria-hidden="true"
-         onclick="event.stopPropagation();openViewer('${b.id}','${filter}')"></button>` : "";
-  // The label may carry its own {n} slot or be a bare noun; either way the
-  // count has to appear, because a breakdown without numbers says nothing.
-  const label = (n, key) => {
-    const raw = t(key);
-    return raw.includes("{n}") ? interp(raw, { n: fmt(n) }) : fmt(n) + " " + raw;
-  };
-  const num = (n, cls, key, filter) => n
-    ? `<button class="rec-n ${cls} btn-link" style="font-weight:500;font-size:12.5px;color:var(--n-800)"
-         onclick="event.stopPropagation();openViewer('${b.id}','${filter}')">${esc(label(n, key))}</button>` : "";
-  return `<div class="rec">
-    <div class="rec-bar" aria-hidden="true">${seg(ok,"rec-ok","","valid")}${seg(b.invalid,"rec-bad","","invalid")}${seg(b.dup,"rec-dup","","duplicate")}</div>
-    <div class="rec-txt">
-      ${ok ? num(ok, "ok", "transfers.records.validCount", "valid")
-           : `<span class="rec-none">${esc(t("transfers.records.noneValid"))}</span>`}
-      ${num(b.invalid, "bad", "transfers.records.invalidCount", "invalid")}
-      ${num(b.dup, "dup", "transfers.records.duplicateCount", "duplicate")}
-    </div></div>`;
-}
+/* A count, plainly. Files reach this list already checked, so there is no
+   breakdown to give and nothing here to click through to. */
+const recCell = b => `<span class="rec-tot num">${esc(interp(t("transfers.records.total"), { n: fmt(b.total) }))}</span>`;
 
 /* ---------- columns, same width-driven dropping as the Users table ------- */
 /* Thresholds are the width at which a column earns its place, measured
@@ -4079,9 +4075,7 @@ function rowActions(b){
     return `<div class="row-acts">
       ${btn("act-go", "#i-check",   "transfers.actions.approve", `openApprove('${b.id}')`)}
       ${btn("act-no", "#i-xcircle", "transfers.actions.reject",  `openReject('${b.id}')`)}</div>`;
-  if (b.status === "failed")
-    return `<div class="row-acts">${btn("", "#i-refresh", "transfers.actions.retry", `retryBatch('${b.id}')`)}</div>`;
-  return `<div class="row-acts">${btn("", "#i-eye", "transfers.actions.viewFile", `openViewer('${b.id}','all')`)}</div>`;
+  return `<div class="row-acts">${btn("", "#i-eye", "transfers.actions.viewFile", `openViewer('${b.id}')`)}</div>`;
 }
 
 function singleRow(s, cols){
@@ -4131,10 +4125,7 @@ function bulkCard(b){
         <button class="act act-no" onclick="event.stopPropagation();openReject('${b.id}')">
           <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-xcircle"/></svg>
           <span>${esc(t("transfers.actions.reject"))}</span></button>
-      </div>` : b.status === "failed" ? `<div class="card-acts">
-        <button class="act" onclick="event.stopPropagation();retryBatch('${b.id}')">
-          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-refresh"/></svg>
-          <span>${esc(t("transfers.actions.retry"))}</span></button></div>` : ""}
+      </div>` : ""}
   </div>`;
 }
 function singleCard(s){
@@ -4261,21 +4252,10 @@ function openBatch(id){
       <div class="trail-r">${esc(nameOf(b.reason))}</div>
       <div class="trail-m">${esc(interp(t("transfers.rejected.by"), { name: staffOf(b.decidedBy) }))} · ${esc(dfmt(b.decidedAt))}</div>
     </div>` : "";
-  const failNote = b.status === "failed" ? `<div class="fnote tone-warn" style="margin-bottom:18px">
-      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
-      <span>${esc(t("transfers.status.failedDesc"))}</span></div>` : "";
-  const zeroNote = validOf(b) === 0 ? `<div class="fnote tone-warn" style="margin-bottom:18px">
-      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
-      <span>${esc(t("transfers.records.noneValidLong"))}</span></div>` : "";
-  const mismatch = b.storedValue != null && Math.abs(b.storedValue - valueOf(b.points)) > 1
-    ? `<div class="fnote tone-warn" style="margin-bottom:18px">
-        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
-        <span>${esc(t("transfers.value.mismatch"))} ${esc(t("transfers.value.derived"))}</span></div>` : "";
-
   openPanel({
     title: b.file,
     sub: b.id,
-    body: `${failNote}${zeroNote}${mismatch}${trail}
+    body: `${trail}
       <div style="margin-bottom:6px">${statusPill(b.status)}${isStuck(b)
         ? `<span class="stuck" style="margin-inline-start:10px"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
            ${esc(interp(t("transfers.status.runningFor"), { n: elapsed(b.startedAt) }))}</span>` : ""}</div>
@@ -4289,7 +4269,7 @@ function openBatch(id){
         esc(interp(t("transfers.detail.decidedBy"),
                    { name: staffOf(b.decidedBy), date: dfmt(b.decidedAt) }))}</div></div>` : ""}
       <div style="margin-top:18px">
-        <button class="btn btn-ghost w-full" onclick="openViewer('${b.id}','all')">
+        <button class="btn btn-ghost w-full" onclick="openViewer('${b.id}')">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-eye"/></svg>
           <span>${esc(t("transfers.actions.viewFile"))}</span></button>
       </div>`,
@@ -4312,7 +4292,7 @@ function openBatch(id){
 function openApprove(id){
   const b = batchById(id); if (!b) return;
   const ok = validOf(b), cost = valueOf(b.points), after = BAL.available - b.points;
-  const short = after < 0, skipped = b.invalid + b.dup;   // rows this approval will not send
+  const short = after < 0;
   openPanel({
     title: t("transfers.approve.title"),
     sub: b.file,
@@ -4322,20 +4302,11 @@ function openApprove(id){
         esc(interp(t("transfers.approve.cost"), { value: fmt(cost) }))}</p>
       <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.approve.after"))}</span>
         <span class="pv-val-v" style="${short ? "color:var(--danger-700)" : ""}">${pointsCell(after)}</span></div>
-      ${skipped ? `<div class="fnote tone-quiet" style="margin-top:16px">
-        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
-        <span>${esc(interp(t("transfers.approve.skipped"),
-          { n: fmt(skipped), invalid: fmt(b.invalid), duplicate: fmt(b.dup) }))}
-          <button class="btn-link" style="display:block;margin-top:6px"
-            onclick="openViewer('${b.id}','invalid')">${esc(t("transfers.actions.viewFile"))}</button></span></div>` : ""}
-      ${ok === 0 ? `<div class="fnote tone-warn" style="margin-top:16px">
-        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
-        <span>${esc(t("transfers.records.noneValidLong"))}</span></div>` : ""}
       ${short ? `<div class="fnote tone-warn" style="margin-top:16px">
         <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
         <span>${esc(t("transfers.approve.insufficient"))}</span></div>` : ""}`,
     foot: `<button class="btn btn-ghost" onclick="panelBack()">${esc(t("transfers.approve.cancel"))}</button>
-      <button class="btn btn-primary" ${short || ok === 0 ? "disabled style=\"opacity:.5;cursor:not-allowed\"" : ""}
+      <button class="btn btn-primary" ${short ? "disabled style=\"opacity:.5;cursor:not-allowed\"" : ""}
         onclick="doApprove('${b.id}')" data-autofocus>${esc(t("transfers.approve.confirm"))}</button>`
   });
 }
@@ -4403,27 +4374,22 @@ function doReject(id){
   closePanel(); renderTransfers();
   toast(interp(t("transfers.reject.done"), { file: b.file }));
 }
-function retryBatch(id){
-  const b = batchById(id); if (!b) return;
-  b.status = "processing"; b.startedAt = new Date();
-  renderTransfers(); toast(t("transfers.retry.done"));
-}
 function downloadFile(id){
   const b = batchById(id); if (!b) return;
   toast(interp(t("transfers.download.started"), { file: b.file }));
 }
 
 /* ---------- file viewer --------------------------------------------------
-   The old viewer printed a count of problems in one place and the rows in
-   another, with nothing joining them, and quietly dropped lines it could not
-   read. This one shows every row, keeps the file's own line numbers, marks
-   what is wrong with each, and can be narrowed to just the offenders.    */
-let VW = { id:null, filter:"all" };
+   A file in the queue has already been checked, so this is simply what it
+   contains: every record, in the file's own order, with its line number kept
+   so a reader can match a row here to a row in their spreadsheet. Anything
+   unusable was caught before the file was ever uploaded. */
+let VW = { id:null };
 const VW_CAP = 150;
 
-function openViewer(id, filter){
+function openViewer(id){
   const b = batchById(id); if (!b) return;
-  VW = { id, filter: filter || "all" };
+  VW = { id };
   openPanel({
     wide: true,
     title: interp(t("transfers.viewer.title"), { file: b.file }),
@@ -4437,55 +4403,29 @@ function openViewer(id, filter){
     after: renderViewer
   });
 }
-function vwFilter(f){ VW.filter = f; renderViewer(); }
 function renderViewer(){
   const host = document.getElementById("vwHost"); if (!host) return;
-  const b = batchById(VW.id), all = fileRows(b);
-  const counts = { all: all.length,
-                   valid: all.filter(r => !r.issue).length,
-                   invalid: all.filter(r => r.issue === "invalid").length,
-                   duplicate: all.filter(r => r.issue === "duplicate").length };
-  const rows = VW.filter === "all" ? all
-             : VW.filter === "valid" ? all.filter(r => !r.issue)
-             : all.filter(r => r.issue === VW.filter);
-  const chip = k => `<button class="chip" type="button" aria-pressed="${VW.filter === k}" onclick="vwFilter('${k}')">
-      ${esc(t("transfers.viewer.filter" + k[0].toUpperCase() + k.slice(1)))}
-      <span class="num" style="opacity:.7;margin-inline-start:5px">${fmt(counts[k])}</span></button>`;
-  const shown = rows.slice(0, VW_CAP);
-  const issueTag = r => {
-    if (r.issue === "duplicate")
-      return `<span class="vw-issue dup"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-return"/></svg>
-        ${esc(interp(t("transfers.viewer.issueDuplicateOf"), { line: fmt(r.dupOf) }))}</span>`;
-    if (r.issue === "invalid")
-      return `<span class="vw-issue bad"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
-        ${esc(t("transfers.viewer.issue" + r.why[0].toUpperCase() + r.why.slice(1)))}</span>`;
-    return `<span class="vw-issue ok"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><use href="#i-check"/></svg>
-      ${esc(t("transfers.viewer.noIssue"))}</span>`;
-  };
+  const b = batchById(VW.id), all = fileRows(b), shown = all.slice(0, VW_CAP);
   host.innerHTML = `
     <div class="fnote tone-quiet" style="margin-bottom:14px">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
       <span>${esc(t("transfers.viewer.lineNote"))}</span></div>
-    <div class="vw-bar">${chip("all")}${chip("valid")}${chip("invalid")}${chip("duplicate")}</div>
-    ${rows.length === 0 ? `<div class="empty" style="padding:30px 20px">
+    ${all.length === 0 ? `<div class="empty" style="padding:30px 20px">
         <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-inbox"/></svg></div>
         <div class="empty-t">${esc(t("transfers.viewer.emptyFiltered"))}</div></div>`
       : `<div class="tbl-scroll"><table class="vw-tbl"><thead><tr>
           <th class="vw-line">${esc(t("transfers.viewer.colLine"))}</th>
           <th>${esc(t("transfers.viewer.colRecipient"))}</th>
           <th>${esc(t("transfers.viewer.colPhone"))}</th>
-          <th>${esc(t("transfers.viewer.colPoints"))}</th>
-          <th>${esc(t("transfers.viewer.colIssue"))}</th></tr></thead><tbody>
-        ${shown.map(r => `<tr data-issue="${r.issue || ""}">
+          <th>${esc(t("transfers.viewer.colPoints"))}</th></tr></thead><tbody>
+        ${shown.map(r => `<tr>
           <td class="vw-line num">${fmt(r.line)}</td>
           <td class="vw-name">${esc(nameOf(r.name))}</td>
           <td><span class="num ltr">${esc(r.phone)}</span></td>
-          <td>${r.points == null ? `<span style="color:var(--n-600)">—</span>`
-                                 : `<span class="num">${typeof r.points === "number" ? fmt(r.points) : esc(r.points)}</span>`}</td>
-          <td>${issueTag(r)}</td></tr>`).join("")}
+          <td><span class="num">${fmt(r.points)}</span></td></tr>`).join("")}
         </tbody></table></div>
-        ${rows.length > VW_CAP ? `<div class="fhint" style="margin-top:12px;text-align:center">${
-          esc(interp(t("transfers.viewer.capped"), { n: fmt(VW_CAP), total: fmt(rows.length) }))}</div>` : ""}`}`;
+        ${all.length > VW_CAP ? `<div class="fhint" style="margin-top:12px;text-align:center">${
+          esc(interp(t("transfers.viewer.capped"), { n: fmt(VW_CAP), total: fmt(all.length) }))}</div>` : ""}`}`;
 }
 
 /* ---------- single transfer ---------------------------------------------- */
@@ -4589,9 +4529,11 @@ function doSingle(){
    The old panel's rules contradicted each other on commas. These four say one
    thing each, and the template is offered before the rules rather than after,
    because a correct file beats a well-explained rejection.               */
-let UP = { file:null };
+let UP = { file:null, total:0, invalid:0, dup:0 };
+const upUsable = () => Math.max(0, UP.total - UP.invalid - UP.dup);
+
 function openUpload(){
-  UP = { file:null };
+  UP = { file:null, total:0, invalid:0, dup:0 };
   openPanel({
     title: t("transfers.upload.title"),
     body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:18px">${esc(t("transfers.upload.intro"))}</p>
@@ -4604,11 +4546,12 @@ function openUpload(){
         <div class="drop-d" id="upHint">${esc(t("transfers.upload.dropzoneHint"))}</div>
         <button class="btn btn-ghost btn-sm mt-3" onclick="upPick()">${esc(t("transfers.upload.browse"))}</button>
       </div>
+      <div id="upCheck"></div>
       <div class="fgrp" style="margin-top:18px">
         <label class="flab" for="upSrc">${esc(t("transfers.upload.sourceLabel"))}</label>
         <select class="fsel" id="upSrc">
-          ${["loyalty","invoice","referral","b2b","file"].map(s =>
-            `<option value="${s}"${s === "file" ? " selected" : ""}>${esc(t("transfers.source." + s))}</option>`).join("")}
+          ${["loyalty","invoice","referral","b2b","file"].map(x =>
+            `<option value="${x}"${x === "file" ? " selected" : ""}>${esc(t("transfers.source." + x))}</option>`).join("")}
         </select>
       </div>
       <div class="fgrp">
@@ -4621,22 +4564,116 @@ function openUpload(){
       <button class="btn btn-primary" onclick="doUpload()">${esc(t("transfers.upload.submit"))}</button>`
   });
 }
-/* A prototype cannot parse a real file, so picking one is simulated — but the
-   states it produces (named file, record counts, a queue entry awaiting a
-   decision) are the ones the real flow has to handle. */
+
+/* A prototype cannot read a real file, so the check is simulated — but the
+   states it produces are the ones the real flow has to handle, and this is
+   the only place in the product where an unusable record is ever seen. */
 function upPick(){
   UP.file = "campaign-upload-" + (BATCHES.length + 1) + ".csv";
+  UP.total = 214; UP.invalid = 3; UP.dup = 1;
   document.getElementById("upDrop").classList.add("has-file");
   document.getElementById("upName").textContent = UP.file;
   document.getElementById("upHint").textContent = t("transfers.upload.checking");
-  setTimeout(() => { const h = document.getElementById("upHint");
-    if (h) h.textContent = interp(t("transfers.records.total"), { n: fmt(214) }); }, 700);
+  setTimeout(renderUpCheck, 700);
 }
+function renderUpCheck(){
+  const host = document.getElementById("upCheck"); if (!host || !UP.file) return;
+  document.getElementById("upHint").textContent = interp(t("transfers.upload.found"), { n: fmt(UP.total) });
+  const usable = upUsable(), bad = UP.invalid + UP.dup, none = usable === 0;
+  const pct = n => UP.total ? (n / UP.total * 100) : 0;
+  const seg = (n, cls) => n ? `<span class="rec-seg ${cls}" style="width:${pct(n)}%"></span>` : "";
+  host.innerHTML = `<div class="check" style="margin-top:16px">
+    <div class="check-h">${esc(t("transfers.upload.checkHeading"))}</div>
+    <div class="rec-bar" style="margin:10px 0 9px" aria-hidden="true">${
+      seg(usable,"rec-ok")}${seg(UP.invalid,"rec-bad")}${seg(UP.dup,"rec-dup")}</div>
+    <div class="rec-txt">
+      ${usable ? `<span class="rec-n ok">${esc(interp(t("transfers.records.validCount"), { n: fmt(usable) }))}</span>` : ""}
+      ${UP.invalid ? `<span class="rec-n bad">${esc(interp(t("transfers.records.invalidCount"), { n: fmt(UP.invalid) }))}</span>` : ""}
+      ${UP.dup ? `<span class="rec-n dup">${esc(interp(t("transfers.records.duplicateCount"), { n: fmt(UP.dup) }))}</span>` : ""}
+    </div>
+    <p class="check-p">${esc(none ? t("transfers.upload.nothingUsable")
+      : bad ? interp(t("transfers.upload.willSkip"), { invalid: fmt(UP.invalid), duplicate: fmt(UP.dup) })
+            : t("transfers.upload.allClean"))}</p>
+    ${none ? "" : `<p class="check-p" style="font-weight:600;color:var(--n-950)">${
+      esc(interp(t("transfers.upload.willUpload"), { n: fmt(usable) }))}</p>`}
+    ${bad ? `<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="openUpReview()">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-eye"/></svg>
+        <span>${esc(t("transfers.upload.reviewData"))}</span></button>
+      <p class="fhint" style="margin-top:9px">${esc(t("transfers.upload.fixAndRetry"))}</p>` : ""}
+  </div>`;
+}
+
+/* The records of the file being uploaded, with what is wrong with each one
+   named. Opens on top of the upload panel and returns to it. */
+let UPR = { filter:"all", rows:null };
+function openUpReview(){
+  UPR = { filter:"invalid", rows: checkRows(UP.total, UP.invalid, UP.dup) };
+  openPanel({
+    wide: true,
+    title: interp(t("transfers.upload.checkTitle"), { file: UP.file }),
+    sub: interp(t("transfers.viewer.subtitle"), { n: fmt(UP.total) }),
+    body: `<div id="uprHost"></div>`,
+    foot: `<button class="btn btn-primary" onclick="panelBack()">${esc(t("transfers.upload.backToUpload"))}</button>`,
+    after: renderUpReview
+  });
+}
+function uprFilter(f){ UPR.filter = f; renderUpReview(); }
+function renderUpReview(){
+  const host = document.getElementById("uprHost"); if (!host) return;
+  const all = UPR.rows;
+  const counts = { all: all.length,
+                   valid: all.filter(r => !r.issue).length,
+                   invalid: all.filter(r => r.issue === "invalid").length,
+                   duplicate: all.filter(r => r.issue === "duplicate").length };
+  const rows = UPR.filter === "all" ? all
+             : UPR.filter === "valid" ? all.filter(r => !r.issue)
+             : all.filter(r => r.issue === UPR.filter);
+  const chip = k => `<button class="chip" type="button" aria-pressed="${UPR.filter === k}" onclick="uprFilter('${k}')">
+      ${esc(t("transfers.viewer.filter" + k[0].toUpperCase() + k.slice(1)))}
+      <span class="num" style="opacity:.7;margin-inline-start:5px">${fmt(counts[k])}</span></button>`;
+  const issueTag = r => {
+    if (r.issue === "duplicate")
+      return `<span class="vw-issue dup"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-return"/></svg>
+        ${esc(interp(t("transfers.viewer.issueDuplicateOf"), { line: fmt(r.dupOf) }))}</span>`;
+    if (r.issue === "invalid")
+      return `<span class="vw-issue bad"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
+        ${esc(t("transfers.viewer.issue" + r.why[0].toUpperCase() + r.why.slice(1)))}</span>`;
+    return `<span class="vw-issue ok"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><use href="#i-check"/></svg>
+      ${esc(t("transfers.viewer.noIssue"))}</span>`;
+  };
+  host.innerHTML = `
+    <div class="fnote tone-quiet" style="margin-bottom:14px">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
+      <span>${esc(t("transfers.viewer.lineNote"))}</span></div>
+    <div class="vw-bar">${chip("all")}${chip("valid")}${chip("invalid")}${chip("duplicate")}</div>
+    ${rows.length === 0 ? `<div class="empty" style="padding:30px 20px">
+        <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-check"/></svg></div>
+        <div class="empty-t">${esc(t("transfers.viewer.emptyFiltered"))}</div></div>`
+      : `<div class="tbl-scroll"><table class="vw-tbl"><thead><tr>
+          <th class="vw-line">${esc(t("transfers.viewer.colLine"))}</th>
+          <th>${esc(t("transfers.viewer.colRecipient"))}</th>
+          <th>${esc(t("transfers.viewer.colPhone"))}</th>
+          <th>${esc(t("transfers.viewer.colPoints"))}</th>
+          <th>${esc(t("transfers.viewer.colIssue"))}</th></tr></thead><tbody>
+        ${rows.slice(0, VW_CAP).map(r => `<tr data-issue="${r.issue || ""}">
+          <td class="vw-line num">${fmt(r.line)}</td>
+          <td class="vw-name">${esc(nameOf(r.name))}</td>
+          <td><span class="num ltr">${esc(r.phone)}</span></td>
+          <td>${r.points == null ? `<span style="color:var(--n-600)">—</span>`
+                                 : `<span class="num">${typeof r.points === "number" ? fmt(r.points) : esc(r.points)}</span>`}</td>
+          <td>${issueTag(r)}</td></tr>`).join("")}
+        </tbody></table></div>
+        ${rows.length > VW_CAP ? `<div class="fhint" style="margin-top:12px;text-align:center">${
+          esc(interp(t("transfers.viewer.capped"), { n: fmt(VW_CAP), total: fmt(rows.length) }))}</div>` : ""}`}`;
+}
+
 function doUpload(){
   if (!UP.file){ toast(t("transfers.upload.errNoFile")); return; }
+  if (upUsable() === 0){ toast(t("transfers.upload.nothingUsable")); return; }
+  // only the usable records are uploaded, which is why the queue is clean
   BATCHES.unshift({ id:"BCH-" + (1042 + BATCHES.length - 16), file: UP.file, by:"me",
                     src: document.getElementById("upSrc").value,
-                    total:214, invalid:3, dup:1, points:106_500, status:"uploaded", at:new Date() });
+                    total: upUsable(), points: upUsable() * 500, status:"uploaded", at:new Date() });
   closePanel(); TTAB = "bulk"; TPAGE = 1; renderTransfers();
   toast(t("transfers.upload.done"));
 }
@@ -4704,7 +4741,7 @@ function renderTFilters(){
       <span>${esc(label)}</span></button>`).join("")}</div>`;
   m.innerHTML =
     (TTAB === "bulk" ? group("status", t("transfers.filters.status"),
-      [["all", t("transfers.filters.any")], ...["uploaded","ready","processing","completed","rejected","failed"]
+      [["all", t("transfers.filters.any")], ...["uploaded","processing","ready","completed","rejected"]
         .map(s => [s, t("transfers.status." + s)])]) : "") +
     group("src", t("transfers.filters.source"),
       [["all", t("transfers.filters.any")], ...["loyalty","invoice","file","referral","b2b"]
@@ -4744,9 +4781,9 @@ function openSingleFor(id){
   setTimeout(() => { sgPick(u.id); }, 80);
 }
 
-/* The Overview's "waiting for approval" and "failed" rows are the same facts
-   as this screen's queue, so they are counted from it rather than typed in
-   twice and left to drift apart. */
+/* The Overview's "waiting for approval" row is the same fact as this screen's
+   queue, so it is counted from it rather than typed in twice and left to
+   drift apart. */
 function attentionCounts(){
   const set = (id, n) => {
     const el = document.querySelector("#" + id + " .att-d"); if (!el) return;
@@ -4754,7 +4791,6 @@ function attentionCounts(){
     document.getElementById(id).hidden = n === 0;
   };
   set("attPending", BATCHES.filter(b => b.status === "uploaded").length);
-  set("attFailed",  BATCHES.filter(b => b.status === "failed").length);
 }
 
 function navQueueBadge(){

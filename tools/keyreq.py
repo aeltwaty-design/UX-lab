@@ -13,7 +13,7 @@ for m in re.finditer(r'data-i18n[a-z-]*="(transfers\.[A-Za-z0-9._]+)"', s):
     keys.add(m.group(1))
 
 # keys built from a prefix + a value: "transfers.status." + st
-STATUSES = ["uploaded","ready","processing","completed","rejected","failed"]
+STATUSES = ["uploaded","processing","ready","completed","rejected"]   # no failed: rejection is the only way out
 SOURCES  = ["loyalty","invoice","file","referral","b2b"]
 BCOLS    = ["file","uploadedBy","records","points","value","source","status","uploaded","actions"]
 ICOLS    = ["recipient","reference","sentBy","points","value","source","date"]
