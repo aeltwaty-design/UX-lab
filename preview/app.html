@@ -729,6 +729,16 @@ html[dir="rtl"] .row-acts{justify-content:flex-start}
 .act-no{border-color:var(--n-400);color:var(--n-900)}
 .act-no:hover{background:var(--n-100);border-color:var(--n-500)}
 
+/* A scope the reader did not set, worn openly and removable. */
+.scope{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--r-150);
+  background:var(--p-50);border:1px solid var(--p-200);margin-bottom:1.25rem;
+  font-size:13.5px;color:var(--p-800)}
+.scope svg{flex:none;color:var(--p-600)}
+.scope-x{margin-inline-start:auto;flex:none;inline-size:32px;block-size:32px;border:none;
+  background:none;border-radius:var(--r-100);color:var(--p-700);cursor:pointer;
+  display:grid;place-items:center}
+.scope-x:hover{background:var(--p-100)}
+
 /* --- narrow layout: a card per row -------------------------------
    Two labelled buttons and a filename cannot share 390px, and a primary
    action reachable only by scrolling sideways is not reachable. Below the
@@ -4468,10 +4478,15 @@ function openBatch(id){
       ${b.decidedAt && b.status !== "rejected" ? `<div class="fld"><div class="fld-v" style="flex:1 1 100%">${
         esc(interp(t("transfers.detail.decidedBy"),
                    { name: staffOf(b.decidedBy), date: dfmt(b.decidedAt) }))}</div></div>` : ""}
-      <div style="margin-top:18px">
+      <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
         <button class="btn btn-ghost w-full" onclick="openViewer('${b.id}')">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-eye"/></svg>
           <span>${esc(t("transfers.actions.viewFile"))}</span></button>
+        ${TXNS.filter(x => x.batch === b.id).length ? `<button class="btn btn-ghost w-full"
+          onclick="goTxnsForBatch('${b.id}')">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-receipt"/></svg>
+          <span>${esc(interp(t("transfers.detail.viewTransactions"),
+                             { n: fmt(TXNS.filter(x => x.batch === b.id).length) }))}</span></button>` : ""}
       </div>`,
     foot: b.status === "uploaded"
       ? `<button class="btn btn-ghost" onclick="openReject('${b.id}')">
@@ -5102,7 +5117,7 @@ const txById = id => TXNS.find(x => x.id === id);
    person opens their profile; a reference opens the file it came from.
    ===================================================================== */
 let XPAGE = 1, XPER = 10, XSORT = { k:"at", dir:"desc" }, XDROP = 0;
-const XFILT = { type:"all", dir:"all", reg:"all", from:"", to:"" };
+const XFILT = { type:"all", dir:"all", reg:"all", from:"", to:"", batch:null };
 
 const XCOLS = [
   { k:"user", always:true, on:true }, { k:"reference", on:true },
@@ -5132,6 +5147,7 @@ function xmatching(){
   const to   = XFILT.to   ? new Date(XFILT.to)   : null;
   if (to) to.setHours(23, 59, 59);
   return TXNS.filter(x => {
+    if (XFILT.batch && x.batch !== XFILT.batch) return false;
     if (XFILT.type !== "all" && x.type !== XFILT.type) return false;
     if (XFILT.dir  !== "all" && x.dir  !== XFILT.dir)  return false;
     if (XFILT.reg  === "reg"   && !x.user.registered)  return false;
@@ -5151,7 +5167,7 @@ function xmatching(){
 const xFilActive = () => (XFILT.type !== "all") + (XFILT.dir !== "all") +
                          (XFILT.reg !== "all") + (!!XFILT.from || !!XFILT.to);
 function xClearFilters(){
-  XFILT.type = XFILT.dir = XFILT.reg = "all"; XFILT.from = XFILT.to = "";
+  XFILT.type = XFILT.dir = XFILT.reg = "all"; XFILT.from = XFILT.to = ""; XFILT.batch = null;
   const q = document.getElementById("xq"); if (q) q.value = "";
   XPAGE = 1; renderTransactions();
 }
@@ -5186,6 +5202,15 @@ function renderTransactions(){
       <span class="pill pill-stage" style="font-size:13.5px;padding:8px 14px">${
         esc(interp(t("transactions.count"), { n: fmt(TXNS.length) }))}</span>
     </div>
+
+    ${XFILT.batch ? `<div class="scope">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-file"/></svg>
+      <span>${esc(interp(t("transactions.scope.fromFile"),
+                         { file: batchById(XFILT.batch)?.file || XFILT.batch }))}</span>
+      <button class="scope-x" onclick="xClearScope()" aria-label="${esc(t("transactions.scope.clear"))}"
+              title="${esc(t("transactions.scope.clear"))}">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>` : ""}
 
     <div class="tbl-wrap">
       <div class="tbl-bar">
@@ -5411,6 +5436,16 @@ function openTxn(id){
         <span>${esc(t("transactions.panel.viewProfile"))}</span></button>`
   });
 }
+/* The other direction: from a file to the records it produced. The scope is
+   shown as a chip that can be taken off, because a list filtered by something
+   the reader did not choose is a list that misrepresents itself. */
+function goTxnsForBatch(id){
+  XFILT.batch = id; XFILT.type = XFILT.dir = XFILT.reg = "all";
+  XFILT.from = XFILT.to = ""; XPAGE = 1;
+  closePanel(); go("transactions"); renderTransactions();
+}
+function xClearScope(){ XFILT.batch = null; XPAGE = 1; renderTransactions(); }
+
 /* Walk back to the file a transaction came from, landing with it open rather
    than leaving the reader to find it in the list. */
 function goBatch(id){
