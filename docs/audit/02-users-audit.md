@@ -136,19 +136,73 @@ child, inert nav. All resolved in Feature 01 and simply inherited here.
 
 ---
 
-## Open questions — must be answered before design
+## Resolved — answers from the client
 
-1. **What is the one job of this screen?** Look up a single person, work the unregistered
-   backlog, or export a segment? Same framing as the dashboard's core question.
-2. **What is behind the funnel?** Which dimensions are filterable today?
-3. **Is there a user detail view**, or is the table the whole feature?
-4. **What can a partner do to a user?** Transfer points, message, invite, deactivate?
-5. **Does email exist?** The search placeholder claims it; no column shows it.
-6. **What is `#` for?** Does any partner workflow need that ID visible?
-7. **Registered vs unregistered** — is unregistered the same population as the dashboard's
-   "invites not completed"?
-8. **Why gender?** Is it used for anything, and is it optional at signup?
-9. **41 users against 18,432 followers** on the dashboard — is that test data, or is the
-   real ratio genuinely that wide?
-10. **Export** — which formats, and does it honour the active filters?
-11. **Date format** — day-first or month-first, and should Hijri appear alongside?
+### R1. The job: **work the unregistered backlog**
+This screen exists for conversion — find the people who are phone numbers with no
+profile and get them registered. That matches what the data shows: roughly half the base
+is in that state. Everything else the screen does is secondary to it.
+
+Consequence: the registered/unregistered split is the spine, not a status pill. Selection
+and a bulk reminder are first-class, not an afterthought.
+
+### R2. Actions on a user
+Three, all confirmed:
+- **Send reminder / invite to register** — the conversion action for phone-only records
+- **Transfer points** to a specific user
+- **Open a full profile** — balance, transaction history, offer redemptions
+
+So rows are not inert. Each needs a primary action inline and a route into the profile.
+
+### R3. Unregistered vs the dashboard's "invites not completed" — **unconfirmed**
+Client is checking with the backend team. **Assumption taken:** they are the same
+population. The dashboard's "Invites not completed" row will link into this screen
+pre-filtered to unregistered, and the two counts must agree.
+
+This is marked in the build so it is cheap to unpick. If they turn out to be different
+sets, the dashboard link and the shared count both have to change, and the two states
+need distinct labels so they stop colliding.
+
+### R4. Columns: keep gender, keep the ID, add email
+All three earn a place, but not all in the default view — eight columns would cram the
+table. Resolution: a **column-visibility control**.
+
+- **Default:** Person · Contact · Status · Points balance · Joined
+- **Optional:** User ID (copyable) · Email · Gender · Last activity
+
+The ten-digit ID leaves the first column but stays reachable and copyable, since support
+and reconciliation need it. Gender keeps a real "not collected" treatment rather than an
+empty cell.
+
+### R5. The profile page is **in scope this round**
+Designed alongside the table, not deferred.
+
+### R6. Dates: **day-first with a written month**
+`12 Sep 2025` / `12 سبتمبر 2025`. Unambiguous in both languages and survives being read
+aloud. Replaces `12/09/2025`, which could not be parsed reliably.
+
+### R7. Bulk reminders: **not built — design the target behaviour**
+Designed as it ought to work, and the rules below are a **spec for the backend**, not a
+description of what exists:
+- Select many, including select-all-matching-filter
+- A confirmation step stating the recipient count — this is outward-facing and cannot be
+  undone
+- A per-user **cooldown** so the same person is not repeatedly contacted, with anyone
+  inside it shown as ineligible and excluded from the count
+- A **per-send cap**, surfaced in the UI rather than failing silently at submit
+
+### R8. Filters — all four
+Registration status · Join date range · Points balance · Activity recency.
+These replace the unlabelled funnel and absorb the separate Registration Date picker.
+
+---
+
+## Still assumed, not confirmed
+
+1. **Export** — assumed CSV and XLSX, honouring the active filters, with the row count
+   stated before download. Export drops to a secondary control; it is not the loudest
+   thing on the page.
+2. **Scale** — 41 users against 18,432 followers on the dashboard is almost certainly test
+   data. Mock data will use a realistic partner-sized base so pagination, selection and
+   the bulk cap are exercised properly.
+3. **Search scope** — assumed name, phone and email, matching the old placeholder.
