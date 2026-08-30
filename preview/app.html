@@ -3353,32 +3353,45 @@ function recCell(b){
    against the real cells rather than guessed: the file and the actions are
    the row's reason for existing and never drop; everything else arrives as
    there is room for it. Source is off by default — it is a filter first. */
+/* Thresholds are measured against the SCROLLER, not the window. Keyed to the
+   viewport they break at 1101px, where the sidebar appears and takes 264px
+   away: a column that fits at 1024 would vanish as the window got wider.
+   Each number is the container width at which one more column still fits.
+   Nothing a dropped column carried is lost — status and uploader fold into
+   the file cell instead. */
 const BCOLS = [
   { k:"file",       always:true, on:true, min:0 },
   { k:"actions",    always:true, on:true, min:0 },
-  { k:"status",     on:true,  min:520 },
-  { k:"points",     on:true,  min:700 },
-  { k:"records",    on:true,  min:900 },
-  { k:"uploadedBy", on:true,  min:1180 },
-  { k:"value",      on:true,  min:1400 },
-  { k:"uploaded",   on:true,  min:1560 },
-  { k:"source",     on:false, min:1660 }
+  { k:"status",     on:true,  min:660 },
+  { k:"points",     on:true,  min:800 },
+  { k:"records",    on:true,  min:960 },
+  { k:"uploadedBy", on:true,  min:1160 },
+  { k:"value",      on:true,  min:1280 },
+  { k:"uploaded",   on:true,  min:1410 },
+  { k:"source",     on:false, min:1540 }
 ];
 const ICOLS = [
   { k:"recipient",  always:true, on:true, min:0 },
-  { k:"points",     on:true,  min:560 },
-  { k:"date",       on:true,  min:760 },
-  { k:"sentBy",     on:true,  min:980 },
-  { k:"value",      on:true,  min:1200 },
-  { k:"reference",  on:true,  min:1400 },
-  { k:"source",     on:false, min:1560 }
+  { k:"points",     on:true,  min:420 },
+  { k:"date",       on:true,  min:560 },
+  { k:"sentBy",     on:true,  min:730 },
+  { k:"value",      on:true,  min:850 },
+  { k:"reference",  on:true,  min:1000 },
+  { k:"source",     on:false, min:1130 }
 ];
+/* The scroller exists by the time rows are drawn; the fallback covers the one
+   frame before it does. */
+function availW(){
+  const sc = document.querySelector("#view-transfers .tbl-scroll");
+  if (sc && sc.clientWidth) return sc.clientWidth;
+  return window.innerWidth - (window.innerWidth >= 1101 ? 329 : 65);
+}
 const tcols  = () => (TTAB === "bulk" ? BCOLS : ICOLS);
 const BORDER = ["file","uploadedBy","records","points","value","source","status","uploaded","actions"];
 const IORDER = ["recipient","reference","sentBy","points","value","source","date"];
 const tshown = () => {
-  const order = TTAB === "bulk" ? BORDER : IORDER;
-  return tcols().filter(c => c.on && window.innerWidth >= (c.min || 0))
+  const order = TTAB === "bulk" ? BORDER : IORDER, w = availW();
+  return tcols().filter(c => c.on && w >= (c.min || 0))
                 .sort((a, b) => order.indexOf(a.k) - order.indexOf(b.k));
 };
 
@@ -3585,14 +3598,18 @@ function renderTRows(){
 }
 
 function bulkRow(b, cols){
-  const narrow = !cols.some(c => c.k === "status");
+  const has = k => cols.some(c => c.k === k);
+  const sub = [b.id];
+  if (!has("status"))     sub.push(t("transfers.status." + b.status));
+  if (!has("uploadedBy")) sub.push(staffOf(b.by));
   const cell = k => {
     switch (k){
       case "file": return `<td><button class="file-cell" onclick="event.stopPropagation();downloadFile('${b.id}')"
           title="${esc(t("transfers.actions.download"))}">
           <span class="file-ico"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-file"/></svg></span>
           <span class="min-w-0"><span class="file-n ltr">${esc(b.file)}</span>
-            <span class="file-sub"><span class="num ltr">${esc(b.id)}</span>${narrow ? " · " + esc(t("transfers.status." + b.status)) : ""}</span>
+            <span class="file-sub">${sub.map((x, i) => i === 0
+              ? `<span class="num ltr">${esc(x)}</span>` : `<span>· ${esc(x)}</span>`).join(" ")}</span>
           </span></button></td>`;
       case "uploadedBy": return `<td><div class="cell-person">
           <span class="avatar avatar-txt" aria-hidden="true">${esc(initialsOf(staffOf(b.by)))}</span>
@@ -4152,7 +4169,7 @@ function tcolToggle(){
   const m = document.getElementById("tcolMenu"), b = document.getElementById("tcolBtn");
   if (m.hidden){
     m.innerHTML = tcols().filter(c => !c.always).map(c => `<button class="dd-opt" role="option"
-      aria-selected="${c.on && window.innerWidth >= (c.min || 0)}" onclick="tcolPick('${c.k}')">
+      aria-selected="${c.on && availW() >= (c.min || 0)}" onclick="tcolPick('${c.k}')">
       <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
       <span>${esc(t("transfers.columns." + c.k))}</span></button>`).join("");
