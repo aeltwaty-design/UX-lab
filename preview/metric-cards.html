@@ -1,0 +1,211 @@
+<title>Metric Card Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p-50:#F5F4FF;--p-100:#EAE8FF;--p-200:#D7D4FF;--p-300:#BFB7FF;--p-400:#9C89FF;
+  --p-500:#755BD8;--p-600:#6246BE;--p-700:#4E349D;--p-800:#3A2678;--p-900:#271A54;
+  --n-25:#FAFBFC;--n-50:#F5F7FA;--n-100:#EEF0F5;--n-200:#E0E4EC;--n-300:#CCD2E0;
+  --n-400:#B5BCCC;--n-500:#9DA5B5;--n-600:#848C9D;--n-700:#5F6572;--n-800:#40444C;
+  --n-900:#22252B;--n-950:#111317;
+  --success-50:#ECFBEA;--success-700:#008301;
+  --warning-50:#FEF4E6;--warning-200:#F4D29C;--warning-700:#946600;
+  --danger-50:#FFF2F1;--danger-200:#FFC8C2;--danger-700:#C83C3B;
+  --info-50:#F0F6FF;--info-700:#266FC8;
+  --r-100:8px;--r-150:12px;--r-200:16px;
+  --sh:0 1px 2px rgba(17,19,23,.05);
+  --font-ar:"FF Shamel Unique","IBM Plex Sans Arabic","Noto Sans Arabic",sans-serif;
+  --font-en:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--n-50);color:var(--n-950);font-family:var(--font-en);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+html[lang="ar"] body{font-family:var(--font-ar);letter-spacing:0}
+html[lang="ar"] .num{font-family:var(--font-en)}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(117,91,216,.28);border-radius:var(--r-100)}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 28px 80px}
+.top{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.lede{color:var(--n-700);margin:8px 0 0;max-width:64ch}
+.langtog{display:flex;background:#fff;border:1px solid var(--n-200);border-radius:var(--r-100);padding:3px;gap:2px;margin-inline-start:auto}
+.langtog button{border:none;background:none;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;color:var(--n-700);cursor:pointer}
+.langtog button[aria-pressed="true"]{background:var(--p-500);color:#fff}
+.opt{margin-top:36px;background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);overflow:hidden}
+.opt-h{padding:18px 22px;border-bottom:1px solid var(--n-100);display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--p-700);background:var(--p-50);padding:3px 9px;border-radius:999px}
+html[lang="ar"] .tag{letter-spacing:0}
+.opt-t{font-size:17px;font-weight:700}
+.opt-w{font-size:13px;color:var(--n-700);flex-basis:100%;margin-top:2px}
+.opt-b{padding:22px;background:var(--n-25)}
+.row{display:grid;gap:14px}
+.c4{grid-template-columns:repeat(4,1fr)}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:900px){.c4,.c3,.c2{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){
+  .c4,.c3,.c2{grid-template-columns:1fr}
+  .wrap{padding:24px 16px 56px}
+  h1{font-size:22px}
+  .mA{border-inline-start:none;border-top:1px solid var(--n-200);padding-inline:0}
+  .mA:first-child{border-top:none}
+  .dual{flex-direction:column;gap:12px}
+  .opt-h,.opt-b{padding:14px}
+}
+.note{font-size:12px;color:var(--n-700);margin-top:14px;padding-top:12px;border-top:1px dashed var(--n-200)}
+.note b{color:var(--n-900)}
+
+/* ---------- shared metric primitives ---------- */
+.m{background:#fff;border:1px solid var(--n-200);border-radius:var(--r-150);padding:14px;min-width:0;display:flex;flex-direction:column}
+.m-l{font-size:11px;color:var(--n-700);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-v{font-size:22px;font-weight:700;line-height:1.15;letter-spacing:-.01em;margin-top:2px}
+.m-d{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--n-700);margin-top:3px}
+.up{color:var(--success-700)}.warn{color:var(--warning-700)}.dn{color:var(--n-700)}
+.spark{width:100%;height:32px;margin-top:auto;padding-top:10px;display:block;overflow:visible}
+/* A minimal */
+.mA{border:none;background:none;padding:14px 16px;border-inline-start:1px solid var(--n-200);border-radius:0}
+.mA:first-child{border-inline-start:none}
+/* C icon-led */
+.m-ico{width:34px;height:34px;border-radius:var(--r-100);display:grid;place-items:center;margin-bottom:10px}
+/* D comparison bars */
+.cmp{margin-top:10px;display:flex;flex-direction:column;gap:5px}
+.cmp-r{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--n-700)}
+.cmp-t{width:52px;flex:none}
+.cmp-b{display:block;height:7px;border-radius:999px;flex:1;background:var(--n-100);overflow:hidden}
+.cmp-f{display:block;height:100%;border-radius:999px}
+/* E target */
+.tgt{margin-top:10px}
+.tgt-b{height:7px;border-radius:999px;background:var(--n-100);overflow:hidden}
+.tgt-f{height:100%;border-radius:999px;background:var(--p-500)}
+.tgt-x{display:flex;justify-content:space-between;font-size:10px;color:var(--n-700);margin-top:5px}
+/* F dual */
+.dual{display:flex;gap:18px}
+.dual>div{flex:1;min-width:0}
+.dual-bar{height:8px;border-radius:999px;display:flex;overflow:hidden;margin-top:12px;gap:2px}
+.sw{width:8px;height:8px;border-radius:2px;flex:none}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 15 5.5-5.5 3.5 3.5L20 6"/><path d="M15 6h5v5"/></symbol>
+<symbol id="i-dn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 9 5.5 5.5 3.5-3.5L20 18"/><path d="M15 18h5v-5"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h14"/><path d="m13 4 4 4-4 4"/><path d="M21 16H7"/><path d="m11 12-4 4 4 4"/></symbol>
+<symbol id="i-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5V6.8A1.8 1.8 0 0 1 4.8 5h14.4A1.8 1.8 0 0 1 21 6.8v1.7a2.4 2.4 0 0 0 0 7v1.7a1.8 1.8 0 0 1-1.8 1.8H4.8A1.8 1.8 0 0 1 3 17.2v-1.7a2.4 2.4 0 0 0 0-7Z"/><path d="M14 9.5 10 15"/></symbol>
+<symbol id="i-hg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10M7 21h10"/><path d="M8 3v3.5c0 2 4 3.6 4 5.5 0-1.9 4-3.5 4-5.5V3"/><path d="M8 21v-3.5c0-2 4-3.6 4-5.5 0 1.9 4 3.5 4 5.5V21"/></symbol>
+<symbol id="i-rt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5.5 4.5 10 9 14.5"/><path d="M4.5 10h9a6 6 0 0 1 0 12h-3"/></symbol>
+</defs></svg>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1 data-i18n="t">Six ways to draw a metric</h1>
+      <p class="lede" data-i18n="lede">Same four figures from the points wallet, six different cards. Each is built from the same tokens, so whichever you pick drops straight into the dashboard. Pick one — or mix, using the heavier options only where a metric earns it.</p>
+    </div>
+    <div class="langtog" role="group" aria-label="Language">
+      <button onclick="setLang('ar')" id="b-ar" aria-pressed="false">عربي</button>
+      <button onclick="setLang('en')" id="b-en" aria-pressed="true">English</button>
+    </div>
+  </div>
+  <div id="opts"></div>
+</div>
+
+<script>
+/* Metric labels come from the product content deck (src/i18n/content.json), so the
+   cards are evaluated with the real Arabic and English strings — including the
+   length difference between the two, which is what actually breaks metric cards.
+   The designer-facing annotations around each option stay in English. */
+const L = {"en": {"issued": "Points issued", "redeemed": "Points redeemed", "pending": "Points pending", "refunded": "Points refunded", "vsPrev": "vs. previous period", "prev": "Previous 30 days", "cur": "Last 30 days"}, "ar": {"issued": "النقاط الصادرة", "redeemed": "النقاط المستبدلة", "pending": "النقاط المعلّقة", "refunded": "النقاط المستردة", "vsPrev": "مقارنة بالفترة السابقة", "prev": "الـ 30 يومًا السابقة", "cur": "آخر 30 يومًا"}};
+let LANG = "en";
+const fmt = n => n.toLocaleString("en-US");   // Western numerals in both languages
+
+const M = [
+  {k:"issued",   v:2847500, d:"12.4%", dir:"up",   tone:"up",   prev:2533000, tgt:3200000, ico:"i-out", c:"var(--p-50)",       ic:"var(--p-700)"},
+  {k:"redeemed", v:1750640, d:"3.1%",  dir:"dn",   tone:"dn",   prev:1806000, tgt:2000000, ico:"i-in",  c:"var(--success-50)", ic:"var(--success-700)"},
+  {k:"pending",  v:96200,   d:"8.0%",  dir:"up",   tone:"warn", prev:89100,   tgt:80000,   ico:"i-hg",  c:"var(--warning-50)", ic:"var(--warning-700)"},
+  {k:"refunded", v:12400,   d:"1.2%",  dir:"dn",   tone:"dn",   prev:12550,   tgt:15000,   ico:"i-rt",  c:"var(--danger-50)",  ic:"var(--danger-700)"}
+];
+const SPARK = {
+  issued:[38,41,39,45,44,52,49,58,55,63,61,70,68,77,74,83,80,90,88,97,94,104,101,112,108,119,115,126,122,134],
+  redeemed:[30,32,31,34,33,37,35,39,38,41,40,44,42,46,44,48,46,50,49,53,51,55,53,57,55,59,57,61,59,62],
+  pending:[22,20,24,21,26,23,28,25,30,27,33,29,35,31,38,33,40,35,43,37,45,39,48,41,50,43,53,45,56,48],
+  refunded:[18,19,17,20,18,21,19,20,18,19,17,18,16,17,15,16,15,14,15,13,14,13,12,13,11,12,11,10,11,10]
+};
+const lbl = k => L[LANG][k];
+const delta = m => `<div class="m-d ${m.tone}"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-${m.dir}"/></svg><span class="num">${m.d}</span></div>`;
+function spark(k, h){
+  const d = SPARK[k], W=120, H=h||32, pad=3;
+  const lo=Math.min(...d), hi=Math.max(...d), span=(hi-lo)||1;
+  const X=i=>(i/(d.length-1))*W, Y=v=>pad+(H-pad*2)-((v-lo)/span)*(H-pad*2);
+  const line=d.map((v,i)=>`${i?"L":"M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+    <defs><linearGradient id="g${k}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--p-500)" stop-opacity=".22"/>
+      <stop offset="100%" stop-color="var(--p-500)" stop-opacity="0"/></linearGradient></defs>
+    <path d="${line}L${W},${H}L0,${H}Z" fill="url(#g${k})"/>
+    <path d="${line}" fill="none" stroke="var(--p-500)" stroke-width="1.75" stroke-linecap="round"
+          stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+    <circle cx="${W}" cy="${Y(d[d.length-1]).toFixed(1)}" r="2.4" fill="var(--p-600)"/></svg>`;
+}
+
+const OPTIONS = [
+  { tag:"A", name:"Minimal", when:"Quietest option. Use when several metrics sit together and none outranks the others — the eye reads the row, not each box.",
+    cls:"c4", note:"<b>Trade-off:</b> nothing tells you whether a number is good or bad without the delta. Cheapest vertically — fits four metrics in ~90px.",
+    card:m=>`<div class="m mA"><div class="m-l">${lbl(m.k)}</div><div class="m-v num">${fmt(m.v)}</div>${delta(m)}</div>` },
+
+  { tag:"B", name:"Sparkline", when:"Currently in the dashboard. Use when the shape of the last 30 days matters as much as today's number.",
+    cls:"c4", note:"<b>Trade-off:</b> answers 'up or down, and how steadily' without a click. Costs ~40px of height per card. The line is brand purple on every tile — status colours are reserved for state, so direction is carried by the arrow and label, never the line.",
+    card:m=>`<div class="m"><div class="m-l">${lbl(m.k)}</div><div class="m-v num">${fmt(m.v)}</div>${delta(m)}${spark(m.k)}</div>` },
+
+  { tag:"C", name:"Icon-led", when:"Most scannable. Use when metrics are on a dense page and people are hunting for one specific figure.",
+    cls:"c4", note:"<b>Trade-off:</b> closest in shape to your current dashboard — but here each colour means something (points out, points in, waiting, returned) instead of being decoration. Only works if every metric has an honest icon.",
+    card:m=>`<div class="m"><div class="m-ico" style="background:${m.c};color:${m.ic}"><svg viewBox="0 0 24 24" width="18" height="18"><use href="#${m.ico}"/></svg></div><div class="m-l">${lbl(m.k)}</div><div class="m-v num">${fmt(m.v)}</div>${delta(m)}</div>` },
+
+  { tag:"D", name:"Period comparison", when:"Use when 'compared to what?' is the real question — it draws the comparison instead of asking you to trust a percentage.",
+    cls:"c2", note:"<b>Trade-off:</b> the most honest about change, and the only option where the delta is verifiable on the card. Needs two bars of room, so it suits two or three metrics, not eight.",
+    card:m=>{const mx=Math.max(m.v,m.prev);return `<div class="m"><div class="m-l">${lbl(m.k)}</div><div class="m-v num">${fmt(m.v)}</div>${delta(m)}
+      <div class="cmp">
+        <div class="cmp-r"><span class="cmp-t">${L[LANG].cur}</span><span class="cmp-b"><span class="cmp-f" style="width:${(m.v/mx*100).toFixed(1)}%;background:var(--p-500)"></span></span></div>
+        <div class="cmp-r"><span class="cmp-t">${L[LANG].prev}</span><span class="cmp-b"><span class="cmp-f" style="width:${(m.prev/mx*100).toFixed(1)}%;background:var(--n-300)"></span></span></div>
+      </div></div>`} },
+
+  { tag:"E", name:"Target progress", when:"Use only for metrics that genuinely have a target. Do not fake one — a progress bar with an invented goal is worse than no bar.",
+    cls:"c2", note:"<b>Trade-off:</b> turns a number into a judgement ('are we on track?'), which is exactly right for quota-style metrics and meaningless for the rest. Note Points pending is over its ceiling — the bar earns its keep there.",
+    card:m=>{const real=m.v/m.tgt*100, over=real>100, w=Math.min(100,real);
+      return `<div class="m"><div class="m-l">${lbl(m.k)}</div><div class="m-v num">${fmt(m.v)}</div>
+      <div class="tgt"><div class="tgt-b"><div class="tgt-f" style="width:${w.toFixed(1)}%;background:${over?'#FAB219':'var(--p-500)'}"></div></div>
+      <div class="tgt-x"><span class="num${over?' warn':''}">${real.toFixed(0)}%${over?' \u25B2':''}</span><span class="num">${fmt(m.tgt)}</span></div></div></div>`} },
+
+  { tag:"F", name:"Paired", when:"Use when two figures only mean something next to each other — issued against redeemed, pending against refunded.",
+    cls:"c2", note:"<b>Trade-off:</b> halves the number of cards and makes the relationship the subject. The split bar shows the ratio directly. Only works for figures that share a unit.",
+    card:null,
+    custom:()=>{
+      const pair=(a,b)=>{const t=a.v+b.v;return `<div class="m"><div class="dual">
+        <div><div class="m-l"><span class="sw" style="display:inline-block;background:var(--p-500);margin-inline-end:5px"></span>${lbl(a.k)}</div>
+             <div class="m-v num">${fmt(a.v)}</div>${delta(a)}</div>
+        <div><div class="m-l"><span class="sw" style="display:inline-block;background:var(--n-300);margin-inline-end:5px"></span>${lbl(b.k)}</div>
+             <div class="m-v num">${fmt(b.v)}</div>${delta(b)}</div>
+      </div><div class="dual-bar"><span style="width:${(a.v/t*100).toFixed(1)}%;background:var(--p-500)"></span><span style="width:${(b.v/t*100).toFixed(1)}%;background:var(--n-300)"></span></div></div>`};
+      return pair(M[0],M[1]) + pair(M[2],M[3]);
+    } }
+];
+
+function render(){
+  document.getElementById("opts").innerHTML = OPTIONS.map(o=>`
+    <section class="opt">
+      <div class="opt-h"><span class="tag">OPTION ${o.tag}</span><span class="opt-t">${o.name}</span>
+        <span class="opt-w">${o.when}</span></div>
+      <div class="opt-b">
+        <div class="row ${o.cls}">${o.custom ? o.custom() : M.map(o.card).join("")}</div>
+        <div class="note">${o.note}</div>
+      </div>
+    </section>`).join("");
+}
+function setLang(l){
+  LANG = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = (l === "ar") ? "rtl" : "ltr";
+  document.getElementById("b-ar").setAttribute("aria-pressed", l==="ar");
+  document.getElementById("b-en").setAttribute("aria-pressed", l==="en");
+  render();
+}
+setLang("en");
+</script>
