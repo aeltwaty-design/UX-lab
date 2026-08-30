@@ -42,6 +42,7 @@
       "thisMonth": "This month",
       "thisQuarter": "This quarter",
       "customRange": "Custom range",
+      "last12Months": "Last 12 months",
       "comparedToPrevious": "vs. previous period"
     },
     "actions": {
@@ -60,6 +61,7 @@
       "seeDetails": "See details"
     },
     "attention": {
+      "sectionTitle": "Action needed",
       "heading": "Needs your attention",
       "subtitle": "A quick list of what needs action today.",
       "openCount": "Open",
@@ -96,6 +98,10 @@
     "wallet": {
       "heading": "Points wallet",
       "availableBalance": "Available balance",
+      "availableCredits": "Available credits",
+      "creditsUnit": "points",
+      "sarEquivalent": "Worth about {value} SAR.",
+      "conversionRate": "{points} points = {sar} SAR",
       "pointsIssued": "Points issued",
       "pointsRedeemed": "Points redeemed",
       "pointsPending": "Points pending",
@@ -105,13 +111,19 @@
       "topUpCta": "Charge points",
       "emptyState": "No balance yet. When you charge points to your account, they'll show up here."
     },
+    "metrics": {
+      "heading": "Points overview",
+      "subtitle": "Figures for the selected period."
+    },
     "flow": {
       "title": "Points issued vs. redeemed",
+      "subtitleYear": "Last 12 months",
       "legendIssued": "Issued",
       "legendRedeemed": "Redeemed",
       "axisXLabel": "Date",
       "axisYLabel": "Points",
       "tooltipValue": "{value} points",
+      "yearTotal": "Year total",
       "emptyState": "No point activity yet. Once you issue or redeem points, this chart will fill in."
     },
     "funnel": {
@@ -140,9 +152,17 @@
     },
     "offers": {
       "heading": "Offers",
+      "manageAll": "Manage all",
       "activeOffers": "Active offers",
       "expiringSoon": "Expiring soon",
       "totalOffers": "Total offers",
+      "expiresIn": "Expires in {n} days",
+      "redeemedCount": "Redeemed {count} times",
+      "statusActive": "Active",
+      "statusExpiring": "Expiring soon",
+      "sampleOffer1": "Zero Making Charges",
+      "sampleOffer2": "Save 23% This National Day",
+      "sampleOffer3": "Double Points Weekend",
       "emptyState": "No offers yet. Create your first offer to start attracting followers."
     },
     "states": {
@@ -207,6 +227,7 @@
       "thisMonth": "هذا الشهر",
       "thisQuarter": "هذا الربع",
       "customRange": "فترة مخصصة",
+      "last12Months": "آخر 12 شهرًا",
       "comparedToPrevious": "مقارنة بالفترة السابقة"
     },
     "actions": {
@@ -225,6 +246,7 @@
       "seeDetails": "عرض التفاصيل"
     },
     "attention": {
+      "sectionTitle": "إجراءات مطلوبة",
       "heading": "يحتاج انتباهك",
       "subtitle": "قائمة سريعة بما يحتاج إجراء اليوم.",
       "openCount": "مفتوحة",
@@ -261,6 +283,10 @@
     "wallet": {
       "heading": "محفظة النقاط",
       "availableBalance": "الرصيد المتاح",
+      "availableCredits": "النقاط المتاحة",
+      "creditsUnit": "نقطة",
+      "sarEquivalent": "بما يعادل {value} ريال تقريبًا.",
+      "conversionRate": "{points} نقاط = {sar} ريال",
       "pointsIssued": "النقاط الصادرة",
       "pointsRedeemed": "النقاط المستبدلة",
       "pointsPending": "النقاط المعلّقة",
@@ -270,13 +296,19 @@
       "topUpCta": "شحن النقاط",
       "emptyState": "لا يوجد رصيد بعد. عندما تشحن نقاطًا إلى حسابك، ستظهر هنا."
     },
+    "metrics": {
+      "heading": "نظرة عامة على النقاط",
+      "subtitle": "أرقام للفترة المحددة."
+    },
     "flow": {
       "title": "النقاط الصادرة مقابل المستبدلة",
+      "subtitleYear": "آخر 12 شهرًا",
       "legendIssued": "الصادرة",
       "legendRedeemed": "المستبدلة",
       "axisXLabel": "التاريخ",
       "axisYLabel": "النقاط",
       "tooltipValue": "{value} نقطة",
+      "yearTotal": "الإجمالي السنوي",
       "emptyState": "لا يوجد نشاط نقاط بعد. بمجرد إصدار أو استبدال نقاط، سيظهر هنا."
     },
     "funnel": {
@@ -305,9 +337,17 @@
     },
     "offers": {
       "heading": "العروض",
+      "manageAll": "إدارة الكل",
       "activeOffers": "العروض النشطة",
       "expiringSoon": "تنتهي قريبًا",
       "totalOffers": "إجمالي العروض",
+      "expiresIn": "تنتهي خلال {n} أيام",
+      "redeemedCount": "استُبدل {count} مرات",
+      "statusActive": "نشط",
+      "statusExpiring": "ينتهي قريبًا",
+      "sampleOffer1": "بدون مصنعية",
+      "sampleOffer2": "خصم 23% بمناسبة اليوم الوطني",
+      "sampleOffer3": "نقاط مضاعفة",
       "emptyState": "لا توجد عروض بعد. أنشئ أول عرض لك لجذب المتابعين."
     },
     "states": {
