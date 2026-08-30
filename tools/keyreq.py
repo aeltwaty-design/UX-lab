@@ -61,7 +61,7 @@ for i in range(1, 6):
 
 # --- charge history --------------------------------------------------------
 CCOLS = ["reference","amount","points","addedBy","notes","purchaseOrder",
-         "invoice","createdAt","endedAt","percent","status"]
+         "invoice","createdAt","endedAt","status"]
 for k in CCOLS: keys.add("charge.columns." + k)
 for k in ["active","expiring","expired"]:
     keys.add("charge.status." + k)

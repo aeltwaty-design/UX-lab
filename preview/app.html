@@ -2072,7 +2072,6 @@ const I18N = {
     "transactions.sampleNote5": "1850 points, more than usual. He bought two pieces this time.",
     "charge.heading": "Charge history",
     "charge.subtitle": "See what you've paid for your points, find an invoice or check when a charge runs out.",
-    "charge.count": "{n} records",
     "charge.columns.reference": "Reference",
     "charge.columns.amount": "Amount paid",
     "charge.columns.points": "Points",
@@ -2082,7 +2081,6 @@ const I18N = {
     "charge.columns.invoice": "Invoice",
     "charge.columns.createdAt": "Created",
     "charge.columns.endedAt": "Ends",
-    "charge.columns.percent": "Percent",
     "charge.columns.status": "Status",
     "charge.status.active": "Active",
     "charge.status.activeDesc": "Still valid, so it counts toward your balance.",
@@ -2093,13 +2091,11 @@ const I18N = {
     "charge.search.placeholder": "Search by reference, invoice or the person who added it…",
     "charge.filters.status": "Status",
     "charge.filters.addedBy": "Added by",
-    "charge.filters.dateRange": "Date range",
     "charge.empty.title": "No charges yet",
     "charge.empty.body": "Once you charge points to your account, it'll show up here.",
     "charge.empty.noMatchTitle": "No matches",
     "charge.empty.noMatchBody": "No charges match your filters. Try different search terms, or clear your filters to see more.",
     "charge.panel.title": "Charge {reference}",
-    "charge.panel.sectionCharge": "Charge",
     "charge.panel.sectionPaperwork": "Paperwork",
     "charge.panel.sectionAddedBy": "Added by",
     "charge.panel.noNotes": "No notes",
@@ -2754,7 +2750,6 @@ const I18N = {
     "transactions.sampleNote5": "1850 نقطة، أكثر من المعتاد. اشترى قطعتين هالمرة.",
     "charge.heading": "سجل الشحن",
     "charge.subtitle": "راجع ما دفعته مقابل نقاطك أو ابحث عن فاتورة أو تحقّق من موعد انتهاء أي شحنة.",
-    "charge.count": "{n} سجلات",
     "charge.columns.reference": "المرجع",
     "charge.columns.amount": "المبلغ المدفوع",
     "charge.columns.points": "النقاط",
@@ -2764,7 +2759,6 @@ const I18N = {
     "charge.columns.invoice": "الفاتورة",
     "charge.columns.createdAt": "الإنشاء",
     "charge.columns.endedAt": "الانتهاء",
-    "charge.columns.percent": "النسبة",
     "charge.columns.status": "الحالة",
     "charge.status.active": "نشطة",
     "charge.status.activeDesc": "لا تزال سارية، لذا تُحتسب ضمن رصيدك.",
@@ -2775,13 +2769,11 @@ const I18N = {
     "charge.search.placeholder": "ابحث بالمرجع أو الفاتورة أو اسم من أضافها…",
     "charge.filters.status": "الحالة",
     "charge.filters.addedBy": "بواسطة",
-    "charge.filters.dateRange": "الفترة الزمنية",
     "charge.empty.title": "لا توجد شحنات بعد",
     "charge.empty.body": "بمجرد أن تشحن نقاطًا إلى حسابك، ستظهر هنا.",
     "charge.empty.noMatchTitle": "لا توجد نتائج مطابقة",
     "charge.empty.noMatchBody": "لا توجد شحنات مطابقة لمعايير التصفية. جرّب كلمات بحث مختلفة أو امسح التصفية لعرض المزيد.",
     "charge.panel.title": "شحنة {reference}",
-    "charge.panel.sectionCharge": "الشحنة",
     "charge.panel.sectionPaperwork": "المستندات",
     "charge.panel.sectionAddedBy": "بواسطة",
     "charge.panel.noNotes": "لا توجد ملاحظات",
@@ -5832,23 +5824,23 @@ const chDate = (y, m, d) => new Date(y, m - 1, d);
    better agree. */
 const CHARGES = [
   { id:"CHG-0051", by:"c1", points:1_500_000, po:"PO-2026-118", invoice:"INV-88214",
-    notes:null, at:chDate(2026,7,14), ends:chDate(2027,7,14), pct:100 },
+    notes:null, at:chDate(2026,7,14), ends:chDate(2027,7,14) },
   { id:"CHG-0049", by:"c3", points:1_000_000, po:null, invoice:"INV-87730",
-    notes:"chargeNote1", at:chDate(2026,5,2), ends:chDate(2026,9,20), pct:100 },
+    notes:"chargeNote1", at:chDate(2026,5,2), ends:chDate(2026,9,20) },
   { id:"CHG-0047", by:"c1", points:2_499_000, po:"PO-2026-094", invoice:"INV-86119",
-    notes:null, at:chDate(2026,3,28), ends:chDate(2027,3,28), pct:100 },
+    notes:null, at:chDate(2026,3,28), ends:chDate(2027,3,28) },
   { id:"CHG-0046", by:"c4", points:500_000, po:null, invoice:null,
-    notes:"chargeNote2", at:chDate(2026,2,11), ends:chDate(2026,9,11), pct:100 },
+    notes:"chargeNote2", at:chDate(2026,2,11), ends:chDate(2026,9,11) },
   { id:"CHG-0045", by:"c1", points:1_500_000, po:"PO-2025-311", invoice:"INV-84402",
-    notes:null, at:chDate(2025,11,3), ends:chDate(2026,11,3), pct:100 },
+    notes:null, at:chDate(2025,11,3), ends:chDate(2026,11,3) },
   { id:"CHG-0044", by:"c3", points:3_000_000, po:"PO-2025-260", invoice:"INV-83155",
-    notes:null, at:chDate(2025,8,19), ends:chDate(2026,8,19), pct:100 },
+    notes:null, at:chDate(2025,8,19), ends:chDate(2026,8,19) },
   { id:"CHG-0043", by:"c2", points:1_000, po:null, invoice:null,
-    notes:null, at:chDate(2024,3,11), ends:chDate(2026,8,6), pct:100 },
+    notes:null, at:chDate(2024,3,11), ends:chDate(2026,8,6) },
   { id:"CHG-0040", by:"c4", points:2_000_000, po:"PO-2024-142", invoice:"INV-71880",
-    notes:"chargeNote3", at:chDate(2024,6,22), ends:chDate(2026,6,22), pct:100 },
+    notes:"chargeNote3", at:chDate(2024,6,22), ends:chDate(2026,6,22) },
   { id:"CHG-0037", by:"c1", points:500_000, po:null, invoice:"Admin Charge",
-    notes:null, at:chDate(2024,1,10), ends:chDate(2026,8,6), pct:100 }
+    notes:null, at:chDate(2024,1,10), ends:chDate(2026,8,6) }
 ].map(c => Object.assign(c, { amount: c.points / 500 }))   // as recorded, not derived
  .sort((a, b) => b.at - a.at);
 const chargeById = id => CHARGES.find(c => c.id === id);
@@ -5870,16 +5862,16 @@ const CFILT = { status:"all", by:"all" };
 const CCOLS = [
   { k:"reference", always:true, on:true }, { k:"amount", on:true },
   { k:"points", on:true }, { k:"addedBy", on:true }, { k:"status", on:true },
-  { k:"createdAt", on:true }, { k:"endedAt", on:true }, { k:"percent", on:true },
+  { k:"createdAt", on:true }, { k:"endedAt", on:true },
   { k:"invoice", on:false }, { k:"purchaseOrder", on:false }, { k:"notes", on:false }
 ];
-const CORDER = ["reference","amount","points","addedBy","status","createdAt",
-                "endedAt","percent","invoice","purchaseOrder","notes"];
+const CORDER = ["reference","amount","points","addedBy","createdAt",
+                "endedAt","status","invoice","purchaseOrder","notes"];
 /* Least valuable first. The percentage goes early: it reads 100 on every
    record and nobody has been able to tell me what it measures, so it is the
    first thing worth the width it takes. */
-const CDROP_ORDER = ["notes","purchaseOrder","percent","invoice","endedAt",
-                     "createdAt","addedBy","status","amount"];
+const CDROP_ORDER = ["notes","purchaseOrder","invoice","createdAt",
+                     "addedBy","endedAt","status","amount"];
 const cshown = () => {
   const dropped = CDROP_ORDER.filter(k => !CCOLS.find(c => c.k === k)?.pinned).slice(0, CDROP);
   return CCOLS.filter(c => c.on && !dropped.includes(c.k))
@@ -5929,7 +5921,6 @@ const chEmpty = key => `<span style="color:var(--n-600)">${esc(t("charge.panel."
 
 function renderCharges(){
   const el = document.getElementById("view-charges"); if (!el) return;
-  const total = CHARGES.reduce((n, c) => n + c.points, 0);
   el.innerHTML = `
     <div class="flex flex-wrap items-end gap-4 page-head">
       <div class="min-w-0 flex-1">
@@ -5937,12 +5928,6 @@ function renderCharges(){
                   { label:t("charge.heading") }])}
         <h1 class="page-t">${esc(t("charge.heading"))}</h1>
         <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("charge.subtitle"))}</p>
-      </div>
-      <div style="text-align:end">
-        <div class="bal-v" style="font-size:22px;justify-content:flex-end">
-          <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><use href="#i-point"/></svg>
-          <span class="num">${fmt(total)}</span></div>
-        <div class="bal-sub" style="margin-top:4px">${esc(interp(t("charge.count"), { n: fmt(CHARGES.length) }))}</div>
       </div>
     </div>
 
@@ -6067,7 +6052,6 @@ function cRow(c, cols){
       case "status":    return `<td>${chPill(chStatus(c))}</td>`;
       case "createdAt": return `<td><span class="cell-date">${esc(dfmt(c.at))}</span></td>`;
       case "endedAt":   return `<td><span class="cell-date">${esc(dfmt(c.ends))}</span></td>`;
-      case "percent":   return `<td><span class="cell-muted num ltr">${fmt(c.pct)}%</span></td>`;
       case "invoice":   return `<td>${c.invoice ? `<span class="cell-id ltr">${esc(c.invoice)}</span>` : chEmpty("noInvoice")}</td>`;
       case "purchaseOrder": return `<td>${c.po ? `<span class="cell-id ltr">${esc(c.po)}</span>` : chEmpty("noPurchaseOrder")}</td>`;
       case "notes":     return `<td><span class="cell-muted">${c.notes ? esc(t("charge." + c.notes)) : chEmpty("noNotes")}</span></td>`;
@@ -6141,7 +6125,6 @@ function openCharge(id){
                c.po ? `<span class="ltr">${esc(c.po)}</span>` : chEmpty("noPurchaseOrder"))}
       ${fldRow(t("charge.columns.notes"),
                c.notes ? esc(t("charge." + c.notes)) : chEmpty("noNotes"))}
-      ${fldRow(t("charge.columns.percent"), `<span class="num ltr">${fmt(c.pct)}%</span>`)}
 
       <div class="trail-h" style="margin:22px 0 4px">${esc(t("charge.panel.sectionAddedBy"))}</div>
       <div class="fld"><div class="fld-v" style="flex:1 1 100%">${chCell(c.by)}</div></div>`,
