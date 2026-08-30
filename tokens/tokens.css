@@ -1,0 +1,132 @@
+/* ---------------------------------------------------------------------------
+   WalaOne Partner Dashboard — design tokens
+   Mirrors the Singular (V1.0.0) two-tier architecture: primitives feed a
+   semantic layer, and components reference ONLY the semantic layer.
+
+   PROVENANCE
+     [figma]   pulled from the live Singular library — use verbatim
+     [brand]   derived from the client-specified primary #755BD8
+     [derived] filled in by us because the library did not expose it.
+               Every [derived] value is a candidate for correction.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* == PRIMITIVES ======================================================== */
+
+  /* Brand — [brand] OKLCH ramp, hue held at -71.3deg, 500 pinned to #755BD8.
+     Contrast-verified; 400 is decorative only (2.82:1 — never text).        */
+  --p-50: #F5F4FF;
+  --p-100: #EAE8FF;
+  --p-200: #D7D4FF;
+  --p-300: #BFB7FF;
+  --p-400: #9C89FF;
+  --p-500: #755BD8;
+  --p-600: #6246BE;
+  --p-700: #4E349D;
+  --p-800: #3A2678;
+  --p-900: #271A54;
+
+  /* Neutral — [figma] 300/800/950 verbatim, [derived] elsewhere on their
+     shared cool hue (-94.7deg, averaged from the three Figma anchors).      */
+  --n-0: #FFFFFF;
+  --n-25: #FAFBFC;
+  --n-50: #F5F7FA;
+  --n-100: #EEF0F5;
+  --n-200: #E0E4EC;
+  --n-300: #CCD2E0; /* [figma] */
+  --n-400: #B5BCCC;
+  --n-500: #9DA5B5;
+  --n-600: #848C9D;
+  --n-700: #5F6572;
+  --n-800: #40444C; /* [figma] */
+  --n-900: #22252B;
+  --n-950: #111317; /* [figma] */
+
+  /* Status — [derived]. 500 marks come from the validated data-viz status
+     palette; 50/100/200 tints and the text-safe 700 are derived from them.  */
+  --success-50: #ECFBEA;
+  --success-100: #D7F5D4;
+  --success-200: #B1E9AC;
+  --success-500: #0CA30C;
+  --success-700: #008301;
+  --warning-50: #FEF4E6;
+  --warning-100: #FBE8CC;
+  --warning-200: #F4D29C;
+  --warning-500: #FAB219;
+  --warning-700: #946600;
+  --danger-50: #FFF2F1;
+  --danger-100: #FFE4E1;
+  --danger-200: #FFC8C2;
+  --danger-500: #D03B3B;
+  --danger-700: #C83C3B;
+  --info-50: #F0F6FF;
+  --info-100: #DFEDFF;
+  --info-200: #BEDAFF;
+  --info-500: #2A78D6;
+  --info-700: #266FC8;
+
+  /* Chart series — [derived]. Validated: CVD dE 24.7, normal-vision dE 30.9.
+     Series 2 is sub-3:1 on white, so both series carry direct labels.       */
+  --series-issued: #755BD8;
+  --series-redeemed: #1BAF7A;
+
+  /* == SEMANTIC ========================================================== */
+  --bg-page: var(--n-50);
+  --bg-surface: #FFFFFF;              /* [figma] bg/standard/default        */
+  --bg-subtle: var(--n-100);
+  --bg-hover: var(--n-100);
+  --bg-primary: var(--p-500);
+  --bg-primary-hover: var(--p-600);
+  --bg-primary-pressed: var(--p-700);
+  --bg-primary-subtle: var(--p-50);
+
+  --text-primary: #111317;            /* [figma] text/Primary               */
+  --text-secondary: #40444C;          /* [figma] text/Secondary             */
+  --text-muted: var(--n-600);
+  --text-on-primary: #FFFFFF;
+  --text-brand: var(--p-700);
+
+  --border-subtle: var(--n-200);
+  --border-default: var(--n-300);
+  --border-input: #CCD2E0;            /* [figma] border/input               */
+  --border-strong: var(--n-400);
+  --border-focus: var(--p-500);
+
+  /* == SPACING == [figma] scale confirmed: token number / 12.5 = px ======= */
+  --sp-25: 2px;  --sp-50: 4px;  --sp-75: 6px;  --sp-100: 8px;
+  --sp-150: 12px; --sp-200: 16px; --sp-250: 20px; --sp-300: 24px;
+  --sp-400: 32px; --sp-500: 40px; --sp-600: 48px; --sp-800: 64px;
+
+  /* == RADIUS == [figma] radius/150 = 12px confirmed; siblings [derived] === */
+  --r-50: 4px; --r-100: 8px; --r-150: 12px; --r-200: 16px; --r-300: 24px;
+  --r-full: 9999px;
+
+  /* == TYPE ============================================================== */
+  /* [figma] Arabic is FF Shamel Unique, line-height 1.5, letter-spacing 0.
+     FF Shamel is licensed and cannot load in a web preview, so the stack
+     falls back to IBM Plex Sans Arabic — the closest freely available
+     humanist Arabic sans, and a designed superfamily with its Latin
+     counterpart, which keeps the two scripts structurally harmonious.   */
+  --font-ar: "FF Shamel Unique", "IBM Plex Sans Arabic", "Noto Sans Arabic", sans-serif;
+  --font-en: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --fs-xs: 12px; --fs-s: 14px; --fs-m: 16px;   /* [figma] confirmed          */
+  --fs-l: 18px; --fs-xl: 20px; --fs-2xl: 24px; /* [derived]                  */
+  --fs-3xl: 30px; --fs-4xl: 36px;              /* [derived]                  */
+
+  --fw-regular: 400; --fw-medium: 500;         /* [figma] confirmed          */
+  --fw-semibold: 600; --fw-bold: 700;          /* [derived]                  */
+
+  /* Line height differs by script on purpose. Arabic needs more vertical
+     room; the system specifies 1.5 and we honour it, but UI-label lines get
+     a tighter value so buttons and stat labels do not grow.                */
+  --lh-tight: 1.25;
+  --lh-body: 1.5;                     /* [figma]                            */
+
+  /* == ELEVATION == [derived] ============================================ */
+  --shadow-xs: 0 1px 2px rgba(17,19,23,.05);
+  --shadow-sm: 0 1px 3px rgba(17,19,23,.06), 0 1px 2px rgba(17,19,23,.04);
+  --shadow-md: 0 4px 12px rgba(17,19,23,.07), 0 1px 3px rgba(17,19,23,.05);
+  --shadow-lg: 0 12px 32px rgba(17,19,23,.10), 0 2px 8px rgba(17,19,23,.05);
+  --shadow-focus: 0 0 0 3px rgba(117,91,216,.28);
+}

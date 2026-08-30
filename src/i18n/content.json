@@ -1,0 +1,320 @@
+{
+  "en": {
+    "app": {
+      "name": "WalaOne",
+      "tenant": "Comtech Gold",
+      "role": "Partner"
+    },
+    "nav": {
+      "overview": "Overview",
+      "groupAudience": "Audience",
+      "users": "Users",
+      "followers": "Followers",
+      "groupPoints": "Points",
+      "transferPoints": "Transfer points",
+      "transactions": "Transactions",
+      "chargeHistory": "Charge history",
+      "groupOffers": "Offers",
+      "offers": "Offers",
+      "groupReports": "Reports",
+      "exports": "Exports",
+      "settings": "Settings",
+      "myProfile": "My profile",
+      "logOut": "Log out",
+      "whatsNew": "What's new",
+      "collapseSidebar": "Collapse sidebar",
+      "expandSidebar": "Expand sidebar"
+    },
+    "topbar": {
+      "searchPlaceholder": "Search…",
+      "notificationsLabel": "Notifications",
+      "notificationCount": "{count} unread notifications",
+      "languageToggleLabel": "Switch language",
+      "languageEnglish": "English",
+      "languageArabic": "عربي",
+      "userMenuLabel": "Account menu"
+    },
+    "header": {
+      "greeting": "Welcome back, {name}",
+      "subtitle": "Here's what's happening across your points programme today.",
+      "last30Days": "Last 30 days",
+      "previous30Days": "Previous 30 days",
+      "thisMonth": "This month",
+      "thisQuarter": "This quarter",
+      "customRange": "Custom range",
+      "comparedToPrevious": "vs. previous period"
+    },
+    "actions": {
+      "transferPoints": "Transfer points",
+      "chargePoints": "Charge points",
+      "createOffer": "Create offer",
+      "inviteUsers": "Invite users",
+      "viewAll": "View all",
+      "export": "Export",
+      "refresh": "Refresh",
+      "retry": "Retry",
+      "reportIssue": "Report issue",
+      "dismiss": "Dismiss",
+      "review": "Review",
+      "approve": "Approve",
+      "seeDetails": "See details"
+    },
+    "attention": {
+      "heading": "Needs your attention",
+      "subtitle": "A quick list of what needs action today.",
+      "balanceIntegrity": {
+        "title": "Balance under review",
+        "description": "This figure has looked wrong for {value}. We're double-checking it before we show a number here.",
+        "cta": "Report issue"
+      },
+      "pendingTransfers": {
+        "title": "Transfers need approval",
+        "description": "{count} point transfers are waiting for your approval.",
+        "cta": "Review transfers"
+      },
+      "expiringOffers": {
+        "title": "Offers expiring soon",
+        "description": "{count} offers expire within 7 days.",
+        "cta": "Review offers"
+      },
+      "failedTransactions": {
+        "title": "Failed transactions",
+        "description": "{count} transactions failed and need your review.",
+        "cta": "Review transactions"
+      },
+      "unregisteredBacklog": {
+        "title": "Invites not completed",
+        "description": "{count} followers were invited but never finished registering.",
+        "cta": "Send reminder"
+      },
+      "allClear": {
+        "title": "All caught up",
+        "body": "Nothing needs your attention right now."
+      }
+    },
+    "wallet": {
+      "heading": "Points wallet",
+      "availableBalance": "Available balance",
+      "pointsIssued": "Points issued",
+      "pointsRedeemed": "Points redeemed",
+      "pointsPending": "Points pending",
+      "pointsRefunded": "Points refunded",
+      "runway": "At the current rate, your balance covers about {value}.",
+      "lowBalanceWarning": "Your balance is running low. Top up to keep transfers running smoothly.",
+      "topUpCta": "Charge points"
+    },
+    "flow": {
+      "title": "Points issued vs. redeemed",
+      "legendIssued": "Issued",
+      "legendRedeemed": "Redeemed",
+      "axisXLabel": "Date",
+      "axisYLabel": "Points",
+      "tooltipValue": "{value} points",
+      "emptyState": "No point activity yet. Once you issue or redeem points, this chart will fill in."
+    },
+    "funnel": {
+      "heading": "Audience funnel",
+      "stageFollowers": "Followers",
+      "stageRegistered": "Registered",
+      "stageActive": "Active",
+      "conversionRate": "Conversion rate",
+      "emptyState": "No followers yet. Once people follow your brand, you'll see them move through this funnel."
+    },
+    "activity": {
+      "heading": "Activity",
+      "recentActivity": "Recent activity",
+      "justNow": "Just now",
+      "minutesAgo": "{n} minutes ago",
+      "hoursAgo": "{n} hours ago",
+      "yesterday": "Yesterday",
+      "daysAgo": "{n} days ago",
+      "eventTransfer": "{value} points transferred to {name}",
+      "eventCharge": "{value} points charged to your account",
+      "eventOfferPublished": "Offer \"{name}\" published",
+      "eventUserRegistered": "New user registered: {name}",
+      "eventRefund": "{value} points refunded from a transaction",
+      "emptyState": "No activity yet. Actions like transfers and charges will show up here as they happen."
+    },
+    "offers": {
+      "heading": "Offers",
+      "activeOffers": "Active offers",
+      "expiringSoon": "Expiring soon",
+      "totalOffers": "Total offers",
+      "emptyState": "No offers yet. Create your first offer to start attracting followers."
+    },
+    "states": {
+      "loading": "Loading…",
+      "errorTitle": "Something went wrong",
+      "errorBody": "We couldn't load this. Try again, or contact support if it keeps happening.",
+      "retry": "Retry",
+      "emptyTitle": "Nothing here yet",
+      "noDataForPeriod": "No data for this period",
+      "loadingAnnouncement": "Content is loading"
+    },
+    "a11y": {
+      "skipToContent": "Skip to main content",
+      "mainNavigation": "Main navigation",
+      "mainContent": "Main content",
+      "chartDescription": "Chart showing points issued and redeemed over the selected period."
+    }
+  },
+  "ar": {
+    "app": {
+      "name": "WalaOne",
+      "tenant": "Comtech Gold",
+      "role": "شريك"
+    },
+    "nav": {
+      "overview": "نظرة عامة",
+      "groupAudience": "الجمهور",
+      "users": "المستخدمين",
+      "followers": "المتابعين",
+      "groupPoints": "النقاط",
+      "transferPoints": "تحويل النقاط",
+      "transactions": "المعاملات",
+      "chargeHistory": "سجل الشحن",
+      "groupOffers": "العروض",
+      "offers": "العروض",
+      "groupReports": "التقارير",
+      "exports": "التصدير",
+      "settings": "الإعدادات",
+      "myProfile": "ملفي الشخصي",
+      "logOut": "تسجيل الخروج",
+      "whatsNew": "الجديد",
+      "collapseSidebar": "طي الشريط الجانبي",
+      "expandSidebar": "توسيع الشريط الجانبي"
+    },
+    "topbar": {
+      "searchPlaceholder": "ابحث…",
+      "notificationsLabel": "الإشعارات",
+      "notificationCount": "{count} إشعارات غير مقروءة",
+      "languageToggleLabel": "تبديل اللغة",
+      "languageEnglish": "English",
+      "languageArabic": "عربي",
+      "userMenuLabel": "قائمة الحساب"
+    },
+    "header": {
+      "greeting": "مرحبًا بعودتك، {name}",
+      "subtitle": "إليك ما يحدث في برنامج نقاطك اليوم.",
+      "last30Days": "آخر 30 يومًا",
+      "previous30Days": "الـ 30 يومًا السابقة",
+      "thisMonth": "هذا الشهر",
+      "thisQuarter": "هذا الربع",
+      "customRange": "فترة مخصصة",
+      "comparedToPrevious": "مقارنة بالفترة السابقة"
+    },
+    "actions": {
+      "transferPoints": "تحويل النقاط",
+      "chargePoints": "شحن النقاط",
+      "createOffer": "إنشاء عرض",
+      "inviteUsers": "دعوة مستخدمين",
+      "viewAll": "عرض الكل",
+      "export": "تصدير",
+      "refresh": "تحديث",
+      "retry": "إعادة المحاولة",
+      "reportIssue": "الإبلاغ عن مشكلة",
+      "dismiss": "تجاهل",
+      "review": "مراجعة",
+      "approve": "موافقة",
+      "seeDetails": "عرض التفاصيل"
+    },
+    "attention": {
+      "heading": "يحتاج انتباهك",
+      "subtitle": "قائمة سريعة بما يحتاج إجراء اليوم.",
+      "balanceIntegrity": {
+        "title": "الرصيد قيد المراجعة",
+        "description": "هذا الرقم غير صحيح منذ {value}. نتحقق منه قبل عرض أي رقم هنا.",
+        "cta": "الإبلاغ عن مشكلة"
+      },
+      "pendingTransfers": {
+        "title": "تحويلات تحتاج موافقة",
+        "description": "{count} تحويلات نقاط بانتظار موافقتك.",
+        "cta": "مراجعة التحويلات"
+      },
+      "expiringOffers": {
+        "title": "عروض تنتهي قريبًا",
+        "description": "{count} عروض تنتهي خلال 7 أيام.",
+        "cta": "مراجعة العروض"
+      },
+      "failedTransactions": {
+        "title": "معاملات فاشلة",
+        "description": "{count} معاملات فشلت وتحتاج مراجعتك.",
+        "cta": "مراجعة المعاملات"
+      },
+      "unregisteredBacklog": {
+        "title": "دعوات لم تكتمل",
+        "description": "{count} متابعين تمت دعوتهم ولم يكملوا التسجيل بعد.",
+        "cta": "إرسال تذكير"
+      },
+      "allClear": {
+        "title": "كل شيء على ما يرام",
+        "body": "لا شيء يحتاج انتباهك الآن."
+      }
+    },
+    "wallet": {
+      "heading": "محفظة النقاط",
+      "availableBalance": "الرصيد المتاح",
+      "pointsIssued": "النقاط الصادرة",
+      "pointsRedeemed": "النقاط المستبدلة",
+      "pointsPending": "النقاط المعلّقة",
+      "pointsRefunded": "النقاط المستردة",
+      "runway": "بمعدلك الحالي، يكفي رصيدك لمدة {value} تقريبًا.",
+      "lowBalanceWarning": "رصيدك منخفض. اشحن رصيدك لتستمر عمليات التحويل دون انقطاع.",
+      "topUpCta": "شحن النقاط"
+    },
+    "flow": {
+      "title": "النقاط الصادرة مقابل المستبدلة",
+      "legendIssued": "الصادرة",
+      "legendRedeemed": "المستبدلة",
+      "axisXLabel": "التاريخ",
+      "axisYLabel": "النقاط",
+      "tooltipValue": "{value} نقطة",
+      "emptyState": "لا يوجد نشاط نقاط بعد. بمجرد إصدار أو استبدال نقاط، سيظهر هنا."
+    },
+    "funnel": {
+      "heading": "مسار الجمهور",
+      "stageFollowers": "المتابعين",
+      "stageRegistered": "المسجلين",
+      "stageActive": "النشطين",
+      "conversionRate": "معدل التحويل",
+      "emptyState": "لا يوجد متابعون بعد. بمجرد أن يتابع الأشخاص علامتك التجارية، سترى تحركهم عبر هذا المسار."
+    },
+    "activity": {
+      "heading": "النشاط",
+      "recentActivity": "النشاط الأخير",
+      "justNow": "الآن",
+      "minutesAgo": "منذ {n} دقائق",
+      "hoursAgo": "منذ {n} ساعات",
+      "yesterday": "أمس",
+      "daysAgo": "منذ {n} أيام",
+      "eventTransfer": "تحويل {value} نقطة إلى {name}",
+      "eventCharge": "شحن {value} نقطة إلى رصيد الحساب",
+      "eventOfferPublished": "نشر عرض «{name}»",
+      "eventUserRegistered": "تسجيل مستخدم جديد: {name}",
+      "eventRefund": "استرداد {value} نقطة من معاملة",
+      "emptyState": "لا يوجد نشاط بعد. الإجراءات مثل التحويلات والشحن ستظهر هنا فور حدوثها."
+    },
+    "offers": {
+      "heading": "العروض",
+      "activeOffers": "العروض النشطة",
+      "expiringSoon": "تنتهي قريبًا",
+      "totalOffers": "إجمالي العروض",
+      "emptyState": "لا توجد عروض بعد. أنشئ أول عرض لك لجذب المتابعين."
+    },
+    "states": {
+      "loading": "جارٍ التحميل…",
+      "errorTitle": "حدث خطأ ما",
+      "errorBody": "تعذّر تحميل هذا المحتوى. حاول مرة أخرى، أو تواصل مع الدعم إذا تكرر الأمر.",
+      "retry": "إعادة المحاولة",
+      "emptyTitle": "لا يوجد شيء هنا بعد",
+      "noDataForPeriod": "لا توجد بيانات لهذه الفترة",
+      "loadingAnnouncement": "جارٍ تحميل المحتوى"
+    },
+    "a11y": {
+      "skipToContent": "تخطي إلى المحتوى الرئيسي",
+      "mainNavigation": "التنقل الرئيسي",
+      "mainContent": "المحتوى الرئيسي",
+      "chartDescription": "رسم بياني يوضّح النقاط الصادرة والمستبدلة خلال الفترة المحددة."
+    }
+  }
+}
