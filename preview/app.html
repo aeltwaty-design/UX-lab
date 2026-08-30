@@ -1363,8 +1363,7 @@ html[dir="rtl"] .vw-line{text-align:start}
 <div id="pnlBack" class="pnl-back" hidden onclick="closePanel()"></div>
 <aside id="pnl" class="pnl" role="dialog" aria-modal="true" aria-labelledby="pnlTitle" hidden>
   <div class="pnl-h">
-    <button class="icon-btn pnl-back-btn" id="pnlBackBtn" onclick="panelBack()"
-            data-i18n-aria="transfers.a11y.backPanel" aria-label="Back" hidden>
+    <button class="icon-btn pnl-back-btn" id="pnlBackBtn" onclick="panelBack()" hidden>
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-back"/></svg></button>
     <div class="min-w-0">
       <h2 id="pnlTitle" class="pnl-t"></h2>
@@ -1706,7 +1705,195 @@ const I18N = {
     "users.unregistered.encourage": "Send a reminder to help them finish registering.",
     "users.pagination.showingRange": "Showing {from} to {to} of {total}",
     "users.pagination.previous": "Previous",
-    "users.pagination.rowsPerPage": "Rows per page"
+    "users.pagination.rowsPerPage": "Rows per page",
+    "transfers.heading": "Transfer points",
+    "transfers.subtitle": "Send points to your customers one at a time, or in bulk from a file.",
+    "transfers.navBulk": "Bulk transfers",
+    "transfers.navIndividual": "Individual transfers",
+    "transfers.tabs.bulk": "Bulk",
+    "transfers.tabs.individual": "Individual",
+    "transfers.summary.charged": "Points charged",
+    "transfers.summary.chargedHint": "Total points you've charged to your account.",
+    "transfers.summary.transferred": "Points transferred",
+    "transfers.summary.transferredHint": "Total points sent to customers so far.",
+    "transfers.summary.available": "Available balance",
+    "transfers.summary.availableHint": "Points you can still transfer.",
+    "transfers.summary.lowBalance": "Your balance is running low. Top up to keep transfers running smoothly.",
+    "transfers.summary.committed": "{n} points committed to files awaiting review",
+    "transfers.queue.waiting": "{n} files are waiting for your review.",
+    "transfers.queue.waitingOne": "One file is waiting for your review.",
+    "transfers.queue.waitingHint": "Review each file's records, then approve or reject it.",
+    "transfers.queue.action": "Review them",
+    "transfers.queue.clear": "Nothing waiting for review. Every file has been checked.",
+    "transfers.cta.label": "New transfer",
+    "transfers.cta.single": "Single transfer",
+    "transfers.cta.singleDesc": "Send points to one customer by name or phone.",
+    "transfers.cta.bulk": "Bulk transfer",
+    "transfers.cta.bulkDesc": "Upload a file to send points to many customers at once.",
+    "transfers.columns.file": "File",
+    "transfers.columns.uploadedBy": "Uploaded by",
+    "transfers.columns.records": "Records",
+    "transfers.columns.points": "Points",
+    "transfers.columns.value": "Value",
+    "transfers.columns.source": "Source",
+    "transfers.columns.status": "Status",
+    "transfers.columns.uploaded": "Uploaded",
+    "transfers.columns.actions": "Actions",
+    "transfers.columns.reference": "Reference",
+    "transfers.columns.sentBy": "Sent by",
+    "transfers.columns.recipient": "Recipient",
+    "transfers.columns.date": "Date",
+    "transfers.records.total": "{n} records",
+    "transfers.records.valid": "Valid",
+    "transfers.records.invalid": "Invalid",
+    "transfers.records.duplicate": "Duplicate",
+    "transfers.records.noneValid": "Every record in this file is invalid or a duplicate, so there's nothing left to send.",
+    "transfers.records.noneValidLong": "Every row in this file is either malformed or a duplicate, so approving it would send nothing to anyone.",
+    "transfers.records.breakdown": "{valid} ready · {invalid} invalid · {duplicate} duplicate",
+    "transfers.status.uploaded": "Uploaded",
+    "transfers.status.uploadedDesc": "Waiting for an admin to approve or reject it.",
+    "transfers.status.ready": "Ready",
+    "transfers.status.readyDesc": "Approved and queued to send.",
+    "transfers.status.processing": "Processing",
+    "transfers.status.processingDesc": "Sending now.",
+    "transfers.status.completed": "Completed",
+    "transfers.status.completedDesc": "Points delivered.",
+    "transfers.status.rejected": "Rejected",
+    "transfers.status.rejectedDesc": "An admin reviewed this and decided not to send it.",
+    "transfers.status.failed": "Failed",
+    "transfers.status.failedDesc": "Something went wrong while sending. It needs a look.",
+    "transfers.status.runningFor": "Running for {n}",
+    "transfers.status.progress": "{done} of {total} rows",
+    "transfers.source.loyalty": "Loyalty programme",
+    "transfers.source.invoice": "Invoice",
+    "transfers.source.file": "File",
+    "transfers.source.referral": "Referral",
+    "transfers.source.b2b": "B2B",
+    "transfers.source.label": "Source",
+    "transfers.actions.approve": "Approve",
+    "transfers.actions.reject": "Reject",
+    "transfers.actions.viewFile": "View file",
+    "transfers.actions.download": "Download",
+    "transfers.actions.viewDetails": "View details",
+    "transfers.actions.retry": "Retry",
+    "transfers.approve.title": "Approve this file?",
+    "transfers.approve.body": "This sends {points} points to {count} people and can't be undone.",
+    "transfers.approve.cost": "This uses ﷼{value} from your available balance.",
+    "transfers.approve.after": "Balance after this approval",
+    "transfers.approve.insufficient": "This file is worth more than your available balance, so it can't be approved yet.",
+    "transfers.approve.skipped": "This send will leave out {n} rows: {invalid} invalid and {duplicate} duplicate.",
+    "transfers.approve.confirm": "Approve",
+    "transfers.approve.cancel": "Cancel",
+    "transfers.approve.done": "{file} approved. It's queued to send.",
+    "transfers.reject.title": "Reject this file?",
+    "transfers.reject.intro": "The uploader will see the reason you write below. The file stays on the list, and rejecting it doesn't delete it.",
+    "transfers.reject.reasonLabel": "Reason",
+    "transfers.reject.reasonPlaceholder": "Explain why you're rejecting this file…",
+    "transfers.reject.required": "Add a reason before rejecting.",
+    "transfers.reject.presetsLabel": "Common reasons",
+    "transfers.reject.preset1": "Too many invalid records",
+    "transfers.reject.preset2": "Duplicates need to be cleared first",
+    "transfers.reject.preset3": "The amount looks higher than expected. Please check it before sending.",
+    "transfers.reject.preset4": "Wrong source type or campaign",
+    "transfers.reject.preset5": "Not approved by the budget owner",
+    "transfers.reject.confirm": "Reject file",
+    "transfers.reject.cancel": "Cancel",
+    "transfers.reject.done": "{file} rejected. The uploader has been notified.",
+    "transfers.reject.keptNote": "The file stays on the list. Nothing is deleted.",
+    "transfers.rejected.by": "Rejected by {name}",
+    "transfers.rejected.reasonHeading": "Reason for rejection",
+    "transfers.detail.decidedBy": "Decided by {name} on {date}",
+    "transfers.viewer.title": "{file}",
+    "transfers.viewer.subtitle": "{n} records",
+    "transfers.viewer.colLine": "Line",
+    "transfers.viewer.colRecipient": "Recipient",
+    "transfers.viewer.colPhone": "Phone",
+    "transfers.viewer.colPoints": "Points",
+    "transfers.viewer.colIssue": "Issue",
+    "transfers.viewer.filterAll": "All",
+    "transfers.viewer.filterValid": "Valid",
+    "transfers.viewer.filterInvalid": "Invalid",
+    "transfers.viewer.filterDuplicate": "Duplicate",
+    "transfers.viewer.lineNote": "Line numbers match the original file. Gaps are normal and don't mean anything is missing.",
+    "transfers.viewer.issueBadPhone": "Phone number format is invalid",
+    "transfers.viewer.issueMissingPoints": "Points value is missing",
+    "transfers.viewer.issueBadPoints": "Points value isn't a valid whole number",
+    "transfers.viewer.issueUnknown": "Unknown issue",
+    "transfers.viewer.issueDuplicateOf": "Same recipient as line {line}",
+    "transfers.viewer.noIssue": "No issue",
+    "transfers.viewer.emptyFiltered": "No records match this filter.",
+    "transfers.viewer.capped": "Showing the first {n} of {total} rows",
+    "transfers.viewer.download": "Download file",
+    "transfers.single.title": "Send points to a customer",
+    "transfers.single.intro": "Search for a customer, choose how many points to send, and they'll receive them right away.",
+    "transfers.single.recipientLabel": "Recipient",
+    "transfers.single.recipientPlaceholder": "Search by name or phone…",
+    "transfers.single.pointsLabel": "Points",
+    "transfers.single.pointsHint": "Between {min} and {max} points.",
+    "transfers.single.valuePreview": "Worth ﷼{value}",
+    "transfers.single.sourceLabel": "Source",
+    "transfers.single.noteLabel": "Note",
+    "transfers.single.noteOptional": "Optional",
+    "transfers.single.notePlaceholder": "Add a note, if you'd like…",
+    "transfers.single.submit": "Send points",
+    "transfers.single.cancel": "Cancel",
+    "transfers.single.done": "{points} points sent to {name}.",
+    "transfers.single.errBelowMin": "Enter at least {min} points.",
+    "transfers.single.errAboveMax": "Enter no more than {max} points.",
+    "transfers.single.errNoRecipient": "Choose a recipient before sending.",
+    "transfers.single.errBalance": "Your available balance doesn't cover this transfer. Charge more points to continue.",
+    "transfers.single.cooldown": "This recipient can only receive points once every 30 minutes.",
+    "transfers.upload.title": "Send points by file",
+    "transfers.upload.intro": "Upload a CSV file with your recipients. An admin will review it before anything is sent.",
+    "transfers.upload.dropzone": "Drag and drop your file here",
+    "transfers.upload.dropzoneHint": "CSV files only, up to 10 MB",
+    "transfers.upload.browse": "Browse",
+    "transfers.upload.template": "Download template",
+    "transfers.upload.templateHint": "A ready-made file with the correct columns, so you can just fill it in.",
+    "transfers.upload.templateStarted": "The template is downloading.",
+    "transfers.upload.sourceLabel": "Source",
+    "transfers.upload.rulesHeading": "File requirements",
+    "transfers.upload.rule1": "One recipient per row.",
+    "transfers.upload.rule2": "Phone numbers in international format, for example 9665XXXXXXXX.",
+    "transfers.upload.rule3": "Points as a whole number, with no separators (write 5000, not 5,000).",
+    "transfers.upload.rule4": "Commas separate the columns.",
+    "transfers.upload.submit": "Upload file",
+    "transfers.upload.cancel": "Cancel",
+    "transfers.upload.done": "File uploaded. It's waiting for an admin's review.",
+    "transfers.upload.checking": "Checking your file…",
+    "transfers.upload.errType": "This file needs to be a CSV.",
+    "transfers.upload.errSize": "This file is larger than 10 MB.",
+    "transfers.upload.errNoFile": "Choose a file first.",
+    "transfers.value.derived": "Value is calculated from points, at a rate of 5 points = 1 ﷼.",
+    "transfers.value.mismatch": "This file's stored value doesn't match our calculation. We're showing the calculated amount instead.",
+    "transfers.value.rate": "5 points = 1 ﷼",
+    "transfers.value.currency": "Saudi riyal",
+    "transfers.search.placeholder": "Search by file name or uploader…",
+    "transfers.search.placeholderIndividual": "Search by recipient or reference…",
+    "transfers.filters.status": "Status",
+    "transfers.filters.source": "Source",
+    "transfers.filters.uploader": "Uploader",
+    "transfers.filters.sender": "Sender",
+    "transfers.filters.any": "All",
+    "transfers.filters.dateRange": "Date range",
+    "transfers.empty.bulkTitle": "No files yet",
+    "transfers.empty.bulkBody": "Once your team uploads a file of recipients, it'll show up here.",
+    "transfers.empty.individualTitle": "No transfers yet",
+    "transfers.empty.individualBody": "Once you send points to a customer, it'll show up here.",
+    "transfers.empty.noMatchTitle": "No matches",
+    "transfers.empty.noMatchBody": "No transfers match your filters. Try different search terms, or clear your filters to see more.",
+    "transfers.a11y.statusColumn": "Transfer status",
+    "transfers.a11y.rowActions": "Actions for {file}",
+    "transfers.a11y.panel": "Side panel",
+    "transfers.a11y.closePanel": "Close panel",
+    "transfers.a11y.tabs": "Transfer type",
+    "transfers.time.minutes": "{n} minutes",
+    "transfers.time.hours": "{n} hours",
+    "transfers.time.days": "{n} days",
+    "transfers.retry.done": "Queued to try again.",
+    "transfers.download.started": "{file} is downloading",
+    "transfers.export.soon": "Export isn't ready yet. We'll turn it on as soon as it is.",
+    "transfers.a11y.backPanel": "Back to {panel}"
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -2019,7 +2206,195 @@ const I18N = {
     "users.unregistered.encourage": "أرسل تذكيرًا لمساعدته على إكمال التسجيل.",
     "users.pagination.showingRange": "عرض {from} إلى {to} من {total}",
     "users.pagination.previous": "السابق",
-    "users.pagination.rowsPerPage": "الصفوف في الصفحة"
+    "users.pagination.rowsPerPage": "الصفوف في الصفحة",
+    "transfers.heading": "تحويل النقاط",
+    "transfers.subtitle": "أرسل النقاط لعملائك واحدًا تلو الآخر، أو دفعة واحدة عبر ملف.",
+    "transfers.navBulk": "عمليات النقاط بالجملة",
+    "transfers.navIndividual": "عمليات النقاط الفردية",
+    "transfers.tabs.bulk": "بالجملة",
+    "transfers.tabs.individual": "الفردية",
+    "transfers.summary.charged": "النقاط المشحونة",
+    "transfers.summary.chargedHint": "إجمالي النقاط التي شحنتها إلى حسابك.",
+    "transfers.summary.transferred": "النقاط المحولة",
+    "transfers.summary.transferredHint": "إجمالي النقاط التي أرسلتها للعملاء حتى الآن.",
+    "transfers.summary.available": "الرصيد المتاح",
+    "transfers.summary.availableHint": "النقاط التي ما زال بإمكانك تحويلها.",
+    "transfers.summary.lowBalance": "رصيدك منخفض. اشحن رصيدك لتستمر عمليات التحويل دون انقطاع.",
+    "transfers.summary.committed": "{n} نقطة محجوزة لملفات بانتظار المراجعة",
+    "transfers.queue.waiting": "{n} ملفات بانتظار مراجعتك.",
+    "transfers.queue.waitingOne": "ملف واحد بانتظار مراجعتك.",
+    "transfers.queue.waitingHint": "راجع صفوف كل ملف، ثم وافق عليه أو ارفضه.",
+    "transfers.queue.action": "راجعها",
+    "transfers.queue.clear": "لا شيء بانتظار المراجعة. تمت مراجعة كل الملفات.",
+    "transfers.cta.label": "تحويل جديد",
+    "transfers.cta.single": "تحويل فردي",
+    "transfers.cta.singleDesc": "أرسل نقاطًا لعميل واحد بالاسم أو رقم الجوال.",
+    "transfers.cta.bulk": "تحويل بالجملة",
+    "transfers.cta.bulkDesc": "ارفع ملفًا لإرسال النقاط لعدد كبير من العملاء دفعة واحدة.",
+    "transfers.columns.file": "الملف",
+    "transfers.columns.uploadedBy": "بواسطة",
+    "transfers.columns.records": "الصفوف",
+    "transfers.columns.points": "النقاط",
+    "transfers.columns.value": "القيمة",
+    "transfers.columns.source": "المصدر",
+    "transfers.columns.status": "الحالة",
+    "transfers.columns.uploaded": "الرفع",
+    "transfers.columns.actions": "الإجراءات",
+    "transfers.columns.reference": "المرجع",
+    "transfers.columns.sentBy": "بواسطة",
+    "transfers.columns.recipient": "المستلم",
+    "transfers.columns.date": "التاريخ",
+    "transfers.records.total": "{n} صفوف",
+    "transfers.records.valid": "صالح",
+    "transfers.records.invalid": "غير صالح",
+    "transfers.records.duplicate": "مكرر",
+    "transfers.records.noneValid": "كل الصفوف في هذا الملف إما غير صالحة أو مكررة، فلا يوجد ما يمكن إرساله.",
+    "transfers.records.noneValidLong": "كل صف في هذا الملف إما غير صالح أو مكرر، فالموافقة عليه لن ترسل شيئًا لأحد.",
+    "transfers.records.breakdown": "{valid} جاهز · {invalid} غير صالح · {duplicate} مكرر",
+    "transfers.status.uploaded": "مرفوع",
+    "transfers.status.uploadedDesc": "بانتظار قرار المشرف: موافقة أو رفض.",
+    "transfers.status.ready": "جاهز",
+    "transfers.status.readyDesc": "تمت الموافقة عليه، وسيُرسل قريبًا.",
+    "transfers.status.processing": "قيد المعالجة",
+    "transfers.status.processingDesc": "جارٍ الإرسال الآن.",
+    "transfers.status.completed": "مكتمل",
+    "transfers.status.completedDesc": "تم تسليم النقاط.",
+    "transfers.status.rejected": "مرفوض",
+    "transfers.status.rejectedDesc": "راجعه المشرف وقرر عدم إرساله.",
+    "transfers.status.failed": "فشل",
+    "transfers.status.failedDesc": "حدث خطأ أثناء الإرسال، ويحتاج إلى مراجعتك.",
+    "transfers.status.runningFor": "قيد المعالجة منذ {n}",
+    "transfers.status.progress": "{done} من {total} صفوف",
+    "transfers.source.loyalty": "برامج ولاء",
+    "transfers.source.invoice": "فاتورة",
+    "transfers.source.file": "ملف",
+    "transfers.source.referral": "ترشيح",
+    "transfers.source.b2b": "B2B",
+    "transfers.source.label": "المصدر",
+    "transfers.actions.approve": "موافقة",
+    "transfers.actions.reject": "رفض",
+    "transfers.actions.viewFile": "عرض الملف",
+    "transfers.actions.download": "تنزيل",
+    "transfers.actions.viewDetails": "عرض التفاصيل",
+    "transfers.actions.retry": "إعادة المحاولة",
+    "transfers.approve.title": "الموافقة على هذا الملف؟",
+    "transfers.approve.body": "سيتم إرسال {points} نقطة إلى {count} أشخاص، ولا يمكن التراجع عنه.",
+    "transfers.approve.cost": "سيُخصم ﷼{value} من رصيدك المتاح.",
+    "transfers.approve.after": "الرصيد بعد هذه الموافقة",
+    "transfers.approve.insufficient": "قيمة هذا الملف أكبر من رصيدك المتاح، لذا لا يمكن الموافقة عليه الآن.",
+    "transfers.approve.skipped": "لن يشمل هذا الإرسال {n} صفوف: {invalid} غير صالح و{duplicate} مكرر.",
+    "transfers.approve.confirm": "موافقة",
+    "transfers.approve.cancel": "إلغاء",
+    "transfers.approve.done": "تمت الموافقة على {file}. سيُرسل قريبًا.",
+    "transfers.reject.title": "رفض هذا الملف؟",
+    "transfers.reject.intro": "سيطّلع رافع الملف على السبب الذي تكتبه أدناه. يبقى الملف في القائمة، فالرفض لا يحذفه.",
+    "transfers.reject.reasonLabel": "السبب",
+    "transfers.reject.reasonPlaceholder": "اشرح سبب رفضك لهذا الملف…",
+    "transfers.reject.required": "أضف سببًا قبل الرفض.",
+    "transfers.reject.presetsLabel": "أسباب شائعة",
+    "transfers.reject.preset1": "عدد كبير من الصفوف غير الصالحة",
+    "transfers.reject.preset2": "يجب إزالة التكرارات أولًا",
+    "transfers.reject.preset3": "المبلغ أعلى من المتوقع. الرجاء التأكد منه قبل الإرسال.",
+    "transfers.reject.preset4": "نوع المصدر أو الحملة غير صحيح",
+    "transfers.reject.preset5": "لم يعتمده المسؤول عن الميزانية",
+    "transfers.reject.confirm": "رفض الملف",
+    "transfers.reject.cancel": "إلغاء",
+    "transfers.reject.done": "تم رفض {file}، وتم إشعار رافعه.",
+    "transfers.reject.keptNote": "يبقى الملف في القائمة. لا يُحذف شيء.",
+    "transfers.rejected.by": "تم الرفض بواسطة {name}",
+    "transfers.rejected.reasonHeading": "سبب الرفض",
+    "transfers.detail.decidedBy": "قرار بواسطة {name} بتاريخ {date}",
+    "transfers.viewer.title": "{file}",
+    "transfers.viewer.subtitle": "{n} صفوف",
+    "transfers.viewer.colLine": "السطر",
+    "transfers.viewer.colRecipient": "المستلم",
+    "transfers.viewer.colPhone": "الجوال",
+    "transfers.viewer.colPoints": "النقاط",
+    "transfers.viewer.colIssue": "المشكلة",
+    "transfers.viewer.filterAll": "الكل",
+    "transfers.viewer.filterValid": "صالح",
+    "transfers.viewer.filterInvalid": "غير صالح",
+    "transfers.viewer.filterDuplicate": "مكرر",
+    "transfers.viewer.lineNote": "أرقام الأسطر مطابقة للملف الأصلي. الفجوات بينها طبيعية ولا تعني وجود نقص.",
+    "transfers.viewer.issueBadPhone": "صيغة رقم الجوال غير صالحة",
+    "transfers.viewer.issueMissingPoints": "قيمة النقاط مفقودة",
+    "transfers.viewer.issueBadPoints": "قيمة النقاط ليست رقمًا صحيحًا",
+    "transfers.viewer.issueUnknown": "مشكلة غير معروفة",
+    "transfers.viewer.issueDuplicateOf": "نفس المستلم في السطر {line}",
+    "transfers.viewer.noIssue": "لا توجد مشكلة",
+    "transfers.viewer.emptyFiltered": "لا توجد صفوف تطابق هذه التصفية.",
+    "transfers.viewer.capped": "عرض أول {n} من أصل {total} صفوف",
+    "transfers.viewer.download": "تنزيل الملف",
+    "transfers.single.title": "إرسال نقاط لعميل",
+    "transfers.single.intro": "ابحث عن العميل، حدّد عدد النقاط المطلوب إرسالها، وستصله فورًا.",
+    "transfers.single.recipientLabel": "المستلم",
+    "transfers.single.recipientPlaceholder": "ابحث بالاسم أو رقم الجوال…",
+    "transfers.single.pointsLabel": "النقاط",
+    "transfers.single.pointsHint": "بين {min} و{max} نقطة.",
+    "transfers.single.valuePreview": "بما يعادل ﷼{value}",
+    "transfers.single.sourceLabel": "المصدر",
+    "transfers.single.noteLabel": "ملاحظة",
+    "transfers.single.noteOptional": "اختياري",
+    "transfers.single.notePlaceholder": "أضف ملاحظة إن رغبت…",
+    "transfers.single.submit": "إرسال النقاط",
+    "transfers.single.cancel": "إلغاء",
+    "transfers.single.done": "تم إرسال {points} نقطة إلى {name}.",
+    "transfers.single.errBelowMin": "أدخل {min} نقطة على الأقل.",
+    "transfers.single.errAboveMax": "لا تتجاوز {max} نقطة.",
+    "transfers.single.errNoRecipient": "اختر مستلمًا قبل الإرسال.",
+    "transfers.single.errBalance": "رصيدك المتاح لا يغطي هذا التحويل. اشحن مزيدًا من النقاط للمتابعة.",
+    "transfers.single.cooldown": "لا يمكن لهذا المستلم استلام نقاط أكثر من مرة كل 30 دقيقة.",
+    "transfers.upload.title": "إرسال نقاط عبر ملف",
+    "transfers.upload.intro": "ارفع ملف CSV يحتوي على المستلمين. سيراجعه أحد المشرفين قبل إرسال أي شيء.",
+    "transfers.upload.dropzone": "اسحب ملفك وأفلته هنا",
+    "transfers.upload.dropzoneHint": "ملفات CSV فقط، بحجم أقصى 10 ميغابايت",
+    "transfers.upload.browse": "تصفّح",
+    "transfers.upload.template": "تنزيل النموذج",
+    "transfers.upload.templateHint": "ملف جاهز يحتوي على الأعمدة الصحيحة، فقط املأه.",
+    "transfers.upload.templateStarted": "جارٍ تنزيل النموذج.",
+    "transfers.upload.sourceLabel": "المصدر",
+    "transfers.upload.rulesHeading": "متطلبات الملف",
+    "transfers.upload.rule1": "مستلم واحد في كل صف.",
+    "transfers.upload.rule2": "أرقام الجوال بالصيغة الدولية، مثل 9665XXXXXXXX.",
+    "transfers.upload.rule3": "النقاط كرقم صحيح بدون فواصل (اكتب 5000 وليس 5,000).",
+    "transfers.upload.rule4": "الفواصل تفصل بين الأعمدة.",
+    "transfers.upload.submit": "رفع الملف",
+    "transfers.upload.cancel": "إلغاء",
+    "transfers.upload.done": "تم رفع الملف. بانتظار مراجعة أحد المشرفين.",
+    "transfers.upload.checking": "جارٍ التحقق من الملف…",
+    "transfers.upload.errType": "يجب أن يكون الملف بصيغة CSV.",
+    "transfers.upload.errSize": "حجم هذا الملف أكبر من 10 ميغابايت.",
+    "transfers.upload.errNoFile": "اختر ملفًا أولًا.",
+    "transfers.value.derived": "القيمة محسوبة من النقاط، بمعدل 5 نقاط = 1 ﷼.",
+    "transfers.value.mismatch": "القيمة المخزّنة في هذا الملف لا تطابق حسابنا. نعرض هنا القيمة المحسوبة بدلًا منها.",
+    "transfers.value.rate": "5 نقاط = 1 ﷼",
+    "transfers.value.currency": "ريال سعودي",
+    "transfers.search.placeholder": "ابحث باسم الملف أو الرافع…",
+    "transfers.search.placeholderIndividual": "ابحث بالمستلم أو المرجع…",
+    "transfers.filters.status": "الحالة",
+    "transfers.filters.source": "المصدر",
+    "transfers.filters.uploader": "الرافع",
+    "transfers.filters.sender": "المرسل",
+    "transfers.filters.any": "الكل",
+    "transfers.filters.dateRange": "الفترة الزمنية",
+    "transfers.empty.bulkTitle": "لا توجد ملفات بعد",
+    "transfers.empty.bulkBody": "بمجرد أن يرفع فريقك ملف مستلمين، سيظهر هنا.",
+    "transfers.empty.individualTitle": "لا توجد تحويلات بعد",
+    "transfers.empty.individualBody": "بمجرد أن ترسل نقاطًا لعميل، سيظهر هنا.",
+    "transfers.empty.noMatchTitle": "لا توجد نتائج مطابقة",
+    "transfers.empty.noMatchBody": "لا توجد تحويلات مطابقة لمعايير التصفية. جرّب كلمات بحث مختلفة أو امسح التصفية لعرض المزيد.",
+    "transfers.a11y.statusColumn": "حالة التحويل",
+    "transfers.a11y.rowActions": "إجراءات {file}",
+    "transfers.a11y.panel": "لوحة جانبية",
+    "transfers.a11y.closePanel": "إغلاق اللوحة",
+    "transfers.a11y.tabs": "نوع التحويل",
+    "transfers.time.minutes": "{n} من الدقائق",
+    "transfers.time.hours": "{n} من الساعات",
+    "transfers.time.days": "{n} من الأيام",
+    "transfers.retry.done": "أُعيد جدولته للمحاولة مرة أخرى.",
+    "transfers.download.started": "جارٍ تنزيل {file}",
+    "transfers.export.soon": "التصدير غير متاح بعد. سنفعّله بمجرد أن يصبح جاهزًا.",
+    "transfers.a11y.backPanel": "الرجوع إلى {panel}"
   }
 };
 
@@ -2484,7 +2859,7 @@ function renderFilters(){
       ["never",  t("usersFilters.activityNever")]]) +
     `<div class="fil-foot">
        <button class="btn-link" onclick="event.stopPropagation();filReset()">${t("usersFilters.reset")}</button>
-       <button class="btn btn-primary btn-sm" onclick="filClose()">${t("transfers.filters.apply")}</button>
+       <button class="btn btn-primary btn-sm" onclick="filClose()">${t("usersFilters.apply")}</button>
      </div>`;
 }
 function filPick(key, val){
@@ -3358,9 +3733,15 @@ function recCell(b){
   const seg = (n, cls, key, filter) => n
     ? `<button class="rec-seg ${cls}" style="width:${pct(n)}%" tabindex="-1" aria-hidden="true"
          onclick="event.stopPropagation();openViewer('${b.id}','${filter}')"></button>` : "";
+  // The label may carry its own {n} slot or be a bare noun; either way the
+  // count has to appear, because a breakdown without numbers says nothing.
+  const label = (n, key) => {
+    const raw = t(key);
+    return raw.includes("{n}") ? interp(raw, { n: fmt(n) }) : fmt(n) + " " + raw;
+  };
   const num = (n, cls, key, filter) => n
     ? `<button class="rec-n ${cls} btn-link" style="font-weight:500;font-size:12.5px;color:var(--n-800)"
-         onclick="event.stopPropagation();openViewer('${b.id}','${filter}')">${esc(interp(t(key), { n: fmt(n) }))}</button>` : "";
+         onclick="event.stopPropagation();openViewer('${b.id}','${filter}')">${esc(label(n, key))}</button>` : "";
   return `<div class="rec">
     <div class="rec-bar" aria-hidden="true">${seg(ok,"rec-ok","","valid")}${seg(b.invalid,"rec-bad","","invalid")}${seg(b.dup,"rec-dup","","duplicate")}</div>
     <div class="rec-txt">
@@ -3831,7 +4212,13 @@ function paintPanel(){
   document.getElementById("pnlTitle").textContent = spec.title;
   const sub = document.getElementById("pnlSub");
   sub.textContent = spec.sub || ""; sub.hidden = !spec.sub;
-  document.getElementById("pnlBackBtn").hidden = PSTACK.length < 2;
+  const backBtn = document.getElementById("pnlBackBtn");
+  backBtn.hidden = PSTACK.length < 2;
+  // Named for where it goes, and carrying no stale English when it is not in use.
+  if (PSTACK.length >= 2)
+    backBtn.setAttribute("aria-label", interp(t("transfers.a11y.backPanel"),
+                                              { panel: PSTACK[PSTACK.length - 2].title }));
+  else backBtn.removeAttribute("aria-label");
   document.getElementById("pnlBody").innerHTML = spec.body;
   const foot = document.getElementById("pnlFoot");
   foot.innerHTML = spec.foot || ""; foot.hidden = !spec.foot;
@@ -3862,7 +4249,6 @@ const fldRow = (label, value) => `<div class="fld"><div class="fld-l">${esc(labe
 /* ---------- batch detail ------------------------------------------------- */
 function openBatch(id){
   const b = batchById(id); if (!b) return;
-  const decided = b.decidedAt ? `${staffOf(b.decidedBy)} · ${dfmt(b.decidedAt)}` : null;
   const trail = b.status === "rejected" ? `<div class="trail">
       <div class="trail-h"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-xcircle"/></svg>
         ${esc(t("transfers.rejected.reasonHeading"))}</div>
@@ -3893,7 +4279,9 @@ function openBatch(id){
       ${fldRow(t("transfers.columns.records"), recCell(b))}
       ${fldRow(t("transfers.columns.points"), pointsCell(b.points))}
       ${fldRow(t("transfers.columns.value"), `${valueCell(b)}<span class="fhint">${esc(t("transfers.value.rate"))}</span>`)}
-      ${decided && b.status !== "rejected" ? fldRow(t("transfers.detail.decidedBy"), esc(decided)) : ""}
+      ${b.decidedAt && b.status !== "rejected" ? `<div class="fld"><div class="fld-v" style="flex:1 1 100%">${
+        esc(interp(t("transfers.detail.decidedBy"),
+                   { name: staffOf(b.decidedBy), date: dfmt(b.decidedAt) }))}</div></div>` : ""}
       <div style="margin-top:18px">
         <button class="btn btn-ghost w-full" onclick="openViewer('${b.id}','all')">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-eye"/></svg>
@@ -3924,8 +4312,8 @@ function openApprove(id){
     sub: b.file,
     body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:16px">${
         esc(interp(t("transfers.approve.body"), { points: fmt(b.points), count: fmt(ok) }))}</p>
-      <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.approve.cost"))}</span>
-        <span class="pv-val-v">${riyal(cost)}</span></div>
+      <p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:16px">${
+        esc(interp(t("transfers.approve.cost"), { value: fmt(cost) }))}</p>
       <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.approve.after"))}</span>
         <span class="pv-val-v" style="${short ? "color:var(--danger-700)" : ""}">${pointsCell(after)}</span></div>
       ${skipped ? `<div class="fnote tone-quiet" style="margin-top:16px">
@@ -4118,8 +4506,9 @@ function openSingle(){
         <div class="fhint">${esc(interp(t("transfers.single.pointsHint"), { min: fmt(TR_MIN), max: fmt(TR_MAX) }))}</div>
         <div class="ferr" id="sgPtsErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
           <span id="sgPtsErrTxt"></span></div>
-        <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.single.valuePreview"))}</span>
-          <span class="pv-val-v" id="sgVal">${riyal(0)}</span></div>
+        <div class="pv-val"><span class="pv-val-v" id="sgVal"
+          style="margin-inline-start:0;font-size:15px;font-weight:600">${
+          esc(interp(t("transfers.single.valuePreview"), { value: fmt(0) }))}</span></div>
       </div>
       <div class="fgrp">
         <label class="flab" for="sgSrc">${esc(t("transfers.single.sourceLabel"))}</label>
@@ -4162,7 +4551,8 @@ function sgPick(id){
 }
 function sgPreview(){
   const v = +document.getElementById("sgPts").value || 0;
-  document.getElementById("sgVal").innerHTML = riyal(valueOf(v));
+  document.getElementById("sgVal").textContent =
+    interp(t("transfers.single.valuePreview"), { value: fmt(valueOf(v)) });
   const err = document.getElementById("sgPtsErr"), txt = document.getElementById("sgPtsErrTxt");
   let msg = "";
   if (v && v < TR_MIN)        msg = interp(t("transfers.single.errBelowMin"), { min: fmt(TR_MIN) });
@@ -4317,7 +4707,7 @@ function renderTFilters(){
       [["all", t("transfers.filters.any")], ...Object.keys(STAFF).map(k => [k, staffOf(k)])]) +
     `<div class="fil-foot"><button class="btn-link" onclick="event.stopPropagation();tclearFilters()">${
        esc(t("users.list.clearFilters"))}</button>
-     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();tfilClose()">${esc(t("transfers.filters.apply"))}</button></div>`;
+     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();tfilClose()">${esc(t("usersFilters.apply"))}</button></div>`;
 }
 function tfilPick(key, val){
   TFILT[key] = val; TPAGE = 1;

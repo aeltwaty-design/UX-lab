@@ -23,7 +23,7 @@
     "transfers.queue.action": "Review them",
     "transfers.queue.clear": "Nothing waiting for review. Every file has been checked.",
 
-    "transfers.cta.label": "Transfer points",
+    "transfers.cta.label": "New transfer",
     "transfers.cta.single": "Single transfer",
     "transfers.cta.singleDesc": "Send points to one customer by name or phone.",
     "transfers.cta.bulk": "Bulk transfer",
@@ -85,6 +85,7 @@
     "transfers.approve.cost": "This uses ﷼{value} from your available balance.",
     "transfers.approve.after": "Balance after this approval",
     "transfers.approve.insufficient": "This file is worth more than your available balance, so it can't be approved yet.",
+    "transfers.approve.skipped": "This send will leave out {n} rows: {invalid} invalid and {duplicate} duplicate.",
     "transfers.approve.confirm": "Approve",
     "transfers.approve.cancel": "Cancel",
     "transfers.approve.done": "{file} approved. It's queued to send.",
@@ -197,8 +198,11 @@
     "transfers.a11y.rowActions": "Actions for {file}",
     "transfers.a11y.panel": "Side panel",
     "transfers.a11y.closePanel": "Close panel",
+    "transfers.a11y.backPanel": "Back to {panel}",
     "transfers.a11y.tabs": "Transfer type",
 
+    "transfers.time.minutes": "{n} minutes",
+    "transfers.time.hours": "{n} hours",
     "transfers.time.days": "{n} days",
 
     "transfers.retry.done": "Queued to try again.",
@@ -230,7 +234,7 @@
     "transfers.queue.action": "راجعها",
     "transfers.queue.clear": "لا شيء بانتظار المراجعة. تمت مراجعة كل الملفات.",
 
-    "transfers.cta.label": "تحويل النقاط",
+    "transfers.cta.label": "تحويل جديد",
     "transfers.cta.single": "تحويل فردي",
     "transfers.cta.singleDesc": "أرسل نقاطًا لعميل واحد بالاسم أو رقم الجوال.",
     "transfers.cta.bulk": "تحويل بالجملة",
@@ -292,6 +296,7 @@
     "transfers.approve.cost": "سيُخصم ﷼{value} من رصيدك المتاح.",
     "transfers.approve.after": "الرصيد بعد هذه الموافقة",
     "transfers.approve.insufficient": "قيمة هذا الملف أكبر من رصيدك المتاح، لذا لا يمكن الموافقة عليه الآن.",
+    "transfers.approve.skipped": "لن يشمل هذا الإرسال {n} صفوف: {invalid} غير صالح و{duplicate} مكرر.",
     "transfers.approve.confirm": "موافقة",
     "transfers.approve.cancel": "إلغاء",
     "transfers.approve.done": "تمت الموافقة على {file}. سيُرسل قريبًا.",
@@ -404,9 +409,12 @@
     "transfers.a11y.rowActions": "إجراءات {file}",
     "transfers.a11y.panel": "لوحة جانبية",
     "transfers.a11y.closePanel": "إغلاق اللوحة",
+    "transfers.a11y.backPanel": "الرجوع إلى {panel}",
     "transfers.a11y.tabs": "نوع التحويل",
 
-    "transfers.time.days": "{n} أيام",
+    "transfers.time.minutes": "{n} من الدقائق",
+    "transfers.time.hours": "{n} من الساعات",
+    "transfers.time.days": "{n} من الأيام",
 
     "transfers.retry.done": "أُعيد جدولته للمحاولة مرة أخرى.",
     "transfers.download.started": "جارٍ تنزيل {file}",
