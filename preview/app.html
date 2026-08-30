@@ -3918,7 +3918,7 @@ function openBatch(id){
 function openApprove(id){
   const b = batchById(id); if (!b) return;
   const ok = validOf(b), cost = valueOf(b.points), after = BAL.available - b.points;
-  const short = after < 0;
+  const short = after < 0, skipped = b.invalid + b.dup;   // rows this approval will not send
   openPanel({
     title: t("transfers.approve.title"),
     sub: b.file,
@@ -3928,6 +3928,12 @@ function openApprove(id){
         <span class="pv-val-v">${riyal(cost)}</span></div>
       <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.approve.after"))}</span>
         <span class="pv-val-v" style="${short ? "color:var(--danger-700)" : ""}">${pointsCell(after)}</span></div>
+      ${skipped ? `<div class="fnote tone-quiet" style="margin-top:16px">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
+        <span>${esc(interp(t("transfers.approve.skipped"),
+          { n: fmt(skipped), invalid: fmt(b.invalid), duplicate: fmt(b.dup) }))}
+          <button class="btn-link" style="display:block;margin-top:6px"
+            onclick="openViewer('${b.id}','invalid')">${esc(t("transfers.actions.viewFile"))}</button></span></div>` : ""}
       ${ok === 0 ? `<div class="fnote tone-warn" style="margin-top:16px">
         <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
         <span>${esc(t("transfers.records.noneValidLong"))}</span></div>` : ""}
