@@ -329,18 +329,25 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
 <symbol id="i-hourglass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10M7 21h10"/><path d="M8 3v3.5c0 2 4 3.6 4 5.5 0-1.9 4-3.5 4-5.5V3"/><path d="M8 21v-3.5c0-2 4-3.6 4-5.5 0 1.9 4 3.5 4 5.5V21"/></symbol>
 <symbol id="i-userplus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 20v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20"/><circle cx="8.5" cy="7" r="3.5"/><path d="M18.5 7.5v6M21.5 10.5h-6"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.2 2.6 2.6 5-5.2"/></symbol>
+<!-- PLACEHOLDER. The real asset is the "WalaOne Coin" component set in
+     Singular (V1.0.0). This is a reconstruction from the supplied raster and is
+     NOT the brand mark — replace this one symbol with the exported SVG and
+     every usage updates, since it is referenced by <use href="#i-point"> only. -->
 <symbol id="i-point" viewBox="0 0 24 24">
   <defs>
-    <linearGradient id="ptg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#8B73E4"/><stop offset="55%" stop-color="#755BD8"/><stop offset="100%" stop-color="#5B45AE"/>
+    <linearGradient id="ptFace" x1=".18" y1="0" x2=".82" y2="1">
+      <stop offset="0%" stop-color="#8571E2"/><stop offset="52%" stop-color="#6E56D2"/><stop offset="100%" stop-color="#57419F"/>
     </linearGradient>
   </defs>
-  <circle cx="12" cy="12" r="11.2" fill="url(#ptg)"/>
-  <path d="M12 .8a11.2 11.2 0 0 1 0 22.4 9 9 0 0 0 0-22.4Z" fill="#BFB7FF" opacity=".55"/>
-  <circle cx="12" cy="12" r="9" fill="url(#ptg)"/>
-  <path d="M7.4 8.6c1.5-.5 2.6.2 3.1 1.5l1.5 4 1.5-4c.5-1.3 1.6-2 3.1-1.5 1.6.6 2 2.3 1.3 3.9l-2.6 5.2c-.5 1-1.3 1.5-2.3 1.5h-2c-1 0-1.8-.5-2.3-1.5L6.1 12.5c-.7-1.6-.3-3.3 1.3-3.9Z"
-        fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/>
-  <circle cx="12" cy="6.6" r="1.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+  <!-- light rim, then the face inset so the rim reads as a lit edge -->
+  <circle cx="12" cy="12" r="11.6" fill="#C6BBEF"/>
+  <circle cx="12" cy="12" r="10.5" fill="url(#ptFace)"/>
+  <!-- shadow arc on the trailing edge, giving the coin its depth -->
+  <path d="M18.6 4.4a10.5 10.5 0 0 1 0 15.2 8.6 8.6 0 0 0 0-15.2Z" fill="#4A3789" opacity=".85"/>
+  <!-- mark -->
+  <path d="M7.6 10.2c0 4.2 1 6.4 2.7 6.4 1.3 0 1.7-2.4 1.7-4.2 0 1.8.4 4.2 1.7 4.2 1.7 0 2.7-2.2 2.7-6.4"
+        fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="12" cy="7.3" r="1.55" fill="none" stroke="#fff" stroke-width="1.5"/>
 </symbol>
 <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8V6.5A1.5 1.5 0 0 0 18.5 5H5.5A1.5 1.5 0 0 0 4 6.5v11A1.5 1.5 0 0 0 5.5 19h13a1.5 1.5 0 0 0 1.5-1.5V16"/><path d="M21 11h-4.2a1.5 1.5 0 0 0 0 3H21Z"/></symbol>
 <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 15 5.5-5.5 3.5 3.5L20 6"/><path d="M15 6h5v5"/></symbol>
