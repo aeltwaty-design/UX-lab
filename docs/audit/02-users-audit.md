@@ -289,3 +289,35 @@ Same flat, equal-weight pattern the dashboard audit rejected — and one of the 
 user on different tabs. Since an unregistered record is a bare phone number with no name
 and no gender, its detail page is the more interesting of the two: most of Personal Info
 is empty, and it is where the reminder action belongs.
+
+## Resolved — detail page
+
+### R9. Parked: **keep it as it is, do not invent a meaning**
+Client does not have a definition to give. So the design keeps the concept, labels it
+plainly, and **does not fabricate an explanation**. It gets a "what is this?" affordance
+with the copy left as an explicit slot for the client to fill once the rule is known.
+
+That is the honest treatment. Inventing a plausible-sounding definition would be worse
+than the current padlock, because a wrong explanation is believed.
+
+Parked does get the visual weight it deserves — it is the largest figure on the page and
+was previously one of three equal tiles.
+
+### R10. `AMOUNT` is the **purchase value that earned the points**
+So there is no contradiction with 5 points = 1 SAR — the two columns describe different
+things. But "Amount" sitting beside "Points" reads as the points' worth, which is exactly
+how it was misread here. **The column is renamed** to say what it is.
+
+`0 SAR` still needs handling: either a genuinely zero-value transaction, which should say
+so in words, or a sub-riyal value rounded to zero, which is a wrong number printed
+confidently. Treated as the former, flagged as the latter if the data says otherwise.
+
+### R11. Unregistered detail page: **designed from the data model**
+An unregistered record is a phone number with no name, no gender and no verified contact.
+Its page is built around what IS known — phone, join date, any parked points — with the
+missing fields shown as "not collected yet" rather than left blank, and **Send reminder
+as the primary action**.
+
+### R12. The STATUS arrow is **direction — points in or out**
+Replaced with an icon **and a word**. A bare coloured arrow is the one place this product
+lets colour carry meaning alone, which the rest of the audit spent its time removing.
