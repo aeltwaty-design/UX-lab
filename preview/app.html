@@ -1893,7 +1893,10 @@ const I18N = {
     "transfers.retry.done": "Queued to try again.",
     "transfers.download.started": "{file} is downloading",
     "transfers.export.soon": "Export isn't ready yet. We'll turn it on as soon as it is.",
-    "transfers.a11y.backPanel": "Back to {panel}"
+    "transfers.a11y.backPanel": "Back to {panel}",
+    "transfers.records.validCount": "{n} ready",
+    "transfers.records.invalidCount": "{n} invalid",
+    "transfers.records.duplicateCount": "{n} duplicate"
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -2394,7 +2397,10 @@ const I18N = {
     "transfers.retry.done": "أُعيد جدولته للمحاولة مرة أخرى.",
     "transfers.download.started": "جارٍ تنزيل {file}",
     "transfers.export.soon": "التصدير غير متاح بعد. سنفعّله بمجرد أن يصبح جاهزًا.",
-    "transfers.a11y.backPanel": "الرجوع إلى {panel}"
+    "transfers.a11y.backPanel": "الرجوع إلى {panel}",
+    "transfers.records.validCount": "{n} من الجاهزة",
+    "transfers.records.invalidCount": "{n} من غير الصالحة",
+    "transfers.records.duplicateCount": "{n} من المكررة"
   }
 };
 
@@ -3745,10 +3751,10 @@ function recCell(b){
   return `<div class="rec">
     <div class="rec-bar" aria-hidden="true">${seg(ok,"rec-ok","","valid")}${seg(b.invalid,"rec-bad","","invalid")}${seg(b.dup,"rec-dup","","duplicate")}</div>
     <div class="rec-txt">
-      ${ok ? num(ok, "ok", "transfers.records.valid", "valid")
+      ${ok ? num(ok, "ok", "transfers.records.validCount", "valid")
            : `<span class="rec-none">${esc(t("transfers.records.noneValid"))}</span>`}
-      ${num(b.invalid, "bad", "transfers.records.invalid", "invalid")}
-      ${num(b.dup, "dup", "transfers.records.duplicate", "duplicate")}
+      ${num(b.invalid, "bad", "transfers.records.invalidCount", "invalid")}
+      ${num(b.dup, "dup", "transfers.records.duplicateCount", "duplicate")}
     </div></div>`;
 }
 

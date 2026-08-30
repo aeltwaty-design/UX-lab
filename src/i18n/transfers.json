@@ -45,8 +45,11 @@
 
     "transfers.records.total": "{n} records",
     "transfers.records.valid": "Valid",
+    "transfers.records.validCount": "{n} ready",
     "transfers.records.invalid": "Invalid",
+    "transfers.records.invalidCount": "{n} invalid",
     "transfers.records.duplicate": "Duplicate",
+    "transfers.records.duplicateCount": "{n} duplicate",
     "transfers.records.noneValid": "Every record in this file is invalid or a duplicate, so there's nothing left to send.",
     "transfers.records.noneValidLong": "Every row in this file is either malformed or a duplicate, so approving it would send nothing to anyone.",
     "transfers.records.breakdown": "{valid} ready · {invalid} invalid · {duplicate} duplicate",
@@ -256,8 +259,11 @@
 
     "transfers.records.total": "{n} صفوف",
     "transfers.records.valid": "صالح",
+    "transfers.records.validCount": "{n} من الجاهزة",
     "transfers.records.invalid": "غير صالح",
+    "transfers.records.invalidCount": "{n} من غير الصالحة",
     "transfers.records.duplicate": "مكرر",
+    "transfers.records.duplicateCount": "{n} من المكررة",
     "transfers.records.noneValid": "كل الصفوف في هذا الملف إما غير صالحة أو مكررة، فلا يوجد ما يمكن إرساله.",
     "transfers.records.noneValidLong": "كل صف في هذا الملف إما غير صالح أو مكرر، فالموافقة عليه لن ترسل شيئًا لأحد.",
     "transfers.records.breakdown": "{valid} جاهز · {invalid} غير صالح · {duplicate} مكرر",
