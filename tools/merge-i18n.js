@@ -10,9 +10,9 @@ const flat = (o, pre = '', out = {}) => {
   return out;
 };
 const SOURCES = ['content.json', 'users-extra.json', 'users-filters.json', 'followers.json',
-                 'transfers.json', 'transactions.json'];
+                 'transfers.json', 'transactions.json', 'chargehistory.json'];
 // prefixes whose page keys are replaced wholesale, so a deleted string really goes
-const OWNED = ['transfers.', 'transactions.'];
+const OWNED = ['transfers.', 'transactions.', 'charge.'];
 const src = { en: {}, ar: {} };
 for (const f of SOURCES) {
   const raw = JSON.parse(fs.readFileSync('src/i18n/' + f, 'utf8'));

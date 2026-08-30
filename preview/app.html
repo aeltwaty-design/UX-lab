@@ -937,7 +937,7 @@ html[dir="rtl"] .vw-line{text-align:start}
       <span class="nav-badge num" id="navQueue" hidden></span></a>
     <a href="#/transactions" class="nav-item" data-route="transactions"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-receipt"/></svg>
       <span class="nav-label" data-i18n="nav.transactions">Transactions</span></a>
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-history"/></svg>
+    <a href="#/charges" class="nav-item" data-route="charges"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-history"/></svg>
       <span class="nav-label" data-i18n="nav.chargeHistory">Charge history</span></a>
 
     <div class="nav-group-label" data-i18n="nav.groupOffers">Offers</div>
@@ -1375,6 +1375,7 @@ html[dir="rtl"] .vw-line{text-align:start}
   <div id="view-detail" class="view"></div>
   <div id="view-transfers" class="view"></div>
   <div id="view-transactions" class="view"></div>
+  <div id="view-charges" class="view"></div>
 </main>
 </div>
 </div>
@@ -2787,6 +2788,7 @@ function setLang(l){
   if (VIEW_OF[ROUTE] === "detail") renderUser();
   if (ROUTE === "transfers") renderTransfers();
   if (ROUTE === "transactions") renderTransactions();
+  if (ROUTE === "charges") renderCharges();
   if (PSTACK.length) paintPanel();
   navQueueBadge();
   [["btn-ar","btn-en"],["pv-ar","pv-en"]].forEach(([a,b])=>{
@@ -3081,7 +3083,7 @@ function go(route, id){
   render(route, id);
 }
 const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"detail", follower:"detail",
-                  transfers:"transfers", transactions:"transactions" };
+                  transfers:"transfers", transactions:"transactions", charges:"charges" };
 const COLL_OF = { users:"users", user:"users", followers:"followers", follower:"followers" };
 function render(route, id){
   ROUTE = route; CURRENT = id ?? null;
@@ -3102,13 +3104,15 @@ function render(route, id){
     renderTransfers();
   }
   if (view === "transactions") renderTransactions();
+  if (view === "charges") renderCharges();
   attentionCounts();          // before applyI18n, which reads the counts
   navQueueBadge();
   applyI18n();
   main.setAttribute("aria-label",
       view === "overview"     ? t("a11y.main")
     : view === "transfers"    ? t("transfers.heading")
-    : view === "transactions" ? t("transactions.heading") : ck("list.heading"));
+    : view === "transactions" ? t("transactions.heading")
+    : view === "charges"      ? t("charge.heading") : ck("list.heading"));
   closeNav(); window.scrollTo(0, 0);
 }
 function onHash(){
@@ -3125,6 +3129,7 @@ let _rw; window.addEventListener("resize", () => {
     if (ROUTE === "users" || ROUTE === "followers") renderRows();
     if (ROUTE === "transfers") renderTRows();
     if (ROUTE === "transactions") renderXRows();
+    if (ROUTE === "charges") renderCRows();
   }, 120);
 });
 
@@ -5659,6 +5664,413 @@ function xBadge(){
 }
 document.addEventListener("click", e => {
   for (const [btn, menu] of [["xcolBtn","xcolMenu"], ["xfilBtn","xfilMenu"]]){
+    if (!e.target.closest("#" + btn) && !e.target.closest("#" + menu)){
+      const m = document.getElementById(menu);
+      if (m && !m.hidden){ m.hidden = true; document.getElementById(btn)?.setAttribute("aria-expanded","false"); }
+    }
+  }
+});
+
+/* =====================================================================
+   CHARGE HISTORY — data
+   The partner buying points, which is the only screen where money moves
+   towards WalaOne rather than points moving towards a customer.
+
+   The amount here is a payment that really happened, not a valuation, so
+   it is shown as recorded and nothing is derived from it. That is also
+   what makes this screen the clearest statement of the rate problem: the
+   figures say 500 points to the riyal, the same as the batch list, the
+   transactions ledger and the newer reference screen.
+   ===================================================================== */
+const CHARGERS = {
+  c1: { n:{ ar:"محمد هلال",     en:"Mohammed Helal" },   em:"m.helal@walaplus.com" },
+  c2: { n:{ ar:"مشرف واحد",     en:"UA super admin" },   em:"ae@walaone.com" },
+  c3: { n:{ ar:"ريم العتيبي",   en:"Reem Al-Otaibi" },   em:"r.alotaibi@walaplus.com" },
+  c4: { n:{ ar:"خالد الدوسري",  en:"Khalid Al-Dosari" }, em:"k.aldosari@walaplus.com" }
+};
+const CH_DAY = 86400000;
+const chDate = (y, m, d) => new Date(y, m - 1, d);
+
+/* The points here sum to 12,500,000, which is what Transfer points reports as
+   charged — the two screens are the same fact at different grain, so they had
+   better agree. */
+const CHARGES = [
+  { id:"CHG-0051", by:"c1", points:1_500_000, po:"PO-2026-118", invoice:"INV-88214",
+    notes:null, at:chDate(2026,7,14), ends:chDate(2027,7,14), pct:100 },
+  { id:"CHG-0049", by:"c3", points:1_000_000, po:null, invoice:"INV-87730",
+    notes:"chargeNote1", at:chDate(2026,5,2), ends:chDate(2026,9,20), pct:100 },
+  { id:"CHG-0047", by:"c1", points:2_499_000, po:"PO-2026-094", invoice:"INV-86119",
+    notes:null, at:chDate(2026,3,28), ends:chDate(2027,3,28), pct:100 },
+  { id:"CHG-0046", by:"c4", points:500_000, po:null, invoice:null,
+    notes:"chargeNote2", at:chDate(2026,2,11), ends:chDate(2026,9,11), pct:100 },
+  { id:"CHG-0045", by:"c1", points:1_500_000, po:"PO-2025-311", invoice:"INV-84402",
+    notes:null, at:chDate(2025,11,3), ends:chDate(2026,11,3), pct:100 },
+  { id:"CHG-0044", by:"c3", points:3_000_000, po:"PO-2025-260", invoice:"INV-83155",
+    notes:null, at:chDate(2025,8,19), ends:chDate(2026,8,19), pct:100 },
+  { id:"CHG-0043", by:"c2", points:1_000, po:null, invoice:null,
+    notes:null, at:chDate(2024,3,11), ends:chDate(2026,8,6), pct:100 },
+  { id:"CHG-0040", by:"c4", points:2_000_000, po:"PO-2024-142", invoice:"INV-71880",
+    notes:"chargeNote3", at:chDate(2024,6,22), ends:chDate(2026,6,22), pct:100 },
+  { id:"CHG-0037", by:"c1", points:500_000, po:null, invoice:"Admin Charge",
+    notes:null, at:chDate(2024,1,10), ends:chDate(2026,8,6), pct:100 }
+].map(c => Object.assign(c, { amount: c.points / 500 }))   // as recorded, not derived
+ .sort((a, b) => b.at - a.at);
+const chargeById = id => CHARGES.find(c => c.id === id);
+
+/* A charge stops counting once its period is over. Derived from the dates the
+   record already carries, so it cannot disagree with them. */
+const CH_SOON = 30;
+function chStatus(c){
+  const days = (c.ends - NOW) / CH_DAY;
+  return days < 0 ? "expired" : days <= CH_SOON ? "expiring" : "active";
+}
+
+/* =====================================================================
+   CHARGE HISTORY — view
+   ===================================================================== */
+let CPAGE = 1, CPER = 10, CSORT = { k:"at", dir:"desc" }, CDROP = 0;
+const CFILT = { status:"all", by:"all" };
+
+const CCOLS = [
+  { k:"reference", always:true, on:true }, { k:"amount", on:true },
+  { k:"points", on:true }, { k:"addedBy", on:true }, { k:"status", on:true },
+  { k:"createdAt", on:true }, { k:"endedAt", on:true }, { k:"percent", on:true },
+  { k:"invoice", on:false }, { k:"purchaseOrder", on:false }, { k:"notes", on:false }
+];
+const CORDER = ["reference","amount","points","addedBy","status","createdAt",
+                "endedAt","percent","invoice","purchaseOrder","notes"];
+/* Least valuable first. The percentage goes early: it reads 100 on every
+   record and nobody has been able to tell me what it measures, so it is the
+   first thing worth the width it takes. */
+const CDROP_ORDER = ["notes","purchaseOrder","percent","invoice","endedAt",
+                     "createdAt","addedBy","status","amount"];
+const cshown = () => {
+  const dropped = CDROP_ORDER.filter(k => !CCOLS.find(c => c.k === k)?.pinned).slice(0, CDROP);
+  return CCOLS.filter(c => c.on && !dropped.includes(c.k))
+              .sort((a, b) => CORDER.indexOf(a.k) - CORDER.indexOf(b.k));
+};
+
+const CH_STAT = {
+  active:   { cls:"pill-success", ico:"#i-check" },
+  expiring: { cls:"pill-attn",    ico:"#i-hourglass" },
+  expired:  { cls:"pill-stage",   ico:"#i-clock" }
+};
+const chPill = st => `<span class="pill ${CH_STAT[st].cls}"
+  title="${esc(t("charge.status." + st + "Desc"))}">
+  <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="${CH_STAT[st].ico}"/></svg>
+  ${esc(t("charge.status." + st))}</span>`;
+
+const chWho = k => CHARGERS[k] ? nameOf(CHARGERS[k].n) : "";
+const chCell = k => `<div class="cell-person">
+  <span class="avatar avatar-txt" aria-hidden="true">${esc(initialsOf(chWho(k)))}</span>
+  <span class="min-w-0"><span class="person-name">${esc(chWho(k))}</span>
+    <span class="person-sub ltr">${esc(CHARGERS[k]?.em || "")}</span></span></div>`;
+
+function cmatching(){
+  const q = (document.getElementById("cq")?.value || "").trim().toLowerCase();
+  return CHARGES.filter(c => {
+    if (CFILT.status !== "all" && chStatus(c) !== CFILT.status) return false;
+    if (CFILT.by !== "all" && c.by !== CFILT.by) return false;
+    if (!q) return true;
+    return [c.id, c.invoice, c.po, chWho(c.by), CHARGERS[c.by]?.em,
+            CHARGERS[c.by]?.n.ar, CHARGERS[c.by]?.n.en]
+      .filter(Boolean).some(v => String(v).toLowerCase().includes(q));
+  }).sort((a, b) => {
+    const dir = CSORT.dir === "asc" ? 1 : -1;
+    if (CSORT.k === "points") return (a.points - b.points) * dir;
+    if (CSORT.k === "amount") return (a.amount - b.amount) * dir;
+    if (CSORT.k === "ends")   return (a.ends - b.ends) * dir;
+    return (a.at - b.at) * dir;
+  });
+}
+const cFilActive = () => (CFILT.status !== "all") + (CFILT.by !== "all");
+function cClearFilters(){
+  CFILT.status = CFILT.by = "all";
+  const q = document.getElementById("cq"); if (q) q.value = "";
+  CPAGE = 1; renderCharges();
+}
+const chEmpty = key => `<span style="color:var(--n-600)">${esc(t("charge.panel." + key))}</span>`;
+
+function renderCharges(){
+  const el = document.getElementById("view-charges"); if (!el) return;
+  const total = CHARGES.reduce((n, c) => n + c.points, 0);
+  el.innerHTML = `
+    <div class="flex flex-wrap items-end gap-4 page-head">
+      <div class="min-w-0 flex-1">
+        ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
+                  { label:t("charge.heading") }])}
+        <h1 class="page-t">${esc(t("charge.heading"))}</h1>
+        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("charge.subtitle"))}</p>
+      </div>
+      <div style="text-align:end">
+        <div class="bal-v" style="font-size:22px;justify-content:flex-end">
+          <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><use href="#i-point"/></svg>
+          <span class="num">${fmt(total)}</span></div>
+        <div class="bal-sub" style="margin-top:4px">${esc(interp(t("charge.count"), { n: fmt(CHARGES.length) }))}</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-bar">
+        <label class="tbl-search">
+          <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
+          <input type="search" id="cq" oninput="CPAGE=1;renderCRows()"
+                 placeholder="${esc(t("charge.search.placeholder"))}">
+        </label>
+        <div class="tbl-bar-actions">
+          <div class="dd">
+            <button class="btn btn-ghost" id="ccolBtn" aria-haspopup="listbox" aria-expanded="false"
+                    aria-controls="ccolMenu" onclick="ccolToggle()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+              <span>${esc(t("users.list.columns"))}</span></button>
+            <div class="dd-menu" id="ccolMenu" role="listbox" hidden></div>
+          </div>
+          <div class="dd">
+            <button class="btn btn-ghost" id="cfilBtn" aria-haspopup="dialog" aria-expanded="false"
+                    aria-controls="cfilMenu" onclick="cfilToggle()">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5.5h17l-6.6 7.8V19l-3.8 2v-7.7Z"/></svg>
+              <span>${esc(t("users.list.filters"))}</span>
+              <span class="fil-badge num" id="cfilBadge"${cFilActive() ? "" : " hidden"}>${cFilActive()}</span></button>
+            <div class="dd-menu fil-panel" id="cfilMenu" role="dialog" aria-modal="false"
+                 aria-label="${esc(t("users.list.filters"))}" hidden></div>
+          </div>
+          <button class="btn btn-ghost" onclick="toast(t('transfers.export.soon'))">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
+            <span>${esc(t("charge.export"))}</span></button>
+        </div>
+      </div>
+
+      <div class="s-load p-5">
+        <div class="sk h-12 mb-2"></div><div class="sk h-16 mb-2"></div><div class="sk h-16 mb-2"></div>
+        <div class="sk h-16"></div>
+      </div>
+      <div class="s-err empty">
+        <div class="empty-ico" style="background:var(--danger-50);color:var(--danger-700)">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-alert"/></svg></div>
+        <div class="empty-t">${esc(t("states.errorTitle"))}</div>
+        <div class="empty-d">${esc(t("states.errorBody"))}</div>
+      </div>
+      <div class="s-empty empty">
+        <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-history"/></svg></div>
+        <div class="empty-t">${esc(t("charge.empty.title"))}</div>
+        <div class="empty-d">${esc(t("charge.empty.body"))}</div>
+      </div>
+
+      <div class="s-real">
+        <div class="tbl-scroll">
+          <table class="tbl"><thead><tr id="thead-c"></tr></thead><tbody id="tbody-c"></tbody></table>
+        </div>
+        <div class="cards" id="cCards" hidden></div>
+        <div id="cNoMatch" class="empty" hidden>
+          <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-search"/></svg></div>
+          <div class="empty-t">${esc(t("charge.empty.noMatchTitle"))}</div>
+          <div class="empty-d">${esc(t("charge.empty.noMatchBody"))}</div>
+          <button class="btn btn-ghost btn-sm mt-3" onclick="cClearFilters()">${esc(t("users.list.clearFilters"))}</button>
+        </div>
+        <div class="tbl-foot" id="cFoot"></div>
+      </div>
+    </div>
+    <p class="fhint" style="margin-top:12px">${esc(t("charge.rate"))}</p>`;
+  renderCRows();
+}
+
+function renderCRows(){
+  if (!document.getElementById("thead-c")) return;
+  const r = fitTable("#view-charges", CDROP_ORDER.length,
+                     d => { CDROP = d; paintCRows(); }, () => cshown().length);
+  cUseCards(r.cards);
+}
+let CPAGE_ROWS = [];
+function paintCRows(){
+  const head = document.getElementById("thead-c"), body = document.getElementById("tbody-c");
+  if (!head || !body) return;
+  const cols = cshown(), rows = cmatching();
+  const pages = Math.max(1, Math.ceil(rows.length / CPER));
+  if (CPAGE > pages) CPAGE = pages;
+  const page = rows.slice((CPAGE - 1) * CPER, CPAGE * CPER);
+
+  const sortable = { amount:"amount", points:"points", createdAt:"at", endedAt:"ends" };
+  head.innerHTML = cols.map(c => {
+    const label = esc(t("charge.columns." + c.k));
+    if (!sortable[c.k]) return `<th>${label}</th>`;
+    const k = sortable[c.k], on = CSORT.k === k;
+    return `<th aria-sort="${on ? (CSORT.dir === "asc" ? "ascending" : "descending") : "none"}">
+      <button class="th-sort" onclick="csort('${k}')">${label}
+        <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><use href="#i-down"/></svg></button></th>`;
+  }).join("");
+
+  body.innerHTML = page.map(c => cRow(c, cols)).join("");
+  CPAGE_ROWS = page;
+  document.getElementById("cCards").hidden = true;
+  document.querySelector("#view-charges .tbl-scroll").hidden = rows.length === 0;
+  document.getElementById("cNoMatch").hidden = rows.length > 0;
+  renderCFoot(rows.length, pages);
+}
+function cUseCards(on){
+  const host = document.getElementById("cCards"),
+        sc = document.querySelector("#view-charges .tbl-scroll");
+  if (!on){ host.hidden = true; return; }
+  host.innerHTML = CPAGE_ROWS.map(cCard).join("");
+  host.hidden = CPAGE_ROWS.length === 0;
+  sc.hidden = true;
+}
+
+function cRow(c, cols){
+  const has = k => cols.some(x => x.k === k);
+  const sub = [];
+  if (!has("status")) sub.push(t("charge.status." + chStatus(c)));
+  const cell = k => {
+    switch (k){
+      case "reference": return `<td><span class="cell-id ltr">${esc(c.id)}</span>${sub.length
+        ? `<div class="file-sub">${esc(sub.join(" · "))}</div>` : ""}</td>`;
+      case "amount":    return `<td><span class="val">${riyal(c.amount)}</span></td>`;
+      case "points":    return `<td>${pointsCell(c.points)}</td>`;
+      case "addedBy":   return `<td>${chCell(c.by)}</td>`;
+      case "status":    return `<td>${chPill(chStatus(c))}</td>`;
+      case "createdAt": return `<td><span class="cell-date">${esc(dfmt(c.at))}</span></td>`;
+      case "endedAt":   return `<td><span class="cell-date">${esc(dfmt(c.ends))}</span></td>`;
+      case "percent":   return `<td><span class="cell-muted num ltr">${fmt(c.pct)}%</span></td>`;
+      case "invoice":   return `<td>${c.invoice ? `<span class="cell-id ltr">${esc(c.invoice)}</span>` : chEmpty("noInvoice")}</td>`;
+      case "purchaseOrder": return `<td>${c.po ? `<span class="cell-id ltr">${esc(c.po)}</span>` : chEmpty("noPurchaseOrder")}</td>`;
+      case "notes":     return `<td><span class="cell-muted">${c.notes ? esc(t("charge." + c.notes)) : chEmpty("noNotes")}</span></td>`;
+    }
+    return "<td></td>";
+  };
+  return `<tr onclick="openCharge('${c.id}')" tabindex="0"
+    onkeydown="if(event.key==='Enter'){openCharge('${c.id}')}">${cols.map(x => cell(x.k)).join("")}</tr>`;
+}
+function cCard(c){
+  return `<div class="card-row" onclick="openCharge('${c.id}')" tabindex="0"
+      onkeydown="if(event.key==='Enter'){openCharge('${c.id}')}">
+    <div class="card-top">
+      <span class="min-w-0 flex-1"><span class="cell-id ltr" style="font-weight:600">${esc(c.id)}</span>
+        <span class="file-sub">${esc(dfmt(c.at))}</span></span>
+      ${chPill(chStatus(c))}
+    </div>
+    <div class="card-meta">${pointsCell(c.points)}<span class="val">${riyal(c.amount)}</span></div>
+    <div class="file-sub">${esc(chWho(c.by))}</div>
+  </div>`;
+}
+function csort(k){
+  if (CSORT.k === k) CSORT.dir = CSORT.dir === "asc" ? "desc" : "asc";
+  else { CSORT.k = k; CSORT.dir = "desc"; }
+  renderCRows();
+}
+function renderCFoot(total, pages){
+  const f = document.getElementById("cFoot"); if (!f) return;
+  const from = total === 0 ? 0 : (CPAGE - 1) * CPER + 1, to = Math.min(CPAGE * CPER, total);
+  const pg = (n, label, dis, cur) => `<button class="pg"${dis ? " disabled" : ""}
+    ${cur ? ' aria-current="page"' : ""} onclick="CPAGE=${n};renderCRows()">${label}</button>`;
+  const nums = [];
+  for (let i = 1; i <= pages; i++){
+    if (i === 1 || i === pages || Math.abs(i - CPAGE) <= 1) nums.push(pg(i, fmt(i), false, i === CPAGE));
+    else if (nums[nums.length - 1] !== "GAP") nums.push("GAP");
+  }
+  f.innerHTML = `<span style="font-size:13px;color:var(--n-700)">${
+      esc(interp(t("users.pagination.showingRange"), { from: fmt(from), to: fmt(to), total: fmt(total) }))}</span>
+    <div class="pager">
+      ${pg(Math.max(1, CPAGE - 1), esc(t("users.pagination.previous")), CPAGE === 1)}
+      ${nums.map(n => n === "GAP" ? `<span class="pg-gap">…</span>` : n).join("")}
+      ${pg(Math.min(pages, CPAGE + 1), esc(t("users.pagination.next")), CPAGE === pages)}
+    </div>
+    <label class="rpp"><span style="font-size:13px;color:var(--n-700)">${esc(t("users.pagination.rowsPerPage"))}</span>
+      <select onchange="CPER=+this.value;CPAGE=1;renderCRows()">
+        ${[10, 25, 50].map(n => `<option value="${n}"${n === CPER ? " selected" : ""}>${fmt(n)}</option>`).join("")}
+      </select></label>`;
+}
+
+/* ---------- one charge ---------------------------------------------------- */
+function openCharge(id){
+  const c = chargeById(id); if (!c) return;
+  const st = chStatus(c);
+  openPanel({
+    title: interp(t("charge.panel.title"), { reference: c.id }),
+    sub: dfmt(c.at),
+    body: `
+      <div class="fgrp">${chPill(st)}</div>
+      <div class="pv-val"><span class="pv-val-l">${esc(t("charge.columns.points"))}</span>
+        <span class="pv-val-v">${pointsCell(c.points)}</span></div>
+      <div class="pv-val"><span class="pv-val-l">${esc(t("charge.columns.amount"))}</span>
+        <span class="pv-val-v">${riyal(c.amount)}</span></div>
+      <div class="fnote tone-quiet" style="margin-top:14px">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-calendar"/></svg>
+        <span>${esc(interp(t("charge.panel.validFor"), { from: dfmt(c.at), to: dfmt(c.ends) }))}</span></div>
+
+      <div class="trail-h" style="margin:22px 0 4px">${esc(t("charge.panel.sectionPaperwork"))}</div>
+      ${fldRow(t("charge.columns.invoice"),
+               c.invoice ? `<span class="ltr">${esc(c.invoice)}</span>` : chEmpty("noInvoice"))}
+      ${fldRow(t("charge.columns.purchaseOrder"),
+               c.po ? `<span class="ltr">${esc(c.po)}</span>` : chEmpty("noPurchaseOrder"))}
+      ${fldRow(t("charge.columns.notes"),
+               c.notes ? esc(t("charge." + c.notes)) : chEmpty("noNotes"))}
+      ${fldRow(t("charge.columns.percent"), `<span class="num ltr">${fmt(c.pct)}%</span>`)}
+
+      <div class="trail-h" style="margin:22px 0 4px">${esc(t("charge.panel.sectionAddedBy"))}</div>
+      <div class="fld"><div class="fld-v" style="flex:1 1 100%">${chCell(c.by)}</div></div>`,
+    foot: `<button class="btn btn-ghost" onclick="closePanel();go('transfers')">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-transfer"/></svg>
+        <span>${esc(t("nav.transfer"))}</span></button>`
+  });
+}
+
+/* ---------- columns and filters ------------------------------------------ */
+function ccolToggle(){
+  const m = document.getElementById("ccolMenu"), b = document.getElementById("ccolBtn");
+  if (m.hidden){
+    const on = new Set(cshown().map(c => c.k));
+    m.innerHTML = CCOLS.filter(c => !c.always).map(c => `<button class="dd-opt" role="option"
+      aria-selected="${on.has(c.k)}" onclick="ccolPick('${c.k}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${esc(t("charge.columns." + c.k))}</span></button>`).join("");
+    m.hidden = false; b.setAttribute("aria-expanded","true");
+  } else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function ccolPick(k){
+  const c = CCOLS.find(x => x.k === k);
+  c.on = !c.on; c.pinned = c.on;
+  document.getElementById("ccolMenu").hidden = true;
+  document.getElementById("ccolBtn").setAttribute("aria-expanded","false");
+  renderCRows();
+}
+function cfilToggle(){
+  const m = document.getElementById("cfilMenu"), b = document.getElementById("cfilBtn");
+  if (m.hidden){ renderCFilters(); m.hidden = false; b.setAttribute("aria-expanded","true"); }
+  else { m.hidden = true; b.setAttribute("aria-expanded","false"); }
+}
+function cfilClose(){
+  const m = document.getElementById("cfilMenu"); if (!m || m.hidden) return;
+  m.hidden = true; document.getElementById("cfilBtn").setAttribute("aria-expanded","false");
+}
+function renderCFilters(){
+  const m = document.getElementById("cfilMenu"); if (!m) return;
+  const group = (key, heading, opts) => `<div class="fil-group">
+    <div class="fil-h">${esc(heading)}</div>
+    ${opts.map(([val, label]) => `<button class="dd-opt" role="option" aria-selected="${CFILT[key] === val}"
+      onclick="event.stopPropagation();cfilPick('${key}','${val}')">
+      <svg class="dd-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>
+      <span>${esc(label)}</span></button>`).join("")}</div>`;
+  m.innerHTML =
+    group("status", t("charge.filters.status"),
+      [["all", t("transfers.filters.any")], ...["active","expiring","expired"]
+        .map(k => [k, t("charge.status." + k)])]) +
+    group("by", t("charge.filters.addedBy"),
+      [["all", t("transfers.filters.any")], ...Object.keys(CHARGERS).map(k => [k, chWho(k)])]) +
+    `<div class="fil-foot"><button class="btn-link" onclick="event.stopPropagation();cClearFilters()">${
+       esc(t("usersFilters.reset"))}</button>
+     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();cfilClose()">${esc(t("usersFilters.apply"))}</button></div>`;
+}
+function cfilPick(key, val){
+  CFILT[key] = val; CPAGE = 1;
+  renderCFilters(); renderCRows();
+  const badge = document.getElementById("cfilBadge");
+  if (badge){ badge.textContent = cFilActive(); badge.hidden = !cFilActive(); }
+}
+document.addEventListener("click", e => {
+  for (const [btn, menu] of [["ccolBtn","ccolMenu"], ["cfilBtn","cfilMenu"]]){
     if (!e.target.closest("#" + btn) && !e.target.closest("#" + menu)){
       const m = document.getElementById(menu);
       if (m && !m.hidden){ m.hidden = true; document.getElementById(btn)?.setAttribute("aria-expanded","false"); }

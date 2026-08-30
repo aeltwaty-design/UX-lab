@@ -14,7 +14,7 @@ s = raw[:_a] + raw[_b:]
 keys = set()
 
 # literal keys
-PREFIX = r'(?:transfers|transactions)'
+PREFIX = r'(?:transfers|transactions|charge)'
 for m in re.finditer(r'["\'](' + PREFIX + r'\.[A-Za-z0-9._]+)["\']', s):
     keys.add(m.group(1))
 for m in re.finditer(r'data-i18n[a-z-]*="(' + PREFIX + r'\.[A-Za-z0-9._]+)"', s):
@@ -59,6 +59,18 @@ for d in ["in","out"]:
 for i in range(1, 6):
     keys.add("transactions.sampleNote%d" % i)
 
+# --- charge history --------------------------------------------------------
+CCOLS = ["reference","amount","points","addedBy","notes","purchaseOrder",
+         "invoice","createdAt","endedAt","percent","status"]
+for k in CCOLS: keys.add("charge.columns." + k)
+for k in ["active","expiring","expired"]:
+    keys.add("charge.status." + k)
+    keys.add("charge.status." + k + "Desc")
+for k in ["noNotes","noPurchaseOrder","noInvoice"]:
+    keys.add("charge.panel." + k)
+for i in range(1, 4):
+    keys.add("charge.chargeNote%d" % i)
+
 # drop the ones that were only ever prefixes
 keys = {k for k in keys if not k.endswith(".")}
 keys.discard("transfers.status.")
@@ -73,11 +85,14 @@ keys.discard("transactions.type.")
 keys.discard("transactions.columns.")
 keys.discard("transactions.direction.")
 keys.discard("transactions.sampleNote")
+keys.discard("charge.columns.")
+keys.discard("charge.status.")
+keys.discard("charge.panel.")
 
 req = sorted(keys)
 if len(sys.argv) > 1 and sys.argv[1] == "--check":
     d = {"en": {}, "ar": {}}
-    for f in ("transfers.json", "transactions.json"):
+    for f in ("transfers.json", "transactions.json", "chargehistory.json"):
         try:
             x = json.load(io.open("src/i18n/" + f, encoding="utf-8"))
         except FileNotFoundError:

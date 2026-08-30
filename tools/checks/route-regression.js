@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
 
   for (const lang of ['ar','en']) {
     console.log(`\n=== ${lang} ===`);
-    for (const route of ['overview','users','followers','transfers','transfers/individual','transactions','user/2423501','follower/2423601']) {
+    for (const route of ['overview','users','followers','transfers','transfers/individual','transactions','charges','user/2423501','follower/2423601']) {
       const p = await b.newPage({ viewport:{ width:1440, height:1000 } });
       await p.route('**://**', r => r.request().url().startsWith('file:') ? r.continue() : r.abort());
       const errs = []; p.on('pageerror', e => errs.push(e.message));
@@ -76,6 +76,7 @@ const { chromium } = require('playwright');
                               ['follower', '#view-detail .card h1'],
                               ['transfers', '#view-transfers h1'],
                               ['transactions', '#view-transactions h1'],
+                              ['charges', '#view-charges h1'],
                               ['users', '#view-list h1'],
                               ['overview', '#view-overview .card-t']]) {
     const r = await p.evaluate(async ([route, sel]) => {

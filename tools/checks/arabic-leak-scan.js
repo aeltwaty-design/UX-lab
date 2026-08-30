@@ -4,7 +4,7 @@ const { chromium } = require('playwright');
    Everything else that reads as English words is a leak. */
 // Reference codes, ids, filenames and the tenant's own name are Latin by
 // nature; everything else Latin in an Arabic page is a leak.
-const OK = /^(?:[\d\s.,:/·—–-]+|BCH-\d+|TRF-\d+|TX-\d+|USR-\d+|FLW-\d+|INV-\d+|COMTECHGOLD(?:\/[A-Z]+)?\/[0-9]+|B2B|CSV|CG|MA|\d+K|⌘K|[A-Za-z0-9._-]+\.csv|Comtech Gold|English|[A-Z]{1,2})$/;
+const OK = /^(?:[\d\s.,:/·—–-]+|BCH-\d+|TRF-\d+|TX-\d+|USR-\d+|FLW-\d+|INV-\d+|COMTECHGOLD(?:\/[A-Z]+)?\/[0-9]+|CHG-\d+|PO-\d+-\d+|Admin Charge|[a-z.]+@[a-z.]+|B2B|CSV|CG|MA|\d+K|⌘K|[A-Za-z0-9._-]+\.csv|Comtech Gold|English|[A-Z]{1,2})$/;
 const LATIN = /[A-Za-z]{2,}/;
 const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
 (async () => {
@@ -78,6 +78,9 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
   await scan('txn panel',      () => { document.getElementById('xcolMenu').hidden = true;
                                        openTxn(TXNS.find(x => x.batch).id); });
   await scan('txn no ref',     () => { closePanel(); openTxn(TXNS.find(x => !x.ref).id); });
+  await scan('charge history', () => { closePanel(); location.hash = '#/charges'; });
+  await scan('charge filters', () => cfilToggle());
+  await scan('charge panel',   () => { cfilClose(); openCharge(CHARGES[0].id); });
   await scan('empty state',    () => { closePanel(); location.hash = '#/transfers'; setState('empty'); });
   await scan('error state',    () => setState('error'));
   await b.close();
