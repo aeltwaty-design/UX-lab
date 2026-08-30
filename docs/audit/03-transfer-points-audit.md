@@ -119,3 +119,64 @@ in the shared components this feature will inherit.
 4. Clicking a file name downloads it.
 5. Transfers and later actions open a **side panel**, never a modal.
 6. The primary action carries both options.
+
+---
+
+# Addendum — the file viewer and the newer reference screen
+
+Two further screens supplied **for understanding only**; their visual design is not to be
+carried across.
+
+## The file viewer ("عرض الملف")
+
+Opens on a batch and shows the rows inside it, paginated into numbered pages
+(صفحة #1 … #5). Columns: `# Row`, `Ref no.`, `Name`, `Amount`, `Mobile no.`
+
+Two things in the data matter more than the layout:
+
+### F1. The row numbers are not sequential
+1, 3, 4, 6, 7, 8, 9, 12, 13, 20 — with 2, 5, 10, 11 and others missing. So the viewer is
+showing a **subset** of the file, and the numbers are the original line numbers. Nothing
+on screen says which subset, or why the others are absent.
+
+### F2. Duplicate reference numbers are visible but unmarked
+`num66` appears six times across the visible rows. The batch list counts duplicates in a
+column; this viewer contains them and does not flag a single one. Together those two
+screens hold the whole answer and neither joins it up: **the count is in one place, the
+offending rows in another, and nothing links them.**
+
+This is the fix for the earlier finding that invalid and duplicate counts lead nowhere.
+The viewer already has the rows — it needs to mark their state.
+
+## The newer reference screen
+
+An Arabic, WalaOne-branded Transfer Points screen. Useful for what it reveals about the
+**data model**, not its styling.
+
+### N1. Bulk and individual are two views of one feature
+The navigation carries تحويل النقاط with two children — عمليات النقاط بالجملة (bulk) and
+عمليات النقاط الفردية (individual). Confirms the two-tab structure the client described.
+
+### N2. There is a "source type" dimension not present in the old screen
+نوع المصدر takes values برامج ولاء (loyalty programme), فاتورة (invoice), ملف (file),
+ترشيح (referral) and B2B. A real dimension, and an obvious filter, that the old design
+omits entirely.
+
+### N3. Individual transfers name who performed them
+تمت بواسطة carries an avatar, a name and a phone. The **bulk list has no equivalent**,
+which is exactly the gap flagged for the approval queue — the batch list never says who
+uploaded the file it is asking an admin to approve.
+
+### N4. The riyal glyph is used, not the letters
+القيمة renders as ﷼ before the figure rather than "SAR" after it.
+
+### N5. Three summary figures head the screen
+إجمالي النقاط المشحونة (total charged), النقاط المحولة (transferred) and رصيد النقاط المتاح
+(available balance) — the wallet, restated in the context of this feature.
+
+### N6. The ratio question gets worse, not better
+The old batch list shows 2,830,000 points against 5,660.00 SAR — 500 points per riyal.
+This screen shows 2,504 points sent against a value of ﷼1,150,150 — roughly 459 riyal per
+point, the inverse. The two cannot both describe the same relationship, and neither
+matches the platform's 5 points = 1 SAR. Likely placeholder data in the newer mockup, but
+it has to be settled before a value column ships anywhere.
