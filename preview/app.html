@@ -403,6 +403,21 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
   border-radius:var(--r-100);border:1px solid var(--n-200)}
 .dlg-f{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
 
+.page-t{font-size:24px;font-weight:700;letter-spacing:-.01em}
+
+/* breadcrumb — hierarchy, not decoration. It only appears where there IS a
+   hierarchy: Overview is the root, so it carries none of its own. The
+   separator flips with direction; a static chevron would point the wrong way
+   in Arabic. */
+.crumbs{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px;margin-bottom:6px}
+.crumbs a{color:var(--n-700);text-decoration:none;border-radius:var(--r-50)}
+.crumbs a:hover{color:var(--p-700);text-decoration:underline}
+.crumbs [aria-current="page"]{color:var(--n-950);font-weight:600;max-width:32ch;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crumb-sep{color:var(--n-500);display:inline-flex}
+.crumb-sep svg{transform:rotate(-90deg)}
+html[dir="rtl"] .crumb-sep svg{transform:rotate(90deg)}
+
 /* detail page */
 .fld{display:flex;gap:16px;padding:13px 0;border-top:1px solid var(--n-100);flex-wrap:wrap}
 .fld:first-of-type{border-top:none}
@@ -912,6 +927,12 @@ table.tbl{width:100%;border-collapse:collapse;min-width:0}
     <!-- page header -->
     <div class="flex flex-wrap items-end gap-4 mb-5">
       <div class="min-w-0 flex-1">
+        <nav class="crumbs" data-i18n-aria="a11y.breadcrumb">
+          <a href="#/overview" data-i18n="nav.overview"></a>
+          <span class="crumb-sep" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 10 4 4 4-4"/></svg></span>
+          <span aria-current="page" data-i18n="nav.users"></span>
+        </nav>
         <h1 style="font-size:24px;font-weight:700;letter-spacing:-.01em" data-i18n="users.list.heading">Users</h1>
         <p style="font-size:14px;color:var(--n-700);margin-top:3px" data-i18n="users.list.subtitle"></p>
       </div>
@@ -1211,7 +1232,6 @@ const I18N = {
     "users.actions.transferPoints": "Transfer points",
     "users.actions.copyId": "Copy user ID",
     "users.actions.copied": "Copied",
-    "users.detail.back": "Back to users",
     "users.detail.joinedOn": "Joined on {date}",
     "users.detail.tabInfo": "Information",
     "users.detail.tabTransactions": "Transactions",
@@ -1249,7 +1269,9 @@ const I18N = {
     "users.reminder.noneEligible": "Nobody in this selection is waiting to register.",
     "users.reminder.confirm": "Send reminder",
     "users.reminder.cancel": "Cancel",
-    "users.reminder.sent": "Reminder sent to {count} people."
+    "users.reminder.sent": "Reminder sent to {count} people.",
+    "users.detail.pageHeading": "User profile",
+    "a11y.breadcrumb": "Breadcrumb"
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -1452,7 +1474,9 @@ const I18N = {
     "users.pagination.showing": "عرض {from} إلى {to} من {total}",
     "users.pagination.prev": "السابق",
     "users.pagination.next": "التالي",
-    "users.pagination.perPage": "الصفوف في الصفحة"
+    "users.pagination.perPage": "الصفوف في الصفحة",
+    "users.detail.pageHeading": "الملف الشخصي للمستخدم",
+    "a11y.breadcrumb": "مسار التنقل"
   }
 };
 
@@ -1926,21 +1950,32 @@ function txTable(rows, kind){
       </tbody></table></div>`;
 }
 
+/* Breadcrumbs are built from strings the product already has — the nav labels
+   and the person's own name — so they need no new copy in either language. */
+function crumbs(trail){
+  const sep = `<span class="crumb-sep" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14"
+    fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m8 10 4 4 4-4"/></svg></span>`;
+  return `<nav class="crumbs" data-i18n-aria="a11y.breadcrumb">` + trail.map((c, i) =>
+    (i ? sep : "") + (c.href ? `<a href="${c.href}">${c.label}</a>`
+                             : `<span aria-current="page">${c.label}</span>`)).join("") + `</nav>`;
+}
+
 function renderUser(){
   const host = document.getElementById("view-user");
   const u = USERS.find(x => x.id === CURRENT);
   if (!host) return;
   if (!u){ host.innerHTML = `<div class="empty" style="padding:60px 20px">
       <div class="empty-t">${t("states.emptyTitle")}</div>
-      <button class="btn btn-ghost btn-sm mt-3" onclick="go('users')">${t("users.detail.back")}</button></div>`; return; }
+      <button class="btn btn-ghost btn-sm mt-3" onclick="go('users')">${t("nav.users")}</button></div>`; return; }
   const L = ledger(u);
   const field = (label, value) => `<div class="fld"><div class="fld-l">${label}</div><div class="fld-v">${value}</div></div>`;
 
   host.innerHTML = `
-    <button class="btn-link mb-4" onclick="go('users')" style="display:inline-flex;align-items:center;gap:6px">
-      <svg viewBox="0 0 24 24" width="15" height="15" style="transform:rotate(90deg)" fill="none" stroke="currentColor"
-        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 10 4 4 4-4"/></svg>
-      ${t("users.detail.back")}</button>
+    ${crumbs([{ label: t("nav.overview"), href: "#/overview" },
+              { label: t("nav.users"), href: "#/users" },
+              { label: u.registered ? u.name[LANG] : u.phone }])}
+    <h1 class="page-t" style="margin-bottom:18px">${t("users.detail.pageHeading")}</h1>
 
     <section class="card mb-5">
       <div class="px-5 py-5 flex flex-wrap items-start gap-4">
