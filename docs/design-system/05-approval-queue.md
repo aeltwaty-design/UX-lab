@@ -196,3 +196,16 @@ text file rather than things in the system.
 
 Small, but worth fixing once and holding: a screen that calls the same thing a
 row here and a record there makes a reader wonder whether they are two things.
+
+## 12. Slack goes above a figure, never between it and its caption
+
+A row of tiles of unequal content has slack to spend. Distributing it evenly
+between every pair looks tidy in the abstract and wrong in practice: it opens a
+gap between a number and the line explaining it, which is the one pair in the
+tile that must stay together.
+
+All the slack sits above the figure. The label holds the top, the figure and
+its sentence sit as one block 12px apart, and tiles with more to say simply
+have less space above their figure.
+
+Learned by doing it the other way first and being corrected.

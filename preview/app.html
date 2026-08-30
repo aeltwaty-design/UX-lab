@@ -607,17 +607,18 @@ html[dir="ltr"] .ltr{text-align:left}
   box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem;flex-wrap:wrap}
 .bal{flex:1 1 200px;min-width:0;padding:18px 20px;border-inline-start:1px solid var(--n-200);
   display:flex;flex-direction:column}
-/* The available-balance tile carries two lines the others do not, which left
-   the shorter two trailing empty space. The slack is now distributed between
-   their lines rather than dumped in one gap, so the three read as one strip. */
-.bal{justify-content:space-between}
+/* The available-balance tile carries two lines the others do not. Distributing
+   that slack between every pair opened a gap between the figure and the line
+   under it; all of it now sits above the figure, leaving the label at the top
+   and the figure and its sentence together as one block. */
+.bal-v{margin-top:auto}
 .bal:first-child{border-inline-start:none}
 .bal-l{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--n-700);
   letter-spacing:.01em}
 .bal-v{display:flex;align-items:baseline;gap:7px;font-size:26px;font-weight:700;color:var(--n-950);
-  line-height:1.15;letter-spacing:-.015em;padding-top:14px}
+  line-height:1.15;letter-spacing:-.015em}
 .bal-v svg{align-self:center}
-.bal-sub{font-size:12px;color:var(--n-700);margin-top:5px;line-height:1.45}
+.bal-sub{font-size:12px;color:var(--n-700);margin-top:12px;line-height:1.45}
 /* the balance a pending approval will actually spend earns the accent */
 .bal-key{background:linear-gradient(180deg,var(--p-50),#fff 70%)}
 .bal-key .bal-v{color:var(--p-700)}
