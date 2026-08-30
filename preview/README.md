@@ -19,6 +19,7 @@ Hash routing, so links work from anywhere in the file:
 | `#/transactions` | Transactions — every point movement |
 | `#/charges` | Charge history — the partner buying points |
 | `#/exports` | Exports — every file the product generated |
+| `#/settings` | Settings — the company profile and its published text |
 | `#/login` | Sign in, then the SMS code — outside the shell |
 
 The screens are linked to each other: the Overview's "waiting for your approval" and
