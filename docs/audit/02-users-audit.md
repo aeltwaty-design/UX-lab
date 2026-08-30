@@ -206,3 +206,86 @@ These replace the unlabelled funnel and absorb the separate Registration Date pi
    data. Mock data will use a realistic partner-sized base so pagination, selection and
    the bulk cap are exercised properly.
 3. **Search scope** — assumed name, phone and email, matching the old placeholder.
+
+---
+
+# Addendum — User detail page
+
+**Screen:** `/users/2423548` — "User details" for `agsh`, a **registered** user.
+Three tabs supplied: Information, Transactions, Parked.
+
+## Structure
+
+Three stacked cards. Card 1: the name, "Registered Since Friday 12th of September 2025
+02:35:11 AM", and three stat tiles — `↑ 0.00 Total points transferred`,
+`↓ 0.00 Total points refund`, `🔒 610.00 Parked`. Card 2: the tab row alone. Card 3: the
+tab's content.
+
+**A new concept appears here that exists nowhere else in the product I have seen:
+"Parked" points**, marked with a padlock. 610.00 held, and the Parked tab lists two rows
+(600 + 10) that sum to it exactly.
+
+## Findings
+
+### G1. "Parked" is never explained
+A padlock, a number, and a tab. Nothing says what parked means, why points are held, what
+releases them, or whether the user can see it. It is the largest figure on the page and
+the least understood.
+
+### G2. The points-to-riyal relationship contradicts what the dashboard was told
+The Parked rows read `600 Points / 1 SAR` and `10 Points / 0 SAR`. The dashboard's
+conversion rate is **5 points = 1 SAR**. These cannot both be describing the same
+relationship. Either `AMOUNT` means something other than the points' value — the basket
+value that earned them, say — or one of the two is wrong. **This must be settled before
+either screen ships**, because both display a points-to-SAR figure to the same person.
+
+### G3. `0 SAR` is printed as a value
+The second row shows `10 Points / 0 SAR`. Either the amount is genuinely zero and should
+say so in words, or it is a rounding artefact of a sub-riyal value, which is worse — it
+prints a wrong number confidently.
+
+### G4. STATUS is a bare green arrow
+No label, no tooltip. Colour and icon with no text, which is the one thing the rest of the
+product gets right. It is also the only column whose meaning cannot be guessed.
+
+### G5. The Parked table's NAME column says "Comtech Gold" on every row
+That is the partner, not the user, on the user's own page. The column is constant, so it
+carries no information and takes a fifth of the table.
+
+### G6. The empty Transactions tab renders headers and nothing else
+No message, no explanation, no suggestion. Identical in kind to the old dashboard's
+unexplained zeros — the reader cannot tell "no transactions yet" from "failed to load".
+
+### G7. "Registered Since Friday 12th of September 2025 02:35:11 AM"
+Second-level precision on a join date, written out longhand, and inconsistent with the
+list's `12/09/2025` for the same event.
+
+### G8. "Total points refund" is ungrammatical
+Should be "refunded", or "Total refunds".
+
+### G9. Personal Info holds three fields
+Full Name, Mobile Number, Gender. No email — although the list's search placeholder
+claims to search it. No user ID. No email or ID means the detail page cannot answer the
+support question the list was too narrow to answer either.
+
+### G10. The page has no actions
+Nothing can be done to this user from their own page — no transfer points, no reminder,
+nothing. The three actions confirmed for this feature are all absent.
+
+### G11. The ⓘ beside Mobile Number has no evident purpose
+No visible tooltip target or explanation.
+
+### G12. Tabs sit in their own card, separated from their content
+The tab row is card 2 and the panel it controls is card 3. A tab and its panel are one
+component; splitting them across two surfaces breaks that relationship.
+
+### G13. Three uniform stat tiles
+Same flat, equal-weight pattern the dashboard audit rejected — and one of the three
+(Parked) is the important one.
+
+## Not yet seen
+
+**The unregistered user's detail page.** All three screenshots are the same registered
+user on different tabs. Since an unregistered record is a bare phone number with no name
+and no gender, its detail page is the more interesting of the two: most of Personal Info
+is empty, and it is where the reminder action belongs.
