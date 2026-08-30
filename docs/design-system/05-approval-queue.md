@@ -240,3 +240,36 @@ much.
 
 **Rule:** any constraint the reader did not apply is named on screen and can be
 removed in one action.
+
+## 15. A figure that goes both ways carries its own sign
+
+The Transactions ledger had a Direction column saying whether points were added
+or taken back. Asked to hide it, the honest answer was not to delete the column
+and let a deduction and an award become the same row — that is the defect the
+column existed to prevent.
+
+The sign moved onto the number instead: **−200** rather than 200, on both the
+points and the value, with the direction still spoken for screen readers, still
+filterable, and still named in the panel.
+
+This is the better design, and the column was the compromise. A figure that can
+go either way says so in the figure; a column repeating that for every row is
+width spent on something the number already knew.
+
+**Not red.** Points coming back is an ordinary operation, not a fault. It takes
+the muted treatment; red stays reserved for things that are broken.
+
+## 16. One component, one behaviour, whatever element it is built from
+
+A name with an identifier beneath it appears on four tables. It was a stack on
+one, a line on two others, and on the fourth a line that only *looked* like a
+stack because the names happened to be long enough to wrap.
+
+The cause was which element each site happened to use — divs stack, spans do
+not — and the fix belongs in the class rather than at the call sites, so the
+pattern cannot depend on how any one place is built. It also made two rules
+that had been sitting there inert start working, since `text-overflow` and
+`max-width` do nothing on an inline box.
+
+**Rule:** if a pattern's appearance depends on which element it was written
+with, the pattern is not defined yet.

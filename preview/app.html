@@ -523,6 +523,13 @@ table.tbl{width:100%;border-collapse:collapse;min-width:0}
 .avatar{inline-size:42px;block-size:42px;border-radius:50%;background:var(--n-100);
   color:var(--n-500);display:grid;place-items:center;flex:none}
 .avatar-txt{font-size:13px;font-weight:700;color:var(--p-700);background:var(--p-100)}
+/* The name and the number beneath it are a stack, not a line. Left to the
+   element used, they were a stack on Users (divs), a line on Transactions and
+   individual transfers (spans), and on bulk transfers a line that only looked
+   like a stack because the names happened to wrap. Setting it here makes the
+   pattern behave the same wherever it appears — and makes the ellipsis and
+   max-width below actually apply, since both are no-ops on an inline box. */
+.person-name,.person-sub{display:block}
 .person-name{font-size:15px;font-weight:700;color:var(--n-950);white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
 .person-name.is-empty{color:var(--n-600);font-weight:500;font-style:italic}
@@ -709,6 +716,10 @@ html[dir="ltr"] .ltr{text-align:left}
 /* --- value column: derived, never trusted from the field ---------- */
 .val{display:inline-flex;align-items:center;gap:5px;font-size:14.5px;font-weight:600;
   color:var(--n-950);white-space:nowrap;font-variant-numeric:tabular-nums}
+/* A figure going the other way. Muted rather than red: points coming back is
+   an ordinary operation, and red here would spend the alarm colour on it. */
+.cell-bal.is-out,.val.is-out{color:var(--n-700)}
+.cell-bal.is-out svg{opacity:.55}
 
 /* --- row actions: labelled, and absent when they do not apply ----- */
 .row-acts{display:flex;align-items:center;gap:6px;justify-content:flex-end}
@@ -5230,7 +5241,7 @@ const XFILT = { type:"all", dir:"all", reg:"all", from:"", to:"", batch:null };
 
 const XCOLS = [
   { k:"user", always:true, on:true }, { k:"reference", on:true },
-  { k:"direction", on:true }, { k:"points", on:true }, { k:"value", on:true },
+  { k:"direction", on:false }, { k:"points", on:true }, { k:"value", on:true },
   { k:"type", on:true }, { k:"registration", on:true },
   { k:"originId", on:false }, { k:"comment", on:false }, { k:"date", on:true }
 ];
@@ -5248,6 +5259,18 @@ const xshown = () => {
 };
 
 const xValue = pts => valueOf(pts);          // five points to the riyal, as everywhere
+
+/* With the direction column hidden, a deduction and an award would be the same
+   row — which is the defect the column existed to prevent. So the figure
+   carries its own sign instead, and says it in less space than a column did.
+   Not red: taking points back is a normal operation, not a fault. */
+const xPoints = x => `<span class="cell-bal${x.dir === "out" ? " is-out" : ""}">
+  <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><use href="#i-point"/></svg>
+  <span class="num ltr">${x.dir === "out" ? "\u2212" : ""}${fmt(x.points)}</span>
+  <span class="sr-only"> ${esc(t("transactions.direction." + x.dir))}</span></span>`;
+const xValueCell = x => `<span class="val${x.dir === "out" ? " is-out" : ""}">${
+  x.dir === "out" ? `<span class="amt"><span class="rial" aria-hidden="true">﷼</span><span class="num">\u2212${
+    fmt(Math.round(xValue(x.points)))}</span></span>` : riyal(xValue(x.points))}</span>`;
 const xNote  = t_ => t_ ? t(t_) : null;
 
 function xmatching(){
@@ -5433,8 +5456,7 @@ const xEmpty = () => `<span style="color:var(--n-600)">—</span>`;
 function xRow(x, cols){
   const has = k => cols.some(c => c.k === k);
   const sub = [];
-  if (!has("type"))      sub.push(t("transactions.type." + x.type));
-  if (!has("direction")) sub.push(t("transactions.direction." + x.dir));
+  if (!has("type")) sub.push(t("transactions.type." + x.type));
   const cell = k => {
     switch (k){
       case "user": return `<td>${xUserCell(x.user)}${sub.length
@@ -5442,8 +5464,8 @@ function xRow(x, cols){
       case "reference": return `<td>${x.ref
         ? `<span class="cell-id ltr">${esc(x.ref)}</span>` : xEmpty()}</td>`;
       case "direction": return `<td>${xDirPill(x.dir)}</td>`;
-      case "points":    return `<td>${pointsCell(x.points)}</td>`;
-      case "value":     return `<td><span class="val">${riyal(xValue(x.points))}</span></td>`;
+      case "points":    return `<td>${xPoints(x)}</td>`;
+      case "value":     return `<td>${xValueCell(x)}</td>`;
       case "type":      return `<td><span class="pill pill-stage">${esc(t("transactions.type." + x.type))}</span></td>`;
       case "registration": return `<td><span class="pill ${x.user.registered ? "pill-success" : "pill-stage"}">
           <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-${x.user.registered ? "check" : "clock"}"/></svg>
@@ -5461,9 +5483,9 @@ function xCard(x){
   return `<div class="card-row" onclick="openTxn('${x.id}')" tabindex="0"
       onkeydown="if(event.key==='Enter'){openTxn('${x.id}')}">
     <div class="card-top">${xUserCell(x.user)}</div>
-    <div class="card-meta" style="gap:10px">${xDirPill(x.dir)}
+    <div class="card-meta" style="gap:10px">
       <span class="pill pill-stage">${esc(t("transactions.type." + x.type))}</span></div>
-    <div class="card-meta">${pointsCell(x.points)}<span class="val">${riyal(xValue(x.points))}</span>
+    <div class="card-meta">${xPoints(x)}${xValueCell(x)}
       <span class="cell-date" style="margin-inline-start:auto">${esc(dfmt(x.at))}</span></div>
     ${x.ref ? `<div class="file-sub"><span class="ltr num">${esc(x.ref)}</span></div>` : ""}
   </div>`;
@@ -5513,9 +5535,9 @@ function openTxn(id){
         <span class="pill pill-stage">${esc(t("transactions.type." + x.type))}</span>
       </div>
       <div class="pv-val"><span class="pv-val-l">${esc(t("transactions.columns.points"))}</span>
-        <span class="pv-val-v">${pointsCell(x.points)}</span></div>
+        <span class="pv-val-v">${xPoints(x)}</span></div>
       <div class="pv-val"><span class="pv-val-l">${esc(t("transactions.columns.value"))}</span>
-        <span class="pv-val-v">${riyal(xValue(x.points))}</span></div>
+        <span class="pv-val-v">${xValueCell(x)}</span></div>
       <div class="fhint" style="margin-bottom:18px">${esc(t("transfers.value.rate"))}</div>
 
       <div class="trail-h" style="margin-bottom:4px">${esc(t("transactions.panel.sectionDetails"))}</div>
