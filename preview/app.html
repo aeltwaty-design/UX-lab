@@ -602,6 +602,75 @@ html[dir="ltr"] .ltr{text-align:left}
 }
 
 /* ===================================================================
+   SETTINGS
+   The partner's own profile, and the text their customers read. The two
+   are not the same weight: a name is a field, terms and conditions are
+   published to customers, and the screen says so.
+   =================================================================== */
+.set-wrap{display:grid;gap:1.25rem;max-width:860px}
+.set-card{background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
+  box-shadow:var(--shadow-sm);padding:24px}
+.set-h{font-size:16px;font-weight:700;color:var(--n-950)}
+.set-sub{font-size:13px;color:var(--n-700);margin-top:3px;line-height:1.5}
+.set-body{margin-top:20px;display:grid;gap:18px}
+
+/* the logo, its controls beside it rather than under it */
+.set-logo{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.set-logo-img{inline-size:84px;block-size:84px;border-radius:var(--r-200);flex:none;
+  display:grid;place-items:center;font-size:26px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,var(--p-500),var(--p-700))}
+.set-logo-acts{display:flex;gap:10px;flex-wrap:wrap}
+
+/* a field that has become dirty says so, quietly, beside its label */
+.set-lab{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
+  color:var(--n-900);margin-bottom:6px}
+.set-dirty{font-size:11px;font-weight:600;color:var(--warning-700);
+  background:var(--warning-50);border:1px solid var(--warning-200);
+  padding:1px 7px;border-radius:999px}
+.set-count{margin-inline-start:auto;font-size:11.5px;color:var(--n-600);
+  font-variant-numeric:tabular-nums}
+.set-count.over{color:var(--danger-700);font-weight:600}
+
+/* long-form: write it, or see it the way a customer will */
+.set-tabs{display:inline-flex;background:var(--n-100);border-radius:var(--r-100);padding:3px;gap:2px;
+  margin-inline-start:auto}
+.set-tabs button{border:none;background:none;padding:6px 14px;border-radius:var(--r-50);
+  font:inherit;font-size:12.5px;font-weight:600;color:var(--n-700);cursor:pointer}
+.set-tabs button[aria-pressed="true"]{background:#fff;color:var(--p-700);box-shadow:var(--shadow-xs)}
+.set-long{min-height:220px;line-height:1.7;font-size:14px}
+.set-prev{min-height:220px;border:1px solid var(--n-200);border-radius:var(--r-100);
+  background:var(--n-25);padding:20px 22px;max-height:420px;overflow-y:auto}
+.set-prev-h{font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--n-600);margin-bottom:12px}
+.set-prev p{font-size:14.5px;line-height:1.75;color:var(--n-900);margin:0 0 13px}
+.set-prev p:last-child{margin-bottom:0}
+.set-prev .empty-d{margin:0}
+
+/* what WalaOne sets, shown but not offered as a field */
+.set-ro{display:grid;gap:14px}
+.set-ro-row{display:flex;gap:16px;flex-wrap:wrap;align-items:baseline}
+.set-ro-l{flex:0 0 190px;font-size:13.5px;color:var(--n-700)}
+.set-ro-v{flex:1;min-width:0;font-size:14.5px;color:var(--n-950);font-weight:500}
+
+/* Unsaved work follows you down the page rather than waiting at the bottom
+   for you to find it. */
+.set-bar{position:sticky;bottom:0;z-index:30;margin-top:4px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:var(--n-950);color:#fff;border-radius:var(--r-150);padding:14px 18px;
+  box-shadow:0 10px 30px rgba(17,19,23,.22)}
+.set-bar-t{font-size:13.5px;font-weight:600}
+.set-bar .btn{margin-inline-start:auto}
+.set-bar .btn-ghost{background:transparent;border-color:rgba(255,255,255,.35);color:#fff}
+.set-bar .btn-ghost:hover{background:rgba(255,255,255,.12)}
+.set-bar .btn + .btn{margin-inline-start:0}
+@media (max-width:620px){
+  .set-card{padding:18px}
+  .set-ro-l{flex-basis:100%}
+  .set-bar{flex-direction:column;align-items:stretch}
+  .set-bar .btn{margin-inline-start:0;width:100%;justify-content:center}
+}
+
+/* ===================================================================
    SIGN IN
    A split card: the form on one half, a showcase on the other. Full
    bleed, no shell — the app's chrome has no business here.
@@ -1088,7 +1157,7 @@ html[dir="rtl"] .vw-line{text-align:start}
   <div class="border-t py-3" style="border-color:var(--n-200)">
     <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-sparkle"/></svg>
       <span class="nav-label" data-i18n="nav.whatsNew">What's new</span></a>
-    <a href="#" class="nav-item"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-settings"/></svg>
+    <a href="#/settings" class="nav-item" data-route="settings"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-settings"/></svg>
       <span class="nav-label" data-i18n="nav.settings">Settings</span></a>
     <a href="#/login" class="nav-item" onclick="signOut();return false"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-logout"/></svg>
       <span class="nav-label" data-i18n="nav.logout">Log out</span></a>
@@ -1513,6 +1582,7 @@ html[dir="rtl"] .vw-line{text-align:start}
   <div id="view-transactions" class="view"></div>
   <div id="view-charges" class="view"></div>
   <div id="view-exports" class="view"></div>
+  <div id="view-settings" class="view"></div>
 </main>
 </div>
 </div>
@@ -3132,6 +3202,7 @@ function setLang(l){
   if (ROUTE === "charges") renderCharges();
   if (ROUTE === "exports") renderExports();
   if (ROUTE === "login") renderLogin();
+  if (ROUTE === "settings") renderSettings();
   if (PSTACK.length) paintPanel();
   navQueueBadge();
   [["btn-ar","btn-en"],["pv-ar","pv-en"]].forEach(([a,b])=>{
@@ -3426,7 +3497,7 @@ function go(route, id){
   render(route, id);
 }
 const VIEW_OF = { overview:"overview", users:"list", followers:"list", user:"detail", follower:"detail",
-                  transfers:"transfers", transactions:"transactions", charges:"charges", exports:"exports" };
+                  transfers:"transfers", transactions:"transactions", charges:"charges", exports:"exports", settings:"settings" };
 const COLL_OF = { users:"users", user:"users", followers:"followers", follower:"followers" };
 function render(route, id){
   ROUTE = route; CURRENT = id ?? null;
@@ -3456,6 +3527,7 @@ function render(route, id){
   if (view === "transactions") renderTransactions();
   if (view === "charges") renderCharges();
   if (view === "exports") renderExports();
+  if (view === "settings") renderSettings();
   attentionCounts();          // before applyI18n, which reads the counts
   navQueueBadge();
   applyI18n();
@@ -3464,7 +3536,8 @@ function render(route, id){
     : view === "transfers"    ? t("transfers.heading")
     : view === "transactions" ? t("transactions.heading")
     : view === "charges"      ? t("charge.heading")
-    : view === "exports"      ? t("exports.heading") : ck("list.heading"));
+    : view === "exports"      ? t("exports.heading")
+    : view === "settings"     ? t("settings.heading") : ck("list.heading"));
   closeNav(); window.scrollTo(0, 0);
 }
 function onHash(){
@@ -7049,6 +7122,235 @@ function signOut(){
   document.body.dataset.auth = "1";
   location.hash = "#/login";
   renderLogin();
+}
+
+/* =====================================================================
+   SETTINGS — the company's own profile, and the text its customers read.
+   Six things a partner may change; the account facts WalaOne sets are
+   shown but never offered as a field, so nothing here can be edited and
+   then refused.
+   ===================================================================== */
+const SET_MAX = { name:60, description:280, terms:6000, about:3000 };
+const SET_SAVED = {
+  logo: "CG",
+  name:        { ar:"كومتك جولد", en:"Comtech Gold" },
+  description: null,          // filled from the sample keys on first render
+  supportEmail:"support@comtechgold.sa",
+  supportPhone:"966800245900",
+  terms: null,
+  about: null,
+  accountId:"WLA-CG-0042",
+  joined: new Date(2024, 0, 10)
+};
+let SET = null, SET_TAB = { terms:"edit", about:"edit" };
+
+/* The tenant's own words live in the copy file so they switch language with
+   everything else; they are read once into the working copy. */
+function setInit(){
+  const base = Object.assign({}, SET_SAVED, {
+    description: t("settings.sample.description"),
+    terms: t("settings.sample.terms"),
+    about: t("settings.sample.about")
+  });
+  base.name = SET_SAVED.name[LANG] || SET_SAVED.name.en;
+  SET = Object.assign({}, base);
+  SET._base = base;
+}
+const setDirty = k => SET && SET[k] !== SET._base[k];
+const setAnyDirty = () => SET && ["logo","name","description","supportEmail","supportPhone","terms","about"]
+  .some(setDirty);
+
+function renderSettings(){
+  const el = document.getElementById("view-settings"); if (!el) return;
+  if (!SET || SET._lang !== LANG){ setInit(); SET._lang = LANG; }
+  el.innerHTML = `
+    <div class="flex flex-wrap items-end gap-4 page-head">
+      <div class="min-w-0 flex-1">
+        ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
+                  { label:t("settings.heading") }])}
+        <h1 class="page-t">${esc(t("settings.heading"))}</h1>
+        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("settings.subtitle"))}</p>
+      </div>
+    </div>
+
+    <div class="set-wrap">
+      <section class="set-card">
+        <div class="set-h">${esc(t("settings.section.profile"))}</div>
+        <div class="set-body">
+          <div>
+            <div class="set-lab">${esc(t("settings.field.logo"))}${setDirty("logo")
+              ? `<span class="set-dirty">${esc(t("settings.unsavedTag"))}</span>` : ""}</div>
+            <div class="set-logo">
+              ${SET.logo
+                ? `<span class="set-logo-img" role="img" aria-label="${esc(t("settings.a11y.logoPreview"))}">${esc(SET.logo)}</span>`
+                : `<span class="set-logo-img" style="background:var(--n-100);color:var(--n-600)" aria-hidden="true">
+                     <svg viewBox="0 0 24 24" width="30" height="30"><use href="#i-user"/></svg></span>`}
+              <div class="min-w-0">
+                <div class="set-logo-acts">
+                  <button class="btn btn-ghost btn-sm" onclick="setLogo('CG')">
+                    <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-upload"/></svg>
+                    <span>${esc(t(SET.logo ? "settings.logo.replace" : "settings.logo.upload"))}</span></button>
+                  ${SET.logo ? `<button class="btn btn-ghost btn-sm" onclick="setLogo(null)">${
+                    esc(t("settings.logo.remove"))}</button>` : ""}
+                </div>
+                <div class="fhint" style="margin-top:8px">${esc(t("settings.field.logoHint"))}</div>
+              </div>
+            </div>
+          </div>
+          ${setField("name", "text")}
+          ${setField("description", "area")}
+        </div>
+      </section>
+
+      <section class="set-card">
+        <div class="set-h">${esc(t("settings.section.contact"))}</div>
+        <div class="set-body">
+          ${setField("supportEmail", "text")}
+          ${setField("supportPhone", "text")}
+        </div>
+      </section>
+
+      <section class="set-card">
+        <div class="set-h">${esc(t("settings.section.content"))}</div>
+        <div class="set-sub">${esc(t("settings.section.contentSub"))}</div>
+        <div class="set-body">
+          ${setLong("terms")}
+          ${setLong("about")}
+        </div>
+      </section>
+
+      <section class="set-card">
+        <div class="set-h">${esc(t("settings.section.account"))}</div>
+        <div class="set-body">
+          <div class="set-ro">
+            <div class="set-ro-row"><div class="set-ro-l">${esc(t("settings.field.accountId"))}</div>
+              <div class="set-ro-v ltr num">${esc(SET.accountId)}</div></div>
+            <div class="set-ro-row"><div class="set-ro-l">${esc(t("settings.field.joined"))}</div>
+              <div class="set-ro-v">${esc(dfmt(SET.joined))}</div></div>
+          </div>
+          <div class="fnote tone-quiet">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
+            <span>${esc(t("settings.managedNote"))}</span></div>
+        </div>
+      </section>
+
+      ${setAnyDirty() ? `<div class="set-bar" role="status">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-alert"/></svg>
+        <span class="set-bar-t">${esc(t("settings.unsaved"))}</span>
+        <button class="btn btn-ghost btn-sm" onclick="setDiscard()">${esc(t("settings.discard"))}</button>
+        <button class="btn btn-primary btn-sm" onclick="setSave()">${esc(t("settings.saveAll"))}</button>
+      </div>` : ""}
+    </div>`;
+}
+
+const setErrFor = k => {
+  const v = String(SET[k] || "");
+  if (k === "name" && !v.trim()) return t("settings.err.nameRequired");
+  if (k === "supportEmail" && v && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return t("settings.err.emailInvalid");
+  if (k === "supportPhone" && v && !/^966\d{8,9}$/.test(v.replace(/[\s-]/g, ""))) return t("settings.err.phoneInvalid");
+  if (SET_MAX[k] && v.length > SET_MAX[k]) return t("settings.err.tooLong");
+  return null;
+};
+
+function setField(k, kind){
+  const v = String(SET[k] ?? ""), max = SET_MAX[k], err = setErrFor(k);
+  const count = max ? `<span class="set-count${v.length > max ? " over" : ""}">${
+    esc(interp(t("settings.chars"), { n: fmt(v.length), max: fmt(max) }))}</span>` : "";
+  const common = `id="set_${k}" oninput="setEdit('${k}',this.value)" aria-invalid="${!!err}"`;
+  return `<div>
+    <div class="set-lab"><label for="set_${k}">${esc(t("settings.field." + k))}</label>${
+      setDirty(k) ? `<span class="set-dirty">${esc(t("settings.unsavedTag"))}</span>` : ""}${count}</div>
+    ${kind === "area"
+      ? `<textarea class="ftxt" ${common}>${esc(v)}</textarea>`
+      : `<input class="finp${k === "supportEmail" || k === "supportPhone" ? " ltr" : ""}" ${common} value="${esc(v)}">`}
+    ${err ? `<div class="ferr"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+      <span>${esc(err)}</span></div>` : `<div class="fhint">${esc(t("settings.field." + k + "Hint"))}</div>`}
+  </div>`;
+}
+
+/* Terms and About are published to customers, so the reader can see the text
+   the way a customer will before deciding it is right. */
+function setLong(k){
+  const v = String(SET[k] ?? ""), max = SET_MAX[k], tab = SET_TAB[k], err = setErrFor(k);
+  const paras = v.split(/\n{2,}/).filter(p => p.trim());
+  return `<div>
+    <div class="set-lab"><label for="set_${k}">${esc(t("settings.field." + k))}</label>${
+      setDirty(k) ? `<span class="set-dirty">${esc(t("settings.unsavedTag"))}</span>` : ""}
+      <span class="set-count${v.length > max ? " over" : ""}">${
+        esc(interp(t("settings.chars"), { n: fmt(v.length), max: fmt(max) }))}</span>
+      <span class="set-tabs" role="group">
+        <button aria-pressed="${tab === "edit"}" onclick="setPreviewTab('${k}','edit')">${esc(t("settings.edit"))}</button>
+        <button aria-pressed="${tab === "preview"}" onclick="setPreviewTab('${k}','preview')">${esc(t("settings.preview"))}</button>
+      </span></div>
+    ${tab === "edit"
+      ? `<textarea class="ftxt set-long" id="set_${k}" aria-label="${
+           esc(interp(t("settings.a11y.editor"), { field: t("settings.field." + k) }))}"
+           oninput="setEdit('${k}',this.value)" aria-invalid="${!!err}">${esc(v)}</textarea>`
+      : `<div class="set-prev">
+           <div class="set-prev-h">${esc(t("settings.previewTitle"))}</div>
+           ${paras.length ? paras.map(p => `<p>${esc(p.trim())}</p>`).join("")
+                          : `<p class="empty-d">${esc(t("settings.previewEmpty"))}</p>`}
+         </div>`}
+    ${err ? `<div class="ferr"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+      <span>${esc(err)}</span></div>` : `<div class="fhint">${esc(t("settings.field." + k + "Hint"))}</div>`}
+  </div>`;
+}
+
+/* Typing must not rebuild the field under the cursor, so the value is kept and
+   only the parts that depend on it are repainted. */
+function setEdit(k, v){
+  SET[k] = v;
+  const lab = document.querySelector(`#set_${k}`)?.closest("div")?.querySelector(".set-lab");
+  if (lab){
+    const max = SET_MAX[k];
+    const c = lab.querySelector(".set-count");
+    if (c && max){
+      c.textContent = interp(t("settings.chars"), { n: fmt(v.length), max: fmt(max) });
+      c.classList.toggle("over", v.length > max);
+    }
+    let tag = lab.querySelector(".set-dirty");
+    if (setDirty(k) && !tag){
+      tag = document.createElement("span"); tag.className = "set-dirty";
+      tag.textContent = t("settings.unsavedTag");
+      lab.querySelector("label")?.after(tag);
+    } else if (!setDirty(k) && tag) tag.remove();
+  }
+  setBar();
+}
+/* The bar is added and removed rather than re-rendered with the page, for the
+   same reason: the cursor stays where the reader put it. */
+function setBar(){
+  const wrap = document.querySelector("#view-settings .set-wrap"); if (!wrap) return;
+  const have = wrap.querySelector(".set-bar"), want = setAnyDirty();
+  if (want && !have){
+    const d = document.createElement("div");
+    d.className = "set-bar"; d.setAttribute("role", "status");
+    d.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-alert"/></svg>
+      <span class="set-bar-t">${esc(t("settings.unsaved"))}</span>
+      <button class="btn btn-ghost btn-sm" onclick="setDiscard()">${esc(t("settings.discard"))}</button>
+      <button class="btn btn-primary btn-sm" onclick="setSave()">${esc(t("settings.saveAll"))}</button>`;
+    wrap.appendChild(d);
+  } else if (!want && have) have.remove();
+}
+/* Named apart from the profile's own setTab, which this quietly replaced —
+   the later definition wins, so a user's tabs stopped switching. */
+function setPreviewTab(k, v){ SET_TAB[k] = v; renderSettings(); }
+function setLogo(v){ SET.logo = v; renderSettings(); if (!v) toast(t("settings.logo.removed")); }
+function setDiscard(){ SET = Object.assign({}, SET._base, { _base: SET._base, _lang: LANG }); renderSettings(); }
+function setSave(){
+  const bad = ["name","description","supportEmail","supportPhone","terms","about"].find(setErrFor);
+  if (bad){
+    renderSettings();
+    const el = document.getElementById("set_" + bad);
+    el?.scrollIntoView({ block:"center", behavior:"smooth" });
+    el?.focus({ preventScroll:true });
+    toast(t("settings.err.cannotSave"));
+    return;
+  }
+  SET._base = Object.assign({}, SET);
+  delete SET._base._base;
+  renderSettings();
+  toast(t("settings.saved"));
 }
 
 document.body.dataset.state = "normal";

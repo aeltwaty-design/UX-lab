@@ -14,7 +14,7 @@ s = raw[:_a] + raw[_b:]
 keys = set()
 
 # literal keys
-PREFIX = r'(?:transfers|transactions|charge|exports|login|otp)'
+PREFIX = r'(?:transfers|transactions|charge|exports|login|otp|settings)'
 for m in re.finditer(r'["\'](' + PREFIX + r'\.[A-Za-z0-9._]+)["\']', s):
     keys.add(m.group(1))
 for m in re.finditer(r'data-i18n[a-z-]*="(' + PREFIX + r'\.[A-Za-z0-9._]+)"', s):
@@ -77,6 +77,14 @@ for k in ECOLS: keys.add("exports.columns." + k)
 for k in ["users","followers","transactions","transfers","charges"]:
     keys.add("exports.target." + k)
 
+# --- settings --------------------------------------------------------------
+SFIELDS = ["logo","name","description","supportEmail","supportPhone","terms","about",
+           "accountId","joined"]
+for k in SFIELDS: keys.add("settings.field." + k)
+for k in ["name","description","supportEmail","supportPhone","terms","about","logo"]:
+    keys.add("settings.field." + k + "Hint")
+for k in ["description","terms","about"]: keys.add("settings.sample." + k)
+
 # drop the ones that were only ever prefixes
 keys = {k for k in keys if not k.endswith(".")}
 keys.discard("transfers.status.")
@@ -96,12 +104,14 @@ keys.discard("charge.status.")
 keys.discard("charge.panel.")
 keys.discard("exports.columns.")
 keys.discard("exports.target.")
+keys.discard("settings.field.")
+keys.discard("settings.sample.")
 
 req = sorted(keys)
 if len(sys.argv) > 1 and sys.argv[1] == "--check":
     d = {"en": {}, "ar": {}}
     for f in ("transfers.json", "transactions.json", "chargehistory.json", "exports.json",
-              "login.json"):
+              "login.json", "settings.json"):
         try:
             x = json.load(io.open("src/i18n/" + f, encoding="utf-8"))
         except FileNotFoundError:

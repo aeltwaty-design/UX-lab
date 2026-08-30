@@ -20,3 +20,9 @@ Set `CHROMIUM` if your browser is not at the default Playwright path.
 
 `../keyreq.py --check` is the non-browser one: it expands the i18n keys built at runtime
 from a prefix plus a variable and diffs them against the copy file in both languages.
+
+`no-duplicate-names.js` is the non-browser one added after a settings preview
+toggle silently replaced the Users profile's tab switcher: both were called
+`setTab`, the later definition won, and nothing failed until someone clicked a
+tab. The page is assembled from many spliced modules, so it asserts that every
+top-level function and const is declared exactly once.

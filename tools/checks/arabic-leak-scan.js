@@ -97,6 +97,9 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
   await scan('exports',        () => { closePanel(); location.hash = '#/exports'; });
   await scan('export filters', () => efilToggle());
   await scan('export columns', () => { efilClose(); ecolToggle(); });
+  await scan('settings',       () => { closePanel(); location.hash = '#/settings'; });
+  await scan('settings dirty', () => { setEdit('name', 'X'); });
+  await scan('settings preview',() => { setPreviewTab('terms','preview'); });
   // sign in, both steps, which live outside the shell
   await scan('sign in',        () => { closePanel(); location.hash = '#/login'; });
   await scan('sign in help',   () => lgHelp());
