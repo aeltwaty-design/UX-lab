@@ -2,7 +2,9 @@ const { chromium } = require('playwright');
 /* Latin text sitting in an Arabic UI. Legitimately-Latin things are allowed:
    filenames, batch and reference ids, phone numbers, B2B, CSV, the tenant name.
    Everything else that reads as English words is a leak. */
-const OK = /^(?:[\d\s.,:/·—–-]+|BCH-\d+|TRF-\d+|USR-\d+|FLW-\d+|B2B|CSV|CG|MA|\d+K|⌘K|[A-Za-z0-9._-]+\.csv|Comtech Gold|English|[A-Z]{1,2})$/;
+// Reference codes, ids, filenames and the tenant's own name are Latin by
+// nature; everything else Latin in an Arabic page is a leak.
+const OK = /^(?:[\d\s.,:/·—–-]+|BCH-\d+|TRF-\d+|TX-\d+|USR-\d+|FLW-\d+|INV-\d+|COMTECHGOLD(?:\/[A-Z]+)?\/[0-9]+|B2B|CSV|CG|MA|\d+K|⌘K|[A-Za-z0-9._-]+\.csv|Comtech Gold|English|[A-Z]{1,2})$/;
 const LATIN = /[A-Za-z]{2,}/;
 const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
 (async () => {
