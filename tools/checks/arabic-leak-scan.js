@@ -21,6 +21,15 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
     if (setup) { await p.evaluate(setup); await p.waitForTimeout(350); }
     const hits = await p.evaluate(([okSrc, latSrc]) => {
       const OK = new RegExp(okSrc), LATIN = new RegExp(latSrc);
+      // One test for text and attributes alike. Attributes used to get only the
+      // whole-string check, so an aria-label that legitimately names a file -
+      // "تنزيل 2026_08_29_charges.csv" - was reported as a leak.
+      const ALLOW = /^(?:CSV|B2B|COMTECHGOLD|DIRECT|RET|(?:INV|BCH|TRF|TX|CHG|PO|EXP)(?:-[0-9-]+)?|9665X+\.?|[a-z.]+@[a-z.]+|[A-Za-z0-9._-]+\.csv)$/;
+      const isLeak = txt => {
+        if (!txt || !LATIN.test(txt) || OK.test(txt)) return false;
+        const words = txt.split(/[^A-Za-z0-9._@X-]+/).filter(w => /[A-Za-z]{2,}/.test(w));
+        return !words.every(w => ALLOW.test(w));
+      };
       const out = [];
       const walk = (root) => {
         const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -32,10 +41,7 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
           if (pnl && pnl.hidden) continue;          // a closed drawer is not on screen
           if (el.offsetParent === null && !pnl) continue;
           const txt = n.textContent.trim();
-          if (!txt || !LATIN.test(txt) || OK.test(txt)) continue;
-          // a Latin acronym or format example inside an Arabic sentence is fine
-          const ALLOW = /^(?:CSV|B2B|COMTECHGOLD|DIRECT|RET|(?:INV|BCH|TRF|TX|CHG|PO)(?:-[0-9-]+)?|9665X+\.?|[a-z.]+@[a-z.]+|[A-Za-z0-9._-]+\.csv)$/;
-          if (txt.split(/[^A-Za-z0-9._X-]+/).filter(w => /[A-Za-z]{2,}/.test(w)).every(w => ALLOW.test(w))) continue;
+          if (!isLeak(txt)) continue;
           out.push({ txt: txt.slice(0, 64), where: (el.className && String(el.className).slice(0,26)) || el.tagName });
         }
       };
@@ -45,7 +51,7 @@ const ALLOW_INLINE = /^(?:CSV|B2B|9665X+|[A-Za-z0-9._-]+\.csv)$/;
         if (el.closest('#pv')) return;
         ['placeholder','aria-label','title'].forEach(a => {
           const v = el.getAttribute(a);
-          if (v && LATIN.test(v) && !OK.test(v.trim()))
+          if (v && isLeak(v.trim()))
             out.push({ txt: '@' + a + ': ' + v.slice(0,56), where: (el.className && String(el.className).slice(0,26)) || el.tagName });
         });
       });

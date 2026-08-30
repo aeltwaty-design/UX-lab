@@ -18,6 +18,7 @@ Hash routing, so links work from anywhere in the file:
 | `#/transfers`, `#/transfers/individual` | Transfer points, bulk and individual |
 | `#/transactions` | Transactions — every point movement |
 | `#/charges` | Charge history — the partner buying points |
+| `#/exports` | Exports — every file the product generated |
 
 The screens are linked to each other: the Overview's "waiting for your approval" and
 "transactions failed" rows count the real transfer queue and open it filtered; a
