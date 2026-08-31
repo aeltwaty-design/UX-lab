@@ -195,9 +195,17 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
   border:1px solid var(--n-200);border-radius:var(--r-200);
   padding:var(--sp-300);min-block-size:158px}
 .stat-ico{inline-size:var(--sp-550);block-size:var(--sp-550);border-radius:var(--r-150);
-  display:grid;place-items:center;background:var(--n-100);color:var(--n-700);margin-bottom:auto}
+  display:grid;place-items:center;background:var(--n-100);color:var(--n-700)}
+/* Both groups run the same four tones in the same order, so the colour reads as
+   a system rather than eight arbitrary choices: the headline figure, the one
+   that is going well, the one to keep an eye on, and the secondary. */
+.tone-p .stat-ico{background:var(--p-100);   color:var(--p-700)}
+.tone-i .stat-ico{background:var(--info-100);color:var(--info-700)}
+.tone-w .stat-ico{background:var(--warning-100);color:var(--warning-700)}
+.tone-s .stat-ico{background:var(--s-200);   color:var(--s-800)}
+.tone-ok .stat-ico{background:var(--success-100);color:var(--success-700)}
 .stat-v{font-size:32px;font-weight:700;color:var(--n-950);line-height:1.1;
-  letter-spacing:-.02em;margin-top:var(--sp-250);font-variant-numeric:tabular-nums}
+  letter-spacing:-.02em;margin-top:var(--sp-300);font-variant-numeric:tabular-nums}
 .stat-l{font-size:14px;color:var(--n-700);margin-top:var(--sp-75)}
 /* The balance is the figure the whole screen exists to report, so it carries the
    brand colour and the rest stay neutral. Accenting all eight would rank none. */
@@ -205,6 +213,19 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .stat-lead .stat-ico{background:var(--p-100);color:var(--p-700)}
 .stat-lead .stat-v{color:var(--p-900)}
 .stat-lead .stat-l{color:var(--p-800)}
+/* A balance that is running out is the one number on this screen that needs to
+   change how it looks, not just what it says. */
+.stat-lead[data-credit="low"]{background:var(--warning-50);border-color:var(--warning-200)}
+.stat-lead[data-credit="low"] .stat-ico{background:var(--warning-100);color:var(--warning-700)}
+.stat-lead[data-credit="low"] .stat-v,
+.stat-lead[data-credit="low"] .stat-note,
+.stat-lead[data-credit="low"] .stat-l{color:var(--warning-700)}
+.stat-lead[data-credit="empty"]{background:var(--danger-50);border-color:var(--danger-200)}
+.stat-lead[data-credit="empty"] .stat-ico{background:var(--danger-100);color:var(--danger-700)}
+.stat-lead[data-credit="empty"] .stat-v,
+.stat-lead[data-credit="empty"] .stat-note,
+.stat-lead[data-credit="empty"] .stat-l{color:var(--danger-700)}
+.stat-note{font-size:12px;line-height:1.45;margin-top:var(--sp-100);color:inherit}
 @media (max-width:520px){
   .stat{min-block-size:0;padding:var(--sp-250)}
   .stat-v{font-size:24px;margin-top:var(--sp-150)}
@@ -1130,7 +1151,7 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
 /* --- form controls inside panels ---------------------------------- */
 .fgrp{margin-bottom:var(--sp-250)}
 .flab{display:block;font-size:12px;font-weight:600;color:var(--n-900);margin-bottom:var(--sp-75)}
-.fopt{font-weight:400;color:var(--n-600)}
+.fopt{font-weight:400;color:var(--n-600);margin-inline-start:var(--sp-100)}
 .finp,.ftxt,.fsel{width:100%;border:1px solid var(--n-300);border-radius:var(--r-100);
   padding:var(--sp-125) var(--sp-175);font:inherit;font-size:14px;color:var(--n-950);background:#fff;outline:none;
   transition:border-color .12s,box-shadow .12s}
@@ -1297,7 +1318,7 @@ html[dir="rtl"] .vw-line{text-align:start}
       <span data-i18n="topbar.search">Search users, transactions, offers…</span>
     </button>
     <div style="flex:1"></div>
-    <button class="icon-btn" data-i18n-aria="topbar.notifications" aria-label="Notifications">
+    <button class="icon-btn" data-notifs data-i18n-aria="topbar.notifications" aria-label="Notifications">
       <svg viewBox="0 0 24 24" width="23" height="23"><use href="#i-bell"/></svg><span class="dot num">4</span>
     </button>
     <div class="langtog" role="group" data-i18n-aria="topbar.language" aria-label="Language">
@@ -1311,7 +1332,6 @@ html[dir="rtl"] .vw-line{text-align:start}
         <span class="block" style="font-size:12px;font-weight:600;line-height:1.2" data-i18n="app.userName">Mohammed Al-Otaibi</span>
         <span class="block" style="font-size:12px;color:var(--n-600)" data-i18n="app.role">Partner admin</span>
       </span>
-      <svg viewBox="0 0 24 24" width="16" height="16" style="color:var(--n-500)"><use href="#i-chevron"/></svg>
     </button>
   </header>
 
@@ -1341,22 +1361,23 @@ html[dir="rtl"] .vw-line{text-align:start}
     <section class="stat-sec" aria-labelledby="grpPoints">
       <h2 class="stat-h" id="grpPoints" data-i18n="home.group.points"></h2>
       <div class="stat-grid">
-        <div class="stat stat-lead">
+        <div class="stat stat-lead" id="stAvailCard">
           <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-wallet"/></svg></span>
           <span class="stat-v num" id="stAvail">0</span>
           <span class="stat-l" data-i18n="home.stat.pointsAvailable"></span>
+          <span class="stat-note" id="stAvailNote" hidden></span>
         </div>
-        <div class="stat">
+        <div class="stat tone-i">
           <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-transfer"/></svg></span>
           <span class="stat-v num" id="stSent">0</span>
           <span class="stat-l" data-i18n="home.stat.pointsTransferred"></span>
         </div>
-        <div class="stat">
+        <div class="stat tone-w">
           <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-return"/></svg></span>
           <span class="stat-v num" id="stRef">0</span>
           <span class="stat-l" data-i18n="home.stat.pointsRefunded"></span>
         </div>
-        <div class="stat">
+        <div class="stat tone-s">
           <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-hourglass"/></svg></span>
           <span class="stat-v num" id="stPend">0</span>
           <span class="stat-l" data-i18n="home.stat.pointsPending"></span>
@@ -1367,22 +1388,22 @@ html[dir="rtl"] .vw-line{text-align:start}
     <section class="stat-sec" aria-labelledby="grpAudience">
       <h2 class="stat-h" id="grpAudience" data-i18n="home.group.audience"></h2>
       <div class="stat-grid">
-        <div class="stat">
+        <div class="stat tone-p">
           <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-users"/></svg></span>
           <span class="stat-v num" id="stUsers">0</span>
           <span class="stat-l" data-i18n="home.stat.totalUsers"></span>
         </div>
-        <div class="stat">
+        <div class="stat tone-ok">
           <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-check"/></svg></span>
           <span class="stat-v num" id="stReg">0</span>
           <span class="stat-l" data-i18n="home.stat.usersRegistered"></span>
         </div>
-        <div class="stat">
+        <div class="stat tone-w">
           <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-userplus"/></svg></span>
           <span class="stat-v num" id="stUnreg">0</span>
           <span class="stat-l" data-i18n="home.stat.usersUnregistered"></span>
         </div>
-        <div class="stat" data-offers>
+        <div class="stat tone-s" data-offers>
           <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-ticket"/></svg></span>
           <span class="stat-v num" id="stOffers">0</span>
           <span class="stat-l" data-i18n="home.stat.totalOffers"></span>
@@ -1565,6 +1586,10 @@ html[dir="rtl"] .vw-line{text-align:start}
     <button onclick="setState('loading')" id="pv-loading" aria-pressed="false">Loading</button>
     <button onclick="setState('empty')"   id="pv-empty"   aria-pressed="false">Empty</button>
     <button onclick="setState('error')"   id="pv-error"   aria-pressed="false">Error</button></div>
+  <div class="row"><span class="lbl">Available credit</span>
+    <button onclick="setCredit('normal')" id="pv-cr-normal" aria-pressed="true">Normal</button>
+    <button onclick="setCredit('low')"    id="pv-cr-low"    aria-pressed="false">Low</button>
+    <button onclick="setCredit('empty')"  id="pv-cr-empty"  aria-pressed="false">Empty</button></div>
   <div class="row"><span class="lbl">Sidebar</span>
     <button onclick="toggleSidebar()" id="pv-collapse" aria-pressed="false">Collapsed</button></div>
 </div>
@@ -3409,11 +3434,34 @@ function relTime(mins){
   if (mins < 1440) return interp(t("time.hour"), { n: fmt(Math.round(mins/60)) });
   return t("time.yesterday");
 }
+/* Which of the three states the balance is being previewed in. Normal is the
+   real derived figure; the other two exist so the low and empty designs can be
+   reviewed without editing data. */
+let CREDIT = "normal";
+const CREDIT_LOW = 42_000;
+function setCredit(k){
+  CREDIT = k;
+  ["normal","low","empty"].forEach(x =>
+    document.getElementById("pv-cr-" + x)?.setAttribute("aria-pressed", String(x === k)));
+  renderHomeStats();
+}
+const creditPoints = () => CREDIT === "empty" ? 0
+                         : CREDIT === "low"   ? CREDIT_LOW
+                         : BAL.available;
+
 function renderHomeStats(){
   if (!document.getElementById("stAvail")) return;
+  const card = document.getElementById("stAvailCard");
+  const note = document.getElementById("stAvailNote");
+  if (card) card.dataset.credit = CREDIT;
+  if (note){
+    const msg = CREDIT === "empty" ? t("wallet.emptyState")
+              : CREDIT === "low"   ? t("wallet.lowBalanceWarning") : "";
+    note.textContent = msg; note.hidden = !msg;
+  }
   const reg   = USERS.filter(u => u.registered).length;
   const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = fmt(n); };
-  set("stAvail",  BAL.available);
+  set("stAvail",  creditPoints());
   set("stSent",   BAL.transferred);
   set("stRef",    HOME_REFUNDED);
   set("stPend",   homePending());
@@ -4672,6 +4720,10 @@ function elapsed(d){
    return together. */
 // Offers is not designed yet, so its nav entry is hidden rather than left
 // pointing at nothing. Flip to true to bring the section back.
+// Notifications have no feed behind them yet, so the bell is hidden rather than
+// left counting four things nobody can open.
+const NOTIFS_ENABLED = false;
+
 // Changing the logo is out of scope for now; the current one still shows.
 const LOGO_EDIT_ENABLED = false;
 
@@ -5561,7 +5613,7 @@ function openUpload(){
         <button class="btn btn-ghost btn-sm mt-3" onclick="upPick()">${esc(t("transfers.upload.browse"))}</button>
       </div>
       <div id="upCheck"></div>
-      <div class="fgrp">
+      <div class="fgrp" style="margin-top:var(--sp-200)">
         <span class="flab">${esc(t("transfers.upload.rulesHeading"))}</span>
         <ul class="rules">${[1,2,3,4].map(i => `<li>
           <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg>
@@ -7715,6 +7767,8 @@ function relToggleAlt(){ REL_ALT = !REL_ALT; renderRelease(); }
 
 if (!OFFERS_ENABLED)
   document.querySelectorAll("[data-offers]").forEach(el => { el.hidden = true; });
+if (!NOTIFS_ENABLED)
+  document.querySelectorAll("[data-notifs]").forEach(el => { el.hidden = true; });
 
 // #16 — a data console people work in daily should let them reach search from
 // the keyboard. "/" is the convention; Ctrl/Cmd+K is the one people try first.
