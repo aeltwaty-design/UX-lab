@@ -45,7 +45,7 @@
   --series-issued:#755BD8; --series-redeemed:#1BAF7A;
   --grid:#EEF0F5; --axis:#CCD2E0;
 
-  --sp-100:8px; --sp-150:12px; --sp-200:16px; --sp-300:24px; --sp-400:32px;
+  --sp-25:2px;--sp-50:4px;--sp-75:6px;--sp-100:8px;--sp-125:10px;--sp-150:12px;--sp-175:14px;--sp-200:16px;--sp-250:20px;--sp-300:24px;--sp-350:28px;--sp-400:32px;--sp-450:36px;--sp-500:40px;--sp-550:44px;--sp-600:48px;--sp-700:56px;
   --r-50:4px; --r-100:8px; --r-150:12px; --r-200:16px; --r-300:24px;
   --shadow-xs:0 1px 2px rgba(17,19,23,.05);
   --shadow-sm:0 1px 3px rgba(17,19,23,.06),0 1px 2px rgba(17,19,23,.04);
@@ -84,7 +84,7 @@ html[lang="ar"] .num{font-family:var(--font-en)} /* Western numerals, KSA conven
 :focus-visible{outline:none;box-shadow:var(--focus);border-radius:var(--r-100)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .skip{position:absolute;inset-inline-start:-9999px;top:8px;z-index:100;
-      background:var(--p-700);color:#fff;padding:10px 16px;border-radius:var(--r-100)}
+      background:var(--p-700);color:#fff;padding:var(--sp-125) var(--sp-200);border-radius:var(--r-100)}
 .skip:focus{inset-inline-start:8px}
 
 /* ---- app shell ---- */
@@ -101,7 +101,7 @@ body[data-collapsed="true"] .nav-badge{display:none}
 body[data-collapsed="true"] .nav-item{justify-content:center;padding-inline:0}
 body[data-collapsed="true"] .brand{justify-content:center}
 
-.nav-item{display:flex;align-items:center;gap:12px;padding:9px 12px;margin-inline:12px;
+.nav-item{display:flex;align-items:center;gap:var(--sp-150);padding:var(--sp-100) var(--sp-150);margin-inline:var(--sp-150);
   border-radius:var(--r-100);color:var(--n-800);font-weight:500;font-size:14px;
   text-decoration:none;cursor:pointer;position:relative;transition:background .12s}
 .nav-item:hover{background:var(--n-100)}
@@ -109,29 +109,29 @@ body[data-collapsed="true"] .brand{justify-content:center}
 .nav-item[aria-current="page"] svg{color:var(--p-600)}
 .nav-item svg{flex:0 0 20px;color:var(--n-600)}
 .nav-group-label{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
-  color:var(--n-600);padding:0 24px;margin:20px 0 6px}
+  color:var(--n-600);padding:0 var(--sp-300);margin:var(--sp-250) 0 var(--sp-75)}
 html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:12px}
 .nav-chevron{margin-inline-start:auto;color:var(--n-500)}
 .nav-badge{margin-inline-start:auto;background:var(--danger-500);color:#fff;font-size:11px;
-  font-weight:600;min-width:20px;height:20px;border-radius:999px;display:grid;place-items:center;padding:0 6px}
+  font-weight:600;min-width:20px;height:20px;border-radius:999px;display:grid;place-items:center;padding:0 var(--sp-75)}
 
 /* ---- topbar ---- */
 .topbar{height:64px;background:#fff;border-bottom:1px solid var(--n-200);
-  display:flex;align-items:center;gap:16px;padding:0 24px;position:sticky;top:0;z-index:20}
-.search{flex:1;max-width:420px;display:flex;align-items:center;gap:10px;height:38px;
-  padding:0 12px;background:var(--n-50);border:1px solid var(--n-200);border-radius:var(--r-100);
+  display:flex;align-items:center;gap:var(--sp-200);padding:0 var(--sp-300);position:sticky;top:0;z-index:20}
+.search{flex:1;max-width:420px;display:flex;align-items:center;gap:var(--sp-125);height:38px;
+  padding:0 var(--sp-150);background:var(--n-50);border:1px solid var(--n-200);border-radius:var(--r-100);
   color:var(--n-600);cursor:pointer}
 .search:hover{background:#fff;border-color:var(--n-300)}
 .kbd{margin-inline-start:auto;font-size:11px;background:#fff;border:1px solid var(--n-200);
-  border-radius:var(--r-50);padding:2px 6px;color:var(--n-600)}
+  border-radius:var(--r-50);padding:var(--sp-25) var(--sp-75);color:var(--n-600)}
 .icon-btn{width:38px;height:38px;display:grid;place-items:center;border-radius:var(--r-100);
   color:var(--n-700);background:none;border:none;cursor:pointer;position:relative}
 .icon-btn:hover{background:var(--n-100)}
-.dot{position:absolute;top:-3px;inset-inline-end:-3px;min-width:18px;height:18px;padding:0 5px;
+.dot{position:absolute;top:-3px;inset-inline-end:-3px;min-width:18px;height:18px;padding:0 var(--sp-50);
   background:var(--danger-500);color:#fff;font-size:10.5px;font-weight:700;border-radius:999px;
   display:grid;place-items:center;border:2px solid #fff;line-height:1}
-.langtog{display:flex;background:var(--n-100);border-radius:var(--r-100);padding:3px;gap:2px}
-.langtog button{border:none;background:none;padding:5px 12px;border-radius:var(--r-50);
+.langtog{display:flex;background:var(--n-100);border-radius:var(--r-100);padding:var(--sp-50);gap:var(--sp-25)}
+.langtog button{border:none;background:none;padding:var(--sp-50) var(--sp-150);border-radius:var(--r-50);
   font-size:13px;font-weight:600;color:var(--n-700);cursor:pointer}
 .langtog button[aria-pressed="true"]{background:#fff;color:var(--p-700);box-shadow:var(--shadow-xs)}
 
@@ -139,30 +139,30 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .dd{position:relative}
 .dd-menu{position:absolute;z-index:40;inset-block-start:calc(100% + 6px);inset-inline-end:0;
   min-width:250px;background:#fff;border:1px solid var(--n-200);border-radius:var(--r-150);
-  box-shadow:var(--shadow-lg);padding:6px;animation:ddIn .12s ease}
+  box-shadow:var(--shadow-lg);padding:var(--sp-75);animation:ddIn .12s ease}
 @keyframes ddIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.dd-menu{animation:none}}
-.dd-opt{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:none;
+.dd-opt{display:flex;align-items:center;gap:var(--sp-125);width:100%;padding:var(--sp-100) var(--sp-125);border:none;
   background:none;border-radius:var(--r-100);cursor:pointer;text-align:start;
   font-size:14px;color:var(--n-900);font-family:inherit}
 .dd-opt:hover,.dd-opt:focus-visible{background:var(--n-100);outline:none}
 .dd-opt[aria-selected="true"]{color:var(--p-700);font-weight:600}
 .dd-check{inline-size:16px;block-size:16px;flex:none;color:var(--p-600);visibility:hidden}
 .dd-opt[aria-selected="true"] .dd-check{visibility:visible}
-.dd-sep{height:1px;background:var(--n-200);margin:6px 4px}
-.dd-sub{display:block;font-size:11.5px;color:var(--n-700);font-weight:400;margin-top:2px;line-height:1.35}
+.dd-sep{height:1px;background:var(--n-200);margin:var(--sp-75) var(--sp-50)}
+.dd-sub{display:block;font-size:11.5px;color:var(--n-700);font-weight:400;margin-top:var(--sp-25);line-height:1.35}
 .dd-opt.dd-custom{align-items:flex-start}
-.dd-opt.dd-custom .dd-check{margin-top:2px}
+.dd-opt.dd-custom .dd-check{margin-top:var(--sp-25)}
 
 /* ---- cards ---- */
 .card{background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
   box-shadow:var(--shadow-xs)}
-.card-h{display:flex;align-items:center;gap:12px;padding:20px 20px 0}
-.card-t{font-size:15px;font-weight:600;color:var(--n-950)}
-.card-sub{font-size:12px;color:var(--n-700);margin-top:2px}
+.card-h{display:flex;align-items:center;gap:var(--sp-150);padding:var(--sp-250) var(--sp-250) 0}
+.card-t{font-size:15px;font-weight:600;color:var(--n-950);margin:0}
+.card-sub{font-size:12px;color:var(--n-700);margin-top:var(--sp-25)}
 
 /* ---- buttons ---- */
-.btn{display:inline-flex;align-items:center;gap:8px;height:50px;padding:0 18px;
+.btn{display:inline-flex;align-items:center;gap:var(--sp-100);height:50px;padding:0 var(--sp-250);
   border-radius:var(--r-100);font-size:14px;font-weight:600;cursor:pointer;border:1px solid transparent;
   white-space:nowrap;transition:background .12s,border-color .12s}
 .btn-primary{background:var(--p-500);color:#fff}
@@ -170,12 +170,20 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .btn-primary:active{background:var(--p-700)}
 .btn-ghost{background:#fff;border-color:var(--n-300);color:var(--n-800)}
 .btn-ghost:hover{background:var(--n-50);border-color:var(--n-400)}
-.btn-sm{height:44px;padding:0 14px;font-size:13px}
-.btn-link{background:none;border:none;color:var(--p-700);font-weight:600;font-size:13px;cursor:pointer;padding:0}
+.btn-sm{height:44px;padding:0 var(--sp-175);font-size:13px}
+/* Two-line button: a pager that carries a kicker above a title. Height comes
+   from the content, so it is a declared variant rather than a rule elsewhere
+   overriding .btn's fixed height. */
+.btn-stack{height:auto;padding:var(--sp-175) var(--sp-200);text-align:start;align-items:flex-start}
+.btn-link{position:relative;background:none;border:none;color:var(--p-700);font-weight:600;
+  font-size:13px;cursor:pointer;padding:0}
+/* Same trick as the row checkbox: the text keeps its size, an invisible
+   overlay carries the target area WCAG 2.2 asks for. */
+.btn-link::before{content:"";position:absolute;inset:-5px}
 .btn-link:hover{text-decoration:underline}
 
 /* ---- attention rows ---- */
-.att-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-top:1px solid var(--n-100)}
+.att-row{display:flex;align-items:center;gap:var(--sp-175);padding:var(--sp-175) var(--sp-250);border-top:1px solid var(--n-100)}
 .att-row:hover{background:var(--n-25)}
 .att-ico{flex:0 0 36px;height:36px;border-radius:var(--r-100);display:grid;place-items:center}
 .sev-critical .att-ico{background:var(--danger-50);color:var(--danger-700)}
@@ -189,8 +197,8 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .sev-info     .att-count{color:var(--info-700)}
 
 /* status pill — icon + label, never colour alone */
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
-  padding:5px 11px;border-radius:999px;white-space:nowrap;line-height:1.3}
+.pill{display:inline-flex;align-items:center;gap:var(--sp-75);font-size:12.5px;font-weight:600;
+  padding:var(--sp-50) var(--sp-150);border-radius:999px;white-space:nowrap;line-height:1.3}
 .pill-critical{background:var(--danger-50);color:var(--danger-700)}
 .pill-warning{background:var(--warning-50);color:var(--warning-700)}
 .pill-success{background:var(--success-50);color:var(--success-700)}
@@ -201,45 +209,45 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .sk{background:linear-gradient(90deg,var(--n-100) 25%,var(--n-200) 37%,var(--n-100) 63%);
   background-size:200% 100%;animation:sh 1.4s ease-in-out infinite;border-radius:var(--r-50)}
 @media (prefers-reduced-motion:reduce){.sk{animation:none}}
-.empty{text-align:center;padding:36px 24px}
+.empty{text-align:center;padding:var(--sp-450) var(--sp-300)}
 .empty-ico{width:44px;height:44px;border-radius:var(--r-100);background:var(--n-100);
-  color:var(--n-600);display:grid;place-items:center;margin:0 auto 12px}
+  color:var(--n-600);display:grid;place-items:center;margin:0 auto var(--sp-150)}
 .empty-t{font-size:14px;font-weight:600;color:var(--n-900)}
-.empty-d{font-size:13px;color:var(--n-700);margin-top:4px;max-width:34ch;margin-inline:auto}
+.empty-d{font-size:13px;color:var(--n-700);margin-top:var(--sp-50);max-width:34ch;margin-inline:auto}
 
 /* ---- metric tile (points overview) ---- */
-.mt{border:1px solid var(--n-200);border-radius:var(--r-150);padding:15px 14px 11px;
+.mt{border:1px solid var(--n-200);border-radius:var(--r-150);padding:var(--sp-200) var(--sp-175) var(--sp-150);
   background:#fff;display:flex;flex-direction:column;gap:1px;min-width:0}
 .mt-l{font-size:11.5px;color:var(--n-700);font-weight:500;line-height:1.35;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mt-v{font-size:20px;font-weight:700;line-height:1.15;letter-spacing:-.01em}
-.mt-d{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--n-700)}
+.mt-d{display:flex;align-items:center;gap:var(--sp-50);font-size:11px;font-weight:600;color:var(--n-700)}
 .mt[data-tone="up"]   .mt-d{color:var(--success-700)}
 .mt[data-tone="warn"] .mt-d{color:var(--warning-700)}
-.mt-s{width:100%;height:58px;margin-top:auto;padding-top:10px;display:block;overflow:visible}
+.mt-s{width:100%;height:58px;margin-top:auto;padding-top:var(--sp-125);display:block;overflow:visible}
 
 /* ---- twelve-month totals beneath the chart ---- */
-.yr-tot{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
+.yr-tot{display:flex;align-items:center;gap:var(--sp-250);flex-wrap:wrap;margin-top:var(--sp-175);padding-top:var(--sp-150);
   border-top:1px solid var(--n-100);font-size:12px;color:var(--n-700)}
 .yr-lbl{font-weight:600;color:var(--n-800)}
-.yr-item{display:flex;align-items:center;gap:6px}
+.yr-item{display:flex;align-items:center;gap:var(--sp-75)}
 .yr-sw{width:9px;height:9px;border-radius:2px;flex:none}
-.yr-item b{color:var(--n-950);font-weight:700;margin-inline-start:2px}
+.yr-item b{color:var(--n-950);font-weight:700;margin-inline-start:var(--sp-25)}
 
 
 /* ---- offers ---- */
 /* the one place brand gold leads: offers are the reward side of the product.
    Gold is 1.63:1 on white, so it never carries text — it fills, ink sits on it. */
-.of-sum{display:flex;align-items:center;gap:10px;padding:16px 14px;border-radius:var(--r-100);
+.of-sum{display:flex;align-items:center;gap:var(--sp-125);padding:var(--sp-200) var(--sp-175);border-radius:var(--r-100);
   background:var(--s-50);border:1px solid var(--s-200);font-size:12px;font-weight:600;color:var(--s-900)}
 .of-sum-n{font-size:24px;font-weight:700;line-height:1}
-.of-row{display:flex;align-items:center;gap:10px;padding:13px 0;border-top:1px solid var(--n-100);flex:1 1 0;min-height:0}
+.of-row{display:flex;align-items:center;gap:var(--sp-125);padding:var(--sp-150) 0;border-top:1px solid var(--n-100);flex:1 1 0;min-height:0}
 .of-row:first-child{border-top:none}
 .of-dot{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:none;
   background:var(--s-100);color:var(--s-900)}
 .of-n{font-size:13px;font-weight:600;color:var(--n-950);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .of-m{font-size:11px;color:var(--n-700);margin-top:1px}
-.of-foot{display:flex;gap:16px;padding-top:12px;margin-top:auto;border-top:1px solid var(--n-100);
+.of-foot{display:flex;gap:var(--sp-200);padding-top:var(--sp-150);margin-top:auto;border-top:1px solid var(--n-100);
   font-size:12px;color:var(--n-700)}
 .of-foot b{color:var(--n-950);font-weight:700}
 .rate-pill{background:var(--s-50);color:var(--s-900);border:1px solid var(--s-200)}
@@ -248,22 +256,22 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 /* ---- chart ---- */
 .chart-wrap{position:relative}
 #tooltip{position:absolute;pointer-events:none;background:var(--n-950);color:#fff;
-  border-radius:var(--r-100);padding:9px 11px;font-size:12px;box-shadow:var(--shadow-lg);
+  border-radius:var(--r-100);padding:var(--sp-100) var(--sp-150);font-size:12px;box-shadow:var(--shadow-lg);
   opacity:0;transition:opacity .1s;z-index:30;min-width:150px}
-.tt-row{display:flex;align-items:center;gap:7px;margin-top:5px}
+.tt-row{display:flex;align-items:center;gap:var(--sp-100);margin-top:var(--sp-50)}
 .tt-sw{width:9px;height:9px;border-radius:2px;flex:none}
 .tt-v{margin-inline-start:auto;font-weight:700}
 
 /* ---- preview controls (NOT part of the product) ---- */
 #pv{position:fixed;inset-block-end:16px;inset-inline-end:16px;z-index:60;background:var(--n-950);
-  color:#fff;border-radius:var(--r-200);padding:12px 14px;box-shadow:var(--shadow-lg);font-size:12px;
+  color:#fff;border-radius:var(--r-200);padding:var(--sp-150) var(--sp-175);box-shadow:var(--shadow-lg);font-size:12px;
   font-family:var(--font-en);max-width:290px}
-#pv h4{margin:0 0 9px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--n-400)}
-#pv .row{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+#pv h4{margin:0 0 var(--sp-100);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--n-400)}
+#pv .row{display:flex;gap:var(--sp-50);margin-bottom:var(--sp-100);flex-wrap:wrap}
 #pv button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff;
-  padding:5px 10px;border-radius:var(--r-50);font-size:11px;cursor:pointer;font-weight:600}
+  padding:var(--sp-50) var(--sp-125);border-radius:var(--r-50);font-size:11px;cursor:pointer;font-weight:600}
 #pv button[aria-pressed="true"]{background:var(--p-500);border-color:var(--p-400)}
-#pv .lbl{color:var(--n-400);font-size:10px;width:100%;margin-bottom:3px}
+#pv .lbl{color:var(--n-400);font-size:10px;width:100%;margin-bottom:var(--sp-50)}
 #pv[data-open="false"] .row{display:none}
 #pv[data-open="false"] h4{margin:0}
 #pv h4{user-select:none}
@@ -289,7 +297,7 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
   body[data-collapsed="true"] .nav-group-label,
   body[data-collapsed="true"] .brand-text,
   body[data-collapsed="true"] .nav-badge{display:revert}
-  body[data-collapsed="true"] .nav-item{justify-content:flex-start;padding-inline:12px}
+  body[data-collapsed="true"] .nav-item{justify-content:flex-start;padding-inline:var(--sp-150)}
   body[data-collapsed="true"] .brand{justify-content:flex-start}
   #navScrim{display:block;position:fixed;inset:0;z-index:45;background:rgba(17,19,23,.45);
     opacity:0;pointer-events:none;transition:opacity .22s ease}
@@ -299,14 +307,14 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 @media (prefers-reduced-motion:reduce){ .sidebar,#navScrim{transition:none} }
 
 @media (max-width:860px){
-  main{padding:16px !important}
-  .topbar{padding:0 14px;gap:10px}
+  main{padding:var(--sp-200) !important}
+  .topbar{padding:0 var(--sp-175);gap:var(--sp-125)}
   .search span:not(.kbd){display:none}
   .search{flex:0 0 38px;max-width:38px;padding:0;justify-content:center}
   .search .kbd{display:none}
   h1{font-size:20px !important}
   /* the action row wraps under the greeting instead of squeezing it */
-  .att-row{flex-wrap:wrap;row-gap:10px}
+  .att-row{flex-wrap:wrap;row-gap:var(--sp-125)}
   .att-row .btn{margin-inline-start:auto}
 }
 @media (max-width:640px){
@@ -322,13 +330,13 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
   .dd-menu{min-width:0;width:100%;max-width:calc(100vw - 32px)}
 }
 @media (max-width:560px){
-  .langtog button{padding:5px 9px;font-size:12px}
-  .card-h{padding:14px 14px 0}
-  .att-row{padding:12px 14px}
+  .langtog button{padding:var(--sp-50) var(--sp-100);font-size:12px}
+  .card-h{padding:var(--sp-175) var(--sp-175) 0}
+  .att-row{padding:var(--sp-150) var(--sp-175)}
   .att-ico{flex-basis:30px;height:30px}
   .mt-v{font-size:18px}
   #pv{inset-inline:10px;inset-block-end:10px;max-width:none}
-  #pv .row{gap:4px}
+  #pv .row{gap:var(--sp-50)}
 }
 </style>
 <style>
@@ -400,14 +408,14 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
 </defs></svg>
 <style>
 /* confirmation dialog */
-.dlg-back{position:fixed;inset:0;z-index:70;background:rgba(17,19,23,.45);display:grid;place-items:center;padding:20px}
-.dlg{background:#fff;border-radius:var(--r-200);box-shadow:var(--shadow-lg);max-width:460px;width:100%;padding:22px}
-.dlg-t{font-size:18px;font-weight:700;margin:0 0 10px}
+.dlg-back{position:fixed;inset:0;z-index:70;background:rgba(17,19,23,.45);display:grid;place-items:center;padding:var(--sp-250)}
+.dlg{background:#fff;border-radius:var(--r-200);box-shadow:var(--shadow-lg);max-width:460px;width:100%;padding:var(--sp-300)}
+.dlg-t{font-size:18px;font-weight:700;margin:0 0 var(--sp-125)}
 .dlg-b{font-size:14px;color:var(--n-800);line-height:1.55}
-.dlg-b p{margin:0 0 8px}
-.dlg-note{font-size:13px;color:var(--n-700);padding:9px 11px;background:var(--n-50);
+.dlg-b p{margin:0 0 var(--sp-100)}
+.dlg-note{font-size:13px;color:var(--n-700);padding:var(--sp-100) var(--sp-150);background:var(--n-50);
   border-radius:var(--r-100);border:1px solid var(--n-200)}
-.dlg-f{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.dlg-f{display:flex;gap:var(--sp-125);justify-content:flex-end;margin-top:var(--sp-250)}
 
 .page-t{font-size:24px;font-weight:700;letter-spacing:-.01em}
 /* separation between a page heading block and the content under it */
@@ -417,52 +425,53 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
    hierarchy: Overview is the root, so it carries none of its own. The
    separator flips with direction; a static chevron would point the wrong way
    in Arabic. */
-.crumbs{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px;margin-bottom:6px}
+.crumbs{display:flex;align-items:center;gap:var(--sp-100);flex-wrap:wrap;font-size:13px;margin-bottom:var(--sp-75)}
 .crumbs a{color:var(--n-700);text-decoration:none;border-radius:var(--r-50)}
 .crumbs a:hover{color:var(--p-700);text-decoration:underline}
 .crumbs [aria-current="page"]{color:var(--n-950);font-weight:600;max-width:32ch;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.crumb-home{display:inline-flex;align-items:center;color:var(--n-600);padding:2px}
+.crumb-home{display:inline-flex;align-items:center;justify-content:center;color:var(--n-600);
+  inline-size:var(--sp-300);block-size:var(--sp-300);margin-inline-start:calc(var(--sp-50) * -1)}
 .crumb-home:hover{color:var(--p-700)}
 .crumb-sep{color:var(--n-500);display:inline-flex}
 .crumb-sep svg{transform:rotate(-90deg)}
 html[dir="rtl"] .crumb-sep svg{transform:rotate(90deg)}
 
 /* detail page */
-.fld{display:flex;gap:16px;padding:13px 0;border-top:1px solid var(--n-100);flex-wrap:wrap}
+.fld{display:flex;gap:var(--sp-200);padding:var(--sp-150) 0;border-top:1px solid var(--n-100);flex-wrap:wrap}
 .fld:first-of-type{border-top:none}
 .fld-l{flex:0 0 190px;font-size:13.5px;color:var(--n-700)}
 .fld-v{flex:1;min-width:0;font-size:14.5px;color:var(--n-950);font-weight:500;
   display:flex;align-items:center;flex-wrap:wrap}
 /* tabs share a card with their panel — they are one component */
-.tabs{display:flex;gap:4px;padding:6px 12px 0;border-bottom:1px solid var(--n-200);overflow-x:auto}
-.tab{border:none;background:none;padding:12px 14px;font:inherit;font-size:14px;font-weight:600;
+.tabs{display:flex;gap:var(--sp-50);padding:var(--sp-75) var(--sp-150) 0;border-bottom:1px solid var(--n-200);overflow-x:auto}
+.tab{border:none;background:none;padding:var(--sp-150) var(--sp-175);font:inherit;font-size:14px;font-weight:600;
   color:var(--n-700);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
 .tab:hover{color:var(--n-950)}
 .tab[aria-selected="true"]{color:var(--p-700);border-bottom-color:var(--p-500)}
-.unreg-note{display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--info-50);
+.unreg-note{display:flex;align-items:center;gap:var(--sp-125);padding:var(--sp-150) var(--sp-250);background:var(--info-50);
   border-top:1px solid var(--info-200);font-size:13.5px;color:var(--n-900)}
-.parked-note{margin:14px 20px 0;padding:11px 13px;border:1px dashed var(--n-300);border-radius:var(--r-100);
+.parked-note{margin:var(--sp-175) var(--sp-250) 0;padding:var(--sp-150) var(--sp-150);border:1px dashed var(--n-300);border-radius:var(--r-100);
   background:var(--n-25);font-size:13px;color:var(--n-700)}
 @media (max-width:560px){ .fld-l{flex-basis:100%} }
 
 /* filter panel */
-.fil-panel{width:300px;max-height:min(70vh,520px);overflow-y:auto;padding:8px}
-.fil-group{padding:6px 0;border-top:1px solid var(--n-100)}
-.fil-group:first-child{border-top:none;padding-top:2px}
+.fil-panel{width:300px;max-height:min(70vh,520px);overflow-y:auto;padding:var(--sp-100)}
+.fil-group{padding:var(--sp-75) 0;border-top:1px solid var(--n-100)}
+.fil-group:first-child{border-top:none;padding-top:var(--sp-25)}
 .fil-h{font-size:11.5px;font-weight:700;color:var(--n-700);letter-spacing:.04em;
-  text-transform:uppercase;padding:6px 10px 4px}
+  text-transform:uppercase;padding:var(--sp-75) var(--sp-125) var(--sp-50)}
 html[lang="ar"] .fil-h{letter-spacing:0;text-transform:none;font-size:12.5px}
-.fil-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:10px 8px 4px;margin-top:6px;border-top:1px solid var(--n-200)}
+.fil-foot{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-125);
+  padding:var(--sp-125) var(--sp-100) var(--sp-50);margin-top:var(--sp-75);border-top:1px solid var(--n-200)}
 .fil-badge{background:var(--p-500);color:#fff;font-size:11px;font-weight:700;min-width:18px;
-  height:18px;border-radius:999px;display:inline-grid;place-items:center;padding:0 5px;
-  margin-inline-start:2px}
+  height:18px;border-radius:999px;display:inline-grid;place-items:center;padding:0 var(--sp-50);
+  margin-inline-start:var(--sp-25)}
 
 /* row overflow menu + toast */
 .row-pop{position:fixed;min-width:210px;z-index:60}
 #toast{position:fixed;inset-block-end:22px;inset-inline-start:50%;transform:translateX(-50%) translateY(12px);
-  background:var(--n-950);color:#fff;padding:11px 18px;border-radius:var(--r-150);font-size:13.5px;
+  background:var(--n-950);color:#fff;padding:var(--sp-150) var(--sp-250);border-radius:var(--r-150);font-size:13.5px;
   box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity .16s,transform .16s;z-index:80}
 #toast.on{opacity:1;transform:translateX(-50%)}
 html[dir="rtl"] #toast{transform:translateX(50%) translateY(12px)}
@@ -471,14 +480,14 @@ html[dir="rtl"] #toast.on{transform:translateX(50%)}
 .tbl tbody tr{cursor:pointer}
 
 /* segmented split — the screen's spine, not a status pill */
-.segs{display:inline-flex;background:var(--n-100);border-radius:var(--r-150);padding:4px;gap:2px}
-.seg{display:inline-flex;align-items:center;gap:7px;border:none;background:none;cursor:pointer;
-  padding:8px 14px;border-radius:var(--r-100);font:inherit;font-size:14px;font-weight:600;color:var(--n-700)}
+.segs{display:inline-flex;background:var(--n-100);border-radius:var(--r-150);padding:var(--sp-50);gap:var(--sp-25)}
+.seg{display:inline-flex;align-items:center;gap:var(--sp-100);border:none;background:none;cursor:pointer;
+  padding:var(--sp-100) var(--sp-175);border-radius:var(--r-100);font:inherit;font-size:14px;font-weight:600;color:var(--n-700)}
 .seg:hover{color:var(--n-950)}
 .seg[aria-selected="true"]{background:#fff;color:var(--p-700);box-shadow:var(--shadow-xs)}
-.seg-n{font-size:12px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--n-200);color:var(--n-800)}
+.seg-n{font-size:12px;font-weight:700;padding:1px var(--sp-100);border-radius:999px;background:var(--n-200);color:var(--n-800)}
 .seg[aria-selected="true"] .seg-n{background:var(--p-100);color:var(--p-700)}
-@media (max-width:560px){ .segs{display:flex;width:100%} .seg{flex:1;justify-content:center;padding:8px 6px} }
+@media (max-width:560px){ .segs{display:flex;width:100%} .seg{flex:1;justify-content:center;padding:var(--sp-100) var(--sp-75)} }
 
 /* ===================================================================
    DATA TABLE — anatomy taken from the design system's table component.
@@ -491,15 +500,15 @@ html[dir="rtl"] #toast.on{transform:translateX(50%)}
    =================================================================== */
 .tbl-wrap{background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
   box-shadow:var(--shadow-xs);overflow:hidden}
-.tbl-bar{display:flex;align-items:center;gap:12px;padding:16px 20px;flex-wrap:wrap}
-.tbl-search{flex:1;max-width:440px;display:flex;align-items:center;gap:9px;height:50px;
-  padding:0 14px;background:#fff;border:1px solid var(--n-300);border-radius:var(--r-150);
+.tbl-bar{display:flex;align-items:center;gap:var(--sp-150);padding:var(--sp-200) var(--sp-250);flex-wrap:wrap}
+.tbl-search{flex:1;max-width:440px;display:flex;align-items:center;gap:var(--sp-100);height:50px;
+  padding:0 var(--sp-175);background:#fff;border:1px solid var(--n-300);border-radius:var(--r-150);
   color:var(--n-600);font-size:14px}
 .tbl-search:focus-within{border-color:var(--p-500);box-shadow:var(--focus)}
 .tbl-search input{flex:1;min-width:0;border:none;outline:none;background:none;
   font:inherit;color:var(--n-950)}
 .tbl-search input::placeholder{color:var(--n-600)}
-.tbl-bar-actions{display:flex;align-items:center;gap:10px;margin-inline-start:auto;flex-wrap:wrap}
+.tbl-bar-actions{display:flex;align-items:center;gap:var(--sp-125);margin-inline-start:auto;flex-wrap:wrap}
 
 /* The scroller must be told it cannot grow past its parent. Without an
    explicit max-width the table's min-width propagates up and the PAGE
@@ -507,19 +516,23 @@ html[dir="rtl"] #toast.on{transform:translateX(50%)}
 .tbl-scroll{overflow-x:auto;max-width:100%}
 table.tbl{width:100%;border-collapse:collapse;min-width:0}
 .tbl th{font-size:14px;font-weight:700;color:var(--n-950);text-align:start;
-  padding:14px 16px;border-bottom:1px solid var(--n-200);white-space:nowrap;background:#fff}
-.tbl td{padding:14px 16px;border-bottom:1px solid var(--n-100);vertical-align:middle}
+  padding:var(--sp-175) var(--sp-200);border-bottom:1px solid var(--n-200);white-space:nowrap;background:#fff}
+/* Table cells treat height as a minimum, so this is a floor: short rows stop
+   collapsing to 47px while two-line rows still grow to fit their content. */
+.tbl td{padding:var(--sp-175) var(--sp-200);border-bottom:1px solid var(--n-100);
+  vertical-align:middle;block-size:var(--sp-700)}
 .tbl tbody tr:last-child td{border-bottom:none}
 .tbl tbody tr:hover{background:var(--n-25)}
 .tbl tbody tr[data-selected="true"]{background:var(--p-50)}
-.th-sort{display:inline-flex;align-items:center;gap:5px;background:none;border:none;
+.th-sort{display:inline-flex;align-items:center;gap:var(--sp-50);background:none;border:none;
+  min-block-size:var(--sp-300);
   padding:0;font:inherit;color:inherit;cursor:pointer}
 .th-sort svg{color:var(--n-500)}
 .th-sort[aria-sort="ascending"] svg,.th-sort[aria-sort="descending"] svg{color:var(--p-600)}
 .th-sort[aria-sort="ascending"] svg{transform:rotate(180deg)}
 
 /* person cell: avatar, then name over contact */
-.cell-person{display:flex;align-items:center;gap:12px;min-width:0}
+.cell-person{display:flex;align-items:center;gap:var(--sp-150);min-width:0}
 .avatar{inline-size:42px;block-size:42px;border-radius:50%;background:var(--n-100);
   color:var(--n-500);display:grid;place-items:center;flex:none}
 .avatar-txt{font-size:13px;font-weight:700;color:var(--p-700);background:var(--p-100)}
@@ -549,36 +562,39 @@ html[dir="ltr"] .ltr{text-align:left}
 .cell-id{font-size:14px;color:var(--n-800);font-variant-numeric:tabular-nums;white-space:nowrap}
 .cell-muted{font-size:14px;color:var(--n-800)}
 .cell-date{font-size:13.5px;color:var(--n-800);white-space:nowrap}
-.cell-bal{display:inline-flex;align-items:center;gap:7px;font-size:15px;font-weight:600;
+.cell-bal{display:inline-flex;align-items:center;gap:var(--sp-100);font-size:15px;font-weight:600;
   color:var(--n-950);white-space:nowrap}
 
-.cb{inline-size:18px;block-size:18px;border:1.5px solid var(--n-400);border-radius:5px;
+/* The visible box stays 18px; a transparent overlay carries a 24px hit area
+   so the control meets WCAG 2.2 target size without redrawing the design. */
+.cb{position:relative;inline-size:18px;block-size:18px;border:1.5px solid var(--n-400);border-radius:5px;
   background:#fff;display:grid;place-items:center;cursor:pointer;flex:none;padding:0}
 .cb[aria-checked="true"]{background:var(--p-500);border-color:var(--p-500)}
 .cb[aria-checked="mixed"]{background:var(--p-500);border-color:var(--p-500)}
 .cb svg{color:#fff;visibility:hidden}
 .cb[aria-checked="true"] svg,.cb[aria-checked="mixed"] svg{visibility:visible}
 
-.row-menu{inline-size:34px;block-size:34px;border-radius:var(--r-100);border:none;
+.cb::before{content:"";position:absolute;inset:-5px}
+.row-menu{inline-size:var(--sp-500);block-size:var(--sp-500);border-radius:var(--r-100);border:none;
   background:none;color:var(--n-600);cursor:pointer;display:grid;place-items:center}
 .row-menu:hover{background:var(--n-100);color:var(--n-900)}
 
 /* footer: range · pages · rows-per-page */
-.tbl-foot{display:flex;align-items:center;gap:16px;padding:14px 20px;flex-wrap:wrap;
+.tbl-foot{display:flex;align-items:center;gap:var(--sp-200);padding:var(--sp-175) var(--sp-250);flex-wrap:wrap;
   border-top:1px solid var(--n-200);font-size:13.5px;color:var(--n-700)}
-.pager{display:flex;align-items:center;gap:4px;margin-inline:auto}
-.pg{min-inline-size:34px;block-size:34px;padding:0 8px;border-radius:var(--r-100);border:none;
+.pager{display:flex;align-items:center;gap:var(--sp-50);margin-inline:auto}
+.pg{min-inline-size:var(--sp-500);block-size:var(--sp-500);padding:0 var(--sp-100);border-radius:var(--r-100);border:none;
   background:none;color:var(--n-800);font:inherit;font-weight:600;cursor:pointer}
 .pg:hover{background:var(--n-100)}
 .pg[aria-current="page"]{background:var(--p-50);color:var(--p-700)}
 .pg:disabled{color:var(--n-400);cursor:default;background:none}
-.pg-gap{padding:0 4px;color:var(--n-500)}
-.rpp{display:flex;align-items:center;gap:7px}
-.rpp select{border:1px solid var(--n-300);border-radius:var(--r-100);padding:5px 8px;
+.pg-gap{padding:0 var(--sp-50);color:var(--n-500)}
+.rpp{display:flex;align-items:center;gap:var(--sp-100)}
+.rpp select{border:1px solid var(--n-300);border-radius:var(--r-100);padding:var(--sp-50) var(--sp-100);
   font:inherit;font-size:13px;color:var(--n-900);background:#fff}
 
 /* selection bar — appears only when rows are picked */
-.selbar{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--p-50);
+.selbar{display:flex;align-items:center;gap:var(--sp-150);padding:var(--sp-150) var(--sp-250);background:var(--p-50);
   border-bottom:1px solid var(--p-200);flex-wrap:wrap}
 .selbar-n{font-size:14px;font-weight:700;color:var(--p-700)}
 .selbar .btn{height:44px}
@@ -587,17 +603,17 @@ html[dir="ltr"] .ltr{text-align:left}
    informational tone rather than danger */
 .pill-stage{background:var(--n-100);color:var(--n-800)}
 /* table rows carry the status at a readable size, not a footnote */
-.tbl .pill{font-size:13.5px;padding:7px 13px;gap:7px}
+.tbl .pill{font-size:13.5px;padding:var(--sp-100) var(--sp-150);gap:var(--sp-100)}
 
 @media (max-width:560px){
-  .tbl td,.tbl th{padding:12px 10px}
+  .tbl td,.tbl th{padding:var(--sp-150) var(--sp-125)}
   .person-sub{max-width:18ch}
 }
 @media (max-width:860px){
-  .tbl-bar{padding:14px}
+  .tbl-bar{padding:var(--sp-175)}
   .tbl-search{max-width:none;flex-basis:100%;order:-1}
   .tbl-bar-actions{margin-inline-start:0}
-  .tbl-foot{padding:12px 14px}
+  .tbl-foot{padding:var(--sp-150) var(--sp-175)}
   .pager{margin-inline:0;order:3;flex-basis:100%;justify-content:center}
 }
 
@@ -607,33 +623,35 @@ html[dir="ltr"] .ltr{text-align:left}
    note itself is set as something to read.
    =================================================================== */
 .rel-doc{max-width:720px}
-.rel-date{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--n-700)}
+.rel-date{display:inline-flex;align-items:center;gap:var(--sp-100);font-size:13px;color:var(--n-700)}
 .rel-title{font-size:26px;font-weight:700;color:var(--n-950);letter-spacing:-.015em;
-  line-height:1.3;margin-top:10px}
-.rel-body{margin-top:22px}
-.rel-body p{font-size:16px;line-height:1.8;color:var(--n-900);margin:0 0 18px;max-width:66ch}
+  line-height:1.3;margin-top:var(--sp-125)}
+.rel-body{margin-top:var(--sp-300)}
+.rel-body p{font-size:16px;line-height:1.8;color:var(--n-900);margin:0 0 var(--sp-250);max-width:66ch}
 .rel-body p:last-child{margin-bottom:0}
 
 /* the same note in the other language, folded away until wanted */
-.rel-alt{margin-top:32px;border-top:1px solid var(--n-200);padding-top:20px}
-.rel-alt-btn{display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;
+.rel-alt{margin-top:var(--sp-400);border-top:1px solid var(--n-200);padding-top:var(--sp-250)}
+.rel-alt-btn{display:inline-flex;align-items:center;gap:var(--sp-100);background:none;border:none;padding:0;
   font:inherit;font-size:13.5px;font-weight:600;color:var(--p-700);cursor:pointer}
+.rel-alt-btn{position:relative}
+.rel-alt-btn::before{content:"";position:absolute;inset:-4px}
 .rel-alt-btn:hover{text-decoration:underline}
 .rel-alt-btn svg{transition:transform .18s}
 .rel-alt-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
-.rel-alt-body{margin-top:18px;padding:20px 22px;border-radius:var(--r-150);
+.rel-alt-body{margin-top:var(--sp-250);padding:var(--sp-250) var(--sp-300);border-radius:var(--r-150);
   background:var(--n-25);border:1px solid var(--n-200)}
-.rel-alt-body h3{font-size:17px;font-weight:700;color:var(--n-950);margin:0 0 12px;line-height:1.35}
-.rel-alt-body p{font-size:14.5px;line-height:1.75;color:var(--n-800);margin:0 0 12px}
+.rel-alt-body h3{font-size:17px;font-weight:700;color:var(--n-950);margin:0 0 var(--sp-150);line-height:1.35}
+.rel-alt-body p{font-size:14.5px;line-height:1.75;color:var(--n-800);margin:0 0 var(--sp-150)}
 .rel-alt-body p:last-child{margin-bottom:0}
 
 /* moving between notes without going back to the list */
-.rel-nav{display:flex;gap:12px;margin-top:36px;padding-top:22px;border-top:1px solid var(--n-200)}
-.rel-nav .btn{flex:1;justify-content:flex-start;height:auto;padding:14px 16px;text-align:start}
+.rel-nav{display:flex;gap:var(--sp-150);margin-top:var(--sp-450);padding-top:var(--sp-300);border-top:1px solid var(--n-200)}
+.rel-nav .btn{flex:1;justify-content:flex-start}
 .rel-nav .btn:last-child{justify-content:flex-end;text-align:end}
 .rel-nav-k{display:block;font-size:11.5px;font-weight:600;color:var(--n-600);
   letter-spacing:.04em;text-transform:uppercase}
-.rel-nav-t{display:block;font-size:14px;font-weight:600;color:var(--n-950);margin-top:3px;
+.rel-nav-t{display:block;font-size:14px;font-weight:600;color:var(--n-950);margin-top:var(--sp-50);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:26ch}
 @media (max-width:620px){
   .rel-title{font-size:21px}
@@ -649,54 +667,54 @@ html[dir="ltr"] .ltr{text-align:left}
    =================================================================== */
 .set-wrap{display:grid;gap:1.25rem;max-width:860px}
 .set-card{background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
-  box-shadow:var(--shadow-sm);padding:24px}
-.set-h{font-size:16px;font-weight:700;color:var(--n-950)}
-.set-sub{font-size:13px;color:var(--n-700);margin-top:3px;line-height:1.5}
-.set-body{margin-top:20px;display:grid;gap:18px}
+  box-shadow:var(--shadow-sm);padding:var(--sp-300)}
+.set-h{font-size:16px;font-weight:700;color:var(--n-950);margin:0}
+.set-sub{font-size:13px;color:var(--n-700);margin-top:var(--sp-50);line-height:1.5}
+.set-body{margin-top:var(--sp-250);display:grid;gap:var(--sp-250)}
 
 /* the logo, its controls beside it rather than under it */
-.set-logo{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.set-logo{display:flex;align-items:center;gap:var(--sp-250);flex-wrap:wrap}
 .set-logo-img{inline-size:84px;block-size:84px;border-radius:var(--r-200);flex:none;
   display:grid;place-items:center;font-size:26px;font-weight:700;color:#fff;
   background:linear-gradient(135deg,var(--p-500),var(--p-700))}
-.set-logo-acts{display:flex;gap:10px;flex-wrap:wrap}
+.set-logo-acts{display:flex;gap:var(--sp-125);flex-wrap:wrap}
 
 /* a field that has become dirty says so, quietly, beside its label */
-.set-lab{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
-  color:var(--n-900);margin-bottom:6px}
+.set-lab{display:flex;align-items:center;gap:var(--sp-100);font-size:13px;font-weight:600;
+  color:var(--n-900);margin-bottom:var(--sp-75)}
 .set-dirty{font-size:11px;font-weight:600;color:var(--warning-700);
   background:var(--warning-50);border:1px solid var(--warning-200);
-  padding:1px 7px;border-radius:999px}
+  padding:1px var(--sp-100);border-radius:999px}
 .set-count{margin-inline-start:auto;font-size:11.5px;color:var(--n-600);
   font-variant-numeric:tabular-nums}
 .set-count.over{color:var(--danger-700);font-weight:600}
 
 /* long-form: write it, or see it the way a customer will */
-.set-tabs{display:inline-flex;background:var(--n-100);border-radius:var(--r-100);padding:3px;gap:2px;
+.set-tabs{display:inline-flex;background:var(--n-100);border-radius:var(--r-100);padding:var(--sp-50);gap:var(--sp-25);
   margin-inline-start:auto}
-.set-tabs button{border:none;background:none;padding:6px 14px;border-radius:var(--r-50);
+.set-tabs button{border:none;background:none;padding:var(--sp-75) var(--sp-175);border-radius:var(--r-50);
   font:inherit;font-size:12.5px;font-weight:600;color:var(--n-700);cursor:pointer}
 .set-tabs button[aria-pressed="true"]{background:#fff;color:var(--p-700);box-shadow:var(--shadow-xs)}
 .set-long{min-height:220px;line-height:1.7;font-size:14px}
 .set-prev{min-height:220px;border:1px solid var(--n-200);border-radius:var(--r-100);
-  background:var(--n-25);padding:20px 22px;max-height:420px;overflow-y:auto}
+  background:var(--n-25);padding:var(--sp-250) var(--sp-300);max-height:420px;overflow-y:auto}
 .set-prev-h{font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--n-600);margin-bottom:12px}
-.set-prev p{font-size:14.5px;line-height:1.75;color:var(--n-900);margin:0 0 13px}
+  color:var(--n-600);margin-bottom:var(--sp-150)}
+.set-prev p{font-size:14.5px;line-height:1.75;color:var(--n-900);margin:0 0 var(--sp-150)}
 .set-prev p:last-child{margin-bottom:0}
 .set-prev .empty-d{margin:0}
 
 /* what WalaOne sets, shown but not offered as a field */
-.set-ro{display:grid;gap:14px}
-.set-ro-row{display:flex;gap:16px;flex-wrap:wrap;align-items:baseline}
+.set-ro{display:grid;gap:var(--sp-175)}
+.set-ro-row{display:flex;gap:var(--sp-200);flex-wrap:wrap;align-items:baseline}
 .set-ro-l{flex:0 0 190px;font-size:13.5px;color:var(--n-700)}
 .set-ro-v{flex:1;min-width:0;font-size:14.5px;color:var(--n-950);font-weight:500}
 
 /* Unsaved work follows you down the page rather than waiting at the bottom
    for you to find it. */
-.set-bar{position:sticky;bottom:0;z-index:30;margin-top:4px;
-  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  background:var(--n-950);color:#fff;border-radius:var(--r-150);padding:14px 18px;
+.set-bar{position:sticky;bottom:0;z-index:30;margin-top:var(--sp-50);
+  display:flex;align-items:center;gap:var(--sp-175);flex-wrap:wrap;
+  background:var(--n-950);color:#fff;border-radius:var(--r-150);padding:var(--sp-175) var(--sp-250);
   box-shadow:0 10px 30px rgba(17,19,23,.22)}
 .set-bar-t{font-size:13.5px;font-weight:600}
 .set-bar .btn{margin-inline-start:auto}
@@ -704,7 +722,7 @@ html[dir="ltr"] .ltr{text-align:left}
 .set-bar .btn-ghost:hover{background:rgba(255,255,255,.12)}
 .set-bar .btn + .btn{margin-inline-start:0}
 @media (max-width:620px){
-  .set-card{padding:18px}
+  .set-card{padding:var(--sp-250)}
   .set-ro-l{flex-basis:100%}
   .set-bar{flex-direction:column;align-items:stretch}
   .set-bar .btn{margin-inline-start:0;width:100%;justify-content:center}
@@ -720,7 +738,7 @@ body[data-auth="1"]{background:var(--p-700)}
 #view-login{display:none}
 body[data-auth="1"] #view-login{display:block}
 
-.auth{position:fixed;inset:0;overflow-y:auto;padding:28px 20px;
+.auth{position:fixed;inset:0;overflow-y:auto;padding:var(--sp-350) var(--sp-250);
   background:
     radial-gradient(120% 90% at 88% 8%, rgba(250,195,51,.22), transparent 55%),
     radial-gradient(110% 80% at 8% 92%, rgba(155,120,255,.35), transparent 60%),
@@ -729,18 +747,18 @@ body[data-auth="1"] #view-login{display:block}
 .auth-card{width:min(1080px,100%);background:#fff;border-radius:var(--r-300);
   box-shadow:0 28px 70px rgba(17,19,23,.28);overflow:hidden;
   display:grid;grid-template-columns:1fr 1fr;min-height:600px}
-.auth-form{padding:44px 48px;display:flex;flex-direction:column}
-.auth-brand{display:flex;align-items:center;gap:11px;margin-bottom:38px}
+.auth-form{padding:var(--sp-550) var(--sp-600);display:flex;flex-direction:column}
+.auth-brand{display:flex;align-items:center;gap:var(--sp-150);margin-bottom:var(--sp-500)}
 .auth-mark{inline-size:40px;block-size:40px;border-radius:11px;display:grid;place-items:center;
   background:linear-gradient(135deg,var(--p-500),var(--p-700));color:#fff;
   font-size:15px;font-weight:700;flex:none}
 .auth-brand-n{font-size:16px;font-weight:700;color:var(--n-950);line-height:1.2}
-.auth-brand-s{font-size:12.5px;color:var(--n-700);margin-top:2px}
+.auth-brand-s{font-size:12.5px;color:var(--n-700);margin-top:var(--sp-25)}
 .auth-h{font-size:26px;font-weight:700;color:var(--n-950);letter-spacing:-.015em}
-.auth-sub{font-size:14px;color:var(--n-700);margin-top:7px;line-height:1.55}
-.auth-body{margin-top:30px;flex:1}
-.auth-foot{margin-top:32px;padding-top:20px;border-top:1px solid var(--n-100);
-  display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--n-600)}
+.auth-sub{font-size:14px;color:var(--n-700);margin-top:var(--sp-100);line-height:1.55}
+.auth-body{margin-top:var(--sp-400);flex:1}
+.auth-foot{margin-top:var(--sp-400);padding-top:var(--sp-250);border-top:1px solid var(--n-100);
+  display:flex;align-items:center;gap:var(--sp-175);flex-wrap:wrap;font-size:12.5px;color:var(--n-600)}
 .auth-foot a{color:var(--n-700);text-decoration:none}
 .auth-foot a:hover{color:var(--p-700);text-decoration:underline}
 .auth-foot .sep{color:var(--n-300)}
@@ -748,10 +766,10 @@ body[data-auth="1"] #view-login{display:block}
 /* a field with something inside it: an icon at the start, a control at the end */
 .f-wrap{position:relative;display:flex;align-items:center}
 .f-wrap > svg{position:absolute;inset-inline-start:14px;color:var(--n-600);pointer-events:none}
-html[dir="ltr"] .f-wrap .finp{padding-left:44px}
-html[dir="rtl"] .f-wrap .finp{padding-right:44px}
-html[dir="ltr"] .f-wrap .finp.has-end{padding-right:48px}
-html[dir="rtl"] .f-wrap .finp.has-end{padding-left:48px}
+html[dir="ltr"] .f-wrap .finp{padding-left:var(--sp-550)}
+html[dir="rtl"] .f-wrap .finp{padding-right:var(--sp-550)}
+html[dir="ltr"] .f-wrap .finp.has-end{padding-right:var(--sp-600)}
+html[dir="rtl"] .f-wrap .finp.has-end{padding-left:var(--sp-600)}
 .f-eye{position:absolute;inset-inline-end:6px;inline-size:38px;block-size:38px;border:none;
   background:none;border-radius:var(--r-100);color:var(--n-600);cursor:pointer;
   display:grid;place-items:center}
@@ -770,21 +788,21 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
 /* --- the six-digit code ------------------------------------------
    Six boxes rather than one field: the shape of the input tells you how
    much is wanted, and a pasted code fills them all. */
-.otp{display:flex;gap:10px;direction:ltr}
+.otp{display:flex;gap:var(--sp-125);direction:ltr}
 .otp input{inline-size:100%;block-size:62px;min-width:0;text-align:center;
   font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;
   border:1px solid var(--n-300);border-radius:var(--r-150);background:#fff;
   color:var(--n-950);outline:none;transition:border-color .12s,box-shadow .12s}
 .otp input:focus{border-color:var(--p-500);box-shadow:var(--focus)}
 .otp input[aria-invalid="true"]{border-color:var(--danger-500)}
-.otp-note{display:flex;align-items:center;gap:8px;padding:11px 14px;border-radius:var(--r-100);
+.otp-note{display:flex;align-items:center;gap:var(--sp-100);padding:var(--sp-150) var(--sp-175);border-radius:var(--r-100);
   background:var(--success-50);border:1px solid var(--success-200);
-  font-size:13px;color:var(--n-900);margin-bottom:20px}
+  font-size:13px;color:var(--n-900);margin-bottom:var(--sp-250)}
 .otp-note svg{flex:none;color:var(--success-700)}
 
 /* --- the showcase ------------------------------------------------- */
-.auth-show{position:relative;overflow:hidden;padding:44px;display:flex;
-  flex-direction:column;justify-content:space-between;gap:28px;color:#fff;
+.auth-show{position:relative;overflow:hidden;padding:var(--sp-550);display:flex;
+  flex-direction:column;justify-content:space-between;gap:var(--sp-350);color:#fff;
   background:linear-gradient(160deg,var(--p-600),var(--p-800) 60%,var(--p-900))}
 .auth-show::before,.auth-show::after{content:"";position:absolute;border-radius:50%;
   pointer-events:none}
@@ -793,14 +811,14 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
 .auth-show::after{inline-size:300px;block-size:300px;inset-block-end:-120px;inset-inline-start:-90px;
   background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%)}
 .show-h{position:relative;font-size:29px;font-weight:700;line-height:1.3;letter-spacing:-.015em}
-.show-b{position:relative;font-size:14.5px;line-height:1.65;margin-top:12px;color:rgba(255,255,255,.82);
+.show-b{position:relative;font-size:14.5px;line-height:1.65;margin-top:var(--sp-150);color:rgba(255,255,255,.82);
   max-width:42ch}
 .show-cap{position:relative;font-size:11.5px;font-weight:600;letter-spacing:.06em;
-  text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:10px;text-align:center}
+  text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:var(--sp-125);text-align:center}
 
 /* The film. Two identical runs side by side, translated by exactly half the
    track, so the loop has no seam and no jump. */
-.films{position:relative;display:flex;flex-direction:column;gap:14px;
+.films{position:relative;display:flex;flex-direction:column;gap:var(--sp-175);
   justify-content:center;flex:1;min-height:0}
 /* The strip is laid out left-to-right whatever the page direction. In RTL an
    overflowing track is positioned from the right edge and extends left, so the
@@ -811,7 +829,7 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
 .film{direction:ltr;position:relative;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
-.film-track{display:flex;gap:14px;width:max-content;animation:film 34s linear infinite}
+.film-track{display:flex;gap:var(--sp-175);width:max-content;animation:film 34s linear infinite}
 /* The second run goes the other way, so the wall reads as movement rather
    than as one belt. */
 .film.rev .film-track{animation-direction:reverse;animation-duration:44s}
@@ -828,14 +846,14 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
 
 @media (max-width:900px){
   .auth-card{grid-template-columns:1fr;min-height:0}
-  .auth-show{order:-1;padding:30px;min-height:300px}
+  .auth-show{order:-1;padding:var(--sp-400);min-height:300px}
   .show-h{font-size:23px}
-  .auth-form{padding:32px 26px}
+  .auth-form{padding:var(--sp-400) var(--sp-300)}
 }
 @media (max-width:560px){
   .auth{padding:0}
   .auth-card{border-radius:0;min-height:100vh}
-  .otp{gap:7px}
+  .otp{gap:var(--sp-100)}
   .otp input{block-size:54px;font-size:20px}
 }
 
@@ -850,7 +868,7 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
        are segments of a single card rather than three loose tiles --- */
 .bal-strip{display:flex;background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
   box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem;flex-wrap:wrap}
-.bal{flex:1 1 200px;min-width:0;padding:18px 20px;border-inline-start:1px solid var(--n-200);
+.bal{flex:1 1 200px;min-width:0;padding:var(--sp-250) var(--sp-250);border-inline-start:1px solid var(--n-200);
   display:flex;flex-direction:column}
 /* The available-balance tile carries two lines the others do not. Distributing
    that slack between every pair opened a gap between the figure and the line
@@ -858,23 +876,23 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
    and the figure and its sentence together as one block. */
 .bal-v{margin-top:auto}
 .bal:first-child{border-inline-start:none}
-.bal-l{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--n-700);
+.bal-l{display:flex;align-items:center;gap:var(--sp-75);font-size:12px;font-weight:600;color:var(--n-700);
   letter-spacing:.01em}
-.bal-v{display:flex;align-items:baseline;gap:7px;font-size:26px;font-weight:700;color:var(--n-950);
+.bal-v{display:flex;align-items:baseline;gap:var(--sp-100);font-size:26px;font-weight:700;color:var(--n-950);
   line-height:1.15;letter-spacing:-.015em}
 .bal-v svg{align-self:center}
-.bal-sub{font-size:12px;color:var(--n-700);margin-top:12px;line-height:1.45}
+.bal-sub{font-size:12px;color:var(--n-700);margin-top:var(--sp-150);line-height:1.45}
 /* the balance a pending approval will actually spend earns the accent */
 .bal-key{background:linear-gradient(180deg,var(--p-50),#fff 70%)}
 .bal-key .bal-v{color:var(--p-700)}
 .bal-key.is-low{background:linear-gradient(180deg,var(--warning-50),#fff 70%)}
 .bal-key.is-low .bal-v{color:var(--warning-700)}
-.bal-warn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
-  color:var(--warning-700);margin-top:6px}
+.bal-warn{display:flex;align-items:center;gap:var(--sp-75);font-size:12px;font-weight:600;
+  color:var(--warning-700);margin-top:var(--sp-75)}
 
 /* --- queue banner: the one thing on this screen that is addressed to
        the reviewer personally --- */
-.queue{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:var(--r-150);
+.queue{display:flex;align-items:center;gap:var(--sp-175);padding:var(--sp-175) var(--sp-250);border-radius:var(--r-150);
   background:var(--warning-50);border:1px solid var(--warning-200);margin-bottom:1.25rem}
 .queue-ico{flex:0 0 38px;height:38px;border-radius:var(--r-100);display:grid;place-items:center;
   background:#fff;color:var(--warning-700);border:1px solid var(--warning-200)}
@@ -901,14 +919,14 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
   .spin,.pill-attn .pill-dot{animation:none}
 }
 /* a status that is going nowhere should say so rather than sit quietly */
-.stuck{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
-  color:var(--danger-700);margin-top:4px}
-.prog{font-size:11.5px;color:var(--n-700);margin-top:4px;font-variant-numeric:tabular-nums}
+.stuck{display:inline-flex;align-items:center;gap:var(--sp-50);font-size:11.5px;font-weight:600;
+  color:var(--danger-700);margin-top:var(--sp-50)}
+.prog{font-size:11.5px;color:var(--n-700);margin-top:var(--sp-50);font-variant-numeric:tabular-nums}
 
 /* Riyal amounts read left-to-right whatever the page direction, so a figure
    never scrambles inside an Arabic sentence. The glyph is drawn from an
    Arabic face because Poppins does not carry it. */
-.amt{display:inline-flex;align-items:baseline;gap:3px;direction:ltr;unicode-bidi:isolate;
+.amt{display:inline-flex;align-items:baseline;gap:var(--sp-50);direction:ltr;unicode-bidi:isolate;
   font-variant-numeric:tabular-nums}
 .rial{font-family:"IBM Plex Sans Arabic","Noto Sans Arabic","Segoe UI",sans-serif;
   font-weight:600;font-size:.92em}
@@ -917,14 +935,14 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
        one place. Each segment opens the viewer filtered to itself. --- */
 .rec{min-width:118px;max-width:190px}
 .rec-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--n-200);
-  margin-bottom:6px}
+  margin-bottom:var(--sp-75)}
 .rec-seg{border:none;padding:0;height:100%;display:block}
 .rec-ok{background:var(--success-500)}
 .rec-bad{background:var(--danger-500)}
 .rec-dup{background:var(--warning-500)}
-.rec-txt{font-size:12.5px;color:var(--n-800);display:flex;flex-wrap:wrap;gap:4px 9px;
+.rec-txt{font-size:12.5px;color:var(--n-800);display:flex;flex-wrap:wrap;gap:var(--sp-50) var(--sp-100);
   align-items:center}
-.rec-n{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.rec-n{display:inline-flex;align-items:center;gap:var(--sp-50);white-space:nowrap}
 .rec-n::before{content:"";inline-size:7px;block-size:7px;border-radius:2px;flex:none}
 .rec-n.ok::before{background:var(--success-500)}
 .rec-n.bad::before{background:var(--danger-500)}
@@ -939,7 +957,7 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
 #view-transfers .person-sub{font-size:12px;max-width:15ch}
 
 /* --- file cell: a filename that downloads should look like one --- */
-.file-cell{display:inline-flex;align-items:center;gap:9px;min-width:0;background:none;border:none;
+.file-cell{display:inline-flex;align-items:center;gap:var(--sp-100);min-width:0;background:none;border:none;
   padding:0;font:inherit;cursor:pointer;color:var(--n-950);text-align:start}
 .file-ico{flex:0 0 34px;height:34px;border-radius:var(--r-100);display:grid;place-items:center;
   background:var(--n-100);color:var(--n-700)}
@@ -947,12 +965,12 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
   max-width:17ch}
 .file-cell:hover .file-n{color:var(--p-700);text-decoration:underline}
 .file-cell:hover .file-ico{background:var(--p-50);color:var(--p-600)}
-.file-sub{font-size:12.5px;color:var(--n-700);margin-top:1px;display:flex;align-items:center;gap:5px;
+.file-sub{font-size:12.5px;color:var(--n-700);margin-top:1px;display:flex;align-items:center;gap:var(--sp-50);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .file-sub > span{white-space:nowrap}
 
 /* --- value column: derived, never trusted from the field ---------- */
-.val{display:inline-flex;align-items:center;gap:5px;font-size:14.5px;font-weight:600;
+.val{display:inline-flex;align-items:center;gap:var(--sp-50);font-size:14.5px;font-weight:600;
   color:var(--n-950);white-space:nowrap;font-variant-numeric:tabular-nums}
 /* A figure going the other way. Muted rather than red: points coming back is
    an ordinary operation, and red here would spend the alarm colour on it. */
@@ -960,9 +978,9 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
 .cell-bal.is-out svg{opacity:.55}
 
 /* --- row actions: labelled, and absent when they do not apply ----- */
-.row-acts{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.row-acts{display:flex;align-items:center;gap:var(--sp-75);justify-content:flex-end}
 html[dir="rtl"] .row-acts{justify-content:flex-start}
-.act{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;border-radius:var(--r-100);
+.act{display:inline-flex;align-items:center;gap:var(--sp-75);height:44px;padding:0 var(--sp-150);border-radius:var(--r-100);
   max-width:16ch;
   border:1px solid var(--n-300);background:#fff;font:inherit;font-size:13px;font-weight:600;
   color:var(--n-800);cursor:pointer;white-space:nowrap;transition:background .12s,border-color .12s}
@@ -983,7 +1001,7 @@ html[dir="rtl"] .row-acts{justify-content:flex-start}
 .act-no:hover{background:var(--n-100);border-color:var(--n-500)}
 
 /* A scope the reader did not set, worn openly and removable. */
-.scope{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--r-150);
+.scope{display:flex;align-items:center;gap:var(--sp-125);padding:var(--sp-150) var(--sp-200);border-radius:var(--r-150);
   background:var(--p-50);border:1px solid var(--p-200);margin-bottom:1.25rem;
   font-size:13.5px;color:var(--p-800)}
 .scope svg{flex:none;color:var(--p-600)}
@@ -998,13 +1016,13 @@ html[dir="rtl"] .row-acts{justify-content:flex-start}
    breakpoint each record becomes a card that stacks what the columns
    carried, in the order the decision needs it. */
 .cards{display:flex;flex-direction:column}
-.card-row{display:flex;flex-direction:column;gap:11px;padding:16px;
+.card-row{display:flex;flex-direction:column;gap:var(--sp-150);padding:var(--sp-200);
   border-bottom:1px solid var(--n-100);cursor:pointer}
 .card-row:last-child{border-bottom:none}
 .card-row:hover{background:var(--n-25)}
-.card-top{display:flex;align-items:flex-start;gap:11px}
-.card-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.card-acts{display:flex;gap:8px}
+.card-top{display:flex;align-items:flex-start;gap:var(--sp-150)}
+.card-meta{display:flex;align-items:center;gap:var(--sp-175);flex-wrap:wrap}
+.card-acts{display:flex;gap:var(--sp-100)}
 /* min-width:0 or the flex item refuses to shrink below its label and the
    pair pushes out of the card. */
 .card-acts .act{flex:1 1 0;min-width:0;justify-content:center;max-width:none;height:50px}
@@ -1025,15 +1043,15 @@ html[dir="rtl"] .row-acts{justify-content:flex-start}
 html[dir="rtl"] .pnl:not(.on){transform:translateX(-100%)}
 .pnl.on{transform:translateX(0)}
 .pnl.pnl-wide{width:min(840px,100vw)}
-.pnl-h{display:flex;align-items:flex-start;gap:12px;padding:20px 22px 16px;
+.pnl-h{display:flex;align-items:flex-start;gap:var(--sp-150);padding:var(--sp-250) var(--sp-300) var(--sp-200);
   border-bottom:1px solid var(--n-200);flex:none}
 .pnl-t{font-size:18px;font-weight:700;color:var(--n-950);letter-spacing:-.01em;line-height:1.3}
-.pnl-sub{font-size:13px;color:var(--n-700);margin-top:3px;line-height:1.5}
+.pnl-sub{font-size:13px;color:var(--n-700);margin-top:var(--sp-50);line-height:1.5}
 .pnl-x{margin-inline-start:auto;flex:none}
-.pnl-back-btn{flex:none;margin-inline-end:2px}
+.pnl-back-btn{flex:none;margin-inline-end:var(--sp-25)}
 html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
-.pnl-b{flex:1;overflow-y:auto;padding:20px 22px}
-.pnl-f{flex:none;display:flex;gap:10px;padding:16px 22px;border-top:1px solid var(--n-200);
+.pnl-b{flex:1;overflow-y:auto;padding:var(--sp-250) var(--sp-300)}
+.pnl-f{flex:none;display:flex;gap:var(--sp-125);padding:var(--sp-200) var(--sp-300);border-top:1px solid var(--n-200);
   background:var(--n-25)}
 .pnl-f .btn{flex:1}
 @media (max-width:620px){
@@ -1042,9 +1060,9 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
   /* Every segmented control, not only the one on Transfer points. Scoped to
      that screen, this left the Users control to overflow the page at 360. */
   .segs{display:flex;width:100%}
-  .seg{flex:1 1 0;min-width:0;justify-content:center;padding-inline:8px}
+  .seg{flex:1 1 0;min-width:0;justify-content:center;padding-inline:var(--sp-100)}
   .seg > span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .seg-n{padding:1px 5px}
+  .seg-n{padding:1px var(--sp-50)}
   .bal{flex-basis:100%;border-inline-start:none;border-top:1px solid var(--n-200)}
   .bal:first-child{border-top:none}
   .queue{flex-wrap:wrap}
@@ -1052,25 +1070,25 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
 }
 @media (max-width:560px){
   .pnl,.pnl.pnl-wide{width:100vw}
-  .pnl-b{padding:16px}
-  .pnl-h,.pnl-f{padding-inline:16px}
+  .pnl-b{padding:var(--sp-200)}
+  .pnl-h,.pnl-f{padding-inline:var(--sp-200)}
 }
 
 /* --- form controls inside panels ---------------------------------- */
-.fgrp{margin-bottom:18px}
-.flab{display:block;font-size:13px;font-weight:600;color:var(--n-900);margin-bottom:6px}
+.fgrp{margin-bottom:var(--sp-250)}
+.flab{display:block;font-size:13px;font-weight:600;color:var(--n-900);margin-bottom:var(--sp-75)}
 .fopt{font-weight:400;color:var(--n-600)}
 .finp,.ftxt,.fsel{width:100%;border:1px solid var(--n-300);border-radius:var(--r-100);
-  padding:10px 14px;font:inherit;font-size:14px;color:var(--n-950);background:#fff;outline:none;
+  padding:var(--sp-125) var(--sp-175);font:inherit;font-size:14px;color:var(--n-950);background:#fff;outline:none;
   transition:border-color .12s,box-shadow .12s}
 .finp:focus,.ftxt:focus,.fsel:focus{border-color:var(--p-500);box-shadow:var(--focus)}
 .finp,.fsel{height:50px}
 .ftxt{min-height:96px;resize:vertical;line-height:1.55}
-.fhint{font-size:12.5px;color:var(--n-700);margin-top:6px;line-height:1.5}
-.ferr{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
-  color:var(--danger-700);margin-top:6px}
+.fhint{font-size:12.5px;color:var(--n-700);margin-top:var(--sp-75);line-height:1.5}
+.ferr{display:flex;align-items:center;gap:var(--sp-75);font-size:12.5px;font-weight:600;
+  color:var(--danger-700);margin-top:var(--sp-75)}
 .finp[aria-invalid="true"],.ftxt[aria-invalid="true"]{border-color:var(--danger-500)}
-.fnote{display:flex;gap:10px;padding:12px 14px;border-radius:var(--r-100);background:var(--info-50);
+.fnote{display:flex;gap:var(--sp-125);padding:var(--sp-150) var(--sp-175);border-radius:var(--r-100);background:var(--info-50);
   border:1px solid var(--info-200);font-size:13px;color:var(--n-900);line-height:1.55}
 .fnote svg{flex:none;color:var(--info-700);margin-top:1px}
 .fnote.tone-warn{background:var(--warning-50);border-color:var(--warning-200)}
@@ -1079,8 +1097,8 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
 .fnote.tone-quiet svg{color:var(--n-700)}
 
 /* preset reasons — chips, because typing the same sentence weekly is a tax */
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.chip{border:1px solid var(--n-300);background:#fff;border-radius:999px;padding:7px 13px;
+.chips{display:flex;flex-wrap:wrap;gap:var(--sp-100);margin-bottom:var(--sp-125)}
+.chip{border:1px solid var(--n-300);background:#fff;border-radius:999px;padding:var(--sp-100) var(--sp-150);
   font:inherit;font-size:13px;color:var(--n-800);cursor:pointer;text-align:start;
   transition:background .12s,border-color .12s,color .12s}
 .chip:hover{background:var(--n-50);border-color:var(--n-400)}
@@ -1088,61 +1106,61 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
   font-weight:600}
 
 /* the points a transfer will move, previewed in riyal as you type */
-.pv-val{display:flex;align-items:baseline;gap:8px;padding:13px 15px;border-radius:var(--r-100);
-  background:var(--n-50);border:1px solid var(--n-200);margin-top:10px}
+.pv-val{display:flex;align-items:baseline;gap:var(--sp-100);padding:var(--sp-150) var(--sp-200);border-radius:var(--r-100);
+  background:var(--n-50);border:1px solid var(--n-200);margin-top:var(--sp-125)}
 .pv-val-l{font-size:12.5px;color:var(--n-700)}
 .pv-val-v{font-size:19px;font-weight:700;color:var(--n-950);margin-inline-start:auto;
   font-variant-numeric:tabular-nums}
 
 /* dropzone */
-.drop{border:1.5px dashed var(--n-300);border-radius:var(--r-150);padding:28px 20px;text-align:center;
+.drop{border:1.5px dashed var(--n-300);border-radius:var(--r-150);padding:var(--sp-350) var(--sp-250);text-align:center;
   background:var(--n-25);transition:border-color .12s,background .12s}
 .drop:hover{border-color:var(--p-400);background:var(--p-50)}
 .drop-ico{width:46px;height:46px;border-radius:var(--r-100);background:#fff;border:1px solid var(--n-200);
-  display:grid;place-items:center;margin:0 auto 12px;color:var(--n-700)}
+  display:grid;place-items:center;margin:0 auto var(--sp-150);color:var(--n-700)}
 .drop-t{font-size:14px;font-weight:600;color:var(--n-950)}
-.drop-d{font-size:12.5px;color:var(--n-700);margin-top:4px}
+.drop-d{font-size:12.5px;color:var(--n-700);margin-top:var(--sp-50)}
 .drop.has-file{border-style:solid;border-color:var(--success-200);background:var(--success-50)}
 .drop.has-file .drop-ico{color:var(--success-700);border-color:var(--success-200)}
 .rules{margin:0;padding:0;list-style:none}
-.rules li{display:flex;gap:9px;font-size:13px;color:var(--n-800);line-height:1.55;padding:5px 0}
-.rules li svg{flex:none;color:var(--success-700);margin-top:3px}
+.rules li{display:flex;gap:var(--sp-100);font-size:13px;color:var(--n-800);line-height:1.55;padding:var(--sp-50) 0}
+.rules li svg{flex:none;color:var(--success-700);margin-top:var(--sp-50)}
 
 /* --- the check shown before a file is uploaded --------------------
    The one place in the product where an unusable record is ever seen. */
-.check{border:1px solid var(--n-200);border-radius:var(--r-150);padding:15px 16px;background:var(--n-25)}
+.check{border:1px solid var(--n-200);border-radius:var(--r-150);padding:var(--sp-200) var(--sp-200);background:var(--n-25)}
 .check-h{font-size:13px;font-weight:700;color:var(--n-950)}
-.check-p{font-size:13px;color:var(--n-800);line-height:1.55;margin-top:9px}
+.check-p{font-size:13px;color:var(--n-800);line-height:1.55;margin-top:var(--sp-100)}
 
 /* --- file viewer -------------------------------------------------- */
-.vw-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.vw-bar{display:flex;align-items:center;gap:var(--sp-100);flex-wrap:wrap;margin-bottom:var(--sp-175)}
 .vw-tbl{width:100%;border-collapse:collapse;font-size:13.5px}
 .vw-tbl th{text-align:start;font-size:12px;font-weight:700;color:var(--n-700);
-  padding:8px 10px;border-bottom:1px solid var(--n-200);white-space:nowrap;
+  padding:var(--sp-100) var(--sp-125);border-bottom:1px solid var(--n-200);white-space:nowrap;
   letter-spacing:.02em;text-transform:uppercase}
-.vw-tbl td{padding:11px 10px;border-bottom:1px solid var(--n-100);vertical-align:top}
+.vw-tbl td{padding:var(--sp-150) var(--sp-125);border-bottom:1px solid var(--n-100);vertical-align:top}
 .vw-tbl tr[data-issue]:not([data-issue=""]) td{background:var(--danger-50)}
 .vw-tbl tr[data-issue="duplicate"] td{background:var(--warning-50)}
 .vw-line{font-variant-numeric:tabular-nums;color:var(--n-600);font-size:12.5px;width:1%;
   white-space:nowrap;text-align:end}
 html[dir="rtl"] .vw-line{text-align:start}
 .vw-name{font-weight:600;color:var(--n-950)}
-.vw-issue{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;
-  padding:3px 8px;border-radius:999px;white-space:nowrap}
+.vw-issue{display:inline-flex;align-items:center;gap:var(--sp-50);font-size:12px;font-weight:600;
+  padding:var(--sp-50) var(--sp-100);border-radius:999px;white-space:nowrap}
 .vw-issue.bad{background:var(--danger-100);color:var(--danger-700)}
 .vw-issue.dup{background:var(--warning-100);color:var(--warning-700)}
 .vw-issue.ok{color:var(--success-700)}
 
 /* --- decision trail: what a reviewer did, and why ------------------ */
-.trail{border:1px solid var(--n-200);border-radius:var(--r-150);padding:14px 16px;margin-bottom:18px}
-.trail-h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--n-950)}
-.trail-r{font-size:13.5px;color:var(--n-900);line-height:1.6;margin-top:8px;
-  padding-inline-start:12px;border-inline-start:2px solid var(--n-300)}
-.trail-m{font-size:12px;color:var(--n-700);margin-top:8px}
+.trail{border:1px solid var(--n-200);border-radius:var(--r-150);padding:var(--sp-175) var(--sp-200);margin-bottom:var(--sp-250)}
+.trail-h{display:flex;align-items:center;gap:var(--sp-100);font-size:13px;font-weight:700;color:var(--n-950)}
+.trail-r{font-size:13.5px;color:var(--n-900);line-height:1.6;margin-top:var(--sp-100);
+  padding-inline-start:var(--sp-150);border-inline-start:2px solid var(--n-300)}
+.trail-m{font-size:12px;color:var(--n-700);margin-top:var(--sp-100)}
 
 /* --- tabs on this screen reuse the segmented control, so switching a
        view looks the same here as it does on Users ------------------ */
-.tabs-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:1.25rem}
+.tabs-row{display:flex;align-items:center;gap:var(--sp-175);flex-wrap:wrap;margin-bottom:1.25rem}
 </style>
 <div id="navScrim" onclick="closeNav()" aria-hidden="true"></div>
 <div class="shell">
@@ -1185,8 +1203,8 @@ html[dir="rtl"] .vw-line{text-align:start}
     <a href="#/charges" class="nav-item" data-route="charges"><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-history"/></svg>
       <span class="nav-label" data-i18n="nav.chargeHistory">Charge history</span></a>
 
-    <div class="nav-group-label" data-i18n="nav.groupOffers" data-nav-offers>Offers</div>
-    <a href="#" class="nav-item" data-nav-offers><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-ticket"/></svg>
+    <div class="nav-group-label" data-i18n="nav.groupOffers" data-offers>Offers</div>
+    <a href="#" class="nav-item" data-offers><svg viewBox="0 0 24 24" width="20" height="20"><use href="#i-ticket"/></svg>
       <span class="nav-label" data-i18n="nav.offers">Offers</span></a>
 
     <div class="nav-group-label" data-i18n="nav.groupReports">Reports</div>
@@ -1238,10 +1256,10 @@ html[dir="rtl"] .vw-line{text-align:start}
   <main id="main" class="p-6 flex-1" data-i18n-aria="a11y.main" aria-label="Dashboard">
   <div id="view-overview" class="view">
     <!-- ---------- page header ---------- -->
-    <div class="flex flex-wrap items-end gap-4 mb-6">
+    <div class="flex flex-wrap items-end gap-4 page-head">
       <div class="min-w-0 flex-1">
         <h1 style="font-size:24px;font-weight:700;letter-spacing:-.01em" data-i18n="header.greeting"></h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px" data-i18n="header.subtitle">Here's what needs you today.</p>
+        <p style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)" data-i18n="header.subtitle">Here's what needs you today.</p>
       </div>
       <div class="hdr-actions flex items-center gap-2 flex-wrap">
         <div class="dd">
@@ -1260,7 +1278,7 @@ html[dir="rtl"] .vw-line{text-align:start}
       <section class="card col-span-12 lg:col-span-4 flex flex-col">
         <div class="card-h pb-3">
           <div class="min-w-0">
-            <div class="card-t" data-i18n="wallet.heading"></div>
+            <h2 class="card-t" data-i18n="wallet.heading"></h2>
             <div class="card-sub" data-i18n="wallet.availableCredits">Available credits</div>
           </div>
           <button class="icon-btn ms-auto shrink-0" style="border:1px solid var(--n-300)"
@@ -1276,7 +1294,7 @@ html[dir="rtl"] .vw-line{text-align:start}
                 <span class="shrink-0 mt-0.5" style="color:var(--danger-700)"><svg viewBox="0 0 24 24" width="18" height="18"><use href="#i-shield"/></svg></span>
                 <div class="min-w-0">
                   <div style="font-size:14px;font-weight:700;color:var(--danger-700)" data-i18n="wallet.integrityTitle"></div>
-                  <div style="font-size:12px;color:var(--n-800);margin-top:3px;line-height:1.5" data-i18n="wallet.integrityBody" data-i18n-vars='{"value":"@time.days:3"}'></div>
+                  <div style="font-size:12px;color:var(--n-800);margin-top:var(--sp-50);line-height:1.5" data-i18n="wallet.integrityBody" data-i18n-vars='{"value":"@time.days:3"}'></div>
                   <button class="btn-link mt-2" data-i18n="actions.reportIssue"></button>
                 </div>
               </div>
@@ -1292,7 +1310,7 @@ html[dir="rtl"] .vw-line{text-align:start}
               <svg viewBox="0 0 24 24" width="30" height="30" class="shrink-0" aria-hidden="true"><use href="#i-point"/></svg>
               <span class="num" style="font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1">1,096,860</span>
             </div>
-            <div style="font-size:13px;color:var(--n-700);margin-top:7px" data-i18n="wallet.sarEquivalent" data-i18n-vars='{"value":"219,372"}'>219,372 SAR</div>
+            <div style="font-size:13px;color:var(--n-700);margin-top:var(--sp-100)" data-i18n="wallet.sarEquivalent" data-i18n-vars='{"value":"219,372"}'>219,372 SAR</div>
             <div class="pt-3" style="border-top:1px dashed var(--n-200);margin-top:auto">
               <span class="pill rate-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13"><use href="#i-point"/></svg>
@@ -1305,9 +1323,9 @@ html[dir="rtl"] .vw-line{text-align:start}
 
       <!-- SUPPORTING FIGURES — separated into their own card -->
       <section class="card col-span-12 lg:col-span-8">
-        <div class="card-h" style="padding-bottom:20px">
+        <div class="card-h" style="padding-bottom:var(--sp-250)">
           <div class="min-w-0">
-            <div class="card-t" data-i18n="metrics.heading">Points activity</div>
+            <h2 class="card-t" data-i18n="metrics.heading">Points activity</h2>
             <div class="card-sub" data-i18n="metrics.subtitle"></div>
           </div>
           <span class="ms-auto" style="font-size:12px;color:var(--n-600)" data-i18n="header.comparedToPrevious"></span>
@@ -1346,7 +1364,7 @@ html[dir="rtl"] .vw-line{text-align:start}
 <section class="card col-span-12 lg:col-span-8">
         <div class="card-h pb-2 flex-wrap">
           <div class="min-w-0">
-            <div class="card-t" data-i18n="flow.title">Points issued vs redeemed</div>
+            <h2 class="card-t" data-i18n="flow.title">Points issued vs redeemed</h2>
             <div class="card-sub" data-i18n="flow.subtitleYear">Last 30 days</div>
           </div>
           <div class="flex items-center gap-4 ms-auto" style="font-size:12px">
@@ -1380,9 +1398,9 @@ html[dir="rtl"] .vw-line{text-align:start}
         </div>
       </section>
       <!-- OFFERS — rebuilt around the offers themselves, not three stacked counts -->
-      <section class="card col-span-12 lg:col-span-4 flex flex-col">
+      <section class="card col-span-12 lg:col-span-4 flex flex-col" data-offers>
         <div class="card-h pb-3">
-          <div class="card-t" data-i18n="offers.heading"></div>
+          <h2 class="card-t" data-i18n="offers.heading"></h2>
           <button class="btn-link ms-auto" data-i18n="offers.manageAll">Manage all</button>
         </div>
         <div class="px-5 pb-5 pt-1 flex-1 flex flex-col">
@@ -1407,10 +1425,10 @@ html[dir="rtl"] .vw-line{text-align:start}
       </section>
     </div>
 
-    <div class="grid grid-cols-12 gap-5 mb-6">
+    <div class="grid grid-cols-12 gap-5 mb-5">
       <section class="card col-span-12">
         <div class="card-h pb-3">
-          <div class="card-t" data-i18n="activity.heading">Recent activity</div>
+          <h2 class="card-t" data-i18n="activity.heading">Recent activity</h2>
           <button class="btn-link ms-auto" data-i18n="actions.viewAll">View all</button>
         </div>
         <div class="px-5 pb-5 pt-1">
@@ -1429,11 +1447,11 @@ html[dir="rtl"] .vw-line{text-align:start}
       <div class="card-h pb-4 flex-wrap">
         <div class="flex items-center gap-2.5 min-w-0">
           <div class="min-w-0">
-            <div class="card-t" data-i18n="attention.sectionTitle">Action needed</div>
+            <h2 class="card-t" data-i18n="attention.sectionTitle">Action needed</h2>
             <div class="card-sub" data-i18n="attention.subtitle">Sorted by urgency. Clear these first.</div>
           </div>
         </div>
-        <span class="pill pill-critical s-real ms-auto"><span class="num">5</span>&nbsp;<span data-i18n="attention.openCount">open</span></span>
+        <span class="pill pill-critical s-real ms-auto"><span class="num" id="attOpen">5</span>&nbsp;<span data-i18n="attention.openCount">open</span></span>
       </div>
 
       <!-- loading -->
@@ -1464,7 +1482,7 @@ html[dir="rtl"] .vw-line{text-align:start}
             <div class="att-t" data-i18n="attention.integrityTitle">Your points balance can't be verified</div>
             <div class="att-d" data-i18n="attention.integrityDesc" data-i18n-vars='{"value":"@time.days:3"}'></div>
           </div>
-          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.integrityCta"></span></button>
+          <button class="btn btn-ghost btn-sm shrink-0" onclick="go('settings')"><span data-i18n="attention.integrityCta"></span></button>
         </div>
         <div class="att-row sev-critical">
           <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-xcircle"/></svg></div>
@@ -1472,7 +1490,7 @@ html[dir="rtl"] .vw-line{text-align:start}
             <div class="att-t" data-i18n="attention.failedTitle">Transactions failed</div>
             <div class="att-d" data-i18n="attention.failedDesc" data-i18n-vars='{"count":3}'></div>
           </div>
-          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.failedCta"></span></button>
+          <button class="btn btn-ghost btn-sm shrink-0" onclick="go('transactions')"><span data-i18n="attention.failedCta"></span></button>
         </div>
         <div class="att-row sev-warning" id="attPending">
           <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-hourglass"/></svg></div>
@@ -1482,7 +1500,7 @@ html[dir="rtl"] .vw-line{text-align:start}
           </div>
           <button class="btn btn-ghost btn-sm shrink-0" onclick="goTransfers('uploaded')"><span data-i18n="attention.pendingCta"></span></button>
         </div>
-        <div class="att-row sev-warning">
+        <div class="att-row sev-warning" data-offers>
           <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-clock"/></svg></div>
           <div class="min-w-0 flex-1">
             <div class="att-t" data-i18n="attention.expiringTitle">Offers expiring within 7 days</div>
@@ -1513,7 +1531,7 @@ html[dir="rtl"] .vw-line{text-align:start}
           <span aria-current="page" data-i18n="nav.users"></span>
         </nav>
         <h1 style="font-size:24px;font-weight:700;letter-spacing:-.01em" data-i18n-coll="list.heading">Users</h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px" data-i18n-coll="list.subtitle"></p>
+        <p style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)" data-i18n-coll="list.subtitle"></p>
       </div>
       <button class="btn btn-primary" id="hdrReminder" onclick="openReminder()" hidden>
         <svg viewBox="0 0 24 24" width="16" height="16"><use href="#i-userplus"/></svg>
@@ -1536,7 +1554,8 @@ html[dir="rtl"] .vw-line{text-align:start}
       <div class="tbl-bar">
         <label class="tbl-search">
           <svg viewBox="0 0 24 24" width="17" height="17"><use href="#i-search"/></svg>
-          <input type="search" id="q" oninput="renderRows()" data-i18n-coll-ph="list.searchPlaceholder">
+          <input type="search" id="q" oninput="renderRows()" data-i18n-coll-ph="list.searchPlaceholder"
+                 data-i18n-aria="a11y.searchField">
         </label>
         <div class="tbl-bar-actions">
           <div class="dd">
@@ -1665,7 +1684,7 @@ html[dir="rtl"] .vw-line{text-align:start}
 
 <!-- ===== PREVIEW CONTROLS — review harness, not part of the product ===== -->
 <div id="pv" data-open="true">
-  <h4 id="pvHead" role="button" tabindex="0" onclick="togglePv()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePv()}" style="cursor:pointer;display:flex;align-items:center;gap:6px"><span id="pvCaret">▾</span><span>Preview controls</span></h4>
+  <h4 id="pvHead" role="button" tabindex="0" onclick="togglePv()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePv()}" style="cursor:pointer;display:flex;align-items:center;gap:var(--sp-75)"><span id="pvCaret">▾</span><span>Preview controls</span></h4>
   <div class="row"><span class="lbl">Language &amp; direction</span>
     <button onclick="setLang('ar')" id="pv-ar" aria-pressed="true">عربي · RTL</button>
     <button onclick="setLang('en')" id="pv-en" aria-pressed="false">English · LTR</button></div>
@@ -2500,7 +2519,9 @@ const I18N = {
     "releases.sample.5.title": "Add your card to Apple Wallet",
     "releases.sample.5.body": "Your WalaOne card can now be added to Apple Wallet, so it's there on your lock screen without needing to open the app first.\n\nOpen your profile, tap add to Apple Wallet, and your card is ready to use when you pay, like any other pass. If you follow more than one brand, each one gets its own card, so you can keep them all together.\n\nThis is available on iPhone for now.",
     "releases.sample.6.title": "A cleaner look for Arabic text",
-    "releases.sample.6.body": "We reworked how Arabic text looks throughout the app, from the font itself to the spacing between lines and letters.\n\nNumbers, dates and riyal amounts should now line up more consistently, and long paragraphs, like the terms you read when you join a programme, are easier to follow.\n\nThis affects the Arabic experience only. If you use WalaOne in English, nothing changes for you."
+    "releases.sample.6.body": "We reworked how Arabic text looks throughout the app, from the font itself to the spacing between lines and letters.\n\nNumbers, dates and riyal amounts should now line up more consistently, and long paragraphs, like the terms you read when you join a programme, are easier to follow.\n\nThis affects the Arabic experience only. If you use WalaOne in English, nothing changes for you.",
+    "a11y.selectRow": "Select {name}",
+    "a11y.searchField": "Search"
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -3322,7 +3343,9 @@ const I18N = {
     "releases.sample.5.title": "أضف بطاقتك إلى Apple Wallet",
     "releases.sample.5.body": "يمكنك الآن إضافة بطاقة ولاء ون إلى Apple Wallet، لتكون جاهزة على شاشة القفل دون الحاجة لفتح التطبيق أولًا.\n\nافتح ملفك الشخصي، واضغط على إضافة إلى Apple Wallet، لتصبح بطاقتك جاهزة للاستخدام عند الدفع تمامًا مثل أي بطاقة أخرى. وإذا كنت تتابع أكثر من علامة تجارية، فلكل واحدة بطاقتها الخاصة، لتحتفظ بها جميعًا في مكان واحد.\n\nهذه الميزة متاحة حاليًا على iPhone فقط.",
     "releases.sample.6.title": "مظهر أوضح للنص العربي",
-    "releases.sample.6.body": "أعدنا العمل على شكل النص العربي في أنحاء التطبيق، من الخط نفسه إلى المسافات بين الأسطر والحروف.\n\nأصبحت الأرقام والتواريخ ومبالغ الريال أكثر انتظامًا في محاذاتها، كما أصبحت الفقرات الطويلة، مثل الشروط التي تقرؤها عند انضمامك إلى أي برنامج، أسهل في القراءة.\n\nيخص هذا التحديث تجربة اللغة العربية فقط، فإذا كنت تستخدم ولاء ون بالإنجليزية، لن يتغيّر شيء لديك."
+    "releases.sample.6.body": "أعدنا العمل على شكل النص العربي في أنحاء التطبيق، من الخط نفسه إلى المسافات بين الأسطر والحروف.\n\nأصبحت الأرقام والتواريخ ومبالغ الريال أكثر انتظامًا في محاذاتها، كما أصبحت الفقرات الطويلة، مثل الشروط التي تقرؤها عند انضمامك إلى أي برنامج، أسهل في القراءة.\n\nيخص هذا التحديث تجربة اللغة العربية فقط، فإذا كنت تستخدم ولاء ون بالإنجليزية، لن يتغيّر شيء لديك.",
+    "a11y.selectRow": "تحديد {name}",
+    "a11y.searchField": "بحث"
   }
 };
 
@@ -3392,6 +3415,9 @@ function applyI18n(){
 
 function setLang(l){
   LANG = l;
+  // A choice the reader made about which language they read in should outlive
+  // a refresh. Wrapped because private windows and blocked site data throw.
+  try { localStorage.setItem("walaone.lang", l); } catch (e) {}
   const html = document.documentElement;
   html.lang = l;
   html.dir = (l === "ar") ? "rtl" : "ltr";     // structural mirror, not just copy
@@ -3934,7 +3960,7 @@ const notCollected = () => `<span class="person-name is-empty">${t("users.empty.
 const money = v => v > 0 ? riyal(v) : t("users.table.zeroValue");
 
 function txTable(rows, kind){
-  if (!rows.length) return `<div class="empty" style="padding:30px 20px">
+  if (!rows.length) return `<div class="empty" style="padding:var(--sp-400) var(--sp-250)">
       <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-inbox"/></svg></div>
       <div class="empty-t">${splitPart(t("users.table.empty"+kind+"Title"),"head")}</div>
       <div class="empty-d">${splitPart(t("users.table.empty"+kind+"Body"),"tail")}</div></div>`;
@@ -3978,7 +4004,7 @@ function offersTable(u){
   if (u.redeemed > 1 && u.offerSeen)
     seen.push({ key: u.offerSeen === "offers.sampleOffer1" ? "offers.sampleOffer2" : "offers.sampleOffer1",
                 date: u.joined });
-  if (!seen.length) return `<div class="empty" style="padding:30px 20px">
+  if (!seen.length) return `<div class="empty" style="padding:var(--sp-400) var(--sp-250)">
       <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-ticket"/></svg></div>
       <div class="empty-t">${splitPart(t("followers.offersTab.empty"), "head")}</div>
       <div class="empty-d">${splitPart(t("followers.offersTab.empty"), "tail")}</div></div>`;
@@ -3996,17 +4022,20 @@ function renderUser(){
   const host = document.getElementById("view-detail");
   const u = coll().rows().find(x => x.id === CURRENT);
   if (!host) return;
-  if (!u){ host.innerHTML = `<div class="empty" style="padding:60px 20px">
+  if (!u){ host.innerHTML = `<div class="empty" style="padding:60px var(--sp-250)">
       <div class="empty-t">${t("states.emptyTitle")}</div>
       <button class="btn btn-ghost btn-sm mt-3" onclick="go('users')">${t("nav.users")}</button></div>`; return; }
   const L = ledger(u);
   const field = (label, value) => `<div class="fld"><div class="fld-l">${label}</div><div class="fld-v">${value}</div></div>`;
 
   host.innerHTML = `
-    ${crumbs([{ label: t("nav.overview"), href: "#/overview", icon: HOME_ICON },
-              { label: ck("list.heading"), href: "#/" + COLL },
-              { label: u.registered ? u.name[LANG] : u.phone }])}
-    <h1 class="page-t page-head">${ck("detail.pageHeading")}</h1>
+    <div class="flex flex-wrap items-end gap-4 page-head">
+      <div class="min-w-0 flex-1">
+        ${crumbs([{ label: t("nav.overview"), href: "#/overview", icon: HOME_ICON },
+                  { label: ck("list.heading"), href: "#/" + COLL },
+                  { label: u.registered ? u.name[LANG] : u.phone }])}
+      </div>
+    </div>
 
     <section class="card mb-5">
       <div class="px-5 py-5 flex flex-wrap items-start gap-4">
@@ -4020,8 +4049,8 @@ function renderUser(){
               <svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-${u.registered ? "check" : "clock"}"/></svg>
               ${t(u.registered ? coll().statusOn : coll().statusOff)}</span>
           </div>
-          ${u.registered ? `<div class="ltr num" style="font-size:14px;color:var(--n-700);margin-top:4px">${u.phone}</div>` : ""}
-          <div style="font-size:13px;color:var(--n-600);margin-top:2px">
+          ${u.registered ? `<div class="ltr num" style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)">${u.phone}</div>` : ""}
+          <div style="font-size:13px;color:var(--n-600);margin-top:var(--sp-25)">
             ${interp(t(coll().sinceKey), { date: dfmt(u.joined) })}</div>
         </div>
         <div class="flex gap-2 flex-wrap">
@@ -4040,7 +4069,7 @@ function renderUser(){
 
     <div class="grid grid-cols-12 gap-4 mb-5">
       <div class="mt col-span-12 md:col-span-4" style="border-color:var(--p-200);background:var(--p-50)">
-        <div class="mt-l" style="display:flex;align-items:center;gap:6px">
+        <div class="mt-l" style="display:flex;align-items:center;gap:var(--sp-75)">
           <svg viewBox="0 0 24 24" width="13" height="13"><use href="#i-shield"/></svg>${t("users.detail.parked")}
           <button class="btn-link" style="font-size:11px" onclick="toast(t('users.detail.parkedExplainPending'))">
             ${t("users.detail.parkedWhat")}</button></div>
@@ -4064,12 +4093,12 @@ function renderUser(){
             <div class="card-t mb-3">${t("users.detail.personalInfo")}</div>
             ${field(t("users.detail.fullName"), u.registered ? u.name[LANG] : notCollected())}
             ${field(t("users.detail.mobile"), `<span class="ltr num">${u.phone}</span>` +
-              (u.registered ? ` <span class="pill pill-success" style="margin-inline-start:8px">
+              (u.registered ? ` <span class="pill pill-success" style="margin-inline-start:var(--sp-100)">
                 <svg viewBox="0 0 24 24" width="11" height="11"><use href="#i-check"/></svg>${t("users.detail.verified")}</span>` : ""))}
             ${field(t("users.detail.email"), u.email ? `<span class="ltr">${u.email}</span>` : notCollected())}
             ${field(t("users.detail.gender"), u.gender ? t("users.gender."+u.gender) : notCollected())}
             ${field(t("users.detail.fieldUserId"), `<span class="ltr cell-id">${uid(u)}</span>
-              <button class="btn-link" style="margin-inline-start:8px;font-size:12px"
+              <button class="btn-link" style="margin-inline-start:var(--sp-100);font-size:12px"
                 onclick="copyId('${uid(u)}')">${t("users.actions.copyUserId")}</button>`)}
           </div>`
         : TAB === "tx" ? txTable(L.tx, "Transactions")
@@ -4365,7 +4394,7 @@ function paintRows(){
                 ? u.name[LANG] : u.phone}</div>
               ${u.registered ? `<div class="person-sub ltr num">${u.phone}</div>` : ""}
               ${shown().some(c=>c.k==="status") ? "" : `<span class="pill ${u.registered ? "pill-success" : "pill-stage"}"
-                style="margin-top:6px"><svg viewBox="0 0 24 24" width="11" height="11"><use href="#i-${u.registered?"check":"clock"}"/></svg>
+                style="margin-top:var(--sp-75)"><svg viewBox="0 0 24 24" width="11" height="11"><use href="#i-${u.registered?"check":"clock"}"/></svg>
                 ${t(u.registered ? coll().statusOn : coll().statusOff)}</span>`}
             </div></div></td>`;
         case "userId": return `<td><span class="cell-id ltr">${uid(u)}</span></td>`;
@@ -4384,7 +4413,9 @@ function paintRows(){
       }
     };
     return `<tr data-selected="${sel}" onclick="openUser(${u.id})">
-      <td><button class="cb" role="checkbox" aria-checked="${sel}" onclick="event.stopPropagation();toggleOne(${u.id})">
+      <td><button class="cb" role="checkbox" aria-checked="${sel}"
+        aria-label="${esc(interp(t("a11y.selectRow"), { name: u.registered ? u.name[LANG] : u.phone }))}"
+        onclick="event.stopPropagation();toggleOne(${u.id})">
         <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.2"
         stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg></button></td>
       ${shown().map(c=>cell(c.k)).join("")}
@@ -4865,7 +4896,7 @@ function renderTransfers(){
         ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
                   { label:t("transfers.heading") }])}
         <h1 class="page-t">${esc(t("transfers.heading"))}</h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("transfers.subtitle"))}</p>
+        <p style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)">${esc(t("transfers.subtitle"))}</p>
       </div>
       <div class="dd">
         <button class="btn btn-primary" id="ctaBtn" aria-haspopup="menu" aria-expanded="false"
@@ -4917,6 +4948,7 @@ function renderTransfers(){
         <label class="tbl-search">
           <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
           <input type="search" id="tq" oninput="TPAGE=1;renderTRows()"
+                 aria-label="${esc(t("a11y.searchField"))}"
                  placeholder="${esc(t(TTAB === "bulk" ? "transfers.search.placeholder" : "transfers.search.placeholderIndividual"))}">
         </label>
         <div class="tbl-bar-actions">
@@ -5136,7 +5168,7 @@ function bulkCard(b){
         <span class="file-sub"><span class="num ltr">${esc(b.id)}</span><span>· ${esc(staffOf(b.by))}</span></span>
       </span>
     </div>
-    <div class="card-meta" style="gap:10px">${statusPill(shownStatus(b))}${progressNote(b)}</div>
+    <div class="card-meta" style="gap:var(--sp-125)">${statusPill(shownStatus(b))}${progressNote(b)}</div>
     ${recCell(b)}
     <div class="card-meta">${pointsCell(b.points)}${valueCell(b)}
       <span class="cell-date" style="margin-inline-start:auto">${esc(dfmt(b.at))}</span></div>
@@ -5278,8 +5310,8 @@ function openBatch(id){
     title: b.file,
     sub: b.id,
     body: `${trail}
-      <div style="margin-bottom:6px">${statusPill(shownStatus(b))}${REVIEWING_ENABLED && isStuck(b)
-        ? `<span class="stuck" style="margin-inline-start:10px"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div style="margin-bottom:var(--sp-75)">${statusPill(shownStatus(b))}${REVIEWING_ENABLED && isStuck(b)
+        ? `<span class="stuck" style="margin-inline-start:var(--sp-125)"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg>
            ${esc(interp(t("transfers.status.runningFor"), { n: elapsed(b.startedAt) }))}</span>` : ""}</div>
       ${fldRow(t("transfers.columns.uploadedBy"), `${esc(staffOf(b.by))} <span class="person-sub num ltr" style="display:block">${esc(STAFF[b.by]?.ph || "")}</span>`)}
       ${fldRow(t("transfers.columns.uploaded"), esc(dfmt(b.at)))}
@@ -5290,7 +5322,7 @@ function openBatch(id){
       ${b.decidedAt && b.status !== "rejected" ? `<div class="fld"><div class="fld-v" style="flex:1 1 100%">${
         esc(interp(t("transfers.detail.decidedBy"),
                    { name: staffOf(b.decidedBy), date: dfmt(b.decidedAt) }))}</div></div>` : ""}
-      <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
+      <div style="margin-top:var(--sp-250);display:flex;flex-direction:column;gap:var(--sp-125)">
         <button class="btn btn-ghost w-full" onclick="openViewer('${b.id}')">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-eye"/></svg>
           <span>${esc(t("transfers.actions.viewFile"))}</span></button>
@@ -5323,13 +5355,13 @@ function openApprove(id){
   openPanel({
     title: t("transfers.approve.title"),
     sub: b.file,
-    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:16px">${
+    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:var(--sp-200)">${
         esc(interp(t("transfers.approve.body"), { points: fmt(b.points), count: fmt(ok) }))}</p>
-      <p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:16px">${
+      <p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:var(--sp-200)">${
         esc(interp(t("transfers.approve.cost"), { value: fmt(cost) }))}</p>
       <div class="pv-val"><span class="pv-val-l">${esc(t("transfers.approve.after"))}</span>
         <span class="pv-val-v" style="${short ? "color:var(--danger-700)" : ""}">${pointsCell(after)}</span></div>
-      ${short ? `<div class="fnote tone-warn" style="margin-top:16px">
+      ${short ? `<div class="fnote tone-warn" style="margin-top:var(--sp-200)">
         <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-alert"/></svg>
         <span>${esc(t("transfers.approve.insufficient"))}</span></div>` : ""}`,
     foot: `<button class="btn btn-ghost" onclick="panelBack()">${esc(t("transfers.approve.cancel"))}</button>
@@ -5354,7 +5386,7 @@ function openReject(id){
   openPanel({
     title: t("transfers.reject.title"),
     sub: b.file,
-    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:16px">${esc(t("transfers.reject.intro"))}</p>
+    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:var(--sp-200)">${esc(t("transfers.reject.intro"))}</p>
       <div class="fgrp">
         <span class="flab">${esc(t("transfers.reject.presetsLabel"))}</span>
         <div class="chips" id="rjChips">
@@ -5434,10 +5466,10 @@ function renderViewer(){
   const host = document.getElementById("vwHost"); if (!host) return;
   const b = batchById(VW.id), all = fileRows(b), shown = all.slice(0, VW_CAP);
   host.innerHTML = `
-    <div class="fnote tone-quiet" style="margin-bottom:14px">
+    <div class="fnote tone-quiet" style="margin-bottom:var(--sp-175)">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
       <span>${esc(t("transfers.viewer.lineNote"))}</span></div>
-    ${all.length === 0 ? `<div class="empty" style="padding:30px 20px">
+    ${all.length === 0 ? `<div class="empty" style="padding:var(--sp-400) var(--sp-250)">
         <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-inbox"/></svg></div>
         <div class="empty-t">${esc(t("transfers.viewer.emptyFiltered"))}</div></div>`
       : `<div class="tbl-scroll"><table class="vw-tbl"><thead><tr>
@@ -5451,7 +5483,7 @@ function renderViewer(){
           <td><span class="num ltr">${esc(r.phone)}</span></td>
           <td><span class="num">${fmt(r.points)}</span></td></tr>`).join("")}
         </tbody></table></div>
-        ${all.length > VW_CAP ? `<div class="fhint" style="margin-top:12px;text-align:center">${
+        ${all.length > VW_CAP ? `<div class="fhint" style="margin-top:var(--sp-150);text-align:center">${
           esc(interp(t("transfers.viewer.capped"), { n: fmt(VW_CAP), total: fmt(all.length) }))}</div>` : ""}`}`;
 }
 
@@ -5462,13 +5494,13 @@ function openSingle(){
   SG = { user:null, points:"", src:"loyalty" };
   openPanel({
     title: t("transfers.single.title"),
-    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:18px">${esc(t("transfers.single.intro"))}</p>
+    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:var(--sp-250)">${esc(t("transfers.single.intro"))}</p>
       <div class="fgrp">
         <label class="flab" for="sgWho">${esc(t("transfers.single.recipientLabel"))}</label>
         <input class="finp" id="sgWho" data-autofocus autocomplete="off" role="combobox"
           aria-expanded="false" aria-controls="sgList" oninput="sgSearch()"
           placeholder="${esc(t("transfers.single.recipientPlaceholder"))}">
-        <div id="sgList" role="listbox" style="margin-top:6px"></div>
+        <div id="sgList" role="listbox" style="margin-top:var(--sp-75)"></div>
         <div class="ferr" id="sgWhoErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
           ${esc(t("transfers.single.errNoRecipient"))}</div>
       </div>
@@ -5509,7 +5541,7 @@ function sgSearch(){
   const hits = USERS.filter(u => u.registered).filter(u =>
     [u.name?.ar, u.name?.en, u.phone].filter(Boolean).some(v => String(v).toLowerCase().includes(q))).slice(0, 5);
   list.innerHTML = hits.length ? hits.map(u => `<button class="dd-opt" role="option" aria-selected="false"
-      type="button" onclick="sgPick(${u.id})" style="border:1px solid var(--n-200);border-radius:var(--r-100);margin-bottom:4px">
+      type="button" onclick="sgPick(${u.id})" style="border:1px solid var(--n-200);border-radius:var(--r-100);margin-bottom:var(--sp-50)">
       <span class="avatar avatar-txt" style="inline-size:30px;block-size:30px;font-size:11px" aria-hidden="true">${esc(initials(u))}</span>
       <span class="min-w-0 text-start"><span style="font-weight:600;display:block">${esc(nameOf(u.name))}</span>
         <span class="num ltr" style="font-size:12px;color:var(--n-700)">${esc(u.phone)}</span></span></button>`).join("")
@@ -5563,8 +5595,8 @@ function openUpload(){
   UP = { file:null, total:0, invalid:0, dup:0, src:"file" };
   openPanel({
     title: t("transfers.upload.title"),
-    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:18px">${esc(t("transfers.upload.intro"))}</p>
-      <button class="btn btn-ghost w-full" style="margin-bottom:16px" onclick="toast(t('transfers.upload.templateStarted'))">
+    body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:var(--sp-250)">${esc(t("transfers.upload.intro"))}</p>
+      <button class="btn btn-ghost w-full" style="margin-bottom:var(--sp-200)" onclick="toast(t('transfers.upload.templateStarted'))">
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
         <span>${esc(t("transfers.upload.template"))}</span></button>
       <div class="drop" id="upDrop">
@@ -5574,7 +5606,7 @@ function openUpload(){
         <button class="btn btn-ghost btn-sm mt-3" onclick="upPick()">${esc(t("transfers.upload.browse"))}</button>
       </div>
       <div id="upCheck"></div>
-      <div class="fgrp" style="margin-top:18px">
+      <div class="fgrp" style="margin-top:var(--sp-250)">
         <label class="flab" for="upSrc">${esc(t("transfers.upload.sourceLabel"))}</label>
         <select class="fsel" id="upSrc">
           ${["loyalty","invoice","referral","b2b","file"].map(x =>
@@ -5623,9 +5655,9 @@ function renderUpCheck(){
   const usable = upUsable(), bad = UP.invalid + UP.dup, none = usable === 0;
   const pct = n => UP.total ? (n / UP.total * 100) : 0;
   const seg = (n, cls) => n ? `<span class="rec-seg ${cls}" style="width:${pct(n)}%"></span>` : "";
-  host.innerHTML = `<div class="check" style="margin-top:16px">
+  host.innerHTML = `<div class="check" style="margin-top:var(--sp-200)">
     <div class="check-h">${esc(t("transfers.upload.checkHeading"))}</div>
-    <div class="rec-bar" style="margin:10px 0 9px" aria-hidden="true">${
+    <div class="rec-bar" style="margin:var(--sp-125) 0 var(--sp-100)" aria-hidden="true">${
       seg(usable,"rec-ok")}${seg(UP.invalid,"rec-bad")}${seg(UP.dup,"rec-dup")}</div>
     <div class="rec-txt">
       ${usable ? `<span class="rec-n ok">${esc(interp(t("transfers.records.validCount"), { n: fmt(usable) }))}</span>` : ""}
@@ -5637,10 +5669,10 @@ function renderUpCheck(){
             : t("transfers.upload.allClean"))}</p>
     ${none ? "" : `<p class="check-p" style="font-weight:600;color:var(--n-950)">${
       esc(interp(t("transfers.upload.willUpload"), { n: fmt(usable) }))}</p>`}
-    ${bad ? `<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="openUpReview()">
+    ${bad ? `<button class="btn btn-ghost btn-sm" style="margin-top:var(--sp-125)" onclick="openUpReview()">
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-eye"/></svg>
         <span>${esc(t("transfers.upload.reviewData"))}</span></button>
-      <p class="fhint" style="margin-top:9px">${esc(t("transfers.upload.fixAndRetry"))}</p>` : ""}
+      <p class="fhint" style="margin-top:var(--sp-100)">${esc(t("transfers.upload.fixAndRetry"))}</p>` : ""}
   </div>`;
 }
 
@@ -5671,7 +5703,7 @@ function renderUpReview(){
              : all.filter(r => r.issue === UPR.filter);
   const chip = k => `<button class="chip" type="button" aria-pressed="${UPR.filter === k}" onclick="uprFilter('${k}')">
       ${esc(t("transfers.viewer.filter" + k[0].toUpperCase() + k.slice(1)))}
-      <span class="num" style="opacity:.7;margin-inline-start:5px">${fmt(counts[k])}</span></button>`;
+      <span class="num" style="opacity:.7;margin-inline-start:var(--sp-50)">${fmt(counts[k])}</span></button>`;
   const issueTag = r => {
     if (r.issue === "duplicate")
       return `<span class="vw-issue dup"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-return"/></svg>
@@ -5683,11 +5715,11 @@ function renderUpReview(){
       ${esc(t("transfers.viewer.noIssue"))}</span>`;
   };
   host.innerHTML = `
-    <div class="fnote tone-quiet" style="margin-bottom:14px">
+    <div class="fnote tone-quiet" style="margin-bottom:var(--sp-175)">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
       <span>${esc(t("transfers.viewer.lineNote"))}</span></div>
     <div class="vw-bar">${chip("all")}${chip("valid")}${chip("invalid")}${chip("duplicate")}</div>
-    ${rows.length === 0 ? `<div class="empty" style="padding:30px 20px">
+    ${rows.length === 0 ? `<div class="empty" style="padding:var(--sp-400) var(--sp-250)">
         <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#i-check"/></svg></div>
         <div class="empty-t">${esc(t("transfers.viewer.emptyFiltered"))}</div></div>`
       : `<div class="tbl-scroll"><table class="vw-tbl"><thead><tr>
@@ -5704,7 +5736,7 @@ function renderUpReview(){
                                  : `<span class="num">${typeof r.points === "number" ? fmt(r.points) : esc(r.points)}</span>`}</td>
           <td>${issueTag(r)}</td></tr>`).join("")}
         </tbody></table></div>
-        ${rows.length > VW_CAP ? `<div class="fhint" style="margin-top:12px;text-align:center">${
+        ${rows.length > VW_CAP ? `<div class="fhint" style="margin-top:var(--sp-150);text-align:center">${
           esc(interp(t("transfers.viewer.capped"), { n: fmt(VW_CAP), total: fmt(rows.length) }))}</div>` : ""}`}`;
 }
 
@@ -5834,6 +5866,11 @@ function attentionCounts(){
     document.getElementById(id).hidden = n === 0;
   };
   set("attPending", BATCHES.filter(b => b.status === "uploaded").length);
+  // The badge counts what is on screen. A hidden row must not be counted, or
+  // the header claims work the list cannot show.
+  const open = document.getElementById("attOpen");
+  if (open) open.textContent = fmt([...document.querySelectorAll(".att-row")]
+    .filter(r => !r.hidden && r.offsetParent !== null).length);
 }
 
 function navQueueBadge(){
@@ -6024,9 +6061,9 @@ function renderTransactions(){
         ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
                   { label:t("transactions.heading") }])}
         <h1 class="page-t">${esc(t("transactions.heading"))}</h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("transactions.subtitle"))}</p>
+        <p style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)">${esc(t("transactions.subtitle"))}</p>
       </div>
-      <span class="pill pill-stage" style="font-size:13.5px;padding:8px 14px">${
+      <span class="pill pill-stage" style="font-size:13.5px;padding:var(--sp-100) var(--sp-175)">${
         esc(interp(t("transactions.count"), { n: fmt(TXNS.length) }))}</span>
     </div>
 
@@ -6044,6 +6081,7 @@ function renderTransactions(){
         <label class="tbl-search">
           <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
           <input type="search" id="xq" oninput="XPAGE=1;renderXRows()"
+                 aria-label="${esc(t("a11y.searchField"))}"
                  placeholder="${esc(t("transactions.search.placeholder"))}">
         </label>
         <div class="tbl-bar-actions">
@@ -6178,7 +6216,7 @@ function xCard(x){
   return `<div class="card-row" onclick="openTxn('${x.id}')" tabindex="0"
       onkeydown="if(event.key==='Enter'){openTxn('${x.id}')}">
     <div class="card-top">${xUserCell(x.user)}</div>
-    <div class="card-meta" style="gap:10px">
+    <div class="card-meta" style="gap:var(--sp-125)">
       <span class="pill pill-stage">${esc(t("transactions.type." + x.type))}</span></div>
     <div class="card-meta">${xPoints(x)}${xValueCell(x)}
       <span class="cell-date" style="margin-inline-start:auto">${esc(dfmt(x.at))}</span></div>
@@ -6225,7 +6263,7 @@ function openTxn(id){
                  : t("transactions.panel.noReference"),
     sub: dfmt(x.at),
     body: `
-      <div class="fgrp" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div class="fgrp" style="display:flex;align-items:center;gap:var(--sp-150);flex-wrap:wrap">
         ${xDirPill(x.dir)}
         <span class="pill pill-stage">${esc(t("transactions.type." + x.type))}</span>
       </div>
@@ -6233,9 +6271,9 @@ function openTxn(id){
         <span class="pv-val-v">${xPoints(x)}</span></div>
       <div class="pv-val"><span class="pv-val-l">${esc(t("transactions.columns.value"))}</span>
         <span class="pv-val-v">${xValueCell(x)}</span></div>
-      <div class="fhint" style="margin-bottom:18px">${esc(t("transfers.value.rate"))}</div>
+      <div class="fhint" style="margin-bottom:var(--sp-250)">${esc(t("transfers.value.rate"))}</div>
 
-      <div class="trail-h" style="margin-bottom:4px">${esc(t("transactions.panel.sectionDetails"))}</div>
+      <div class="trail-h" style="margin-bottom:var(--sp-50)">${esc(t("transactions.panel.sectionDetails"))}</div>
       ${fldRow(t("transactions.columns.reference"),
                x.ref ? `<span class="ltr num">${esc(x.ref)}</span>` : xEmpty())}
       ${fldRow(t("transactions.columns.originId"),
@@ -6246,14 +6284,14 @@ function openTxn(id){
                          : `<span style="color:var(--n-600)">${esc(t("transactions.panel.noComment"))}</span>`)}
       ${fldRow(t("transactions.columns.date"), esc(dfmt(x.at)))}
 
-      <div class="trail-h" style="margin:22px 0 4px">${esc(t("transactions.panel.sectionPerson"))}</div>
+      <div class="trail-h" style="margin:var(--sp-300) 0 var(--sp-50)">${esc(t("transactions.panel.sectionPerson"))}</div>
       <div class="fld"><div class="fld-v" style="flex:1 1 100%">${xUserCell(u)}</div></div>
       ${fldRow(t("transactions.columns.registration"),
                `<span class="pill ${u.registered ? "pill-success" : "pill-stage"}">
                   <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><use href="#i-${u.registered ? "check" : "clock"}"/></svg>
                   ${esc(t(u.registered ? "users.status.registered" : "users.status.notRegistered"))}</span>`)}
 
-      ${b ? `<div style="margin-top:20px">
+      ${b ? `<div style="margin-top:var(--sp-250)">
         <button class="btn btn-ghost w-full" onclick="closePanel();goBatch('${b.id}')">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-file"/></svg>
           <span>${esc(interp(t("transactions.panel.fromFile"), { file: b.file }))}</span></button></div>` : ""}`,
@@ -6328,12 +6366,12 @@ function renderXFilters(){
       [["all", t("transfers.filters.any")], ["reg", t("users.status.registered")],
        ["unreg", t("users.status.notRegistered")]]) +
     `<div class="fil-group"><div class="fil-h">${esc(t("transactions.filters.dateRange"))}</div>
-      <div style="display:flex;gap:8px;padding:2px 6px 6px">
-        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:4px">${esc(t("transactions.filters.dateFrom"))}</span>
-          <input type="date" class="finp" style="height:44px;padding:6px 10px;font-size:13px" value="${XFILT.from}"
+      <div style="display:flex;gap:var(--sp-100);padding:var(--sp-25) var(--sp-75) var(--sp-75)">
+        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:var(--sp-50)">${esc(t("transactions.filters.dateFrom"))}</span>
+          <input type="date" class="finp" style="height:44px;padding:var(--sp-75) var(--sp-125);font-size:13px" value="${XFILT.from}"
                  onclick="event.stopPropagation()" onchange="event.stopPropagation();xfilDate('from',this.value)"></label>
-        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:4px">${esc(t("transactions.filters.dateTo"))}</span>
-          <input type="date" class="finp" style="height:44px;padding:6px 10px;font-size:13px" value="${XFILT.to}"
+        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:var(--sp-50)">${esc(t("transactions.filters.dateTo"))}</span>
+          <input type="date" class="finp" style="height:44px;padding:var(--sp-75) var(--sp-125);font-size:13px" value="${XFILT.to}"
                  onclick="event.stopPropagation()" onchange="event.stopPropagation();xfilDate('to',this.value)"></label>
       </div></div>` +
     `<div class="fil-foot"><button class="btn-link" onclick="event.stopPropagation();xClearFilters()">${
@@ -6489,7 +6527,7 @@ function renderCharges(){
         ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
                   { label:t("charge.heading") }])}
         <h1 class="page-t">${esc(t("charge.heading"))}</h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("charge.subtitle"))}</p>
+        <p style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)">${esc(t("charge.subtitle"))}</p>
       </div>
     </div>
 
@@ -6498,6 +6536,7 @@ function renderCharges(){
         <label class="tbl-search">
           <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
           <input type="search" id="cq" oninput="CPAGE=1;renderCRows()"
+                 aria-label="${esc(t("a11y.searchField"))}"
                  placeholder="${esc(t("charge.search.placeholder"))}">
         </label>
         <div class="tbl-bar-actions">
@@ -6555,7 +6594,7 @@ function renderCharges(){
         <div class="tbl-foot" id="cFoot"></div>
       </div>
     </div>
-    <p class="fhint" style="margin-top:12px">${esc(t("charge.rate"))}</p>`;
+    <p class="fhint" style="margin-top:var(--sp-150)">${esc(t("charge.rate"))}</p>`;
   renderCRows();
 }
 
@@ -6676,11 +6715,11 @@ function openCharge(id){
         <span class="pv-val-v">${pointsCell(c.points)}</span></div>
       <div class="pv-val"><span class="pv-val-l">${esc(t("charge.columns.amount"))}</span>
         <span class="pv-val-v">${riyal(c.amount)}</span></div>
-      <div class="fnote tone-quiet" style="margin-top:14px">
+      <div class="fnote tone-quiet" style="margin-top:var(--sp-175)">
         <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-calendar"/></svg>
         <span>${esc(interp(t("charge.panel.validFor"), { from: dfmt(c.at), to: dfmt(c.ends) }))}</span></div>
 
-      <div class="trail-h" style="margin:22px 0 4px">${esc(t("charge.panel.sectionPaperwork"))}</div>
+      <div class="trail-h" style="margin:var(--sp-300) 0 var(--sp-50)">${esc(t("charge.panel.sectionPaperwork"))}</div>
       ${fldRow(t("charge.columns.invoice"),
                c.invoice ? `<span class="ltr">${esc(c.invoice)}</span>` : chEmpty("noInvoice"))}
       ${fldRow(t("charge.columns.purchaseOrder"),
@@ -6688,7 +6727,7 @@ function openCharge(id){
       ${fldRow(t("charge.columns.notes"),
                c.notes ? esc(t("charge." + c.notes)) : chEmpty("noNotes"))}
 
-      <div class="trail-h" style="margin:22px 0 4px">${esc(t("charge.panel.sectionAddedBy"))}</div>
+      <div class="trail-h" style="margin:var(--sp-300) 0 var(--sp-50)">${esc(t("charge.panel.sectionAddedBy"))}</div>
       <div class="fld"><div class="fld-v" style="flex:1 1 100%">${chCell(c.by)}</div></div>`,
     foot: `<button class="btn btn-ghost" onclick="closePanel();go('transfers')">
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-transfer"/></svg>
@@ -6838,7 +6877,7 @@ function renderExports(){
         ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
                   { label:t("exports.heading") }])}
         <h1 class="page-t">${esc(t("exports.heading"))}</h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("exports.subtitle"))}</p>
+        <p style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)">${esc(t("exports.subtitle"))}</p>
       </div>
     </div>
 
@@ -6847,6 +6886,7 @@ function renderExports(){
         <label class="tbl-search">
           <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
           <input type="search" id="eq" oninput="EPAGE=1;renderERows()"
+                 aria-label="${esc(t("a11y.searchField"))}"
                  placeholder="${esc(t("exports.search.placeholder"))}">
         </label>
         <div class="tbl-bar-actions">
@@ -7063,12 +7103,12 @@ function renderEFilters(){
     group("by", t("exports.filters.requestedBy"),
       [["all", t("transfers.filters.any")], ...people.map(p => [p, p])]) +
     `<div class="fil-group"><div class="fil-h">${esc(t("exports.filters.dateRange"))}</div>
-      <div style="display:flex;gap:8px;padding:2px 6px 6px">
-        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:4px">${esc(t("exports.filters.dateFrom"))}</span>
-          <input type="date" class="finp" style="height:44px;padding:6px 10px;font-size:13px" value="${EFILT.from}"
+      <div style="display:flex;gap:var(--sp-100);padding:var(--sp-25) var(--sp-75) var(--sp-75)">
+        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:var(--sp-50)">${esc(t("exports.filters.dateFrom"))}</span>
+          <input type="date" class="finp" style="height:44px;padding:var(--sp-75) var(--sp-125);font-size:13px" value="${EFILT.from}"
                  onclick="event.stopPropagation()" onchange="event.stopPropagation();efilDate('from',this.value)"></label>
-        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:4px">${esc(t("exports.filters.dateTo"))}</span>
-          <input type="date" class="finp" style="height:44px;padding:6px 10px;font-size:13px" value="${EFILT.to}"
+        <label style="flex:1"><span class="fhint" style="display:block;margin-bottom:var(--sp-50)">${esc(t("exports.filters.dateTo"))}</span>
+          <input type="date" class="finp" style="height:44px;padding:var(--sp-75) var(--sp-125);font-size:13px" value="${EFILT.to}"
                  onclick="event.stopPropagation()" onchange="event.stopPropagation();efilDate('to',this.value)"></label>
       </div></div>` +
     `<div class="fil-foot"><button class="btn-link" onclick="event.stopPropagation();eClearFilters()">${
@@ -7207,12 +7247,12 @@ function credsStep(){
         <div class="ferr" id="lgPassErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
           <span id="lgPassErrTxt">${esc(t("login.errPassword"))}</span></div>
       </div>
-      <button class="btn btn-primary" style="margin-top:6px" onclick="doLogin()">${esc(t("login.submit"))}</button>
-      <div style="text-align:center;margin-top:16px">
+      <button class="btn btn-primary" style="margin-top:var(--sp-75)" onclick="doLogin()">${esc(t("login.submit"))}</button>
+      <div style="text-align:center;margin-top:var(--sp-200)">
         <button class="auth-link" id="lgHelpBtn" aria-expanded="false" aria-controls="lgHelp"
                 onclick="lgHelp()">${esc(t("login.forgot"))}</button>
       </div>
-      <div class="fnote tone-quiet" id="lgHelp" style="margin-top:14px" hidden>
+      <div class="fnote tone-quiet" id="lgHelp" style="margin-top:var(--sp-175)" hidden>
         <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-info"/></svg>
         <span>${esc(t("login.forgotHelp"))}</span></div>
     </div>`;
@@ -7237,11 +7277,11 @@ function otpStep(){
         <div class="ferr" id="otpErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
           <span id="otpErrTxt"></span></div>
       </div>
-      <button class="btn btn-primary" style="margin-top:6px" onclick="doOtp()">${esc(t("otp.submit"))}</button>
-      <div style="text-align:center;margin-top:16px">
+      <button class="btn btn-primary" style="margin-top:var(--sp-75)" onclick="doOtp()">${esc(t("otp.submit"))}</button>
+      <div style="text-align:center;margin-top:var(--sp-200)">
         <span id="otpResend"></span>
       </div>
-      <div style="text-align:center;margin-top:14px">
+      <div style="text-align:center;margin-top:var(--sp-175)">
         <button class="auth-link" style="color:var(--n-700)" onclick="authBack()">${esc(t("otp.back"))}</button>
       </div>
     </div>`;
@@ -7385,13 +7425,13 @@ function renderSettings(){
         ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
                   { label:t("settings.heading") }])}
         <h1 class="page-t">${esc(t("settings.heading"))}</h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("settings.subtitle"))}</p>
+        <p style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)">${esc(t("settings.subtitle"))}</p>
       </div>
     </div>
 
     <div class="set-wrap">
       <section class="set-card">
-        <div class="set-h">${esc(t("settings.section.profile"))}</div>
+        <h2 class="set-h">${esc(t("settings.section.profile"))}</h2>
         <div class="set-body">
           <div>
             <div class="set-lab">${esc(t("settings.field.logo"))}${setDirty("logo")
@@ -7409,7 +7449,7 @@ function renderSettings(){
                   ${SET.logo ? `<button class="btn btn-ghost btn-sm" onclick="setLogo(null)">${
                     esc(t("settings.logo.remove"))}</button>` : ""}
                 </div>
-                <div class="fhint" style="margin-top:8px">${esc(t("settings.field.logoHint"))}</div>
+                <div class="fhint" style="margin-top:var(--sp-100)">${esc(t("settings.field.logoHint"))}</div>
               </div>
             </div>
           </div>
@@ -7419,7 +7459,7 @@ function renderSettings(){
       </section>
 
       <section class="set-card">
-        <div class="set-h">${esc(t("settings.section.contact"))}</div>
+        <h2 class="set-h">${esc(t("settings.section.contact"))}</h2>
         <div class="set-body">
           ${setField("supportEmail", "text")}
           ${setField("supportPhone", "text")}
@@ -7427,7 +7467,7 @@ function renderSettings(){
       </section>
 
       <section class="set-card">
-        <div class="set-h">${esc(t("settings.section.content"))}</div>
+        <h2 class="set-h">${esc(t("settings.section.content"))}</h2>
         <div class="set-sub">${esc(t("settings.section.contentSub"))}</div>
         <div class="set-body">
           ${setLong("terms")}
@@ -7436,7 +7476,7 @@ function renderSettings(){
       </section>
 
       <section class="set-card">
-        <div class="set-h">${esc(t("settings.section.account"))}</div>
+        <h2 class="set-h">${esc(t("settings.section.account"))}</h2>
         <div class="set-body">
           <div class="set-ro">
             <div class="set-ro-row"><div class="set-ro-l">${esc(t("settings.field.accountId"))}</div>
@@ -7620,7 +7660,7 @@ function renderReleases(){
         ${crumbs([{ href:"#/overview", icon:HOME_ICON, label:t("nav.overview") },
                   { label:t("releases.heading") }])}
         <h1 class="page-t">${esc(t("releases.heading"))}</h1>
-        <p style="font-size:14px;color:var(--n-700);margin-top:3px">${esc(t("releases.subtitle"))}</p>
+        <p style="font-size:14px;color:var(--n-700);margin-top:var(--sp-50)">${esc(t("releases.subtitle"))}</p>
       </div>
     </div>
 
@@ -7629,6 +7669,7 @@ function renderReleases(){
         <label class="tbl-search">
           <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
           <input type="search" id="relq" value="${esc(RELQ)}" oninput="RELQ=this.value;renderReleases()"
+                 aria-label="${esc(t("a11y.searchField"))}"
                  placeholder="${esc(t("releases.search.placeholder"))}">
         </label>
       </div>
@@ -7694,7 +7735,7 @@ function renderRelease(){
       </div>
     </div>
 
-    <div class="card rel-doc" style="padding:32px">
+    <div class="card rel-doc" style="padding:var(--sp-400)">
       <span class="rel-date">
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-calendar"/></svg>
         ${esc(interp(t("releases.detail.releasedOn"), { date: dfmt(r.at) }))}</span>
@@ -7712,10 +7753,10 @@ function renderRelease(){
       </div>
 
       <div class="rel-nav">
-        ${older ? `<button class="btn btn-ghost" onclick="go('release',${older.id})">
+        ${older ? `<button class="btn btn-ghost btn-stack" onclick="go('release',${older.id})">
           <span><span class="rel-nav-k">${esc(t("releases.detail.previous"))}</span>
             <span class="rel-nav-t">${esc(relTitle(older.id))}</span></span></button>` : `<span style="flex:1"></span>`}
-        ${newer ? `<button class="btn btn-ghost" onclick="go('release',${newer.id})">
+        ${newer ? `<button class="btn btn-ghost btn-stack" onclick="go('release',${newer.id})">
           <span><span class="rel-nav-k">${esc(t("releases.detail.next"))}</span>
             <span class="rel-nav-t">${esc(relTitle(newer.id))}</span></span></button>` : `<span style="flex:1"></span>`}
       </div>
@@ -7724,11 +7765,31 @@ function renderRelease(){
 function relToggleAlt(){ REL_ALT = !REL_ALT; renderRelease(); }
 
 if (!OFFERS_ENABLED)
-  document.querySelectorAll("[data-nav-offers]").forEach(el => { el.hidden = true; });
+  document.querySelectorAll("[data-offers]").forEach(el => { el.hidden = true; });
+
+// #16 — a data console people work in daily should let them reach search from
+// the keyboard. "/" is the convention; Ctrl/Cmd+K is the one people try first.
+document.addEventListener("keydown", e => {
+  const inField = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable;
+  const wants = (e.key === "/" && !inField) || (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey));
+  if (!wants) return;
+  const box = [...document.querySelectorAll('input[type="search"]')].find(i => i.offsetParent !== null);
+  if (!box) return;
+  e.preventDefault(); box.focus(); box.select();
+});
+
+// Settings holds long-form text. Navigating inside the app keeps an unsaved
+// edit, but a reload or a closed tab would drop it with no warning.
+window.addEventListener("beforeunload", e => {
+  if (typeof setAnyDirty === "function" && setAnyDirty()) { e.preventDefault(); e.returnValue = ""; }
+});
 
 document.body.dataset.state = "normal";
 document.body.dataset.collapsed = "false";
 document.body.dataset.nav = "closed";
-setLang("ar");
+setLang((() => {
+  try { const v = localStorage.getItem("walaone.lang"); if (v === "ar" || v === "en") return v; } catch (e) {}
+  return "ar";
+})());
 onHash();
 </script>

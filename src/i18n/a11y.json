@@ -1,0 +1,10 @@
+{
+  "en": {
+    "a11y.selectRow": "Select {name}",
+    "a11y.searchField": "Search"
+  },
+  "ar": {
+    "a11y.selectRow": "تحديد {name}",
+    "a11y.searchField": "بحث"
+  }
+}
