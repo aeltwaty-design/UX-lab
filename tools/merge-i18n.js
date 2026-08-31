@@ -11,7 +11,7 @@ const flat = (o, pre = '', out = {}) => {
 };
 const SOURCES = ['content.json', 'users-extra.json', 'users-filters.json', 'followers.json',
                  'transfers.json', 'transactions.json', 'chargehistory.json',
-                 'exports.json', 'login.json', 'settings.json', 'releases.json', 'a11y.json', 'quickaccess.json', 'edits-batch.json', 'riyal.json'];
+                 'exports.json', 'login.json', 'settings.json', 'releases.json', 'a11y.json', 'quickaccess.json', 'edits-batch.json', 'riyal.json', 'emptybalance.json'];
 // prefixes whose page keys are replaced wholesale, so a deleted string really goes
 const OWNED = ['transfers.', 'transactions.', 'charge.', 'exports.', 'login.', 'otp.', 'settings.', 'releases.', 'quick.', 'home.'];
 const src = { en: {}, ar: {} };

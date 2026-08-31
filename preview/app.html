@@ -1936,7 +1936,6 @@ const I18N = {
     "transfers.summary.available": "Available balance",
     "transfers.summary.availableHint": "Points you can still transfer.",
     "transfers.summary.lowBalance": "Your balance is running low. Top up to keep transfers running smoothly.",
-    "transfers.summary.committed": "{n} points committed to files awaiting review",
     "transfers.queue.waiting": "{n} files are waiting for your review.",
     "transfers.queue.waitingOne": "One file is waiting for your review.",
     "transfers.queue.waitingHint": "Review who a file is for, how many points it sends, and what it costs, then approve or reject it.",
@@ -2456,7 +2455,8 @@ const I18N = {
     "home.stat.usersUnregistered": "Users unregistered",
     "home.stat.totalOffers": "Total offers",
     "home.group.points": "Points",
-    "home.group.audience": "Audience"
+    "home.group.audience": "Audience",
+    "transfers.summary.emptyBalance": "Your balance is at zero. Transfers are stopped until you charge more points."
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -2783,7 +2783,6 @@ const I18N = {
     "transfers.summary.available": "الرصيد المتاح",
     "transfers.summary.availableHint": "النقاط التي ما زال بإمكانك تحويلها.",
     "transfers.summary.lowBalance": "رصيدك منخفض. اشحن رصيدك لتستمر عمليات التحويل دون انقطاع.",
-    "transfers.summary.committed": "{n} نقطة محجوزة لملفات بانتظار المراجعة",
     "transfers.queue.waiting": "{n} ملفات بانتظار مراجعتك.",
     "transfers.queue.waitingOne": "ملف واحد بانتظار مراجعتك.",
     "transfers.queue.waitingHint": "راجع المستفيدين من كل ملف، وعدد نقاطه، وتكلفته، ثم وافق عليه أو ارفضه.",
@@ -3303,7 +3302,8 @@ const I18N = {
     "home.stat.usersUnregistered": "المستخدمين غير المسجلين",
     "home.stat.totalOffers": "إجمالي العروض",
     "home.group.points": "النقاط",
-    "home.group.audience": "الجمهور"
+    "home.group.audience": "الجمهور",
+    "transfers.summary.emptyBalance": "رصيدك صفر. توقفت عمليات التحويل حتى تشحن مزيدًا من النقاط."
   }
 };
 
@@ -4833,11 +4833,6 @@ function progressNote(b){
     : `<div class="prog">${line} · ${esc(interp(t("transfers.status.runningFor"), { n: elapsed(b.startedAt) }))}</div>`;
 }
 
-/* What the review queue has already spoken for. An approver looking at the
-   available balance needs to know how much of it is promised to files that
-   are still waiting on them, or they will approve their way past it. */
-const committed = () => BATCHES.filter(b => ["uploaded","ready"].includes(shownStatus(b)))
-                               .reduce((n, b) => n + b.points, 0);
 
 /* Six states, three families. Uploaded is the only one addressed to a person,
    so it is the only one that pulses. Rejected takes the neutral stage
@@ -4950,19 +4945,22 @@ function showQueue(){ TTAB = "bulk"; TFILT.status = "uploaded"; TPAGE = 1; rende
 function renderTransfers(){
   const el = document.getElementById("view-transfers"); if (!el) return;
   const waiting = waitingCount();
-  const com     = committed();
-  const lowBal  = (BAL.available - com) / BAL.charged < 0.2;
 
-  const balTile = (key, pts, cls) => `<div class="bal ${cls || ""}${cls && lowBal ? " is-low" : ""}">
+  /* The old rule subtracted committed points before judging the balance, so a
+     healthy 3.5M read as low and the warning never went away. Committed points
+     are reserved, not spent -- they are still the partner's. The line now
+     follows what is actually available: gone, nearly gone, or fine. */
+  const balNote = () =>
+      BAL.available === 0                    ? t("transfers.summary.emptyBalance")
+    : BAL.available / BAL.charged < 0.1      ? t("transfers.summary.lowBalance")
+    : "";
+  const balTile = (key, pts, cls) => `<div class="bal ${cls || ""}${cls && balNote() ? " is-low" : ""}">
     <div class="bal-l">${esc(t("transfers.summary." + key))}</div>
     <div class="bal-v"><svg viewBox="0 0 26 25" width="21" height="21" aria-hidden="true"><use href="#i-point"/></svg>
       <span class="num">${fmt(pts)}</span></div>
     <div class="bal-sub">${riyal(valueOf(pts))}</div>
-    ${cls && com ? `<div class="bal-warn" style="color:var(--n-700)">
-      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-hourglass"/></svg>
-      ${esc(interp(t("transfers.summary.committed"), { n: fmt(com) }))}</div>` : ""}
-    ${cls && lowBal ? `<div class="bal-warn"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
-      ${esc(t("transfers.summary.lowBalance"))}</div>` : ""}</div>`;
+    ${cls && balNote() ? `<div class="bal-warn"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+      <use href="#i-alert"/></svg>${esc(balNote())}</div>` : ""}</div>`;
 
   const tabBtn = (k, n) => `<button class="seg" role="tab" aria-selected="${TTAB === k}"
       onclick="setTTab('${k}')"><span>${esc(t("transfers.tabs." + k))}</span><span class="seg-n num">${fmt(n)}</span></button>`;

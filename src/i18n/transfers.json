@@ -4,10 +4,8 @@
     "transfers.subtitle": "Send points to your customers one at a time, or in bulk from a file.",
     "transfers.navBulk": "Bulk transfers",
     "transfers.navIndividual": "Individual transfers",
-
     "transfers.tabs.bulk": "Bulk",
     "transfers.tabs.individual": "Individual",
-
     "transfers.summary.charged": "Points charged",
     "transfers.summary.chargedHint": "Total points you've charged to your account.",
     "transfers.summary.transferred": "Points transferred",
@@ -15,20 +13,16 @@
     "transfers.summary.available": "Available balance",
     "transfers.summary.availableHint": "Points you can still transfer.",
     "transfers.summary.lowBalance": "Your balance is running low. Top up to keep transfers running smoothly.",
-    "transfers.summary.committed": "{n} points committed to files awaiting review",
-
     "transfers.queue.waiting": "{n} files are waiting for your review.",
     "transfers.queue.waitingOne": "One file is waiting for your review.",
     "transfers.queue.waitingHint": "Review who a file is for, how many points it sends, and what it costs, then approve or reject it.",
     "transfers.queue.action": "Review them",
     "transfers.queue.clear": "Nothing waiting for review. Every file has been checked.",
-
     "transfers.cta.label": "New transfer",
     "transfers.cta.single": "Single transfer",
     "transfers.cta.singleDesc": "Send points to one customer by name or phone.",
     "transfers.cta.bulk": "Bulk transfer",
     "transfers.cta.bulkDesc": "Upload a file to send points to many customers at once.",
-
     "transfers.columns.file": "File",
     "transfers.columns.uploadedBy": "Uploaded by",
     "transfers.columns.records": "Records",
@@ -42,7 +36,6 @@
     "transfers.columns.sentBy": "Sent by",
     "transfers.columns.recipient": "Recipient",
     "transfers.columns.date": "Date",
-
     "transfers.records.total": "{n} records",
     "transfers.records.valid": "Valid",
     "transfers.records.validCount": "{n} ready",
@@ -51,7 +44,6 @@
     "transfers.records.duplicate": "Duplicate",
     "transfers.records.duplicateCount": "{n} duplicate",
     "transfers.records.breakdown": "{valid} ready · {invalid} invalid · {duplicate} duplicate",
-
     "transfers.status.uploaded": "Uploaded",
     "transfers.status.uploadedDesc": "Waiting for an admin to approve or reject it.",
     "transfers.status.ready": "Ready",
@@ -64,20 +56,17 @@
     "transfers.status.rejectedDesc": "An admin reviewed this and decided not to send it.",
     "transfers.status.runningFor": "Running for {n}",
     "transfers.status.progress": "{done} of {total} records",
-
     "transfers.source.loyalty": "Loyalty programme",
     "transfers.source.invoice": "Invoice",
     "transfers.source.file": "File",
     "transfers.source.referral": "Referral",
     "transfers.source.b2b": "B2B",
     "transfers.source.label": "Source",
-
     "transfers.actions.approve": "Approve",
     "transfers.actions.reject": "Reject",
     "transfers.actions.viewFile": "View file",
     "transfers.actions.download": "Download",
     "transfers.actions.viewDetails": "View details",
-
     "transfers.approve.title": "Approve this file?",
     "transfers.approve.body": "This sends {points} points to {count} people and can't be undone.",
     "transfers.approve.cost": "This uses ﷼{value} from your available balance.",
@@ -86,7 +75,6 @@
     "transfers.approve.confirm": "Approve",
     "transfers.approve.cancel": "Cancel",
     "transfers.approve.done": "{file} approved. It's queued to send.",
-
     "transfers.reject.title": "Reject this file?",
     "transfers.reject.intro": "The uploader will see the reason you write below. The file stays on the list, and rejecting it doesn't delete it.",
     "transfers.reject.reasonLabel": "Reason",
@@ -102,13 +90,10 @@
     "transfers.reject.cancel": "Cancel",
     "transfers.reject.done": "{file} rejected. The uploader has been notified.",
     "transfers.reject.keptNote": "The file stays on the list. Nothing is deleted.",
-
     "transfers.rejected.by": "Rejected by {name}",
     "transfers.rejected.reasonHeading": "Reason for rejection",
-
     "transfers.detail.decidedBy": "Decided by {name} on {date}",
     "transfers.detail.viewTransactions": "View {n} transactions",
-
     "transfers.viewer.title": "{file}",
     "transfers.viewer.subtitle": "{n} records",
     "transfers.viewer.colLine": "Line",
@@ -130,7 +115,6 @@
     "transfers.viewer.emptyFiltered": "No records to show.",
     "transfers.viewer.capped": "Showing the first {n} of {total} records",
     "transfers.viewer.download": "Download file",
-
     "transfers.single.title": "Send points to a customer",
     "transfers.single.intro": "Search for a customer, choose how many points to send, and they'll receive them right away.",
     "transfers.single.recipientLabel": "Recipient",
@@ -150,7 +134,6 @@
     "transfers.single.errNoRecipient": "Choose a recipient before sending.",
     "transfers.single.errBalance": "Your available balance doesn't cover this transfer. Charge more points to continue.",
     "transfers.single.cooldown": "This recipient can only receive points once every 30 minutes.",
-
     "transfers.upload.title": "Send points by file",
     "transfers.upload.intro": "Upload a CSV file with your recipients. An admin will review it before anything is sent.",
     "transfers.upload.dropzone": "Drag and drop your file here",
@@ -182,11 +165,9 @@
     "transfers.upload.backToUpload": "Back to upload",
     "transfers.upload.fixAndRetry": "Or fix the file and choose it again.",
     "transfers.upload.nothingUsable": "Every record in this file has a problem, so there's nothing to upload. Fix the file and try again.",
-
     "transfers.value.derived": "Value is calculated from points, at a rate of 5 points = 1 ﷼.",
     "transfers.value.rate": "5 points = 1 ﷼",
     "transfers.value.currency": "Saudi riyal",
-
     "transfers.search.placeholder": "Search by file name or uploader…",
     "transfers.search.placeholderIndividual": "Search by recipient or reference…",
     "transfers.filters.status": "Status",
@@ -207,13 +188,10 @@
     "transfers.a11y.closePanel": "Close panel",
     "transfers.a11y.backPanel": "Back to {panel}",
     "transfers.a11y.tabs": "Transfer type",
-
     "transfers.time.minutes": "{n} minutes",
     "transfers.time.hours": "{n} hours",
     "transfers.time.days": "{n} days",
-
     "transfers.download.started": "{file} is downloading",
-
     "transfers.export.soon": "Export isn't ready yet. We'll turn it on as soon as it is."
   },
   "ar": {
@@ -221,10 +199,8 @@
     "transfers.subtitle": "أرسل النقاط لعملائك واحدًا تلو الآخر، أو دفعة واحدة عبر ملف.",
     "transfers.navBulk": "عمليات النقاط بالجملة",
     "transfers.navIndividual": "عمليات النقاط الفردية",
-
     "transfers.tabs.bulk": "بالجملة",
     "transfers.tabs.individual": "الفردية",
-
     "transfers.summary.charged": "النقاط المشحونة",
     "transfers.summary.chargedHint": "إجمالي النقاط التي شحنتها إلى حسابك.",
     "transfers.summary.transferred": "النقاط المحولة",
@@ -232,20 +208,16 @@
     "transfers.summary.available": "الرصيد المتاح",
     "transfers.summary.availableHint": "النقاط التي ما زال بإمكانك تحويلها.",
     "transfers.summary.lowBalance": "رصيدك منخفض. اشحن رصيدك لتستمر عمليات التحويل دون انقطاع.",
-    "transfers.summary.committed": "{n} نقطة محجوزة لملفات بانتظار المراجعة",
-
     "transfers.queue.waiting": "{n} ملفات بانتظار مراجعتك.",
     "transfers.queue.waitingOne": "ملف واحد بانتظار مراجعتك.",
     "transfers.queue.waitingHint": "راجع المستفيدين من كل ملف، وعدد نقاطه، وتكلفته، ثم وافق عليه أو ارفضه.",
     "transfers.queue.action": "راجعها",
     "transfers.queue.clear": "لا شيء بانتظار المراجعة. تمت مراجعة كل الملفات.",
-
     "transfers.cta.label": "تحويل جديد",
     "transfers.cta.single": "تحويل فردي",
     "transfers.cta.singleDesc": "أرسل نقاطًا لعميل واحد بالاسم أو رقم الجوال.",
     "transfers.cta.bulk": "تحويل بالجملة",
     "transfers.cta.bulkDesc": "ارفع ملفًا لإرسال النقاط لعدد كبير من العملاء دفعة واحدة.",
-
     "transfers.columns.file": "الملف",
     "transfers.columns.uploadedBy": "بواسطة",
     "transfers.columns.records": "السجلات",
@@ -259,7 +231,6 @@
     "transfers.columns.sentBy": "بواسطة",
     "transfers.columns.recipient": "المستلم",
     "transfers.columns.date": "التاريخ",
-
     "transfers.records.total": "{n} سجلات",
     "transfers.records.valid": "صالح",
     "transfers.records.validCount": "{n} من الجاهزة",
@@ -268,7 +239,6 @@
     "transfers.records.duplicate": "مكرر",
     "transfers.records.duplicateCount": "{n} من المكررة",
     "transfers.records.breakdown": "{valid} جاهز · {invalid} غير صالح · {duplicate} مكرر",
-
     "transfers.status.uploaded": "مرفوع",
     "transfers.status.uploadedDesc": "بانتظار قرار المشرف: موافقة أو رفض.",
     "transfers.status.ready": "جاهز",
@@ -281,20 +251,17 @@
     "transfers.status.rejectedDesc": "راجعه المشرف وقرر عدم إرساله.",
     "transfers.status.runningFor": "مستمر منذ {n}",
     "transfers.status.progress": "{done} من {total} سجلات",
-
     "transfers.source.loyalty": "برامج ولاء",
     "transfers.source.invoice": "فاتورة",
     "transfers.source.file": "ملف",
     "transfers.source.referral": "ترشيح",
     "transfers.source.b2b": "B2B",
     "transfers.source.label": "المصدر",
-
     "transfers.actions.approve": "موافقة",
     "transfers.actions.reject": "رفض",
     "transfers.actions.viewFile": "عرض الملف",
     "transfers.actions.download": "تنزيل",
     "transfers.actions.viewDetails": "عرض التفاصيل",
-
     "transfers.approve.title": "الموافقة على هذا الملف؟",
     "transfers.approve.body": "سيتم إرسال {points} نقطة إلى {count} أشخاص، ولا يمكن التراجع عنه.",
     "transfers.approve.cost": "سيُخصم ﷼{value} من رصيدك المتاح.",
@@ -303,7 +270,6 @@
     "transfers.approve.confirm": "موافقة",
     "transfers.approve.cancel": "إلغاء",
     "transfers.approve.done": "تمت الموافقة على {file}. سيُرسل قريبًا.",
-
     "transfers.reject.title": "رفض هذا الملف؟",
     "transfers.reject.intro": "سيطّلع رافع الملف على السبب الذي تكتبه أدناه. يبقى الملف في القائمة، فالرفض لا يحذفه.",
     "transfers.reject.reasonLabel": "السبب",
@@ -319,13 +285,10 @@
     "transfers.reject.cancel": "إلغاء",
     "transfers.reject.done": "تم رفض {file}، وتم إشعار رافعه.",
     "transfers.reject.keptNote": "يبقى الملف في القائمة. لا يُحذف شيء.",
-
     "transfers.rejected.by": "تم الرفض بواسطة {name}",
     "transfers.rejected.reasonHeading": "سبب الرفض",
-
     "transfers.detail.decidedBy": "قرار بواسطة {name} بتاريخ {date}",
     "transfers.detail.viewTransactions": "عرض {n} معاملات",
-
     "transfers.viewer.title": "{file}",
     "transfers.viewer.subtitle": "{n} سجلات",
     "transfers.viewer.colLine": "السطر",
@@ -347,7 +310,6 @@
     "transfers.viewer.emptyFiltered": "لا توجد سجلات لعرضها.",
     "transfers.viewer.capped": "عرض أول {n} من أصل {total} سجلات",
     "transfers.viewer.download": "تنزيل الملف",
-
     "transfers.single.title": "إرسال نقاط لعميل",
     "transfers.single.intro": "ابحث عن العميل، حدّد عدد النقاط المطلوب إرسالها، وستصله فورًا.",
     "transfers.single.recipientLabel": "المستلم",
@@ -367,7 +329,6 @@
     "transfers.single.errNoRecipient": "اختر مستلمًا قبل الإرسال.",
     "transfers.single.errBalance": "رصيدك المتاح لا يغطي هذا التحويل. اشحن مزيدًا من النقاط للمتابعة.",
     "transfers.single.cooldown": "لا يمكن لهذا المستلم استلام نقاط أكثر من مرة كل 30 دقيقة.",
-
     "transfers.upload.title": "إرسال نقاط عبر ملف",
     "transfers.upload.intro": "ارفع ملف CSV يحتوي على المستلمين. سيراجعه أحد المشرفين قبل إرسال أي شيء.",
     "transfers.upload.dropzone": "اسحب ملفك وأفلته هنا",
@@ -399,11 +360,9 @@
     "transfers.upload.backToUpload": "الرجوع إلى الرفع",
     "transfers.upload.fixAndRetry": "أو صحّح الملف واخترْه من جديد.",
     "transfers.upload.nothingUsable": "جميع سجلات هذا الملف بها مشكلة، فلا يوجد ما يمكن رفعه. صحّح الملف وحاول مرة أخرى.",
-
     "transfers.value.derived": "القيمة محسوبة من النقاط، بمعدل 5 نقاط = 1 ﷼.",
     "transfers.value.rate": "5 نقاط = 1 ﷼",
     "transfers.value.currency": "ريال سعودي",
-
     "transfers.search.placeholder": "ابحث باسم الملف أو الرافع…",
     "transfers.search.placeholderIndividual": "ابحث بالمستلم أو المرجع…",
     "transfers.filters.status": "الحالة",
@@ -424,13 +383,10 @@
     "transfers.a11y.closePanel": "إغلاق اللوحة",
     "transfers.a11y.backPanel": "الرجوع إلى {panel}",
     "transfers.a11y.tabs": "نوع التحويل",
-
     "transfers.time.minutes": "{n} من الدقائق",
     "transfers.time.hours": "{n} من الساعات",
     "transfers.time.days": "{n} من الأيام",
-
     "transfers.download.started": "جارٍ تنزيل {file}",
-
     "transfers.export.soon": "التصدير غير متاح بعد. سنفعّله بمجرد أن يصبح جاهزًا."
   }
 }

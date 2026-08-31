@@ -1,0 +1,8 @@
+{
+  "en": {
+    "transfers.summary.emptyBalance": "Your balance is at zero. Transfers are stopped until you charge more points."
+  },
+  "ar": {
+    "transfers.summary.emptyBalance": "رصيدك صفر. توقفت عمليات التحويل حتى تشحن مزيدًا من النقاط."
+  }
+}
