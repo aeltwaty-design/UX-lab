@@ -1,0 +1,31 @@
+{
+  "en": {
+    "charge.rate": "5 points = {riyal} 1",
+    "releases.sample.2.body": "We've redesigned the balance screen so it's easier to see what your points are worth, not just how many you have.\n\nYour points and their {riyal} value now sit side by side, so if you're holding 500 points, you can see straight away that's worth {riyal} 100. No more doing the maths yourself.\n\nWe also tidied up the layout so your most recent activity is easier to find without digging through the app.",
+    "settings.sample.terms": "Every purchase you make at a Comtech Gold store earns you points in our loyalty programme. You earn 1 point for every {riyal} 10 you spend, added to your balance automatically as soon as your purchase is complete.\n\nEvery 5 points you hold are worth {riyal} 1, and that's the fixed rate we use to work out what your balance is worth.\n\nPoints stay valid for 12 months from the date you earn them. Any points not used within that time expire automatically and are removed from your balance.\n\nPoints cannot be exchanged for cash, transferred to another member, or used anywhere outside Comtech Gold. If a purchase is returned or cancelled, we may deduct the points that came with it from your balance.\n\nWe may update these terms from time to time as our loyalty programme changes. Any update will be posted here in the WalaOne app, and continuing to use your points afterwards means you accept the new terms.",
+    "transfers.approve.cost": "This uses {riyal} {value} from your available balance.",
+    "transfers.single.valuePreview": "Worth {riyal} {value}",
+    "transfers.value.currency": "Saudi riyal",
+    "transfers.value.derived": "Value is calculated from points, at a rate of 5 points = {riyal} 1.",
+    "transfers.value.rate": "5 points = {riyal} 1",
+    "users.table.sar": "{riyal} {value}",
+    "users.table.sarAmount": "{riyal} {value}",
+    "wallet.conversionRate": "{points} points = {riyal} {sar}",
+    "wallet.sarEquivalent": "Worth about {riyal} {value}."
+  },
+  "ar": {
+    "charge.rate": "5 نقاط = 1 {riyal}",
+    "releases.sample.2.body": "أعدنا تصميم شاشة الرصيد لتكون أوضح في عرض قيمة نقاطك، وليس فقط عددها.\n\nتظهر نقاطك وقيمتها بالريال جنبًا إلى جنب، فإذا كان رصيدك 500 نقطة، ترى مباشرة أنها تعادل 100 {riyal} دون أي حساب من جانبك.\n\nكما رتّبنا الشاشة بحيث يسهل عليك إيجاد آخر نشاطاتك دون الحاجة للبحث في أنحاء التطبيق.",
+    "releases.sample.6.body": "أعدنا العمل على شكل النص العربي في أنحاء التطبيق، من الخط نفسه إلى المسافات بين الأسطر والحروف.\n\nأصبحت الأرقام والتواريخ ومبالغ الريال أكثر انتظامًا في محاذاتها، كما أصبحت الفقرات الطويلة، مثل الشروط التي تقرؤها عند انضمامك إلى أي برنامج، أسهل في القراءة.\n\nيخص هذا التحديث تجربة اللغة العربية فقط، فإذا كنت تستخدم ولاء ون بالإنجليزية، لن يتغيّر شيء لديك.",
+    "settings.sample.terms": "عند كل عملية شراء من متاجر Comtech Gold، تحصل على نقاط تُضاف مباشرة إلى رصيدك في برنامج الولاء. تكسب نقطة واحدة عن كل 10 {riyal} من قيمة مشترياتك، وتُحتسب النقاط تلقائيًا فور إتمام عملية الشراء.\n\nكل 5 نقاط تعادل 1 {riyal} عند استخدامها، وهذا هو المعدل الثابت الذي نعتمده لتحديد قيمة نقاطك في أي وقت.\n\nتظل نقاطك صالحة لمدة 12 شهرًا من تاريخ اكتسابها. إذا لم تُستخدم خلال هذه المدة، تنتهي صلاحيتها تلقائيًا وتُحذف من رصيدك.\n\nلا يمكن استبدال النقاط بمبالغ نقدية، ولا تحويلها إلى عضو آخر، ولا استخدامها خارج متاجر Comtech Gold. إذا تم إرجاع عملية شراء أو إلغاؤها، قد نخصم النقاط المرتبطة بها من رصيدك.\n\nقد نُحدّث هذه الشروط من وقت لآخر لمواكبة أي تغييرات في برنامج الولاء. سننشر أي تعديل هنا في تطبيق ولاء ون، واستمرارك في استخدام النقاط بعد ذلك يعني موافقتك على الشروط الجديدة.",
+    "transfers.approve.cost": "سيُخصم {value} {riyal} من رصيدك المتاح.",
+    "transfers.single.valuePreview": "بما يعادل {value} {riyal}",
+    "transfers.value.currency": "ريال سعودي",
+    "transfers.value.derived": "القيمة محسوبة من النقاط، بمعدل 5 نقاط = 1 {riyal}.",
+    "transfers.value.rate": "5 نقاط = 1 {riyal}",
+    "users.table.sar": "{value} {riyal}",
+    "users.table.sarAmount": "{value} {riyal}",
+    "wallet.conversionRate": "{points} نقاط = {sar} {riyal}",
+    "wallet.sarEquivalent": "بما يعادل {value} {riyal} تقريبًا."
+  }
+}

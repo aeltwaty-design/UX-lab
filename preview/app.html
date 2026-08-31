@@ -445,21 +445,23 @@ body[data-state="error"]   .s-real,body[data-state="error"]   .s-load, body[data
      Singular (V1.0.0). This is a reconstruction from the supplied raster and is
      NOT the brand mark — replace this one symbol with the exported SVG and
      every usage updates, since it is referenced by <use href="#i-point"> only. -->
-<symbol id="i-point" viewBox="0 0 24 24">
-  <defs>
-    <linearGradient id="ptFace" x1=".18" y1="0" x2=".82" y2="1">
-      <stop offset="0%" stop-color="#8571E2"/><stop offset="52%" stop-color="#6E56D2"/><stop offset="100%" stop-color="#57419F"/>
-    </linearGradient>
-  </defs>
-  <!-- light rim, then the face inset so the rim reads as a lit edge -->
-  <circle cx="12" cy="12" r="11.6" fill="#C6BBEF"/>
-  <circle cx="12" cy="12" r="10.5" fill="url(#ptFace)"/>
-  <!-- shadow arc on the trailing edge, giving the coin its depth -->
-  <path d="M18.6 4.4a10.5 10.5 0 0 1 0 15.2 8.6 8.6 0 0 0 0-15.2Z" fill="#4A3789" opacity=".85"/>
-  <!-- mark -->
-  <path d="M7.6 10.2c0 4.2 1 6.4 2.7 6.4 1.3 0 1.7-2.4 1.7-4.2 0 1.8.4 4.2 1.7 4.2 1.7 0 2.7-2.2 2.7-6.4"
-        fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="12" cy="7.3" r="1.55" fill="none" stroke="#fff" stroke-width="1.5"/>
+<symbol id="i-riyal" viewBox="0 0 1124.14 1256.39">
+  <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
+  <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
+</symbol>
+<symbol id="i-point" viewBox="0 0 26 25">
+  <defs><clipPath id="coinMark">
+    <rect width="11.9989" height="12.4988" fill="white" transform="translate(5.99854 5.79333)"/>
+  </clipPath></defs>
+  <path d="M13.9898 24.0274C20.6229 24.0274 26.0001 18.6503 26.0001 12.0171C26.0001 5.38403 20.6229 0.00683594 13.9898 0.00683594C7.35669 0.00683594 1.97949 5.38403 1.97949 12.0171C1.97949 18.6503 7.35669 24.0274 13.9898 24.0274Z" fill="#534199"/>
+  <path d="M12.0103 24.0206C18.6434 24.0206 24.0206 18.6434 24.0206 12.0103C24.0206 5.3772 18.6434 0 12.0103 0C5.3772 0 0 5.3772 0 12.0103C0 18.6434 5.3772 24.0206 12.0103 24.0206Z" fill="#A391E5"/>
+  <path d="M1.46777 17.7673C2.56114 19.765 4.20557 21.4182 6.19739 22.5221L22.5525 6.25307C21.4591 4.2554 19.8147 2.60219 17.8228 1.49829L1.46777 17.7673Z" fill="#D4CCF3"/>
+  <path d="M12.0108 21.0162C16.9846 21.0162 21.0167 16.9841 21.0167 12.0103C21.0167 7.03647 16.9846 3.00439 12.0108 3.00439C7.03696 3.00439 3.00488 7.03647 3.00488 12.0103C3.00488 16.9841 7.03696 21.0162 12.0108 21.0162Z" fill="#755BD8"/>
+  <g clip-path="url(#coinMark)">
+    <path d="M17.6333 10.8283C17.3658 9.8084 16.3184 9.19649 15.3156 9.46845C14.8253 9.60443 14.4242 9.92172 14.1568 10.3523L12.0174 14.1145C11.9951 14.1371 11.9951 14.1825 11.9728 14.2051L11.2151 15.5423C11.2151 15.5423 11.2151 15.5423 11.2151 15.5649V15.5423C11.2151 15.5423 11.2151 15.5649 11.1929 15.5649C10.9031 16.0409 10.3014 16.1768 9.85575 15.8822C9.72203 15.7916 9.61061 15.6783 9.52147 15.5423L7.3821 11.7801C7.11468 11.3042 7.27067 10.6923 7.73866 10.443C8.20665 10.171 8.78606 10.3297 9.05348 10.8056L11.126 14.4544L11.6608 13.5252L9.85575 10.3523C9.3209 9.44579 8.16208 9.1285 7.24839 9.64976C6.3347 10.171 6.02271 11.3495 6.55755 12.2787L8.69692 16.0409C9.23176 16.9701 10.3906 17.2647 11.282 16.7434C11.6163 16.5395 11.8837 16.2448 12.0397 15.9049L12.7751 14.6131C12.7751 14.6131 12.7751 14.5904 12.7974 14.5904L14.9368 10.8283C15.2042 10.3523 15.8059 10.1937 16.2739 10.4656C16.7418 10.7376 16.8978 11.3495 16.6304 11.8028L14.4911 15.5649C14.2236 16.0409 13.6219 16.1995 13.1539 15.9276C13.0425 15.8596 12.9534 15.7916 12.8642 15.6783L12.3962 16.5168C13.1762 17.2194 14.3796 17.1287 15.0705 16.3355C15.1596 16.2448 15.2265 16.1315 15.2933 16.0409L17.4327 12.2787C17.7001 11.8481 17.767 11.3269 17.6333 10.8283Z" fill="white"/>
+    <path d="M11.9953 10.5114C12.8645 10.5114 13.5776 9.7862 13.5776 8.90232C13.5776 8.01845 12.8645 7.29321 11.9953 7.29321C11.1262 7.29321 10.4131 8.01845 10.4131 8.90232C10.4131 9.7862 11.1262 10.5114 11.9953 10.5114ZM11.9953 8.26774C12.3519 8.26774 12.6416 8.56237 12.6416 8.92499C12.6416 9.2876 12.3519 9.58223 11.9953 9.58223C11.6388 9.58223 11.3491 9.2876 11.3491 8.92499C11.3491 8.56237 11.6388 8.26774 11.9953 8.26774Z" fill="white"/>
+  </g>
+  <path opacity="0.8" d="M3.88054 12.605C3.89371 7.63102 7.93646 3.60964 12.9101 3.62281C14.6427 3.62749 16.259 4.1212 17.6301 4.97254C16.0957 3.74572 14.1516 3.00999 12.0345 3.00443C7.06054 2.99126 3.01808 7.01293 3.00491 11.9866C2.99643 15.2281 4.70173 18.0736 7.26716 19.6665C5.19691 18.0109 3.87323 15.4616 3.88054 12.605Z" fill="#534199"/>
 </symbol>
 <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8V6.5A1.5 1.5 0 0 0 18.5 5H5.5A1.5 1.5 0 0 0 4 6.5v11A1.5 1.5 0 0 0 5.5 19h13a1.5 1.5 0 0 0 1.5-1.5V16"/><path d="M21 11h-4.2a1.5 1.5 0 0 0 0 3H21Z"/></symbol>
 <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 15 5.5-5.5 3.5 3.5L20 6"/><path d="M15 6h5v5"/></symbol>
@@ -1004,6 +1006,11 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
   font-variant-numeric:tabular-nums}
 .rial{font-family:"IBM Plex Sans Arabic","Noto Sans Arabic","Segoe UI",sans-serif;
   font-weight:600;font-size:.92em}
+/* The riyal symbol. Sized from the surrounding text so it scales with whatever
+   it sits next to, and nudged down a hair because the glyph's optical centre
+   sits above its box centre. */
+.rsym{inline-size:.82em;block-size:.82em;display:inline-block;vertical-align:-.08em;
+  fill:currentColor;flex:none}
 
 /* --- record breakdown: the count and the offending rows finally in
        one place. Each segment opens the viewer filtered to itself. --- */
@@ -1701,8 +1708,8 @@ const I18N = {
     "time.days": "{n} days",
     "header.comparedToPrevious": "vs. previous period",
     "wallet.availableCredits": "Available credits",
-    "wallet.sarEquivalent": "Worth about {value} SAR.",
-    "wallet.conversionRate": "{points} points = {sar} SAR",
+    "wallet.sarEquivalent": "Worth about {riyal} {value}.",
+    "wallet.conversionRate": "{points} points = {riyal} {sar}",
     "metrics.heading": "Points overview",
     "metrics.subtitle": "Figures for the selected period.",
     "flow.subtitleYear": "Last 12 months",
@@ -1788,7 +1795,7 @@ const I18N = {
     "users.table.date": "Date",
     "users.table.in": "In",
     "users.table.out": "Out",
-    "users.table.sar": "{value} SAR",
+    "users.table.sar": "{riyal} {value}",
     "users.table.zeroValue": "No purchase value",
     "users.table.emptyTransactionsTitle": "No transactions yet. Once this user makes a purchase, they'll show up here.",
     "users.table.emptyTransactionsBody": "No transactions yet. Once this user makes a purchase, they'll show up here.",
@@ -1805,7 +1812,7 @@ const I18N = {
     "users.reminder.sent": "Reminder sent to {count} people.",
     "users.detail.pageHeading": "User profile",
     "a11y.breadcrumb": "Breadcrumb",
-    "users.table.sarAmount": "{value} SAR",
+    "users.table.sarAmount": "{riyal} {value}",
     "usersFilters.statusHeading": "Status",
     "usersFilters.joinedHeading": "Joined",
     "usersFilters.balanceHeading": "Points balance",
@@ -1975,7 +1982,7 @@ const I18N = {
     "transfers.actions.viewDetails": "View details",
     "transfers.approve.title": "Approve this file?",
     "transfers.approve.body": "This sends {points} points to {count} people and can't be undone.",
-    "transfers.approve.cost": "This uses ﷼{value} from your available balance.",
+    "transfers.approve.cost": "This uses {riyal} {value} from your available balance.",
     "transfers.approve.after": "Balance after this approval",
     "transfers.approve.insufficient": "This file is worth more than your available balance, so it can't be approved yet.",
     "transfers.approve.confirm": "Approve",
@@ -2026,7 +2033,7 @@ const I18N = {
     "transfers.single.recipientPlaceholder": "Search by phone or Loyalty ID…",
     "transfers.single.pointsLabel": "Points",
     "transfers.single.pointsHint": "Between {min} and {max} points.",
-    "transfers.single.valuePreview": "Worth ﷼{value}",
+    "transfers.single.valuePreview": "Worth {riyal} {value}",
     "transfers.single.sourceLabel": "Source",
     "transfers.single.noteLabel": "Note",
     "transfers.single.noteOptional": "Optional",
@@ -2060,8 +2067,8 @@ const I18N = {
     "transfers.upload.errType": "This file needs to be a CSV.",
     "transfers.upload.errSize": "This file is larger than 10 MB.",
     "transfers.upload.errNoFile": "Choose a file first.",
-    "transfers.value.derived": "Value is calculated from points, at a rate of 5 points = 1 ﷼.",
-    "transfers.value.rate": "5 points = 1 ﷼",
+    "transfers.value.derived": "Value is calculated from points, at a rate of 5 points = {riyal} 1.",
+    "transfers.value.rate": "5 points = {riyal} 1",
     "transfers.value.currency": "Saudi riyal",
     "transfers.search.placeholder": "Search by file name or uploader…",
     "transfers.search.placeholderIndividual": "Search by recipient or reference…",
@@ -2271,7 +2278,7 @@ const I18N = {
     "charge.chargeNote2": "Paid by bank transfer, approved by the finance manager.",
     "charge.chargeNote3": "Double check the purchase order number before sending the invoice to accounting.",
     "charge.export": "Export",
-    "charge.rate": "5 points = 1 ﷼",
+    "charge.rate": "5 points = {riyal} 1",
     "charge.a11y.panel": "Side panel",
     "exports.heading": "Exports",
     "exports.subtitle": "Download a file you requested earlier, or check whether one you just asked for is ready.",
@@ -2361,7 +2368,7 @@ const I18N = {
     "settings.field.about": "About the programme",
     "settings.field.aboutHint": "The explanation of your programme that customers read in the WalaOne app. Keep it accurate and up to date.",
     "settings.sample.description": "Comtech Gold is a Saudi jewellery retailer, offering gold pieces chosen for everyday wear and special occasions.",
-    "settings.sample.terms": "Every purchase you make at a Comtech Gold store earns you points in our loyalty programme. You earn 1 point for every 10 ﷼ you spend, added to your balance automatically as soon as your purchase is complete.\n\nEvery 5 points you hold are worth ﷼1, and that's the fixed rate we use to work out what your balance is worth.\n\nPoints stay valid for 12 months from the date you earn them. Any points not used within that time expire automatically and are removed from your balance.\n\nPoints cannot be exchanged for cash, transferred to another member, or used anywhere outside Comtech Gold. If a purchase is returned or cancelled, we may deduct the points that came with it from your balance.\n\nWe may update these terms from time to time as our loyalty programme changes. Any update will be posted here in the WalaOne app, and continuing to use your points afterwards means you accept the new terms.",
+    "settings.sample.terms": "Every purchase you make at a Comtech Gold store earns you points in our loyalty programme. You earn 1 point for every {riyal} 10 you spend, added to your balance automatically as soon as your purchase is complete.\n\nEvery 5 points you hold are worth {riyal} 1, and that's the fixed rate we use to work out what your balance is worth.\n\nPoints stay valid for 12 months from the date you earn them. Any points not used within that time expire automatically and are removed from your balance.\n\nPoints cannot be exchanged for cash, transferred to another member, or used anywhere outside Comtech Gold. If a purchase is returned or cancelled, we may deduct the points that came with it from your balance.\n\nWe may update these terms from time to time as our loyalty programme changes. Any update will be posted here in the WalaOne app, and continuing to use your points afterwards means you accept the new terms.",
     "settings.sample.about": "The Comtech Gold loyalty programme is our way of saying thank you to the customers who choose us for life's gold and jewellery moments. Every purchase moves you closer to rewards you'll actually use.\n\nAs a member, you earn points on every purchase, which you can redeem for discounts on future purchases. You'll also be the first to hear about our seasonal offers and new collections.\n\nJoining is free and easy. All you need is a WalaOne account, and your points start building automatically from your first purchase. You can check your balance anytime in the app.\n\nThank you for choosing Comtech Gold for your special moments. We're glad to be part of the ones still to come.",
     "settings.edit": "Edit",
     "settings.preview": "Preview",
@@ -2408,7 +2415,7 @@ const I18N = {
     "releases.sample.1.title": "Faster points after every purchase",
     "releases.sample.1.body": "Points now show up in your balance within moments of a purchase, instead of the short wait it used to take.\n\nIf you've paid and opened WalaOne to check whether your points came through, you shouldn't need to wait and wonder anymore. Your balance updates before you've even left the store.",
     "releases.sample.2.title": "A clearer balance screen",
-    "releases.sample.2.body": "We've redesigned the balance screen so it's easier to see what your points are worth, not just how many you have.\n\nYour points and their riyal value now sit side by side, so if you're holding 500 points, you can see straight away that's worth ﷼100. No more doing the maths yourself.\n\nWe also tidied up the layout so your most recent activity is easier to find without digging through the app.",
+    "releases.sample.2.body": "We've redesigned the balance screen so it's easier to see what your points are worth, not just how many you have.\n\nYour points and their {riyal} value now sit side by side, so if you're holding 500 points, you can see straight away that's worth {riyal} 100. No more doing the maths yourself.\n\nWe also tidied up the layout so your most recent activity is easier to find without digging through the app.",
     "releases.sample.3.title": "Offers near you",
     "releases.sample.3.body": "WalaOne can now show you offers from brands you follow that are close to where you are, so you're less likely to miss a deal just because you didn't think to check the app.\n\nTurn on location access if the app asks for it, and a short list of nearby offers appears on your home screen. You can turn this off anytime from your phone's settings if you'd rather not share your location.\n\nThis only ever shows offers from brands you already follow, never anything else.",
     "releases.sample.4.title": "Receipts load properly again",
@@ -2548,8 +2555,8 @@ const I18N = {
     "time.days": "{n} أيام",
     "header.comparedToPrevious": "مقارنة بالفترة السابقة",
     "wallet.availableCredits": "النقاط المتاحة",
-    "wallet.sarEquivalent": "بما يعادل {value} ريال تقريبًا.",
-    "wallet.conversionRate": "{points} نقاط = {sar} ريال",
+    "wallet.sarEquivalent": "بما يعادل {value} {riyal} تقريبًا.",
+    "wallet.conversionRate": "{points} نقاط = {sar} {riyal}",
     "metrics.heading": "نظرة عامة على النقاط",
     "metrics.subtitle": "أرقام للفترة المحددة.",
     "flow.subtitleYear": "آخر 12 شهرًا",
@@ -2651,8 +2658,8 @@ const I18N = {
     "users.gender.male": "ذكر",
     "users.gender.female": "أنثى",
     "users.reminder.noneEligible": "لا أحد من المحددين بانتظار التسجيل.",
-    "users.table.sarAmount": "{value} ريال",
-    "users.table.sar": "{value} ريال",
+    "users.table.sarAmount": "{value} {riyal}",
+    "users.table.sar": "{value} {riyal}",
     "usersFilters.statusHeading": "الحالة",
     "usersFilters.joinedHeading": "الانضمام",
     "usersFilters.balanceHeading": "رصيد النقاط",
@@ -2822,7 +2829,7 @@ const I18N = {
     "transfers.actions.viewDetails": "عرض التفاصيل",
     "transfers.approve.title": "الموافقة على هذا الملف؟",
     "transfers.approve.body": "سيتم إرسال {points} نقطة إلى {count} أشخاص، ولا يمكن التراجع عنه.",
-    "transfers.approve.cost": "سيُخصم ﷼{value} من رصيدك المتاح.",
+    "transfers.approve.cost": "سيُخصم {value} {riyal} من رصيدك المتاح.",
     "transfers.approve.after": "الرصيد بعد هذه الموافقة",
     "transfers.approve.insufficient": "قيمة هذا الملف أكبر من رصيدك المتاح، لذا لا يمكن الموافقة عليه الآن.",
     "transfers.approve.confirm": "موافقة",
@@ -2873,7 +2880,7 @@ const I18N = {
     "transfers.single.recipientPlaceholder": "ابحث برقم الجوال أو الرقم التعريفي…",
     "transfers.single.pointsLabel": "النقاط",
     "transfers.single.pointsHint": "بين {min} و{max} نقطة.",
-    "transfers.single.valuePreview": "بما يعادل ﷼{value}",
+    "transfers.single.valuePreview": "بما يعادل {value} {riyal}",
     "transfers.single.sourceLabel": "المصدر",
     "transfers.single.noteLabel": "ملاحظة",
     "transfers.single.noteOptional": "اختياري",
@@ -2907,8 +2914,8 @@ const I18N = {
     "transfers.upload.errType": "يجب أن يكون الملف بصيغة CSV.",
     "transfers.upload.errSize": "حجم هذا الملف أكبر من 10 ميغابايت.",
     "transfers.upload.errNoFile": "اختر ملفًا أولًا.",
-    "transfers.value.derived": "القيمة محسوبة من النقاط، بمعدل 5 نقاط = 1 ﷼.",
-    "transfers.value.rate": "5 نقاط = 1 ﷼",
+    "transfers.value.derived": "القيمة محسوبة من النقاط، بمعدل 5 نقاط = 1 {riyal}.",
+    "transfers.value.rate": "5 نقاط = 1 {riyal}",
     "transfers.value.currency": "ريال سعودي",
     "transfers.search.placeholder": "ابحث باسم الملف أو الرافع…",
     "transfers.search.placeholderIndividual": "ابحث بالمستلم أو المرجع…",
@@ -3118,7 +3125,7 @@ const I18N = {
     "charge.chargeNote2": "تحويل بنكي، وافق عليه المدير المالي.",
     "charge.chargeNote3": "تأكد من رقم أمر الشراء قبل ما ترسل الفاتورة للمحاسبة.",
     "charge.export": "تصدير",
-    "charge.rate": "5 نقاط = 1 ﷼",
+    "charge.rate": "5 نقاط = 1 {riyal}",
     "charge.a11y.panel": "لوحة جانبية",
     "exports.heading": "التصدير",
     "exports.subtitle": "نزّل ملفًا طلبته سابقًا، أو تحقّق من جاهزية ملف طلبته للتو.",
@@ -3208,7 +3215,7 @@ const I18N = {
     "settings.field.about": "عن البرنامج",
     "settings.field.aboutHint": "شرح برنامجك الذي يقرؤه عملاؤك في تطبيق ولاء ون. احرص على أن يبقى دقيقًا ومحدّثًا.",
     "settings.sample.description": "Comtech Gold متجر سعودي للذهب والمجوهرات، نختار كل قطعة بعناية لتليق بلحظاتك المميزة.",
-    "settings.sample.terms": "عند كل عملية شراء من متاجر Comtech Gold، تحصل على نقاط تُضاف مباشرة إلى رصيدك في برنامج الولاء. تكسب نقطة واحدة عن كل 10 ﷼ من قيمة مشترياتك، وتُحتسب النقاط تلقائيًا فور إتمام عملية الشراء.\n\nكل 5 نقاط تعادل 1 ﷼ عند استخدامها، وهذا هو المعدل الثابت الذي نعتمده لتحديد قيمة نقاطك في أي وقت.\n\nتظل نقاطك صالحة لمدة 12 شهرًا من تاريخ اكتسابها. إذا لم تُستخدم خلال هذه المدة، تنتهي صلاحيتها تلقائيًا وتُحذف من رصيدك.\n\nلا يمكن استبدال النقاط بمبالغ نقدية، ولا تحويلها إلى عضو آخر، ولا استخدامها خارج متاجر Comtech Gold. إذا تم إرجاع عملية شراء أو إلغاؤها، قد نخصم النقاط المرتبطة بها من رصيدك.\n\nقد نُحدّث هذه الشروط من وقت لآخر لمواكبة أي تغييرات في برنامج الولاء. سننشر أي تعديل هنا في تطبيق ولاء ون، واستمرارك في استخدام النقاط بعد ذلك يعني موافقتك على الشروط الجديدة.",
+    "settings.sample.terms": "عند كل عملية شراء من متاجر Comtech Gold، تحصل على نقاط تُضاف مباشرة إلى رصيدك في برنامج الولاء. تكسب نقطة واحدة عن كل 10 {riyal} من قيمة مشترياتك، وتُحتسب النقاط تلقائيًا فور إتمام عملية الشراء.\n\nكل 5 نقاط تعادل 1 {riyal} عند استخدامها، وهذا هو المعدل الثابت الذي نعتمده لتحديد قيمة نقاطك في أي وقت.\n\nتظل نقاطك صالحة لمدة 12 شهرًا من تاريخ اكتسابها. إذا لم تُستخدم خلال هذه المدة، تنتهي صلاحيتها تلقائيًا وتُحذف من رصيدك.\n\nلا يمكن استبدال النقاط بمبالغ نقدية، ولا تحويلها إلى عضو آخر، ولا استخدامها خارج متاجر Comtech Gold. إذا تم إرجاع عملية شراء أو إلغاؤها، قد نخصم النقاط المرتبطة بها من رصيدك.\n\nقد نُحدّث هذه الشروط من وقت لآخر لمواكبة أي تغييرات في برنامج الولاء. سننشر أي تعديل هنا في تطبيق ولاء ون، واستمرارك في استخدام النقاط بعد ذلك يعني موافقتك على الشروط الجديدة.",
     "settings.sample.about": "برنامج Comtech Gold للولاء هو طريقتنا لنشكر عملاءنا الذين يختاروننا في كل مناسبة تستحق قطعة ذهب أو مجوهرات مميزة. كل عملية شراء تقرّبك خطوة من مكافآت حقيقية.\n\nكعضو في البرنامج، تكسب نقاطًا مع كل عملية شراء، يمكنك استبدالها لاحقًا بخصومات على مشترياتك القادمة. كما نطلعك أولًا بأول على عروضنا الموسمية وتشكيلاتنا الجديدة.\n\nالانضمام مجاني وبسيط، يكفي أن يكون لديك حساب في تطبيق ولاء ون. بعد أول عملية شراء، تبدأ نقاطك بالتراكم تلقائيًا، وتستطيع متابعة رصيدك في أي وقت من التطبيق.\n\nشكرًا لاختيارك Comtech Gold في لحظاتك الثمينة، ونتطلع لنكون جزءًا من كل مناسبة قادمة في حياتك.",
     "settings.edit": "تعديل",
     "settings.preview": "معاينة",
@@ -3255,7 +3262,7 @@ const I18N = {
     "releases.sample.1.title": "النقاط تصل أسرع بعد كل عملية شراء",
     "releases.sample.1.body": "أصبحت النقاط تظهر في رصيدك خلال لحظات من إتمام عملية الشراء، بدلًا من الانتظار القصير المعتاد.\n\nإذا سبق أن دفعت وفتحت تطبيق ولاء ون للتأكد من وصول نقاطك، لن تحتاج إلى الانتظار والتساؤل بعد الآن، فرصيدك يظهر محدّثًا قبل أن تغادر المتجر.",
     "releases.sample.2.title": "شاشة رصيد أوضح",
-    "releases.sample.2.body": "أعدنا تصميم شاشة الرصيد لتكون أوضح في عرض قيمة نقاطك، وليس فقط عددها.\n\nتظهر نقاطك وقيمتها بالريال جنبًا إلى جنب، فإذا كان رصيدك 500 نقطة، ترى مباشرة أنها تعادل 100 ﷼ دون أي حساب من جانبك.\n\nكما رتّبنا الشاشة بحيث يسهل عليك إيجاد آخر نشاطاتك دون الحاجة للبحث في أنحاء التطبيق.",
+    "releases.sample.2.body": "أعدنا تصميم شاشة الرصيد لتكون أوضح في عرض قيمة نقاطك، وليس فقط عددها.\n\nتظهر نقاطك وقيمتها بالريال جنبًا إلى جنب، فإذا كان رصيدك 500 نقطة، ترى مباشرة أنها تعادل 100 {riyal} دون أي حساب من جانبك.\n\nكما رتّبنا الشاشة بحيث يسهل عليك إيجاد آخر نشاطاتك دون الحاجة للبحث في أنحاء التطبيق.",
     "releases.sample.3.title": "عروض قريبة منك",
     "releases.sample.3.body": "أصبح بإمكان تطبيق ولاء ون عرض عروض العلامات التجارية التي تتابعها إذا كانت قريبة من موقعك، حتى لا يفوتك عرض لمجرد أنك لم تفتح التطبيق في وقته.\n\nفعّل مشاركة الموقع عندما يطلب منك التطبيق ذلك، وستظهر لك قائمة قصيرة بالعروض القريبة منك في الشاشة الرئيسية. ويمكنك إيقاف هذه الميزة في أي وقت من إعدادات هاتفك إذا فضّلت عدم مشاركة موقعك.\n\nهذه الميزة تعرض فقط عروض العلامات التجارية التي تتابعها بالفعل، ولا تعرض أي شيء آخر.",
     "releases.sample.4.title": "الإيصالات تعمل بشكل طبيعي من جديد",
@@ -3309,6 +3316,52 @@ function interp(s, vars){
     return typeof v === "number" ? fmt(v) : v;
   });
 }
+/* {riyal} is a placeholder in the copy, because an SVG cannot live inside a
+   translated string. This swaps it for the symbol once the text is in the DOM,
+   which is the only point where both kinds of binding have landed. */
+function paintRiyal(root){
+  const walk = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT);
+  const hits = [];
+  let n;
+  while ((n = walk.nextNode())) if (n.nodeValue.indexOf("{riyal}") >= 0) hits.push(n);
+  for (const node of hits){
+    const frag = document.createDocumentFragment();
+    node.nodeValue.split("{riyal}").forEach((part, i) => {
+      if (i){
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", "0 0 1124.14 1256.39");
+        svg.setAttribute("class", "rsym");
+        svg.setAttribute("aria-hidden", "true");
+        const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        use.setAttribute("href", "#i-riyal");
+        svg.appendChild(use);
+        frag.appendChild(svg);
+      }
+      if (part) frag.appendChild(document.createTextNode(part));
+    });
+    node.parentNode.replaceChild(frag, node);
+  }
+}
+
+/* Every screen builds its own markup, and several of them redraw after
+   applyI18n has already run -- setLang repaints each route, and sorting, paging
+   or searching rewrites rows on their own. Rather than keep a list of the
+   places that need painting, which is exactly the list that went stale for the
+   language switch, watch for new markup and paint whatever arrives. */
+let PAINTING = false;
+function watchRiyal(){
+  new MutationObserver(muts => {
+    if (PAINTING) return;
+    PAINTING = true;
+    try {
+      for (const m of muts)
+        for (const node of m.addedNodes)
+          if (node.nodeType === 1) paintRiyal(node);
+          else if (node.nodeType === 3 && node.parentNode) paintRiyal(node.parentNode);
+    } finally { PAINTING = false; }
+  }).observe(document.body, { childList: true, subtree: true });
+}
+
 function applyI18n(){
   // One place that binds every data-i18n* variant. Anything the markup can ask
   // for is handled here; see the assertion at the end of this file, which fails
@@ -3339,6 +3392,7 @@ function applyI18n(){
     el.setAttribute("placeholder", interp(t(el.dataset.i18nPh))));
   document.querySelectorAll("[data-i18n-coll-ph]").forEach(el =>
     el.setAttribute("placeholder", interp(ck(el.dataset.i18nCollPh))));
+  paintRiyal();
 }
 
 /* Guard against exactly the failure that hid this: markup asking for a binding
@@ -3961,7 +4015,7 @@ function txTable(rows, kind){
         ${isTx ? `<td><span class="pill ${x.dir === "in" ? "pill-success" : "pill-stage"}">
             <svg viewBox="0 0 24 24" width="12" height="12" style="transform:rotate(${x.dir==="in"?0:180}deg)"><use href="#i-up"/></svg>
             ${t("users.table." + x.dir)}</span></td>` : ""}
-        <td><span class="cell-bal"><svg viewBox="0 0 24 24" width="18" height="18"><use href="#i-point"/></svg>
+        <td><span class="cell-bal"><svg viewBox="0 0 26 25" width="18" height="18"><use href="#i-point"/></svg>
             <span class="num">${fmt(x.points)}</span></span></td>
         <td><span class="cell-muted">${money(x.value)}</span></td>
         <td><span class="cell-date">${dfmt(x.date)}</span></td></tr>`).join("")}
@@ -4386,7 +4440,7 @@ function paintRows(){
         case "status": return `<td><span class="pill ${u.registered ? "pill-success" : "pill-stage"}">
             <svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-${u.registered ? "check" : "clock"}"/></svg>
             ${t(u.registered ? coll().statusOn : coll().statusOff)}</span></td>`;
-        case "points": return `<td><span class="cell-bal"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-point"/></svg>
+        case "points": return `<td><span class="cell-bal"><svg viewBox="0 0 26 25" width="19" height="19"><use href="#i-point"/></svg>
             <span class="num">${fmt(u.points)}</span></span></td>`;
         case "joined": return `<td><span class="cell-date">${dfmt(u.joined)}</span></td>`;
         case "email":  return `<td><span class="cell-muted ltr">${u.email || `<span class="person-name is-empty">${t("users.empty.notCollected")}</span>`}</span></td>`;
@@ -4785,8 +4839,8 @@ function statusPill(st){
 
 /* Riyal amounts carry the glyph, and always read left-to-right so the figure
    does not scramble inside an Arabic sentence. */
-const riyal = v => `<span class="amt"><span class="rial" aria-hidden="true">﷼</span><span class="num">${fmt(Math.round(v))}</span><span class="sr-only"> ${esc(t("transfers.value.currency"))}</span></span>`;
-const pointsCell = p => `<span class="cell-bal"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-point"/></svg><span class="num">${fmt(p)}</span></span>`;
+const riyal = v => `<span class="amt"><svg class="rsym" viewBox="0 0 1124.14 1256.39" aria-hidden="true"><use href="#i-riyal"/></svg><span class="num">${fmt(Math.round(v))}</span><span class="sr-only"> ${esc(t("transfers.value.currency"))}</span></span>`;
+const pointsCell = p => `<span class="cell-bal"><svg viewBox="0 0 26 25" width="18" height="18" aria-hidden="true"><use href="#i-point"/></svg><span class="num">${fmt(p)}</span></span>`;
 
 /* Five points to the riyal, every time. */
 const valueCell = b => `<span class="val">${riyal(valueOf(b.points))}</span>`;
@@ -4880,7 +4934,7 @@ function renderTransfers(){
 
   const balTile = (key, pts, cls) => `<div class="bal ${cls || ""}${cls && lowBal ? " is-low" : ""}">
     <div class="bal-l">${esc(t("transfers.summary." + key))}</div>
-    <div class="bal-v"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><use href="#i-point"/></svg>
+    <div class="bal-v"><svg viewBox="0 0 26 25" width="21" height="21" aria-hidden="true"><use href="#i-point"/></svg>
       <span class="num">${fmt(pts)}</span></div>
     <div class="bal-sub">${riyal(valueOf(pts))} · ${esc(t("transfers.summary." + key + "Hint"))}</div>
     ${cls && com ? `<div class="bal-warn" style="color:var(--n-700)">
@@ -5997,11 +6051,11 @@ const xValue = pts => valueOf(pts);          // five points to the riyal, as eve
    carries its own sign instead, and says it in less space than a column did.
    Not red: taking points back is a normal operation, not a fault. */
 const xPoints = x => `<span class="cell-bal${x.dir === "out" ? " is-out" : ""}">
-  <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><use href="#i-point"/></svg>
+  <svg viewBox="0 0 26 25" width="19" height="19" aria-hidden="true"><use href="#i-point"/></svg>
   <span class="num ltr">${x.dir === "out" ? "\u2212" : ""}${fmt(x.points)}</span>
   <span class="sr-only"> ${esc(t("transactions.direction." + x.dir))}</span></span>`;
 const xValueCell = x => `<span class="val${x.dir === "out" ? " is-out" : ""}">${
-  x.dir === "out" ? `<span class="amt"><span class="rial" aria-hidden="true">﷼</span><span class="num">\u2212${
+  x.dir === "out" ? `<span class="amt"><svg class="rsym" viewBox="0 0 1124.14 1256.39" aria-hidden="true"><use href="#i-riyal"/></svg><span class="num">\u2212${
     fmt(Math.round(xValue(x.points)))}</span></span>` : riyal(xValue(x.points))}</span>`;
 const xNote  = t_ => t_ ? t(t_) : null;
 
@@ -7786,6 +7840,8 @@ document.addEventListener("keydown", e => {
 window.addEventListener("beforeunload", e => {
   if (typeof setAnyDirty === "function" && setAnyDirty()) { e.preventDefault(); e.returnValue = ""; }
 });
+
+watchRiyal();
 
 document.body.dataset.state = "normal";
 document.body.dataset.collapsed = "false";
