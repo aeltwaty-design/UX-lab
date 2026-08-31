@@ -1,0 +1,50 @@
+{
+  "en": {
+    "users.columns.userId": "Loyalty ID",
+    "users.detail.userId": "Loyalty ID",
+    "users.detail.fieldUserId": "Loyalty ID",
+    "users.actions.copyId": "Copy loyalty ID",
+    "users.actions.copyUserId": "Copy loyalty ID",
+
+    "transfers.source.fullNumber": "Full mobile number",
+    "transfers.source.loyaltyIdOnly": "Loyalty ID only",
+    "transfers.single.recipientPlaceholder": "Search by phone or Loyalty ID…",
+
+    "settings.section.contentOptional": "Optional",
+
+    "home.stat.pointsAvailable": "Points available",
+    "home.stat.pointsTransferred": "Points transferred",
+    "home.stat.pointsRefunded": "Points refunded",
+    "home.stat.pointsPending": "Points pending",
+    "home.stat.totalUsers": "Total users",
+    "home.stat.usersRegistered": "Users registered",
+    "home.stat.usersUnregistered": "Users unregistered",
+    "home.stat.totalOffers": "Total offers",
+    "home.group.points": "Points",
+    "home.group.audience": "Audience"
+  },
+  "ar": {
+    "users.columns.userId": "الرقم التعريفي",
+    "users.detail.userId": "الرقم التعريفي",
+    "users.detail.fieldUserId": "الرقم التعريفي",
+    "users.actions.copyId": "نسخ الرقم التعريفي",
+    "users.actions.copyUserId": "نسخ الرقم التعريفي",
+
+    "transfers.source.fullNumber": "رقم الجوال الكامل",
+    "transfers.source.loyaltyIdOnly": "الرقم التعريفي فقط",
+    "transfers.single.recipientPlaceholder": "ابحث برقم الجوال أو الرقم التعريفي…",
+
+    "settings.section.contentOptional": "اختياري",
+
+    "home.stat.pointsAvailable": "النقاط المتاحة",
+    "home.stat.pointsTransferred": "النقاط المحولة",
+    "home.stat.pointsRefunded": "النقاط المستردة",
+    "home.stat.pointsPending": "النقاط المعلّقة",
+    "home.stat.totalUsers": "إجمالي المستخدمين",
+    "home.stat.usersRegistered": "المستخدمين المسجلين",
+    "home.stat.usersUnregistered": "المستخدمين غير المسجلين",
+    "home.stat.totalOffers": "إجمالي العروض",
+    "home.group.points": "النقاط",
+    "home.group.audience": "الجمهور"
+  }
+}

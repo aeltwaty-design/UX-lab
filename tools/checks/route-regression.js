@@ -52,10 +52,15 @@ const { chromium } = require('playwright');
   const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto('file:///home/user/UX-lab/preview/app.html#/overview', { waitUntil:'domcontentloaded' });
   await p.evaluate(() => setLang('ar')); await p.waitForTimeout(250);
+  // The dashboard reduced to eight figures, but the rule it was testing holds:
+  // nothing on the home screen may state a number the data cannot account for.
+  // Points pending is now the figure derived from the approval queue.
   const att = await p.evaluate(() => ({
-    pending: document.querySelector('#attPending .att-d')?.textContent.trim(),
+    pending:  document.getElementById('stPend')?.textContent.trim(),
+    fromData: fmt(BATCHES.filter(b => b.status === 'uploaded').reduce((n,b) => n + b.points, 0)),
     navBadge: document.getElementById('navQueue')?.textContent }));
-  check('overview count comes from the queue', /3/.test(att.pending||'') && att.navBadge==='3', JSON.stringify(att));
+  check('overview pending figure comes from the queue',
+        !!att.pending && att.pending === att.fromData && att.navBadge === '3', JSON.stringify(att));
   const jump = await p.evaluate(async () => { goTransfers('uploaded'); await new Promise(r=>setTimeout(r,300));
     return { route: location.hash, filter: TFILT.status, rows: document.querySelectorAll('#tbody-t tr, .card-row').length }; });
   check('overview -> the review queue', jump.route==='#/transfers' && jump.filter==='uploaded' && jump.rows===3, JSON.stringify(jump));

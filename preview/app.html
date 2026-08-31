@@ -182,6 +182,34 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .btn-link::before{content:"";position:absolute;inset:-5px}
 .btn-link:hover{text-decoration:underline}
 
+/* ---- dashboard figures ---- */
+.stat-sec{margin-bottom:var(--sp-400)}
+.stat-sec:last-child{margin-bottom:0}
+.stat-h{font-size:14px;font-weight:600;color:var(--n-700);margin:0 0 var(--sp-150)}
+/* Fixed tracks, not auto-fit: the two groups hold different numbers of cards,
+   and auto-fit stretched the shorter row so the cards stopped lining up. */
+.stat-grid{display:grid;gap:var(--sp-250);grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:1180px){ .stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:560px){  .stat-grid{grid-template-columns:1fr} }
+.stat{display:flex;flex-direction:column;align-items:flex-start;background:#fff;
+  border:1px solid var(--n-200);border-radius:var(--r-200);
+  padding:var(--sp-300);min-block-size:158px}
+.stat-ico{inline-size:var(--sp-550);block-size:var(--sp-550);border-radius:var(--r-150);
+  display:grid;place-items:center;background:var(--n-100);color:var(--n-700);margin-bottom:auto}
+.stat-v{font-size:32px;font-weight:700;color:var(--n-950);line-height:1.1;
+  letter-spacing:-.02em;margin-top:var(--sp-250);font-variant-numeric:tabular-nums}
+.stat-l{font-size:14px;color:var(--n-700);margin-top:var(--sp-75)}
+/* The balance is the figure the whole screen exists to report, so it carries the
+   brand colour and the rest stay neutral. Accenting all eight would rank none. */
+.stat-lead{background:var(--p-50);border-color:var(--p-200)}
+.stat-lead .stat-ico{background:var(--p-100);color:var(--p-700)}
+.stat-lead .stat-v{color:var(--p-900)}
+.stat-lead .stat-l{color:var(--p-800)}
+@media (max-width:520px){
+  .stat{min-block-size:0;padding:var(--sp-250)}
+  .stat-v{font-size:24px;margin-top:var(--sp-150)}
+}
+
 /* ---- quick access ---- */
 /* The card is stretched to the chart beside it, so the list has to take the
    height rather than leave it empty underneath: the rows share whatever is
@@ -690,7 +718,10 @@ html[dir="ltr"] .ltr{text-align:left}
 .set-wrap{display:grid;gap:1.25rem;max-width:860px}
 .set-card{background:#fff;border:1px solid var(--n-200);border-radius:var(--r-200);
   box-shadow:var(--shadow-sm);padding:var(--sp-300)}
-.set-h{font-size:16px;font-weight:700;color:var(--n-950);margin:0}
+.set-h{font-size:16px;font-weight:700;color:var(--n-950);margin:0;
+  display:flex;align-items:center;gap:var(--sp-100);flex-wrap:wrap}
+.set-opt{font-size:12px;font-weight:500;color:var(--n-700);
+  background:var(--n-100);border-radius:999px;padding:var(--sp-25) var(--sp-100)}
 .set-sub{font-size:12px;color:var(--n-700);margin-top:var(--sp-50);line-height:1.5}
 .set-body{margin-top:var(--sp-250);display:grid;gap:var(--sp-250)}
 
@@ -1103,6 +1134,15 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
 .finp,.ftxt,.fsel{width:100%;border:1px solid var(--n-300);border-radius:var(--r-100);
   padding:var(--sp-125) var(--sp-175);font:inherit;font-size:14px;color:var(--n-950);background:#fff;outline:none;
   transition:border-color .12s,box-shadow .12s}
+/* The browser's own select arrow sits at its own inset and ignores direction, so
+   it never lined up with the field's text. Ours uses the same --sp-175 inset. */
+.fsel{appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236C6684' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m8 10 4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-size:18px 18px;
+  background-position:right var(--sp-175) center;
+  padding-inline-end:calc(var(--sp-175) + 18px + var(--sp-100))}
+html[dir="rtl"] .fsel{background-position:left var(--sp-175) center}
+.fsel::-ms-expand{display:none}
 .finp:focus,.ftxt:focus,.fsel:focus{border-color:var(--p-500);box-shadow:var(--focus)}
 .finp,.fsel{height:50px}
 .ftxt{min-height:96px;resize:vertical;line-height:1.55}
@@ -1295,285 +1335,62 @@ html[dir="rtl"] .vw-line{text-align:start}
         </div>
       </div>
     </div>
-    <div class="grid grid-cols-12 gap-5 mb-5">
-      <!-- WALLET — its own card now, separate from the supporting figures -->
-      <section class="card col-span-12 lg:col-span-4 flex flex-col">
-        <div class="card-h pb-3">
-          <div class="min-w-0">
-            <h2 class="card-t" data-i18n="wallet.heading"></h2>
-            <div class="card-sub" data-i18n="wallet.availableCredits">Available credits</div>
-          </div>
-          <button class="icon-btn ms-auto shrink-0" style="border:1px solid var(--n-300)"
-                  onclick="go('charges')"
-                  data-i18n-aria="actions.chargePoints" aria-label="Charge points">
-            <svg viewBox="0 0 24 24" width="18" height="18"><use href="#i-plus"/></svg>
-          </button>
+    <!-- The dashboard is the eight figures and nothing else. Two groups rather than
+         one flat grid of eight, and the balance leads its group, because a wall of
+         equal boxes gives the reader nothing to look at first. -->
+    <section class="stat-sec" aria-labelledby="grpPoints">
+      <h2 class="stat-h" id="grpPoints" data-i18n="home.group.points"></h2>
+      <div class="stat-grid">
+        <div class="stat stat-lead">
+          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-wallet"/></svg></span>
+          <span class="stat-v num" id="stAvail">0</span>
+          <span class="stat-l" data-i18n="home.stat.pointsAvailable"></span>
         </div>
-        <div class="px-5 pb-5 pt-1 flex-1 flex flex-col">
-          <div class="s-load"><div class="sk h-4 w-28 mb-3"></div><div class="sk h-11 w-44 mb-2"></div><div class="sk h-4 w-32"></div></div>
-          <div class="s-err">
-            <div class="rounded-lg p-3" style="background:var(--danger-50);border:1px solid var(--danger-200)">
-              <div class="flex items-start gap-2.5">
-                <span class="shrink-0 mt-0.5" style="color:var(--danger-700)"><svg viewBox="0 0 24 24" width="18" height="18"><use href="#i-shield"/></svg></span>
-                <div class="min-w-0">
-                  <div style="font-size:14px;font-weight:700;color:var(--danger-700)" data-i18n="wallet.integrityTitle"></div>
-                  <div style="font-size:12px;color:var(--n-800);margin-top:var(--sp-50);line-height:1.5" data-i18n="wallet.integrityBody" data-i18n-vars='{"value":"@time.days:3"}'></div>
-                  <button class="btn-link mt-2" data-i18n="actions.reportIssue"></button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="s-empty empty py-5">
-            <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-wallet"/></svg></div>
-            <div class="empty-t" data-i18n="wallet.emptyBody" data-i18n-part="head"></div>
-            <div class="empty-d" data-i18n="wallet.emptyBody" data-i18n-part="tail"></div>
-          </div>
-          <div class="s-real flex-1 flex flex-col">
-            <div class="flex items-center gap-2.5">
-              <svg viewBox="0 0 24 24" width="30" height="30" class="shrink-0" aria-hidden="true"><use href="#i-point"/></svg>
-              <span class="num" style="font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1">1,096,860</span>
-            </div>
-            <div style="font-size:12px;color:var(--n-700);margin-top:var(--sp-100)" data-i18n="wallet.sarEquivalent" data-i18n-vars='{"value":"219,372"}'>219,372 SAR</div>
-            <div class="pt-3" style="border-top:1px dashed var(--n-200);margin-top:auto">
-              <span class="pill rate-pill">
-                <svg viewBox="0 0 24 24" width="13" height="13"><use href="#i-point"/></svg>
-                <span data-i18n="wallet.conversionRate" data-i18n-vars='{"points":5,"sar":1}'>5 points = 1 SAR</span>
-              </span>
-            </div>
-          </div>
+        <div class="stat">
+          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-transfer"/></svg></span>
+          <span class="stat-v num" id="stSent">0</span>
+          <span class="stat-l" data-i18n="home.stat.pointsTransferred"></span>
         </div>
-      </section>
-
-      <!-- SUPPORTING FIGURES — separated into their own card -->
-      <section class="card col-span-12 lg:col-span-8">
-        <div class="card-h" style="padding-bottom:var(--sp-250)">
-          <div class="min-w-0">
-            <h2 class="card-t" data-i18n="metrics.heading">Points activity</h2>
-            <div class="card-sub" data-i18n="metrics.subtitle"></div>
-          </div>
-          <span class="ms-auto" style="font-size:12px;color:var(--n-600)" data-i18n="header.comparedToPrevious"></span>
+        <div class="stat">
+          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-return"/></svg></span>
+          <span class="stat-v num" id="stRef">0</span>
+          <span class="stat-l" data-i18n="home.stat.pointsRefunded"></span>
         </div>
-        <div class="px-5 pb-5">
-          <div class="s-load grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div class="sk h-28"></div><div class="sk h-28"></div><div class="sk h-28"></div><div class="sk h-28"></div></div>
-          <div class="s-err empty py-6"><div class="empty-t" data-i18n="states.errorTitle"></div>
-            <button class="btn btn-ghost btn-sm mt-3"><span data-i18n="actions.retry"></span></button></div>
-          <div class="s-empty empty py-6"><div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-inbox"/></svg></div>
-            <div class="empty-t" data-i18n="flow.emptyBody" data-i18n-part="head"></div>
-            <div class="empty-d" data-i18n="flow.emptyBody" data-i18n-part="tail"></div></div>
-          <div class="s-real grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div class="mt" data-spark="issued" data-tone="up">
-              <div class="mt-l" data-i18n="wallet.issued"></div><div class="mt-v num">2,847,500</div>
-              <div class="mt-d"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-up"/></svg><span class="num">12.4%</span></div>
-              <svg class="mt-s" viewBox="0 0 120 58" preserveAspectRatio="none" aria-hidden="true"></svg></div>
-            <div class="mt" data-spark="redeemed" data-tone="flat">
-              <div class="mt-l" data-i18n="wallet.redeemed"></div><div class="mt-v num">1,750,640</div>
-              <div class="mt-d"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-down"/></svg><span class="num">3.1%</span></div>
-              <svg class="mt-s" viewBox="0 0 120 58" preserveAspectRatio="none" aria-hidden="true"></svg></div>
-            <div class="mt" data-spark="pending" data-tone="warn">
-              <div class="mt-l" data-i18n="wallet.pending"></div><div class="mt-v num">96,200</div>
-              <div class="mt-d"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-up"/></svg><span class="num">8.0%</span></div>
-              <svg class="mt-s" viewBox="0 0 120 58" preserveAspectRatio="none" aria-hidden="true"></svg></div>
-            <div class="mt" data-spark="refunded" data-tone="flat">
-              <div class="mt-l" data-i18n="wallet.refunded"></div><div class="mt-v num">12,400</div>
-              <div class="mt-d"><svg viewBox="0 0 24 24" width="12" height="12"><use href="#i-down"/></svg><span class="num">1.2%</span></div>
-              <svg class="mt-s" viewBox="0 0 120 58" preserveAspectRatio="none" aria-hidden="true"></svg></div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div class="grid grid-cols-12 gap-5 mb-5">
-<section class="card col-span-12 lg:col-span-7">
-        <div class="card-h pb-2 flex-wrap">
-          <div class="min-w-0">
-            <h2 class="card-t" data-i18n="flow.title">Points issued vs redeemed</h2>
-            <div class="card-sub" data-i18n="flow.subtitleYear">Last 30 days</div>
-          </div>
-          <div class="flex items-center gap-4 ms-auto" style="font-size:12px">
-            <span class="flex items-center gap-1.5"><span style="width:10px;height:10px;border-radius:3px;background:var(--series-issued)"></span>
-              <span data-i18n="flow.legendIssued">Issued</span></span>
-            <span class="flex items-center gap-1.5"><span style="width:10px;height:10px;border-radius:3px;background:var(--series-redeemed)"></span>
-              <span data-i18n="flow.legendRedeemed">Redeemed</span></span>
-          </div>
-        </div>
-        <div class="px-5 pb-4 pt-3">
-          <div class="s-load"><div class="sk w-full" style="height:344px;border-radius:10px"></div></div>
-          <div class="s-err empty" style="height:344px;display:grid;place-content:center">
-            <div class="empty-t" data-i18n="states.errorTitle">Couldn't load this</div>
-            <button class="btn btn-ghost btn-sm mt-3 mx-auto"><span data-i18n="actions.retry">Try again</span></button></div>
-          <div class="s-empty empty" style="height:344px;display:grid;place-content:center">
-            <div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-inbox"/></svg></div>
-            <div class="empty-t" data-i18n="flow.emptyBody" data-i18n-part="head">No activity in this period</div>
-            <div class="empty-d" data-i18n="flow.emptyBody" data-i18n-part="tail">When you issue or customers redeem points, the trend appears here.</div></div>
-          <div class="s-real chart-wrap">
-            <svg id="chart" viewBox="0 0 720 344" width="100%" height="344" role="img"
-                 data-i18n-aria="a11y.chartDesc" aria-label="Points issued versus redeemed over the last 30 days"></svg>
-            <div id="tooltip" role="status" aria-live="polite"></div>
-            <div class="yr-tot">
-              <span class="yr-lbl" data-i18n="flow.yearTotal"></span>
-              <span class="yr-item"><span class="yr-sw" style="background:var(--series-issued)"></span>
-                <span data-i18n="wallet.issued"></span><b class="num" id="totIssued"></b></span>
-              <span class="yr-item"><span class="yr-sw" style="background:var(--series-redeemed)"></span>
-                <span data-i18n="wallet.redeemed"></span><b class="num" id="totRedeemed"></b></span>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- QUICK ACCESS — the four things a partner actually comes here to do.
-           Sits where Offers used to, so the row is whole again. -->
-      <section class="card col-span-12 lg:col-span-5 flex flex-col">
-        <div class="card-h pb-3">
-          <div class="min-w-0">
-            <h2 class="card-t" data-i18n="quick.heading"></h2>
-            <div class="card-sub" data-i18n="quick.sub"></div>
-          </div>
-        </div>
-        <div class="qa-list">
-          <button class="qa-row" onclick="openUpload()">
-            <span class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-upload"/></svg></span>
-            <span class="qa-tx"><span class="qa-t" data-i18n="quick.bulk"></span><span class="qa-d" data-i18n="quick.bulkHint"></span></span>
-            <svg class="qa-go" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-chevron"/></svg>
-          </button>
-          <button class="qa-row" onclick="openSingle()">
-            <span class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-userplus"/></svg></span>
-            <span class="qa-tx"><span class="qa-t" data-i18n="quick.single"></span><span class="qa-d" data-i18n="quick.singleHint"></span></span>
-            <svg class="qa-go" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-chevron"/></svg>
-          </button>
-          <button class="qa-row" onclick="go('charges')">
-            <span class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-plus"/></svg></span>
-            <span class="qa-tx"><span class="qa-t" data-i18n="quick.charge"></span><span class="qa-d" data-i18n="quick.chargeHint"></span></span>
-            <svg class="qa-go" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-chevron"/></svg>
-          </button>
-          <button class="qa-row" onclick="go('exports')">
-            <span class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-download"/></svg></span>
-            <span class="qa-tx"><span class="qa-t" data-i18n="quick.export"></span><span class="qa-d" data-i18n="quick.exportHint"></span></span>
-            <svg class="qa-go" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-chevron"/></svg>
-          </button>
-        </div>
-      </section>
-      <!-- OFFERS — rebuilt around the offers themselves, not three stacked counts -->
-      <section class="card col-span-12 lg:col-span-4 flex flex-col" data-offers>
-        <div class="card-h pb-3">
-          <h2 class="card-t" data-i18n="offers.heading"></h2>
-          <button class="btn-link ms-auto" data-i18n="offers.manageAll">Manage all</button>
-        </div>
-        <div class="px-5 pb-5 pt-1 flex-1 flex flex-col">
-          <div class="s-load"><div class="sk h-12 mb-2"></div><div class="sk h-14 mb-2"></div><div class="sk h-14 mb-2"></div><div class="sk h-14"></div></div>
-          <div class="s-err empty py-6"><div class="empty-t" data-i18n="states.errorTitle"></div>
-            <button class="btn btn-ghost btn-sm mt-3"><span data-i18n="actions.retry"></span></button></div>
-          <div class="s-empty empty py-6"><div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-ticket"/></svg></div>
-            <div class="empty-t" data-i18n="offers.emptyBody" data-i18n-part="head"></div>
-            <div class="empty-d" data-i18n="offers.emptyBody" data-i18n-part="tail"></div></div>
-          <div class="s-real flex-1 flex flex-col">
-            <div class="of-sum">
-              <svg viewBox="0 0 24 24" width="16" height="16" class="shrink-0"><use href="#i-clock"/></svg>
-              <span class="num of-sum-n">5</span><span data-i18n="offers.expiringSoon"></span>
-            </div>
-            <div id="offerList" class="flex-1" style="display:flex;flex-direction:column;min-height:0"></div>
-            <div class="of-foot">
-              <span><b class="num">312</b> <span data-i18n="offers.active"></span></span>
-              <span><b class="num">4,094</b> <span data-i18n="offers.total"></span></span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div class="grid grid-cols-12 gap-6">
-      <section class="card col-span-12 lg:col-span-6">
-        <div class="card-h pb-3">
-          <h2 class="card-t" data-i18n="activity.heading">Recent activity</h2>
-          <button class="btn-link ms-auto" data-i18n="actions.viewAll">View all</button>
-        </div>
-        <div class="px-5 pb-5 pt-1">
-          <div class="s-load"><div class="sk h-12 mb-2"></div><div class="sk h-12 mb-2"></div><div class="sk h-12 mb-2"></div><div class="sk h-12"></div></div>
-          <div class="s-err empty py-6"><div class="empty-t" data-i18n="states.errorTitle">Couldn't load this</div>
-            <button class="btn btn-ghost btn-sm mt-3"><span data-i18n="actions.retry">Try again</span></button></div>
-          <div class="s-empty empty py-6"><div class="empty-ico"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-inbox"/></svg></div>
-            <div class="empty-t" data-i18n="activity.emptyBody" data-i18n-part="head">Nothing has happened yet</div>
-            <div class="empty-d" data-i18n="activity.emptyBody" data-i18n-part="tail">Transfers, refunds and new sign-ups will appear here as they happen.</div></div>
-          <div class="s-real" id="activityList"></div>
-        </div>
-      </section>
-
-      <section class="card overflow-hidden col-span-12 lg:col-span-6">
-      <div class="card-h pb-4 flex-wrap">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <div class="min-w-0">
-            <h2 class="card-t" data-i18n="attention.sectionTitle">Action needed</h2>
-            <div class="card-sub" data-i18n="attention.subtitle">Sorted by urgency. Clear these first.</div>
-          </div>
-        </div>
-        <span class="pill pill-critical s-real ms-auto"><span class="num" id="attOpen">5</span>&nbsp;<span data-i18n="attention.openCount">open</span></span>
-      </div>
-
-      <!-- loading -->
-      <div class="s-load px-5 pb-5 pt-2">
-        <div class="sk h-14 mb-2 rounded-lg"></div><div class="sk h-14 mb-2 rounded-lg"></div><div class="sk h-14 rounded-lg"></div>
-      </div>
-
-      <!-- error -->
-      <div class="s-err empty">
-        <div class="empty-ico" style="background:var(--danger-50);color:var(--danger-700)"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-alert"/></svg></div>
-        <div class="empty-t" data-i18n="states.errorTitle">Couldn't load this</div>
-        <div class="empty-d" data-i18n="states.errorBody">Something went wrong on our side. Your data is safe.</div>
-        <button class="btn btn-ghost btn-sm mt-3"><svg viewBox="0 0 24 24" width="14" height="14"><use href="#i-refresh"/></svg><span data-i18n="actions.retry">Try again</span></button>
-      </div>
-
-      <!-- all clear -->
-      <div class="s-empty empty">
-        <div class="empty-ico" style="background:var(--success-50);color:var(--success-700)"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#i-check"/></svg></div>
-        <div class="empty-t" data-i18n="attention.allClearTitle">Nothing needs you right now</div>
-        <div class="empty-d" data-i18n="attention.allClearBody">Every transfer is approved and no offers are expiring this week.</div>
-      </div>
-
-      <div class="s-real mt-1">
-        <!-- 1. DATA INTEGRITY — the -1,096,860 bug, never shown as fact -->
-        <div class="att-row sev-critical">
-          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-shield"/></svg></div>
-          <div class="min-w-0 flex-1">
-            <div class="att-t" data-i18n="attention.integrityTitle">Your points balance can't be verified</div>
-            <div class="att-d" data-i18n="attention.integrityDesc" data-i18n-vars='{"value":"@time.days:3"}'></div>
-          </div>
-          <button class="btn btn-ghost btn-sm shrink-0" onclick="go('settings')"><span data-i18n="attention.integrityCta"></span></button>
-        </div>
-        <div class="att-row sev-critical">
-          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-xcircle"/></svg></div>
-          <div class="min-w-0 flex-1">
-            <div class="att-t" data-i18n="attention.failedTitle">Transactions failed</div>
-            <div class="att-d" data-i18n="attention.failedDesc" data-i18n-vars='{"count":3}'></div>
-          </div>
-          <button class="btn btn-ghost btn-sm shrink-0" onclick="go('transactions')"><span data-i18n="attention.failedCta"></span></button>
-        </div>
-        <div class="att-row sev-warning" id="attPending">
-          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-hourglass"/></svg></div>
-          <div class="min-w-0 flex-1">
-            <div class="att-t" data-i18n="attention.pendingTitle">Transfers waiting for your approval</div>
-            <div class="att-d" data-i18n="attention.pendingDesc" data-i18n-vars='{"count":12}'></div>
-          </div>
-          <button class="btn btn-ghost btn-sm shrink-0" onclick="goTransfers('uploaded')"><span data-i18n="attention.pendingCta"></span></button>
-        </div>
-        <div class="att-row sev-warning" data-offers>
-          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-clock"/></svg></div>
-          <div class="min-w-0 flex-1">
-            <div class="att-t" data-i18n="attention.expiringTitle">Offers expiring within 7 days</div>
-            <div class="att-d" data-i18n="attention.expiringDesc" data-i18n-vars='{"count":5}'></div>
-          </div>
-          <button class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.expiringCta"></span></button>
-        </div>
-        <div class="att-row sev-info">
-          <div class="att-ico"><svg viewBox="0 0 24 24" width="19" height="19"><use href="#i-userplus"/></svg></div>
-          <div class="min-w-0 flex-1">
-            <div class="att-t" data-i18n="attention.backlogTitle">Followers who never finished signing up</div>
-            <div class="att-d" data-i18n="attention.backlogDesc" data-i18n-vars='{"count":148}'></div>
-          </div>
-          <a href="#/users?seg=unreg" class="btn btn-ghost btn-sm shrink-0"><span data-i18n="attention.backlogCta"></span></a>
+        <div class="stat">
+          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-hourglass"/></svg></span>
+          <span class="stat-v num" id="stPend">0</span>
+          <span class="stat-l" data-i18n="home.stat.pointsPending"></span>
         </div>
       </div>
-      </section>
-    </div>
+    </section>
+
+    <section class="stat-sec" aria-labelledby="grpAudience">
+      <h2 class="stat-h" id="grpAudience" data-i18n="home.group.audience"></h2>
+      <div class="stat-grid">
+        <div class="stat">
+          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-users"/></svg></span>
+          <span class="stat-v num" id="stUsers">0</span>
+          <span class="stat-l" data-i18n="home.stat.totalUsers"></span>
+        </div>
+        <div class="stat">
+          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-check"/></svg></span>
+          <span class="stat-v num" id="stReg">0</span>
+          <span class="stat-l" data-i18n="home.stat.usersRegistered"></span>
+        </div>
+        <div class="stat">
+          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-userplus"/></svg></span>
+          <span class="stat-v num" id="stUnreg">0</span>
+          <span class="stat-l" data-i18n="home.stat.usersUnregistered"></span>
+        </div>
+        <div class="stat" data-offers>
+          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-ticket"/></svg></span>
+          <span class="stat-v num" id="stOffers">0</span>
+          <span class="stat-l" data-i18n="home.stat.totalOffers"></span>
+        </div>
+      </div>
+    </section>
   </div>
+
   <div id="view-list" class="view">
 
     <!-- page header -->
@@ -1895,7 +1712,7 @@ const I18N = {
     "users.status.registered": "Registered",
     "users.status.notRegistered": "Not registered",
     "users.columns.person": "Person",
-    "users.columns.userId": "User ID",
+    "users.columns.userId": "Loyalty ID",
     "users.columns.status": "Status",
     "users.columns.points": "Points balance",
     "users.columns.joined": "Joined",
@@ -1921,7 +1738,7 @@ const I18N = {
     "users.pagination.perPage": "Rows per page",
     "users.actions.viewProfile": "View profile",
     "users.actions.transferPoints": "Transfer points",
-    "users.actions.copyId": "Copy user ID",
+    "users.actions.copyId": "Copy loyalty ID",
     "users.actions.copied": "Copied",
     "users.detail.joinedOn": "Joined on {date}",
     "users.detail.tabInfo": "Information",
@@ -1932,7 +1749,7 @@ const I18N = {
     "users.detail.mobile": "Mobile number",
     "users.detail.email": "Email",
     "users.detail.gender": "Gender",
-    "users.detail.userId": "User ID",
+    "users.detail.userId": "Loyalty ID",
     "users.detail.verified": "Verified",
     "users.detail.parked": "Parked",
     "users.detail.parkedWhat": "What is this?",
@@ -2039,14 +1856,14 @@ const I18N = {
     "users.reminder.cooldownNote": "{count} people were excluded because they were reminded recently.",
     "users.reminder.capNote": "You can send up to {cap} reminders in one batch.",
     "users.actions.sendReminder": "Send reminder",
-    "users.actions.copyUserId": "Copy user ID",
+    "users.actions.copyUserId": "Copy loyalty ID",
     "users.actions.copiedConfirmation": "Copied",
     "users.detail.sectionPersonalInfo": "Personal information",
     "users.detail.fieldFullName": "Full name",
     "users.detail.fieldMobile": "Mobile number",
     "users.detail.fieldEmail": "Email",
     "users.detail.fieldGender": "Gender",
-    "users.detail.fieldUserId": "User ID",
+    "users.detail.fieldUserId": "Loyalty ID",
     "users.detail.verifiedBadge": "Verified",
     "users.detail.summaryTransferred": "Total points transferred",
     "users.detail.summaryRefunded": "Total points refunded",
@@ -2181,7 +1998,7 @@ const I18N = {
     "transfers.single.title": "Send points to a customer",
     "transfers.single.intro": "Search for a customer, choose how many points to send, and they'll receive them right away.",
     "transfers.single.recipientLabel": "Recipient",
-    "transfers.single.recipientPlaceholder": "Search by name or phone…",
+    "transfers.single.recipientPlaceholder": "Search by phone or Loyalty ID…",
     "transfers.single.pointsLabel": "Points",
     "transfers.single.pointsHint": "Between {min} and {max} points.",
     "transfers.single.valuePreview": "Worth ﷼{value}",
@@ -2586,7 +2403,20 @@ const I18N = {
     "quick.charge": "Charge points",
     "quick.chargeHint": "Top up to keep transfers running smoothly.",
     "quick.export": "Export reports",
-    "quick.exportHint": "Download reports on transactions, users or transfers."
+    "quick.exportHint": "Download reports on transactions, users or transfers.",
+    "transfers.source.fullNumber": "Full mobile number",
+    "transfers.source.loyaltyIdOnly": "Loyalty ID only",
+    "settings.section.contentOptional": "Optional",
+    "home.stat.pointsAvailable": "Points available",
+    "home.stat.pointsTransferred": "Points transferred",
+    "home.stat.pointsRefunded": "Points refunded",
+    "home.stat.pointsPending": "Points pending",
+    "home.stat.totalUsers": "Total users",
+    "home.stat.usersRegistered": "Users registered",
+    "home.stat.usersUnregistered": "Users unregistered",
+    "home.stat.totalOffers": "Total offers",
+    "home.group.points": "Points",
+    "home.group.audience": "Audience"
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -2755,7 +2585,7 @@ const I18N = {
     "users.reminder.sent": "تم إرسال التذكير إلى {count} أشخاص.",
     "users.actions.viewProfile": "عرض الملف الشخصي",
     "users.actions.transferPoints": "تحويل النقاط",
-    "users.actions.copyId": "نسخ معرف المستخدم",
+    "users.actions.copyId": "نسخ الرقم التعريفي",
     "users.actions.copied": "تم النسخ",
     "users.detail.joinedOn": "تاريخ الانضمام: {date}",
     "users.detail.tabInfo": "المعلومات",
@@ -2766,7 +2596,7 @@ const I18N = {
     "users.detail.mobile": "رقم الجوال",
     "users.detail.email": "البريد الإلكتروني",
     "users.detail.gender": "الجنس",
-    "users.detail.userId": "معرف المستخدم",
+    "users.detail.userId": "الرقم التعريفي",
     "users.detail.verified": "موثق",
     "users.detail.parked": "المحجوزة",
     "users.detail.parkedWhat": "ما المقصود؟",
@@ -3015,7 +2845,7 @@ const I18N = {
     "transfers.single.title": "إرسال نقاط لعميل",
     "transfers.single.intro": "ابحث عن العميل، حدّد عدد النقاط المطلوب إرسالها، وستصله فورًا.",
     "transfers.single.recipientLabel": "المستلم",
-    "transfers.single.recipientPlaceholder": "ابحث بالاسم أو رقم الجوال…",
+    "transfers.single.recipientPlaceholder": "ابحث برقم الجوال أو الرقم التعريفي…",
     "transfers.single.pointsLabel": "النقاط",
     "transfers.single.pointsHint": "بين {min} و{max} نقطة.",
     "transfers.single.valuePreview": "بما يعادل ﷼{value}",
@@ -3420,7 +3250,20 @@ const I18N = {
     "quick.charge": "شحن النقاط",
     "quick.chargeHint": "اشحن رصيدك لتستمر عمليات التحويل دون انقطاع.",
     "quick.export": "تصدير التقارير",
-    "quick.exportHint": "نزّل تقارير عن المعاملات والمستخدمين والتحويلات."
+    "quick.exportHint": "نزّل تقارير عن المعاملات والمستخدمين والتحويلات.",
+    "transfers.source.fullNumber": "رقم الجوال الكامل",
+    "transfers.source.loyaltyIdOnly": "الرقم التعريفي فقط",
+    "settings.section.contentOptional": "اختياري",
+    "home.stat.pointsAvailable": "النقاط المتاحة",
+    "home.stat.pointsTransferred": "النقاط المحولة",
+    "home.stat.pointsRefunded": "النقاط المستردة",
+    "home.stat.pointsPending": "النقاط المعلّقة",
+    "home.stat.totalUsers": "إجمالي المستخدمين",
+    "home.stat.usersRegistered": "المستخدمين المسجلين",
+    "home.stat.usersUnregistered": "المستخدمين غير المسجلين",
+    "home.stat.totalOffers": "إجمالي العروض",
+    "home.group.points": "النقاط",
+    "home.group.audience": "الجمهور"
   }
 };
 
@@ -3504,7 +3347,7 @@ function setLang(l){
   // itself belongs here, Overview included -- its date filter, activity feed
   // and the month labels down the chart axis all stayed in the old language
   // until they were added.
-  if (ROUTE === "overview"){ renderDD(); renderActivity(); drawChart(); }
+  if (ROUTE === "overview"){ renderDD(); renderHomeStats(); }
   if (VIEW_OF[ROUTE] === "detail") renderUser();
   if (ROUTE === "transfers") renderTransfers();
   if (ROUTE === "transactions") renderTransactions();
@@ -3566,7 +3409,22 @@ function relTime(mins){
   if (mins < 1440) return interp(t("time.hour"), { n: fmt(Math.round(mins/60)) });
   return t("time.yesterday");
 }
+function renderHomeStats(){
+  if (!document.getElementById("stAvail")) return;
+  const reg   = USERS.filter(u => u.registered).length;
+  const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = fmt(n); };
+  set("stAvail",  BAL.available);
+  set("stSent",   BAL.transferred);
+  set("stRef",    HOME_REFUNDED);
+  set("stPend",   homePending());
+  set("stUsers",  USERS.length);
+  set("stReg",    reg);
+  set("stUnreg",  USERS.length - reg);
+  set("stOffers", OFFERS_TOTAL);
+}
+
 function renderActivity(){
+  if (!document.getElementById("activityList")) return;
   const icons = {transfer:"#i-transfer", refund:"#i-return", charge:"#i-plus", offer:"#i-ticket", signup:"#i-userplus"};
   document.getElementById("activityList").innerHTML = ACTIVITY.map(a=>{
     const name = a.n ? a.n[LANG] : "";
@@ -3828,7 +3686,7 @@ function render(route, id){
     if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
   const main = document.getElementById("main");
-  if (view === "overview"){ renderDD(); renderActivity(); renderOffers(); drawChart(); drawSparks(); }
+  if (view === "overview"){ renderDD(); renderHomeStats(); }
   if (view === "list"){ counts(); renderRows(); }
   applyReminderFlag();
   if (view === "detail"){ renderUser(); }
@@ -3842,7 +3700,6 @@ function render(route, id){
   if (view === "settings") renderSettings();
   if (view === "releases") renderReleases();
   if (view === "release"){ REL_ALT = false; renderRelease(); }
-  attentionCounts();          // before applyI18n, which reads the counts
   navQueueBadge();
   applyI18n();
   main.setAttribute("aria-label",
@@ -4777,6 +4634,17 @@ function checkRows(total, invalid, dup){
 const BAL = { charged: 12_500_000, transferred: 9_000_000 };
 BAL.available = BAL.charged - BAL.transferred;
 
+/* The dashboard figures. Anything with a real source behind it is derived, so
+   the home screen cannot disagree with the screen it summarises -- the balance
+   and the transferred total come from BAL, pending is the points actually
+   sitting in the approval queue, and the user counts come from the list.
+   Refunds and offers have no dataset in the prototype yet, so those two are
+   stated here and are the only figures on the screen that are not derived. */
+const HOME_REFUNDED = 12_400;
+const OFFERS_TOTAL  = 4_094;
+const homePending = () => BATCHES.filter(b => b.status === "uploaded")
+                                 .reduce((n, b) => n + b.points, 0);
+
 /* =====================================================================
    TRANSFER POINTS — view
    ===================================================================== */
@@ -4804,6 +4672,9 @@ function elapsed(d){
    return together. */
 // Offers is not designed yet, so its nav entry is hidden rather than left
 // pointing at nothing. Flip to true to bring the section back.
+// Changing the logo is out of scope for now; the current one still shows.
+const LOGO_EDIT_ENABLED = false;
+
 const OFFERS_ENABLED = false;
 
 const REVIEWING_ENABLED = false;
@@ -5597,7 +5468,7 @@ function openSingle(){
       <div class="fgrp">
         <label class="flab" for="sgSrc">${esc(t("transfers.single.sourceLabel"))}</label>
         <select class="fsel" id="sgSrc">
-          ${["loyalty","invoice","referral","b2b","file"].map(s =>
+          ${["fullNumber","loyaltyIdOnly"].map(s =>
             `<option value="${s}">${esc(t("transfers.source." + s))}</option>`).join("")}
         </select>
       </div>
@@ -5618,12 +5489,17 @@ function sgSearch(){
   const list = document.getElementById("sgList");
   if (!q){ list.innerHTML = ""; SG.user = null; return; }
   const hits = USERS.filter(u => u.registered).filter(u =>
-    [u.name?.ar, u.name?.en, u.phone].filter(Boolean).some(v => String(v).toLowerCase().includes(q))).slice(0, 5);
+    [u.name?.ar, u.name?.en, u.phone, u.id].filter(Boolean)
+      .some(v => String(v).toLowerCase().includes(q))).slice(0, 5);
+  // Searching by Loyalty ID and being shown only a phone number leaves nothing to
+  // check the input against, so the second line follows whichever field matched.
+  const byId = /^\d+$/.test(q) && hits.some(u => !String(u.phone).includes(q) && String(u.id).includes(q));
   list.innerHTML = hits.length ? hits.map(u => `<button class="dd-opt" role="option" aria-selected="false"
       type="button" onclick="sgPick(${u.id})" style="border:1px solid var(--n-200);border-radius:var(--r-100);margin-bottom:var(--sp-50)">
       <span class="avatar avatar-txt" style="inline-size:30px;block-size:30px;font-size:12px" aria-hidden="true">${esc(initials(u))}</span>
       <span class="min-w-0 text-start"><span style="font-weight:600;display:block">${esc(nameOf(u.name))}</span>
-        <span class="num ltr" style="font-size:12px;color:var(--n-700)">${esc(u.phone)}</span></span></button>`).join("")
+        <span class="num ltr" style="font-size:12px;color:var(--n-700)">${
+          esc(byId ? String(u.id) : u.phone)}</span></span></button>`).join("")
     : `<div class="fhint">${esc(t("transfers.empty.noMatchTitle"))}</div>`;
 }
 function sgPick(id){
@@ -5685,13 +5561,6 @@ function openUpload(){
         <button class="btn btn-ghost btn-sm mt-3" onclick="upPick()">${esc(t("transfers.upload.browse"))}</button>
       </div>
       <div id="upCheck"></div>
-      <div class="fgrp" style="margin-top:var(--sp-250)">
-        <label class="flab" for="upSrc">${esc(t("transfers.upload.sourceLabel"))}</label>
-        <select class="fsel" id="upSrc">
-          ${["loyalty","invoice","referral","b2b","file"].map(x =>
-            `<option value="${x}"${x === "file" ? " selected" : ""}>${esc(t("transfers.source." + x))}</option>`).join("")}
-        </select>
-      </div>
       <div class="fgrp">
         <span class="flab">${esc(t("transfers.upload.rulesHeading"))}</span>
         <ul class="rules">${[1,2,3,4].map(i => `<li>
@@ -5824,7 +5693,7 @@ function doUpload(){
   if (upUsable() === 0){ toast(t("transfers.upload.nothingUsable")); return; }
   // only the usable records are uploaded, which is why the queue is clean
   BATCHES.unshift({ id:"BCH-" + (1042 + BATCHES.length - 16), file: UP.file, by:"me",
-                    src: document.getElementById("upSrc").value,
+                    src: "file",          // a file upload is always a file
                     total: upUsable(), points: upUsable() * 500, status:"uploaded", at:new Date() });
   closePanel(); TTAB = "bulk"; TPAGE = 1; renderTransfers();
   toast(t("transfers.upload.done"));
@@ -6490,10 +6359,10 @@ document.addEventListener("click", e => {
    transactions ledger and the newer reference screen.
    ===================================================================== */
 const CHARGERS = {
-  c1: { n:{ ar:"محمد هلال",     en:"Mohammed Helal" },   em:"m.helal@walaplus.com" },
-  c2: { n:{ ar:"مشرف واحد",     en:"UA super admin" },   em:"ae@walaone.com" },
-  c3: { n:{ ar:"ريم العتيبي",   en:"Reem Al-Otaibi" },   em:"r.alotaibi@walaplus.com" },
-  c4: { n:{ ar:"خالد الدوسري",  en:"Khalid Al-Dosari" }, em:"k.aldosari@walaplus.com" }
+  c1: { n:{ ar:"محمد هلال",     en:"Mohammed Helal" },   ph:"966555660123" },
+  c2: { n:{ ar:"مشرف واحد",     en:"UA super admin" },   ph:"966500000000" },
+  c3: { n:{ ar:"ريم العتيبي",   en:"Reem Al-Otaibi" },   ph:"966501122334" },
+  c4: { n:{ ar:"خالد الدوسري",  en:"Khalid Al-Dosari" }, ph:"966553344556" }
 };
 const CH_DAY = 86400000;
 const chDate = (y, m, d) => new Date(y, m - 1, d);
@@ -6571,7 +6440,7 @@ const chWho = k => CHARGERS[k] ? nameOf(CHARGERS[k].n) : "";
 const chCell = k => `<div class="cell-person">
   <span class="avatar avatar-txt" aria-hidden="true">${esc(initialsOf(chWho(k)))}</span>
   <span class="min-w-0"><span class="person-name">${esc(chWho(k))}</span>
-    <span class="person-sub ltr">${esc(CHARGERS[k]?.em || "")}</span></span></div>`;
+    <span class="person-sub ltr num">${esc(CHARGERS[k]?.ph || "")}</span></span></div>`;
 
 function cmatching(){
   const q = (document.getElementById("cq")?.value || "").trim().toLowerCase();
@@ -6579,7 +6448,7 @@ function cmatching(){
     if (CFILT.status !== "all" && chStatus(c) !== CFILT.status) return false;
     if (CFILT.by !== "all" && c.by !== CFILT.by) return false;
     if (!q) return true;
-    return [c.id, c.invoice, c.po, chWho(c.by), CHARGERS[c.by]?.em,
+    return [c.id, c.invoice, c.po, chWho(c.by), CHARGERS[c.by]?.ph,
             CHARGERS[c.by]?.n.ar, CHARGERS[c.by]?.n.en]
       .filter(Boolean).some(v => String(v).toLowerCase().includes(q));
   }).sort((a, b) => {
@@ -7513,14 +7382,14 @@ function renderSettings(){
         <h2 class="set-h">${esc(t("settings.section.profile"))}</h2>
         <div class="set-body">
           <div>
-            <div class="set-lab">${esc(t("settings.field.logo"))}${setDirty("logo")
+            <div class="set-lab">${esc(t("settings.field.logo"))}${LOGO_EDIT_ENABLED && setDirty("logo")
               ? `<span class="set-dirty">${esc(t("settings.unsavedTag"))}</span>` : ""}</div>
             <div class="set-logo">
               ${SET.logo
                 ? `<span class="set-logo-img" role="img" aria-label="${esc(t("settings.a11y.logoPreview"))}">${esc(SET.logo)}</span>`
                 : `<span class="set-logo-img" style="background:var(--n-100);color:var(--n-600)" aria-hidden="true">
                      <svg viewBox="0 0 24 24" width="30" height="30"><use href="#i-user"/></svg></span>`}
-              <div class="min-w-0">
+              ${LOGO_EDIT_ENABLED ? `<div class="min-w-0">
                 <div class="set-logo-acts">
                   <button class="btn btn-ghost btn-sm" onclick="setLogo('CG')">
                     <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-upload"/></svg>
@@ -7529,7 +7398,7 @@ function renderSettings(){
                     esc(t("settings.logo.remove"))}</button>` : ""}
                 </div>
                 <div class="fhint" style="margin-top:var(--sp-100)">${esc(t("settings.field.logoHint"))}</div>
-              </div>
+              </div>` : ""}
             </div>
           </div>
           ${setField("name", "text")}
@@ -7546,7 +7415,8 @@ function renderSettings(){
       </section>
 
       <section class="set-card">
-        <h2 class="set-h">${esc(t("settings.section.content"))}</h2>
+        <h2 class="set-h">${esc(t("settings.section.content"))}<span class="set-opt">${
+          esc(t("settings.section.contentOptional"))}</span></h2>
         <div class="set-sub">${esc(t("settings.section.contentSub"))}</div>
         <div class="set-body">
           ${setLong("terms")}
