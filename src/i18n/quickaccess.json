@@ -1,0 +1,26 @@
+{
+  "en": {
+    "quick.heading": "Quick access",
+    "quick.sub": "The tasks you use most often.",
+    "quick.bulk": "Bulk transfer",
+    "quick.bulkHint": "Send points to customers from a file.",
+    "quick.single": "Single transfer",
+    "quick.singleHint": "Send points to one customer by name.",
+    "quick.charge": "Charge points",
+    "quick.chargeHint": "Top up to keep transfers running smoothly.",
+    "quick.export": "Export reports",
+    "quick.exportHint": "Download reports on transactions, users or transfers."
+  },
+  "ar": {
+    "quick.heading": "الوصول السريع",
+    "quick.sub": "مهامك الأكثر استخدامًا.",
+    "quick.bulk": "تحويل بالجملة",
+    "quick.bulkHint": "أرسل النقاط لعملائك عبر ملف.",
+    "quick.single": "تحويل فردي",
+    "quick.singleHint": "أرسل نقاطًا لعميل واحد بالاسم.",
+    "quick.charge": "شحن النقاط",
+    "quick.chargeHint": "اشحن رصيدك لتستمر عمليات التحويل دون انقطاع.",
+    "quick.export": "تصدير التقارير",
+    "quick.exportHint": "نزّل تقارير عن المعاملات والمستخدمين والتحويلات."
+  }
+}

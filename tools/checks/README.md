@@ -26,3 +26,12 @@ toggle silently replaced the Users profile's tab switcher: both were called
 `setTab`, the later definition won, and nothing failed until someone clicked a
 tab. The page is assembled from many spliced modules, so it asserts that every
 top-level function and const is declared exactly once.
+
+## lang-switch.js
+
+Switches language on every route in both directions and asserts nothing is
+left in the language the reader just left. Views built in JS carry no
+data-i18n, so applyI18n cannot reach them and each has to be redrawn by
+name in setLang; forgetting one is invisible until someone switches.
+Skips blocks that declare their own dir, the language toggle, and Latin
+that is data rather than copy -- addresses, filenames, reference codes.
