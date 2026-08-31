@@ -207,6 +207,9 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .stat-v{font-size:32px;font-weight:700;color:var(--n-950);line-height:1.1;
   letter-spacing:-.02em;margin-top:var(--sp-300);font-variant-numeric:tabular-nums}
 .stat-l{font-size:14px;color:var(--n-700);margin-top:var(--sp-75)}
+/* Points figures are marked with the coin itself rather than a line icon on a
+   chip, matching how every other points figure in the product is marked. */
+.stat-coin{inline-size:var(--sp-550);block-size:var(--sp-550);display:block}
 /* The balance is the figure the whole screen exists to report, so it carries the
    brand colour and the rest stay neutral. Accenting all eight would rank none. */
 .stat-lead{background:var(--p-50);border-color:var(--p-200)}
@@ -1369,23 +1372,23 @@ html[dir="rtl"] .vw-line{text-align:start}
       <h2 class="stat-h" id="grpPoints" data-i18n="home.group.points"></h2>
       <div class="stat-grid">
         <div class="stat stat-lead" id="stAvailCard">
-          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-wallet"/></svg></span>
+          <svg class="stat-coin" viewBox="0 0 26 25" aria-hidden="true"><use href="#i-point"/></svg>
           <span class="stat-v num" id="stAvail">0</span>
           <span class="stat-l" data-i18n="home.stat.pointsAvailable"></span>
           <span class="stat-note" id="stAvailNote" hidden></span>
         </div>
         <div class="stat tone-i">
-          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-transfer"/></svg></span>
+          <svg class="stat-coin" viewBox="0 0 26 25" aria-hidden="true"><use href="#i-point"/></svg>
           <span class="stat-v num" id="stSent">0</span>
           <span class="stat-l" data-i18n="home.stat.pointsTransferred"></span>
         </div>
         <div class="stat tone-w">
-          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-return"/></svg></span>
+          <svg class="stat-coin" viewBox="0 0 26 25" aria-hidden="true"><use href="#i-point"/></svg>
           <span class="stat-v num" id="stRef">0</span>
           <span class="stat-l" data-i18n="home.stat.pointsRefunded"></span>
         </div>
         <div class="stat tone-s">
-          <span class="stat-ico"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#i-hourglass"/></svg></span>
+          <svg class="stat-coin" viewBox="0 0 26 25" aria-hidden="true"><use href="#i-point"/></svg>
           <span class="stat-v num" id="stPend">0</span>
           <span class="stat-l" data-i18n="home.stat.pointsPending"></span>
         </div>
