@@ -183,11 +183,19 @@ html[lang="ar"] .nav-group-label{letter-spacing:0;text-transform:none;font-size:
 .btn-link:hover{text-decoration:underline}
 
 /* ---- quick access ---- */
-.qa-list{display:flex;flex-direction:column;padding:0 var(--sp-150) var(--sp-150)}
+/* The card is stretched to the chart beside it, so the list has to take the
+   height rather than leave it empty underneath: the rows share whatever is
+   left over instead of stacking at their natural size. */
+.qa-list{display:flex;flex-direction:column;flex:1;padding:0 var(--sp-150) var(--sp-150)}
+.qa-row{flex:1}
 .qa-row{display:flex;align-items:center;gap:var(--sp-150);inline-size:100%;
   padding:var(--sp-150);border:none;background:none;border-radius:var(--r-100);
   cursor:pointer;text-align:start;transition:background .12s}
 .qa-row:hover{background:var(--n-50)}
+/* Taller rows drift apart without a line between them; the same hairline the
+   attention list beside it uses keeps these reading as one list. */
+.qa-row + .qa-row{border-top:1px solid var(--n-100);border-radius:0}
+.qa-row:first-child{border-end-start-radius:0;border-end-end-radius:0}
 .qa-ico{flex:0 0 var(--sp-500);block-size:var(--sp-500);border-radius:var(--r-100);
   display:grid;place-items:center;background:var(--p-50);color:var(--p-700)}
 .qa-tx{min-inline-size:0;flex:1}
