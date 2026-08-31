@@ -955,7 +955,10 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
    that slack between every pair opened a gap between the figure and the line
    under it; all of it now sits above the figure, leaving the label at the top
    and the figure and its sentence together as one block. */
-.bal-v{margin-top:auto}
+/* Anchored from the top, not the bottom: the available tile carries warning
+   lines the other two do not, and bottom-anchoring lifted its figure out of
+   line with them. Same reason the Home figures are top-anchored. */
+.bal-v{margin-top:var(--sp-150)}
 .bal:first-child{border-inline-start:none}
 .bal-l{display:flex;align-items:center;gap:var(--sp-75);font-size:12px;font-weight:600;color:var(--n-700);
   letter-spacing:.01em}
@@ -3498,15 +3501,28 @@ function relTime(mins){
    reviewed without editing data. */
 let CREDIT = "normal";
 const CREDIT_LOW = 42_000;
+/* The preview sets the balance itself rather than overlaying a number on one
+   screen. Everything that reads a balance -- the Home figure, the Transfer
+   points strip and its low warning, the cost check on approval, the single
+   transfer validation -- reads BAL.available, so moving that one value makes
+   all of them agree. The derived figure is kept so "normal" can restore it. */
+let BAL_REAL = null;
 function setCredit(k){
+  // Capture on the way out of normal, not once and forever: a transfer made
+  // while previewing normal moves the balance, and coming back from low should
+  // restore what it became, not what it was before that transfer.
+  if (CREDIT === "normal" && k !== "normal") BAL_REAL = BAL.available;
   CREDIT = k;
+  BAL.available = k === "empty" ? 0
+                : k === "low"   ? CREDIT_LOW
+                : (BAL_REAL === null ? BAL.available : BAL_REAL);
+  if (k === "normal") BAL_REAL = null;
   ["normal","low","empty"].forEach(x =>
     document.getElementById("pv-cr-" + x)?.setAttribute("aria-pressed", String(x === k)));
   renderHomeStats();
+  if (ROUTE === "transfers") renderTransfers();
+  if (PSTACK.length) paintPanel();
 }
-const creditPoints = () => CREDIT === "empty" ? 0
-                         : CREDIT === "low"   ? CREDIT_LOW
-                         : BAL.available;
 
 function renderHomeStats(){
   if (!document.getElementById("stAvail")) return;
@@ -3520,7 +3536,7 @@ function renderHomeStats(){
   }
   const reg   = USERS.filter(u => u.registered).length;
   const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = fmt(n); };
-  set("stAvail",  creditPoints());
+  set("stAvail",  BAL.available);
   set("stSent",   BAL.transferred);
   set("stRef",    HOME_REFUNDED);
   set("stPend",   homePending());
@@ -4941,7 +4957,7 @@ function renderTransfers(){
     <div class="bal-l">${esc(t("transfers.summary." + key))}</div>
     <div class="bal-v"><svg viewBox="0 0 26 25" width="21" height="21" aria-hidden="true"><use href="#i-point"/></svg>
       <span class="num">${fmt(pts)}</span></div>
-    <div class="bal-sub">${riyal(valueOf(pts))} · ${esc(t("transfers.summary." + key + "Hint"))}</div>
+    <div class="bal-sub">${riyal(valueOf(pts))}</div>
     ${cls && com ? `<div class="bal-warn" style="color:var(--n-700)">
       <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-hourglass"/></svg>
       ${esc(interp(t("transfers.summary.committed"), { n: fmt(com) }))}</div>` : ""}
