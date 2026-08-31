@@ -1,0 +1,506 @@
+<title>WalaOne Prototype Architecture</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* The page wears the system it documents: WalaOne's own primary and secondary,
+   its display face, and neutrals pulled toward the violet rather than left grey. */
+:root{
+  --ground:#FBFAFE; --surface:#FFFFFF; --sunk:#F4F2FA;
+  --ink:#191527; --body:#3D374F; --muted:#6C6684;
+  --rule:#E6E2F0; --rule-soft:#F0EDF7;
+  --primary:#755BD8; --primary-deep:#5A43B0; --primary-wash:#F1EDFC;
+  --gold:#FAC333; --gold-deep:#8A6A00; --gold-wash:#FEF6E0;
+  --shadow:0 1px 2px rgba(25,21,39,.06), 0 8px 24px -12px rgba(25,21,39,.14);
+  --measure:66ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#131120; --surface:#1C1930; --sunk:#221E39;
+    --ink:#EDEAF5; --body:#C6C0DA; --muted:#948DAE;
+    --rule:#2E2A44; --rule-soft:#262239;
+    --primary:#A48CF0; --primary-deep:#C3B2F7; --primary-wash:#241F3D;
+    --gold:#F3C74B; --gold-deep:#F3C74B; --gold-wash:#2C2410;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#131120; --surface:#1C1930; --sunk:#221E39;
+  --ink:#EDEAF5; --body:#C6C0DA; --muted:#948DAE;
+  --rule:#2E2A44; --rule-soft:#262239;
+  --primary:#A48CF0; --primary-deep:#C3B2F7; --primary-wash:#241F3D;
+  --gold:#F3C74B; --gold-deep:#F3C74B; --gold-wash:#2C2410;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--body);
+  font:400 16px/1.65 "IBM Plex Sans", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:Poppins, ui-sans-serif, system-ui, sans-serif; color:var(--ink);
+  text-wrap:balance; margin:0; letter-spacing:-.015em}
+code,.mono{font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace}
+
+.wrap{max-width:1180px; margin:0 auto; padding:0 28px}
+.layout{display:grid; grid-template-columns:220px minmax(0,1fr); gap:56px; align-items:start}
+@media (max-width:940px){ .layout{grid-template-columns:1fr; gap:32px} }
+
+/* ---------- masthead ---------- */
+header.top{border-bottom:1px solid var(--rule); background:var(--surface)}
+.top-in{padding:56px 0 40px}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--primary); margin-bottom:14px}
+h1{font-size:clamp(30px,4.6vw,46px); font-weight:700; line-height:1.1}
+.standfirst{margin:18px 0 0; max-width:var(--measure); font-size:18px; color:var(--body)}
+
+.facts{display:flex; flex-wrap:wrap; gap:0; margin-top:34px;
+  border:1px solid var(--rule); border-radius:12px; overflow:hidden; background:var(--sunk)}
+.fact{flex:1 1 130px; padding:16px 18px; border-inline-end:1px solid var(--rule)}
+.fact:last-child{border-inline-end:none}
+.fact-n{font-family:"IBM Plex Mono",monospace; font-size:21px; font-weight:500;
+  color:var(--ink); font-variant-numeric:tabular-nums; line-height:1.2}
+.fact-l{font-size:12.5px; color:var(--muted); margin-top:3px}
+
+/* ---------- index ---------- */
+nav.index{position:sticky; top:28px; font-size:14px}
+@media (max-width:940px){ nav.index{position:static; padding-bottom:8px; border-bottom:1px solid var(--rule)} }
+.index-t{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:12px}
+nav.index ol{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px}
+@media (max-width:940px){ nav.index ol{flex-flow:row wrap; gap:4px 16px} }
+nav.index a{display:block; padding:5px 0; color:var(--muted); text-decoration:none;
+  border-inline-start:2px solid transparent; padding-inline-start:12px; margin-inline-start:-14px}
+nav.index a:hover{color:var(--primary); border-inline-start-color:var(--primary)}
+@media (max-width:940px){ nav.index a{border:none; margin:0; padding-inline-start:0} }
+
+/* ---------- sections ---------- */
+main{padding:52px 0 90px}
+section{padding-bottom:52px; margin-bottom:52px; border-bottom:1px solid var(--rule-soft)}
+section:last-of-type{border-bottom:none}
+h2{font-size:25px; font-weight:600; margin-bottom:6px; scroll-margin-top:24px}
+.kicker{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:8px}
+p{max-width:var(--measure); margin:16px 0 0}
+h3{font-size:16.5px; font-weight:600; margin-top:30px}
+strong{color:var(--ink); font-weight:600}
+a{color:var(--primary-deep)}
+code{background:var(--sunk); border:1px solid var(--rule); border-radius:5px;
+  padding:1px 5px; font-size:.875em; color:var(--ink); white-space:nowrap}
+
+/* ---------- figures ---------- */
+figure{margin:30px 0 0; padding:24px; background:var(--surface);
+  border:1px solid var(--rule); border-radius:14px; box-shadow:var(--shadow); overflow-x:auto}
+figure svg{display:block; max-width:100%; height:auto; margin:0 auto; color:var(--muted)}
+figcaption code{background:var(--sunk);border:1px solid var(--rule);border-radius:4px;padding:1px 4px;font-size:.9em;color:var(--ink)}
+figcaption{margin-top:18px; padding-top:16px; border-top:1px solid var(--rule-soft);
+  font-size:14px; color:var(--muted); max-width:var(--measure)}
+.svg-label{font-family:"IBM Plex Mono",monospace; font-size:11.5px; fill:var(--muted)}
+.svg-box{font-family:"IBM Plex Sans",sans-serif; font-size:13px; fill:var(--ink); font-weight:500}
+.svg-arrow{font-family:"IBM Plex Mono",monospace; font-size:11px; fill:var(--muted)}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto; margin-top:26px; border:1px solid var(--rule);
+  border-radius:12px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:520px}
+th,td{text-align:start; padding:13px 16px; border-bottom:1px solid var(--rule-soft);
+  vertical-align:top}
+th{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--muted); font-weight:500; background:var(--sunk);
+  border-bottom-color:var(--rule)}
+tbody tr:last-child td{border-bottom:none}
+td.mono{font-size:13px; color:var(--ink); white-space:nowrap}
+
+/* ---------- route map ---------- */
+.routes{display:grid; grid-template-columns:repeat(auto-fill,minmax(215px,1fr));
+  gap:10px; margin-top:26px}
+.route{background:var(--surface); border:1px solid var(--rule); border-radius:10px; padding:13px 15px}
+.route-h{font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--primary-deep); font-weight:500}
+.route-d{font-size:13px; color:var(--muted); margin-top:4px; line-height:1.45}
+
+/* a note that carries a caution, used sparingly — the gold is the product's second colour */
+.note{margin-top:26px; padding:16px 20px; border-radius:10px;
+  background:var(--gold-wash); border:1px solid var(--gold);
+  border-inline-start:3px solid var(--gold); max-width:var(--measure)}
+.note p{margin:0; font-size:14.5px; color:var(--ink)}
+.note p + p{margin-top:10px}
+.note-t{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--gold-deep); margin-bottom:7px; font-weight:500}
+
+pre{margin:22px 0 0; padding:18px 20px; background:var(--sunk); border:1px solid var(--rule);
+  border-radius:10px; overflow-x:auto; font-size:13.5px; line-height:1.6; color:var(--ink)}
+pre code{background:none; border:none; padding:0; white-space:pre}
+
+ul.plain{max-width:var(--measure); margin:16px 0 0; padding:0; list-style:none;
+  display:flex; flex-direction:column; gap:10px}
+ul.plain li{padding-inline-start:18px; position:relative}
+ul.plain li::before{content:""; position:absolute; inset-inline-start:0; top:.62em;
+  width:5px; height:5px; border-radius:50%; background:var(--primary)}
+
+footer{border-top:1px solid var(--rule); padding:26px 0 46px; font-size:13.5px; color:var(--muted)}
+:focus-visible{outline:2px solid var(--primary); outline-offset:2px; border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap top-in">
+    <div class="eyebrow">Partner Dashboard · Prototype</div>
+    <h1>WalaOne Prototype Architecture</h1>
+    <p class="standfirst">How the bilingual partner dashboard is put together — one file, no build step,
+      and the machinery that keeps Arabic and English honest.</p>
+
+    <div class="facts">
+      <div class="fact"><div class="fact-n">1</div><div class="fact-l">HTML file, no build</div></div>
+      <div class="fact"><div class="fact-n">7,874</div><div class="fact-l">lines</div></div>
+      <div class="fact"><div class="fact-n">11</div><div class="fact-l">routes</div></div>
+      <div class="fact"><div class="fact-n">833</div><div class="fact-l">copy keys × 2 languages</div></div>
+      <div class="fact"><div class="fact-n">215</div><div class="fact-l">top-level functions</div></div>
+      <div class="fact"><div class="fact-n">7</div><div class="fact-l">automated checks</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="index" aria-label="Sections">
+    <div class="index-t">Contents</div>
+    <ol>
+      <li><a href="#shape">The shape of it</a></li>
+      <li><a href="#routing">Routing</a></li>
+      <li><a href="#copy">Copy and language</a></li>
+      <li><a href="#layout">The layout system</a></li>
+      <li><a href="#tables">Tables that fit</a></li>
+      <li><a href="#panels">Panels</a></li>
+      <li><a href="#data">Data and the rate</a></li>
+      <li><a href="#checks">What guards it</a></li>
+      <li><a href="#next">Porting to React</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- ============================================================ -->
+    <section id="shape">
+      <div class="kicker">Structure</div>
+      <h2>The shape of it</h2>
+      <p>The entire prototype is <strong>one file</strong> — <code>preview/app.html</code>, 7,874 lines,
+        491&nbsp;KB. No bundler, no framework, no <code>npm install</code> to see it run. Open it from
+        disk and it works, offline, in any browser.</p>
+      <p>That is a deliberate constraint, not a shortcut. A prototype whose job is to be reviewed
+        daily by people who do not run a dev server has to open from a double-click. Tailwind is
+        <em>precompiled and inlined</em> rather than pulled from a CDN, so the page has no runtime
+        dependency and no flash of unstyled content.</p>
+
+      <div class="note">
+        <div class="note-t">Consequence worth knowing</div>
+        <p>Because the Tailwind CSS is compiled from this file's own markup at a point in time, a
+          <em>new</em> utility class in fresh markup has no rule behind it and silently does nothing.
+          That is exactly what happened when the Quick access card first went in: <code>lg:col-span-5</code>
+          did not exist, so the cards stacked instead of sitting side by side. New utilities have to be
+          added to the inlined stylesheet by hand.</p>
+      </div>
+
+      <h3>What lives outside the file</h3>
+      <ul class="plain">
+        <li><code>src/i18n/*.json</code> — 13 copy sources, the writable half of the text</li>
+        <li><code>tools/merge-i18n.js</code> — folds those into the dictionary inside the page</li>
+        <li><code>tools/checks/*.js</code> — 7 headless browser checks</li>
+        <li><code>docs/</code> — audits, research, and design-system notes per feature</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="routing">
+      <div class="kicker">Navigation</div>
+      <h2>Routing</h2>
+      <p>One shell — sidebar, top bar, main region — and eleven views that swap inside it. The hash is
+        the whole router. <code>parseHash()</code> splits <code>#/route/id?seg=</code> into three parts and
+        every render reads from there, so any screen is a URL you can paste to a colleague.</p>
+      <p>An id that is all digits is a record; anything else is a tab name. That one rule lets
+        <code>#/user/2423500</code> and <code>#/transfers/individual</code> share a parser.</p>
+
+      <div class="routes">
+        <div class="route"><div class="route-h">#/overview</div><div class="route-d">Home. Wallet, metrics, chart, quick access, activity, action needed.</div></div>
+        <div class="route"><div class="route-h">#/users</div><div class="route-d">Everyone in the points programme.</div></div>
+        <div class="route"><div class="route-h">#/user/:id</div><div class="route-d">One person: profile, ledger, parked points.</div></div>
+        <div class="route"><div class="route-h">#/followers</div><div class="route-d">An audience, not a subset of Users.</div></div>
+        <div class="route"><div class="route-h">#/follower/:id</div><div class="route-d">Same template as the user detail, different collection.</div></div>
+        <div class="route"><div class="route-h">#/transfers</div><div class="route-d">The approval queue for bulk point transfers.</div></div>
+        <div class="route"><div class="route-h">#/transactions</div><div class="route-d">Every individual movement of points.</div></div>
+        <div class="route"><div class="route-h">#/charges</div><div class="route-d">What the partner paid for their points.</div></div>
+        <div class="route"><div class="route-h">#/exports</div><div class="route-d">Where every Export button on every screen lands.</div></div>
+        <div class="route"><div class="route-h">#/settings</div><div class="route-d">Company profile and the text customers read.</div></div>
+        <div class="route"><div class="route-h">#/releases · /release/:id</div><div class="route-d">App release notes, each shown in both languages.</div></div>
+        <div class="route"><div class="route-h">#/login</div><div class="route-d">Sign in and OTP.</div></div>
+      </div>
+
+      <p>Users and Followers share <em>one</em> view container and one set of render functions.
+        A collection object supplies the differences — headings, column sets, empty-state copy — which is
+        why <code>ck()</code> exists alongside <code>t()</code>: it resolves a key against whichever
+        collection is active.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="copy">
+      <div class="kicker">Bilingual</div>
+      <h2>Copy and language</h2>
+      <p>Every string the reader sees exists twice, in Arabic and English, under one flat dotted key.
+        Writers edit JSON files; the page carries a compiled dictionary. A merge step connects the two.</p>
+
+      <figure>
+        <svg viewBox="0 0 720 260" role="img" aria-label="Thirteen JSON copy files pass through the merge tool into the dictionary inlined in app.html. Owned prefixes are deleted before rewriting, so removing a string from a source file removes it from the page.">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="arP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="#755BD8"/>
+            </marker>
+          </defs>
+
+          <rect x="8" y="46" width="150" height="86" rx="9" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text class="svg-box" x="83" y="80" text-anchor="middle">13 JSON sources</text>
+          <text class="svg-label" x="83" y="100" text-anchor="middle">src/i18n/*.json</text>
+          <text class="svg-label" x="83" y="118" text-anchor="middle">{ en:{…}, ar:{…} }</text>
+
+          <line x1="162" y1="89" x2="242" y2="89" stroke="currentColor" stroke-width="1.2" marker-end="url(#ar)"/>
+          <text class="svg-arrow" x="202" y="80" text-anchor="middle">flatten</text>
+
+          <rect x="246" y="46" width="158" height="86" rx="9" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text class="svg-box" x="325" y="80" text-anchor="middle">merge-i18n.js</text>
+          <text class="svg-label" x="325" y="100" text-anchor="middle">replace owned prefixes</text>
+          <text class="svg-label" x="325" y="118" text-anchor="middle">drop dead keys</text>
+
+          <line x1="408" y1="89" x2="488" y2="89" stroke="currentColor" stroke-width="1.2" marker-end="url(#ar)"/>
+          <text class="svg-arrow" x="448" y="80" text-anchor="middle">rewrite</text>
+
+          <rect x="492" y="46" width="150" height="86" rx="9" fill="none" stroke="#755BD8" stroke-width="1.6"/>
+          <text class="svg-box" x="567" y="80" text-anchor="middle">const I18N</text>
+          <text class="svg-label" x="567" y="100" text-anchor="middle">inlined in app.html</text>
+          <text class="svg-label" x="567" y="118" text-anchor="middle">833 keys × 2</text>
+
+          <line x1="567" y1="136" x2="567" y2="186" stroke="#755BD8" stroke-width="1.4" marker-end="url(#arP)"/>
+          <text class="svg-arrow" x="579" y="166" text-anchor="start">t() / ck()</text>
+
+          <rect x="480" y="190" width="174" height="52" rx="9" fill="none" stroke="#755BD8" stroke-width="1.6"/>
+          <text class="svg-box" x="567" y="212" text-anchor="middle">applyI18n()</text>
+          <text class="svg-label" x="567" y="230" text-anchor="middle">6 binding attributes</text>
+
+          <path d="M325 132 L325 214 L470 214" fill="none" stroke="currentColor" stroke-width="1.1"
+                stroke-dasharray="4 4" marker-end="url(#ar)"/>
+          <text class="svg-arrow" x="336" y="234" text-anchor="start">a deleted string really disappears</text>
+        </svg>
+        <figcaption>The merge replaces nine owned prefixes wholesale rather than patching key by key —
+          so deleting a string from a source file deletes it from the page, instead of leaving the old
+          text stranded in the dictionary forever.</figcaption>
+      </figure>
+
+      <h3>Six ways a key reaches the DOM</h3>
+      <p>Static markup declares its copy with an attribute, and <code>applyI18n()</code> walks the page
+        applying them: <code>data-i18n</code> for text, plus <code>-aria</code>, <code>-ph</code> (placeholder),
+        <code>-title</code>, <code>-part</code> (half of a two-sentence string), <code>-vars</code>
+        (interpolation), and <code>-coll</code> (resolve against the active collection).</p>
+
+      <div class="note">
+        <div class="note-t">The trap this design carries</div>
+        <p>Anything built in JavaScript has no <code>data-i18n</code> attribute, so <code>applyI18n()</code>
+          cannot reach it. Every such view has to be <em>redrawn by name</em> inside <code>setLang()</code>,
+          and forgetting one is invisible until somebody switches language.</p>
+        <p>It has bitten twice: the user profile kept a person's whole ledger in the previous language, and
+          the Overview kept its date filter, activity feed and chart axis. <code>lang-switch.js</code> now
+          switches on every route in both directions and fails if anything is left in the wrong script.</p>
+      </div>
+
+      <h3>Direction is structural</h3>
+      <p>Arabic is not a translation layer over a left-to-right page. <code>dir</code> flips on the root
+        element and the CSS is written in <strong>logical properties</strong> throughout —
+        <code>margin-inline-start</code>, <code>inset-inline-end</code>, <code>border-end-start-radius</code> —
+        so the layout mirrors rather than being re-specified. A <code>.ltr</code> helper isolates the
+        things that must not mirror: phone numbers, emails, file names, reference codes.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="layout">
+      <div class="kicker">Design system</div>
+      <h2>The layout system</h2>
+      <p>Two scales, both enforced. <strong>Spacing</strong> resolves through 17 tokens with 443
+        references and no loose pixel values left except twelve 1px hairlines. <strong>Type</strong> is
+        seven sizes — 12, 14, 16, 18, 20, 24, 32 — down from 21, five of which used to be half-pixel
+        values that rendered differently per browser and zoom level.</p>
+      <p>Colour is tokenised the same way: a primary ramp from the brand's <code>#755BD8</code>, a
+        secondary from <code>#FAC333</code>, a twelve-step neutral, and separate semantic ramps for
+        success, warning, danger and info — kept apart from the accent so a status colour never has to
+        compete with a brand colour.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Family</th><th>Tokens</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">--sp-*</td><td class="mono">17</td><td>2px through 56px. Every margin, padding and gap resolves here.</td></tr>
+            <tr><td class="mono">--r-*</td><td class="mono">5</td><td>4 / 8 / 12 / 16 / 24px radii.</td></tr>
+            <tr><td class="mono">--p-*, --s-*</td><td class="mono">20</td><td>Primary and secondary ramps, 50 → 900.</td></tr>
+            <tr><td class="mono">--n-*</td><td class="mono">12</td><td>Neutrals, 25 → 950.</td></tr>
+            <tr><td class="mono">--success/warning/danger/info-*</td><td class="mono">20</td><td>Semantic, deliberately separate from the accent.</td></tr>
+            <tr><td class="mono">--shadow-*</td><td class="mono">4</td><td>xs → lg.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="tables">
+      <div class="kicker">The interesting part</div>
+      <h2>Tables that fit</h2>
+      <p>Six data tables carry between seven and eleven columns and have to work from a 360px phone to a
+        1800px monitor. The first version used hand-written width thresholds, which broke at 1101px —
+        the width where the sidebar appears and the <em>container</em> narrows while the
+        <em>window</em> gets wider.</p>
+      <p>It was replaced by a loop that measures instead of guessing. Draw the table, ask whether it
+        overflows its scroller, drop the least valuable column, draw again. Below three surviving
+        columns it stops fighting and switches to cards.</p>
+
+      <figure>
+        <svg viewBox="0 0 700 234" role="img" aria-label="The fit loop: paint the table, measure whether it overflows its container, and if it does drop the next column and repaint. It exits to a fitted table when nothing overflows, or to cards when fewer than three columns survive.">
+          <defs>
+            <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="ar2P" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="#755BD8"/>
+            </marker>
+          </defs>
+
+          <rect x="10" y="72" width="118" height="50" rx="9" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text class="svg-box" x="69" y="102" text-anchor="middle">paint(drop)</text>
+
+          <line x1="132" y1="97" x2="196" y2="97" stroke="currentColor" stroke-width="1.2" marker-end="url(#ar2)"/>
+
+          <path d="M262 58 L332 97 L262 136 L192 97 z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text class="svg-box" x="262" y="101" text-anchor="middle">overflows?</text>
+
+          <path d="M262 140 L262 186 L134 186 L134 126" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#ar2)"/>
+          <text class="svg-arrow" x="200" y="203" text-anchor="middle">yes — drop the next column, repaint</text>
+
+          <line x1="336" y1="97" x2="398" y2="97" stroke="currentColor" stroke-width="1.2" marker-end="url(#ar2)"/>
+          <text class="svg-arrow" x="367" y="88" text-anchor="middle">no</text>
+
+          <path d="M470 58 L540 97 L470 136 L400 97 z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text class="svg-box" x="470" y="101" text-anchor="middle">≥ 3 columns?</text>
+
+          <line x1="542" y1="97" x2="600" y2="97" stroke="#755BD8" stroke-width="1.5" marker-end="url(#ar2P)"/>
+          <text class="svg-arrow" x="571" y="88" text-anchor="middle">yes</text>
+          <rect x="604" y="76" width="88" height="42" rx="9" fill="none" stroke="#755BD8" stroke-width="1.6"/>
+          <text class="svg-box" x="648" y="102" text-anchor="middle">table</text>
+
+          <path d="M470 138 L470 190 L604 190" fill="none" stroke="#755BD8" stroke-width="1.5" marker-end="url(#ar2P)"/>
+          <text class="svg-arrow" x="486" y="182" text-anchor="start">no</text>
+          <rect x="604" y="168" width="88" height="42" rx="9" fill="none" stroke="#755BD8" stroke-width="1.6"/>
+          <text class="svg-box" x="648" y="194" text-anchor="middle">cards</text>
+
+          <text class="svg-label" x="10" y="30">fitTable(view, dropLen, paint, shownCount)</text>
+          <text class="svg-label" x="10" y="48">guarded at 12 iterations</text>
+        </svg>
+        <figcaption>"Overflows" is the table's own <code>scrollWidth</code> against its scroller's
+          <code>clientWidth</code> — the container, never the window. The same loop drives all six
+          tables; each supplies its own drop order, so the decision about which column it can afford
+          to lose first stays with the screen and only the mechanism is shared.</figcaption>
+      </figure>
+
+      <p>Because it measures the real rendered table, it is correct at any width in either language
+        without a single breakpoint. Arabic column widths differ from English ones; the loop does not
+        need to know that. <code>column-fit.js</code> proves it across six tables × eleven widths ×
+        two languages.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="panels">
+      <div class="kicker">Interaction</div>
+      <h2>Panels</h2>
+      <p>Side panels are a <strong>stack</strong>, not a boolean. <code>openPanel()</code> pushes,
+        <code>panelBack()</code> pops one step, <code>closePanel()</code> empties it. That is what lets a
+        file open, then a rejection form open on top of it, and Escape step back to the file rather than
+        dumping you at the list.</p>
+      <p>Focus is trapped inside the open panel and returned to whatever opened it on close. Panels also
+        close with the route that owns them — without that, starting a transfer and then clicking
+        Users left the drawer floating over a screen it had nothing to do with.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="data">
+      <div class="kicker">Mock data</div>
+      <h2>Data and the rate</h2>
+      <p>Every dataset is generated from a <strong>seeded pseudo-random function</strong>, so the same
+        46 users with the same names, phone numbers and balances appear on every load, on every machine.
+        Screenshots stay comparable and a bug found on row 12 is still on row 12 tomorrow.</p>
+      <p>One rule governs money: <strong>5 points = 1 SAR</strong>, everywhere, no exceptions. Value is
+        never stored on a record — it is <code>valueOf(points)</code>, computed at render.</p>
+
+      <pre><code>const PTS_PER_RIYAL = 5;
+const valueOf = pts =&gt; pts / PTS_PER_RIYAL;</code></pre>
+
+      <div class="note">
+        <div class="note-t">Why this is a rule and not a helper</div>
+        <p>Charge history used to build its amounts with <code>points / 500</code>. That single line
+          contradicted the stated rate on every screen it touched and survived four features of review,
+          because each screen looked internally consistent. Deriving value rather than storing it means
+          no record can carry a figure that disagrees with the rate.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="checks">
+      <div class="kicker">Verification</div>
+      <h2>What guards it</h2>
+      <p>Seven headless-browser checks, run against the real rendered page rather than the source.
+        Each one exists because something specific went wrong.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Check</th><th>What it catches</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">route-regression</td><td>Every route × both languages: raw keys leaking to screen, views failing to draw, JavaScript errors.</td></tr>
+            <tr><td class="mono">lang-switch</td><td>Anything left in the language the reader just left — the JS-rendered views <code>applyI18n</code> cannot reach.</td></tr>
+            <tr><td class="mono">arabic-leak-scan</td><td>Latin text stranded in Arabic copy, across 41 states. Skips blocks that declare the other language on purpose.</td></tr>
+            <tr><td class="mono">column-fit</td><td>Six tables × eleven widths × two languages: no table may overflow its container.</td></tr>
+            <tr><td class="mono">states-and-keyboard</td><td>Loading, empty and error states; focus trapping; Escape stepping back through the panel stack.</td></tr>
+            <tr><td class="mono">no-duplicate-names</td><td>Two functions declared with the same name — one silently replaces the other. This happened once and broke the profile tabs with no error.</td></tr>
+            <tr><td class="mono">width-sweep</td><td>Layout sanity across the full width range.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>A check is only kept once it has been shown to fail without the fix it guards. The
+        language-switch check was written after the Overview bug, then verified by removing the fix and
+        confirming it went red — a test that cannot fail is worse than no test.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="next">
+      <div class="kicker">What comes next</div>
+      <h2>Porting to React</h2>
+      <p>The single file is a prototype for reviewing design decisions, not the shipping codebase. Most
+        of it ports cleanly, and a few things are worth carrying over deliberately:</p>
+      <ul class="plain">
+        <li><strong>The copy pipeline survives as-is.</strong> The JSON sources and the owned-prefix
+          rule are framework-agnostic; only the merge target changes.</li>
+        <li><strong>The redraw problem disappears.</strong> React re-renders on a language change by
+          itself, which removes the entire class of bug <code>lang-switch.js</code> exists to catch —
+          though the check is worth keeping pointed at the built app.</li>
+        <li><strong>The fit loop needs a resize observer.</strong> It currently runs on render and on
+          window resize; in React it belongs in a hook watching the container, not the window.</li>
+        <li><strong>The panel stack maps to routed modals</strong> — the stack is already the right
+          model, so it becomes state rather than an array.</li>
+        <li><strong>Tokens move to CSS custom properties in one stylesheet</strong> and stop being
+          duplicated by the inlined Tailwind build.</li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">WalaOne Partner Dashboard — prototype architecture. Branch
+    <code>claude/walaone-dashboard-redesign-nwindp</code>.</div>
+</footer>
