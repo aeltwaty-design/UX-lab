@@ -1,0 +1,8 @@
+{
+  "en": {
+    "transfers.upload.rule2Loyalty": "Loyalty IDs as 7-digit numbers starting with 24235, for example 2423568."
+  },
+  "ar": {
+    "transfers.upload.rule2Loyalty": "الرقم التعريفي كرقم من 7 خانات يبدأ بـ24235، مثل 2423568."
+  }
+}

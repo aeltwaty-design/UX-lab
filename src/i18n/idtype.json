@@ -1,0 +1,24 @@
+{
+  "en": {
+    "transfers.idType.phone": "Phone number",
+    "transfers.idType.loyaltyId": "Loyalty ID",
+    "transfers.single.idTypeLabel": "Identifier type",
+    "transfers.single.phonePlaceholder": "966501234567",
+    "transfers.single.loyaltyPlaceholder": "2423568",
+    "transfers.single.notFound": "We couldn't find a customer with that number.",
+    "transfers.single.foundLabel": "Sending to",
+    "transfers.upload.typeLabel": "Type",
+    "transfers.upload.typeHint": "The column in your file must match this choice."
+  },
+  "ar": {
+    "transfers.idType.phone": "رقم الجوال",
+    "transfers.idType.loyaltyId": "الرقم التعريفي",
+    "transfers.single.idTypeLabel": "نوع المعرّف",
+    "transfers.single.phonePlaceholder": "966501234567",
+    "transfers.single.loyaltyPlaceholder": "2423568",
+    "transfers.single.notFound": "تعذّر العثور على عميل بهذا الرقم.",
+    "transfers.single.foundLabel": "الإرسال إلى",
+    "transfers.upload.typeLabel": "النوع",
+    "transfers.upload.typeHint": "يجب أن يتطابق عمود ملفك مع هذا الاختيار."
+  }
+}

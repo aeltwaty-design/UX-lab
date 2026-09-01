@@ -971,6 +971,9 @@ html[dir="ltr"] .finp[type="password"]{text-align:left}
 .bal-key .bal-v{color:var(--p-700)}
 .bal-key.is-low{background:linear-gradient(180deg,var(--warning-50),#fff 70%)}
 .bal-key.is-low .bal-v{color:var(--warning-700)}
+.bal-key.is-empty{background:linear-gradient(180deg,var(--danger-50),#fff 70%)}
+.bal-key.is-empty .bal-v{color:var(--danger-700)}
+.bal-key.is-empty .bal-warn{color:var(--danger-700)}
 .bal-warn{display:flex;align-items:center;gap:var(--sp-75);font-size:12px;font-weight:600;
   color:var(--warning-700);margin-top:var(--sp-75)}
 
@@ -1167,6 +1170,26 @@ html[dir="rtl"] .pnl-back-btn svg{transform:scaleX(-1)}
 .fgrp{margin-bottom:var(--sp-250)}
 .flab{display:block;font-size:12px;font-weight:600;color:var(--n-900);margin-bottom:var(--sp-75)}
 .fopt{font-weight:400;color:var(--n-600);margin-inline-start:var(--sp-100)}
+/* Two exclusive choices that change what the field beneath them means. A radio
+   rather than a segmented control: the choice is part of the form's answer, not
+   a view filter, and it has to be obvious which one is active before typing. */
+.radio-row{display:flex;gap:var(--sp-100);flex-wrap:wrap;margin-bottom:var(--sp-125)}
+.radio{display:inline-flex;align-items:center;gap:var(--sp-100);cursor:pointer;
+  padding:var(--sp-125) var(--sp-175);border:1px solid var(--n-300);border-radius:var(--r-100);
+  font-size:14px;font-weight:500;color:var(--n-800);background:#fff;flex:1 1 auto;
+  transition:border-color .12s,background .12s}
+.radio:hover{border-color:var(--n-400);background:var(--n-25)}
+.radio input{appearance:none;-webkit-appearance:none;margin:0;flex:none;
+  inline-size:18px;block-size:18px;border:1.5px solid var(--n-400);border-radius:50%;
+  display:grid;place-items:center;transition:border-color .12s}
+.radio input::after{content:"";inline-size:9px;block-size:9px;border-radius:50%;
+  background:var(--p-500);transform:scale(0);transition:transform .12s}
+.radio input:checked{border-color:var(--p-500)}
+.radio input:checked::after{transform:scale(1)}
+.radio:has(input:checked){border-color:var(--p-400);background:var(--p-50);color:var(--n-950)}
+.radio input:focus-visible{outline:2px solid var(--p-500);outline-offset:2px}
+.sg-found{display:flex;align-items:center;gap:var(--sp-100);font-size:13px;
+  color:var(--success-700);font-weight:600;margin-top:var(--sp-100)}
 .finp,.ftxt,.fsel{width:100%;border:1px solid var(--n-300);border-radius:var(--r-100);
   padding:var(--sp-125) var(--sp-175);font:inherit;font-size:14px;color:var(--n-950);background:#fff;outline:none;
   transition:border-color .12s,box-shadow .12s}
@@ -2035,7 +2058,7 @@ const I18N = {
     "transfers.viewer.capped": "Showing the first {n} of {total} records",
     "transfers.viewer.download": "Download file",
     "transfers.single.title": "Send points to a customer",
-    "transfers.single.intro": "Search for a customer, choose how many points to send, and they'll receive them right away.",
+    "transfers.single.intro": "Identify a customer by phone number or Loyalty ID, send points, and they'll receive them right away.",
     "transfers.single.recipientLabel": "Recipient",
     "transfers.single.recipientPlaceholder": "Search by phone or Loyalty ID…",
     "transfers.single.pointsLabel": "Points",
@@ -2456,7 +2479,17 @@ const I18N = {
     "home.stat.totalOffers": "Total offers",
     "home.group.points": "Points",
     "home.group.audience": "Audience",
-    "transfers.summary.emptyBalance": "Your balance is at zero. Transfers are stopped until you charge more points."
+    "transfers.summary.emptyBalance": "Your balance is at zero. Transfers are stopped until you charge more points.",
+    "transfers.idType.phone": "Phone number",
+    "transfers.idType.loyaltyId": "Loyalty ID",
+    "transfers.single.idTypeLabel": "Identifier type",
+    "transfers.single.phonePlaceholder": "966501234567",
+    "transfers.single.loyaltyPlaceholder": "2423568",
+    "transfers.single.notFound": "We couldn't find a customer with that number.",
+    "transfers.single.foundLabel": "Sending to",
+    "transfers.upload.typeLabel": "Type",
+    "transfers.upload.typeHint": "The column in your file must match this choice.",
+    "transfers.upload.rule2Loyalty": "Loyalty IDs as 7-digit numbers starting with 24235, for example 2423568."
   },
   "ar": {
     "app.tenantRole": "شريك",
@@ -2882,7 +2915,7 @@ const I18N = {
     "transfers.viewer.capped": "عرض أول {n} من أصل {total} سجلات",
     "transfers.viewer.download": "تنزيل الملف",
     "transfers.single.title": "إرسال نقاط لعميل",
-    "transfers.single.intro": "ابحث عن العميل، حدّد عدد النقاط المطلوب إرسالها، وستصله فورًا.",
+    "transfers.single.intro": "حدّد العميل برقم الجوال أو الرقم التعريفي، وأرسل له النقاط، وسيستلمها فورًا.",
     "transfers.single.recipientLabel": "المستلم",
     "transfers.single.recipientPlaceholder": "ابحث برقم الجوال أو الرقم التعريفي…",
     "transfers.single.pointsLabel": "النقاط",
@@ -3303,7 +3336,17 @@ const I18N = {
     "home.stat.totalOffers": "إجمالي العروض",
     "home.group.points": "النقاط",
     "home.group.audience": "الجمهور",
-    "transfers.summary.emptyBalance": "رصيدك صفر. توقفت عمليات التحويل حتى تشحن مزيدًا من النقاط."
+    "transfers.summary.emptyBalance": "رصيدك صفر. توقفت عمليات التحويل حتى تشحن مزيدًا من النقاط.",
+    "transfers.idType.phone": "رقم الجوال",
+    "transfers.idType.loyaltyId": "الرقم التعريفي",
+    "transfers.single.idTypeLabel": "نوع المعرّف",
+    "transfers.single.phonePlaceholder": "966501234567",
+    "transfers.single.loyaltyPlaceholder": "2423568",
+    "transfers.single.notFound": "تعذّر العثور على عميل بهذا الرقم.",
+    "transfers.single.foundLabel": "الإرسال إلى",
+    "transfers.upload.typeLabel": "النوع",
+    "transfers.upload.typeHint": "يجب أن يتطابق عمود ملفك مع هذا الاختيار.",
+    "transfers.upload.rule2Loyalty": "الرقم التعريفي كرقم من 7 خانات يبدأ بـ24235، مثل 2423568."
   }
 };
 
@@ -4954,7 +4997,8 @@ function renderTransfers(){
       BAL.available === 0                    ? t("transfers.summary.emptyBalance")
     : BAL.available / BAL.charged < 0.1      ? t("transfers.summary.lowBalance")
     : "";
-  const balTile = (key, pts, cls) => `<div class="bal ${cls || ""}${cls && balNote() ? " is-low" : ""}">
+  const balState = () => BAL.available === 0 ? "is-empty" : balNote() ? "is-low" : "";
+  const balTile = (key, pts, cls) => `<div class="bal ${cls || ""}${cls ? " " + balState() : ""}">
     <div class="bal-l">${esc(t("transfers.summary." + key))}</div>
     <div class="bal-v"><svg viewBox="0 0 26 25" width="21" height="21" aria-hidden="true"><use href="#i-point"/></svg>
       <span class="num">${fmt(pts)}</span></div>
@@ -5564,20 +5608,26 @@ function renderViewer(){
 
 /* ---------- single transfer ---------------------------------------------- */
 const TR_MIN = 50, TR_MAX = 10000;
-let SG = { user:null, points:"", src:"loyalty" };
+let SG = { user:null, points:"", idType:"phone" };
 function openSingle(){
-  SG = { user:null, points:"", src:"loyalty" };
+  SG = { user:null, points:"", idType:"phone" };
   openPanel({
     title: t("transfers.single.title"),
     body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:var(--sp-250)">${esc(t("transfers.single.intro"))}</p>
       <div class="fgrp">
-        <label class="flab" for="sgWho">${esc(t("transfers.single.recipientLabel"))}</label>
-        <input class="finp" id="sgWho" data-autofocus autocomplete="off" role="combobox"
-          aria-expanded="false" aria-controls="sgList" oninput="sgSearch()"
-          placeholder="${esc(t("transfers.single.recipientPlaceholder"))}">
-        <div id="sgList" role="listbox" style="margin-top:var(--sp-75)"></div>
+        <span class="flab" id="sgWhoLab">${esc(t("transfers.single.recipientLabel"))}</span>
+        <div class="radio-row" role="radiogroup" aria-label="${esc(t("transfers.single.idTypeLabel"))}">
+          ${["phone","loyaltyId"].map(k => `<label class="radio">
+            <input type="radio" name="sgIdType" value="${k}"${SG.idType === k ? " checked" : ""}
+              onchange="sgSetType('${k}')">
+            <span>${esc(t("transfers.idType." + k))}</span></label>`).join("")}
+        </div>
+        <input class="finp ltr num" id="sgWho" data-autofocus autocomplete="off" inputmode="numeric"
+          aria-labelledby="sgWhoLab" oninput="sgLookup()"
+          placeholder="${esc(t("transfers.single." + (SG.idType === "phone" ? "phonePlaceholder" : "loyaltyPlaceholder")))}">
+        <div class="sg-found" id="sgFound" hidden></div>
         <div class="ferr" id="sgWhoErr" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
-          ${esc(t("transfers.single.errNoRecipient"))}</div>
+          <span id="sgWhoErrTxt">${esc(t("transfers.single.errNoRecipient"))}</span></div>
       </div>
       <div class="fgrp">
         <label class="flab" for="sgPts">${esc(t("transfers.single.pointsLabel"))}</label>
@@ -5591,13 +5641,6 @@ function openSingle(){
           esc(interp(t("transfers.single.valuePreview"), { value: fmt(0) }))}</span></div>
       </div>
       <div class="fgrp">
-        <label class="flab" for="sgSrc">${esc(t("transfers.single.sourceLabel"))}</label>
-        <select class="fsel" id="sgSrc">
-          ${["fullNumber","loyaltyIdOnly"].map(s =>
-            `<option value="${s}">${esc(t("transfers.source." + s))}</option>`).join("")}
-        </select>
-      </div>
-      <div class="fgrp">
         <label class="flab" for="sgNote">${esc(t("transfers.single.noteLabel"))}
           <span class="fopt">${esc(t("transfers.single.noteOptional"))}</span></label>
         <textarea class="ftxt" id="sgNote" placeholder="${esc(t("transfers.single.notePlaceholder"))}"></textarea>
@@ -5609,29 +5652,60 @@ function openSingle(){
       <button class="btn btn-primary" onclick="doSingle()">${esc(t("transfers.single.submit"))}</button>`
   });
 }
-function sgSearch(){
-  const q = document.getElementById("sgWho").value.trim().toLowerCase();
-  const list = document.getElementById("sgList");
-  if (!q){ list.innerHTML = ""; SG.user = null; return; }
-  const hits = USERS.filter(u => u.registered).filter(u =>
-    [u.name?.ar, u.name?.en, u.phone, u.id].filter(Boolean)
-      .some(v => String(v).toLowerCase().includes(q))).slice(0, 5);
-  // Searching by Loyalty ID and being shown only a phone number leaves nothing to
-  // check the input against, so the second line follows whichever field matched.
-  const byId = /^\d+$/.test(q) && hits.some(u => !String(u.phone).includes(q) && String(u.id).includes(q));
-  list.innerHTML = hits.length ? hits.map(u => `<button class="dd-opt" role="option" aria-selected="false"
-      type="button" onclick="sgPick(${u.id})" style="border:1px solid var(--n-200);border-radius:var(--r-100);margin-bottom:var(--sp-50)">
-      <span class="avatar avatar-txt" style="inline-size:30px;block-size:30px;font-size:12px" aria-hidden="true">${esc(initials(u))}</span>
-      <span class="min-w-0 text-start"><span style="font-weight:600;display:block">${esc(nameOf(u.name))}</span>
-        <span class="num ltr" style="font-size:12px;color:var(--n-700)">${
-          esc(byId ? String(u.id) : u.phone)}</span></span></button>`).join("")
-    : `<div class="fhint">${esc(t("transfers.empty.noMatchTitle"))}</div>`;
-}
-function sgPick(id){
-  SG.user = USERS.find(u => u.id === id);
-  document.getElementById("sgWho").value = nameOf(SG.user.name) + " · " + SG.user.phone;
-  document.getElementById("sgList").innerHTML = "";
+/* The recipient is no longer a search. You say which kind of identifier you are
+   about to type, then type it, and the form confirms whose it is before you can
+   send -- so an identifier typed one digit wrong is caught here rather than
+   after the points have moved. */
+function sgSetType(k){
+  SG.idType = k;
+  SG.user = null;
+  // Keep the controls honest when this is called from code rather than a click.
+  document.querySelectorAll('input[name="sgIdType"]').forEach(r => { r.checked = r.value === k; });
+  const box = document.getElementById("sgWho");
+  box.value = "";
+  box.placeholder = t("transfers.single." + (k === "phone" ? "phonePlaceholder" : "loyaltyPlaceholder"));
+  document.getElementById("sgFound").hidden = true;
   document.getElementById("sgWhoErr").hidden = true;
+  box.focus();
+}
+
+function sgFind(v){
+  const q = String(v).trim();
+  if (!q) return null;
+  return USERS.find(u => u.registered &&
+    String(SG.idType === "phone" ? u.phone : u.id) === q) || null;
+}
+
+function sgLookup(){
+  const v = document.getElementById("sgWho").value.trim();
+  SG.user = sgFind(v);
+  const found = document.getElementById("sgFound");
+  const err   = document.getElementById("sgWhoErr");
+  if (SG.user){
+    found.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg>
+      <span>${esc(t("transfers.single.foundLabel"))} ${esc(nameOf(SG.user.name))}</span>`;
+    found.hidden = false; err.hidden = true;
+  } else {
+    found.hidden = true;
+    // Silent until there is enough typed to be a real attempt, so the error does
+    // not fire on the first keystroke of every entry.
+    const enough = v.length >= (SG.idType === "phone" ? 12 : 7);
+    document.getElementById("sgWhoErrTxt").textContent = t("transfers.single.notFound");
+    err.hidden = !enough;
+  }
+}
+
+/* Opening a transfer from someone's profile still works: the identifier is
+   filled in for them rather than searched for. */
+function sgPick(id){
+  const u = USERS.find(x => x.id === id);
+  if (!u) return;
+  SG.idType = "phone";
+  document.querySelectorAll('input[name="sgIdType"]').forEach(r => { r.checked = r.value === "phone"; });
+  const box = document.getElementById("sgWho");
+  box.placeholder = t("transfers.single.phonePlaceholder");
+  box.value = String(u.phone);
+  sgLookup();
   document.getElementById("sgPts").focus();
 }
 function sgPreview(){
@@ -5658,7 +5732,7 @@ function doSingle(){
   }
   if (bad) return;
   SINGLES.unshift({ ref: "TRF-" + (48300 + SINGLES.length), by: "me", to: SG.user, points: pts,
-                    src: document.getElementById("sgSrc").value, at: new Date() });
+                    src: SG.idType, at: new Date() });
   BAL.transferred += pts; BAL.available -= pts;
   closePanel(); TTAB = "individual"; TPAGE = 1; renderTransfers();
   toast(interp(t("transfers.single.done"), { points: fmt(pts), name: nameOf(SG.user.name) }));
@@ -5668,11 +5742,11 @@ function doSingle(){
    The old panel's rules contradicted each other on commas. These four say one
    thing each, and the template is offered before the rules rather than after,
    because a correct file beats a well-explained rejection.               */
-let UP = { file:null, total:0, invalid:0, dup:0, src:"file" };
+let UP = { file:null, total:0, invalid:0, dup:0, src:"file", idType:"phone" };
 const upUsable = () => Math.max(0, UP.total - UP.invalid - UP.dup);
 
 function openUpload(){
-  UP = { file:null, total:0, invalid:0, dup:0, src:"file" };
+  UP = { file:null, total:0, invalid:0, dup:0, src:"file", idType:"phone" };
   openPanel({
     title: t("transfers.upload.title"),
     body: `<p style="font-size:14px;color:var(--n-900);line-height:1.6;margin-bottom:var(--sp-250)">${esc(t("transfers.upload.intro"))}</p>
@@ -5687,10 +5761,18 @@ function openUpload(){
       </div>
       <div id="upCheck"></div>
       <div class="fgrp" style="margin-top:var(--sp-200)">
+        <span class="flab" id="upTypeLab">${esc(t("transfers.upload.typeLabel"))}</span>
+        <div class="radio-row" role="radiogroup" aria-labelledby="upTypeLab">
+          ${["phone","loyaltyId"].map(k => `<label class="radio">
+            <input type="radio" name="upIdType" value="${k}"${UP.idType === k ? " checked" : ""}
+              onchange="upSetType('${k}')">
+            <span>${esc(t("transfers.idType." + k))}</span></label>`).join("")}
+        </div>
+        <div class="fhint">${esc(t("transfers.upload.typeHint"))}</div>
+      </div>
+      <div class="fgrp">
         <span class="flab">${esc(t("transfers.upload.rulesHeading"))}</span>
-        <ul class="rules">${[1,2,3,4].map(i => `<li>
-          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg>
-          <span>${esc(t("transfers.upload.rule" + i))}</span></li>`).join("")}</ul>
+        <ul class="rules" id="upRules">${upRules()}</ul>
       </div>`,
     foot: `<button class="btn btn-ghost" onclick="panelBack()">${esc(t("transfers.upload.cancel"))}</button>
       <button class="btn btn-primary" onclick="doUpload()">${esc(t("transfers.upload.submit"))}</button>`,
@@ -5700,6 +5782,21 @@ function openUpload(){
 /* Repainting the panel rebuilds its markup from the stored body, so a file
    already chosen has to be put back on screen — otherwise stepping back from
    the review makes the person choose it a second time. */
+/* Rule 2 names the format of the identifier column, so it has to follow the
+   Type choice -- otherwise the requirements contradict the selection sitting
+   directly above them. */
+function upRules(){
+  const two = UP.idType === "loyaltyId" ? "rule2Loyalty" : "rule2";
+  return ["rule1", two, "rule3", "rule4"].map(k => `<li>
+    <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><use href="#i-check"/></svg>
+    <span>${esc(t("transfers.upload." + k))}</span></li>`).join("");
+}
+function upSetType(k){
+  UP.idType = k;
+  const ul = document.getElementById("upRules");
+  if (ul) ul.innerHTML = upRules();
+}
+
 function restoreUpload(){
   if (!UP.file) return;
   const drop = document.getElementById("upDrop"); if (!drop) return;

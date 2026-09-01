@@ -1,0 +1,8 @@
+{
+  "en": {
+    "transfers.single.intro": "Identify a customer by phone number or Loyalty ID, send points, and they'll receive them right away."
+  },
+  "ar": {
+    "transfers.single.intro": "حدّد العميل برقم الجوال أو الرقم التعريفي، وأرسل له النقاط، وسيستلمها فورًا."
+  }
+}
