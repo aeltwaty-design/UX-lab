@@ -5753,14 +5753,7 @@ function openUpload(){
       <button class="btn btn-ghost w-full" style="margin-bottom:var(--sp-200)" onclick="toast(t('transfers.upload.templateStarted'))">
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><use href="#i-download"/></svg>
         <span>${esc(t("transfers.upload.template"))}</span></button>
-      <div class="drop" id="upDrop">
-        <div class="drop-ico"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><use href="#i-upload"/></svg></div>
-        <div class="drop-t" id="upName">${esc(t("transfers.upload.dropzone"))}</div>
-        <div class="drop-d" id="upHint">${esc(t("transfers.upload.dropzoneHint"))}</div>
-        <button class="btn btn-ghost btn-sm mt-3" onclick="upPick()">${esc(t("transfers.upload.browse"))}</button>
-      </div>
-      <div id="upCheck"></div>
-      <div class="fgrp" style="margin-top:var(--sp-200)">
+      <div class="fgrp" style="margin-bottom:var(--sp-200)">
         <span class="flab" id="upTypeLab">${esc(t("transfers.upload.typeLabel"))}</span>
         <div class="radio-row" role="radiogroup" aria-labelledby="upTypeLab">
           ${["phone","loyaltyId"].map(k => `<label class="radio">
@@ -5770,7 +5763,14 @@ function openUpload(){
         </div>
         <div class="fhint">${esc(t("transfers.upload.typeHint"))}</div>
       </div>
-      <div class="fgrp">
+      <div class="drop" id="upDrop">
+        <div class="drop-ico"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><use href="#i-upload"/></svg></div>
+        <div class="drop-t" id="upName">${esc(t("transfers.upload.dropzone"))}</div>
+        <div class="drop-d" id="upHint">${esc(t("transfers.upload.dropzoneHint"))}</div>
+        <button class="btn btn-ghost btn-sm mt-3" onclick="upPick()">${esc(t("transfers.upload.browse"))}</button>
+      </div>
+      <div id="upCheck"></div>
+      <div class="fgrp" style="margin-top:var(--sp-200)">
         <span class="flab">${esc(t("transfers.upload.rulesHeading"))}</span>
         <ul class="rules" id="upRules">${upRules()}</ul>
       </div>`,
